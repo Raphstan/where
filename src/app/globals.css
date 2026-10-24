@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+/*
+  Design tokens de WHERE, repris de docs/prototype.html.
+  Tailwind v4 : les tokens vivent ici (@theme) et non dans tailwind.config.
+  La palette par défaut de Tailwind est retirée : seules ces couleurs existent.
+*/
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-cream: #f7f2e9;
+  --color-cream-2: #fbf8f2;
+  --color-sand: #eadfcc;
+  --color-sand-2: #f1e9db;
+  --color-line: #e3d9c7;
+
+  --color-ink: #16202e;
+  --color-ink-2: #2b3443;
+  --color-muted: #75705f;
+  --color-soft: #a39e8f;
+
+  --color-blue: #2e6e8e;
+  --color-blue-2: #dce9ef;
+  --color-coral: #df6f55;
+  --color-coral-2: #fbe4dc;
+
+  --color-olive: #5e7f5a;
+  --color-olive-2: #e3ecdd;
+  --color-amber: #c7913a;
+  --color-amber-2: #f7ebd2;
+  --color-night: #1a2436;
+  --color-night-2: #243247;
+
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-manrope), system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --radius-card: 18px;
+  --radius-card-lg: 26px;
+
+  --shadow-soft: 0 1px 2px rgba(22, 32, 46, 0.04), 0 10px 30px -12px rgba(22, 32, 46, 0.18);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
