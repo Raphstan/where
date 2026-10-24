@@ -86,7 +86,15 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
 - **Jamais de clé `service_role` côté client.** Les deux seules opérations qui l'exigent (webhook Resend
   entrant, page invité sans compte) vivent dans des route handlers serveur documentés. Jamais de
   `NEXT_PUBLIC_` pour cette clé.
-- **Variables d'environnement documentées dans `.env.example`**, une ligne de commentaire par variable.
+- **Auth** : lien magique par email uniquement (`@supabase/ssr`). La session est rafraîchie dans
+  `src/proxy.ts` (Next 16 : le middleware s'appelle `proxy`). Les routes de l'app sont protégées là.
+  Tout composant serveur qui lit la session appelle `await connection()` avant (Cache Components).
+- **Schéma** : migrations SQL dans `supabase/migrations`, types générés dans
+  `src/lib/supabase/database.types.ts` via `npm run db:types`, tests RLS en pgTAP dans `supabase/tests`
+  via `npm run db:test`. Toute modification du schéma passe par une nouvelle migration, jamais par le
+  dashboard.
+- **Variables d'environnement documentées dans `.env.example`**, une ligne de commentaire par variable,
+  et validées par zod dans `src/lib/env.ts`. Les clés `NEXT_PUBLIC_*` y sont référencées littéralement.
 - Tests : Vitest. Un test minimal par logique métier (voir § 5).
 - Nommage : fichiers `kebab-case`, composants `PascalCase`, tables et colonnes Postgres `snake_case`.
 - Langue de l'interface : français, tutoiement, typographie française (espace avant « ? » et « : »,
