@@ -39,6 +39,7 @@ http://127.0.0.1:54324, pas dans ta vraie boîte.
 | `npm run db:reset` | Recrée la base locale depuis `supabase/migrations` |
 | `npm run db:types` | Régénère `src/lib/supabase/database.types.ts` depuis la base locale |
 | `npm run db:test` | Tests RLS en pgTAP (`supabase/tests`) |
+| `npm run test:live` | Tests en direct contre l'API Anthropic sur les six questions de la maquette (`ANTHROPIC_API_KEY` requis, ignorés sinon) |
 
 ## Structure
 
@@ -53,10 +54,22 @@ src/lib/supabase/       clients Supabase (serveur, navigateur, proxy) et types g
 src/proxy.ts            rafraîchit la session et protège les routes de l'app
 src/app/login/          connexion par lien magique
 src/app/auth/           arrivée du lien magique (confirm) et déconnexion (signout)
+src/app/api/ask/        POST : question → critères compris (+ une question de précision au plus)
+src/lib/ask/            schémas zod, prompt système, appel Anthropic (sortie structurée), mode factice
+src/components/chat/    écran de conversation : bulles, chips de critères, question à choix, composer
 supabase/migrations/    schéma SQL et politiques RLS
 supabase/tests/         tests RLS (pgTAP)
 supabase/templates/     template de l'email de lien magique
 ```
+
+## Compréhension des questions (Anthropic)
+
+`/api/ask` appelle le modèle `claude-opus-5` avec une sortie structurée (zod) et renvoie les critères
+compris, les chips à afficher et, au plus, une question complémentaire. Il n'y a pas encore de résultats.
+
+- Mettre `ANTHROPIC_API_KEY` dans `.env.local` pour un fonctionnement réel.
+- Sans clé, `WHERE_ASK_MOCK=1` renvoie une compréhension simulée (développement uniquement).
+- `npm run test:live` vérifie les six questions d'exemple de la maquette contre l'API réelle.
 
 ## Supabase hébergé (Vercel)
 

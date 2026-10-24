@@ -89,6 +89,10 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
 - **Auth** : lien magique par email uniquement (`@supabase/ssr`). La session est rafraîchie dans
   `src/proxy.ts` (Next 16 : le middleware s'appelle `proxy`). Les routes de l'app sont protégées là.
   Tout composant serveur qui lit la session appelle `await connection()` avant (Cache Components).
+- **API Anthropic** : SDK officiel `@anthropic-ai/sdk`, modèle `claude-opus-5`, sorties structurées via
+  `client.messages.parse` + `zodOutputFormat`. Prompt système stable et mis en cache
+  (`src/lib/ask/prompt.ts`), jamais de valeur variable dedans. Clé lue dans `src/lib/env.server.ts`
+  uniquement. `WHERE_ASK_MOCK=1` permet de développer l'interface sans clé, jamais en production.
 - **Schéma** : migrations SQL dans `supabase/migrations`, types générés dans
   `src/lib/supabase/database.types.ts` via `npm run db:types`, tests RLS en pgTAP dans `supabase/tests`
   via `npm run db:test`. Toute modification du schéma passe par une nouvelle migration, jamais par le
