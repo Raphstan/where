@@ -18,9 +18,10 @@ function CloseButton({ onClick }: { onClick: () => void }) {
 
 /**
  * Colonne de droite sur desktop large (docs/prototype.html, .rpanel), feuille ailleurs (.sheet) :
- * bottom sheet sur mobile, fenêtre centrée entre les deux.
+ * bottom sheet sur mobile, fenêtre centrée entre les deux. `sheetOnly` : toujours une feuille
+ * (écrans d'onboarding, sans colonne de droite).
  */
-export function ContextPanel() {
+export function ContextPanel({ sheetOnly = false }: { sheetOnly?: boolean }) {
   const { panel, close } = usePanel();
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export function ContextPanel() {
 
   return (
     <>
-      <aside className="hidden w-[380px] shrink-0 flex-col border-l border-line bg-cream-2 xl:flex">
+      <aside className={sheetOnly ? "hidden" : "hidden w-[380px] shrink-0 flex-col border-l border-line bg-cream-2 xl:flex"}>
         <div className="flex items-center gap-2.5 border-b border-line px-[18px] py-4">
           <h2 className="font-display text-[21px] font-medium leading-tight">{panel ? panel.title : "Détails"}</h2>
           {panel ? <CloseButton onClick={close} /> : null}
@@ -54,7 +55,7 @@ export function ContextPanel() {
 
       {panel ? (
         <div
-          className="fixed inset-0 z-40 flex animate-fade items-end bg-ink/45 backdrop-blur-[2px] lg:items-center lg:justify-center xl:hidden"
+          className={`fixed inset-0 z-40 flex animate-fade items-end bg-ink/45 backdrop-blur-[2px] lg:items-center lg:justify-center ${sheetOnly ? "" : "xl:hidden"}`}
           onClick={(e) => {
             if (e.target === e.currentTarget) close();
           }}

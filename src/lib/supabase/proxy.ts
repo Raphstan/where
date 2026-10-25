@@ -3,7 +3,17 @@ import { NextResponse, type NextRequest } from "next/server";
 import { publicEnv } from "@/lib/env";
 
 /** Routes réservées aux utilisateurs connectés. */
-const PROTECTED_PREFIXES = ["/chat", "/memory", "/circle", "/profile", "/import"];
+const PROTECTED_PREFIXES = [
+  "/chat",
+  "/memory",
+  "/circle",
+  "/profile",
+  "/import",
+  "/sources",
+  "/privacy",
+  "/edge",
+  "/onboarding",
+];
 
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
@@ -46,12 +56,14 @@ export async function updateSession(request: NextRequest) {
   if (!user && isProtected(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    const target = pathname + request.nextUrl.search;
     url.search = "";
-    if (pathname !== "/chat") url.searchParams.set("next", pathname);
+    if (target !== "/chat") url.searchParams.set("next", target);
     return NextResponse.redirect(url);
   }
 
-  if (user && pathname === "/login") {
+  // L'accueil et la connexion s'adressent aux visiteurs : une fois connecté, on va au chat.
+  if (user && (pathname === "/login" || pathname === "/")) {
     const url = request.nextUrl.clone();
     url.pathname = "/chat";
     url.search = "";

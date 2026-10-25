@@ -49,7 +49,7 @@ export function ConfidencePill({ level, text }: { level: ConfidenceLevel; text: 
 }
 
 /** Dégradés des avatars de la maquette (.av.sarah, .noam, .maya, .david). */
-const AVATAR = [
+const AVATAR_GRADIENTS = [
   "from-[#e58a6f] to-[#b9553f]",
   "from-[#3e7f9f] to-[#1f4f68]",
   "from-[#c8a35a] to-[#8c6a2a]",
@@ -73,7 +73,7 @@ export function PersonAvatar({ person, size = "md" }: { person: Person; size?: k
   return (
     <span
       title={person.name}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-linear-145 font-display font-bold text-white shadow-[inset_0_-6px_12px_rgba(0,0,0,0.12)] ${dims} ${AVATAR[hashIndex(person.id, AVATAR.length)]}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-linear-145 font-display font-bold text-white shadow-[inset_0_-6px_12px_rgba(0,0,0,0.12)] ${dims} ${AVATAR_GRADIENTS[hashIndex(person.id, AVATAR_GRADIENTS.length)]}`}
     >
       {person.initial}
     </span>

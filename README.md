@@ -48,6 +48,9 @@ http://127.0.0.1:54324, pas dans ta vraie boîte.
 docs/prototype.html     maquette interactive (cahier des charges)
 src/app/layout.tsx      layout racine : polices Fraunces et Manrope, métadonnées
 src/app/globals.css     tokens de couleur, typographie, rayons, ombre (@theme Tailwind v4)
+src/app/page.tsx        accueil (visiteurs) ; connecté, on va directement au chat
+src/app/how/            « Comment ça marche »
+src/app/onboarding/     « Comment veux-tu commencer ? » et circle/ : « Ton cercle de confiance »
 src/app/(app)/          coquille de l'app et les quatre pages : chat, memory, circle, profile
 src/components/shell/   barre latérale, onglets mobiles, panneau contextuel, gabarit de page
 src/lib/                logique partagée (navigation, niveaux de preuve, env) et ses tests

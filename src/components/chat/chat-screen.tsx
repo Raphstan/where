@@ -401,6 +401,20 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     void runAsk({ question: text });
   }
 
+  /* Question posée depuis l'accueil (/chat?q=…) : posée une fois, puis retirée de l'URL. */
+  useEffect(() => {
+    if (initial) return;
+    const q = new URLSearchParams(window.location.search).get("q")?.trim().slice(0, 500);
+    if (!q) return;
+    // Hors du rendu de l'effet ; en mode strict, le premier passage est annulé et le second envoie.
+    const t = setTimeout(() => {
+      window.history.replaceState(null, "", "/chat");
+      send(q);
+    });
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois, au chargement
+  }, []);
+
   function pick(id: number, option: string) {
     if (busy || !question) return;
     let clarificationQuestion: string | null = null;

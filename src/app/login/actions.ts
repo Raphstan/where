@@ -1,6 +1,8 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { z } from "zod";
+import { NEXT_COOKIE, NEXT_COOKIE_MAX_AGE, safeNextPath } from "@/lib/auth/redirect";
 import { publicEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -43,6 +45,20 @@ export async function sendMagicLink(
       status: "error",
       message: "Impossible d'envoyer le lien pour l'instant. Réessaie dans un instant.",
     };
+  }
+
+  // La page demandée survit au détour par la boîte mail (voir /auth/confirm).
+  const jar = await cookies();
+  if (next) {
+    jar.set(NEXT_COOKIE, safeNextPath(next), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: NEXT_COOKIE_MAX_AGE,
+      path: "/",
+    });
+  } else {
+    jar.delete(NEXT_COOKIE);
   }
 
   return { status: "sent", email };
