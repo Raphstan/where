@@ -19,6 +19,13 @@ describe("filtrage par cercle", () => {
     expect(inCircle(rows(place("p1"), [sig("recommended", SARAH)], false), CIRCLE)).toHaveLength(0);
   });
 
+  it("une réponse non réutilisable ne sert qu'à la conversation où elle a été donnée", () => {
+    const memory = rows(place("p1"), [sig("recommended", SARAH)], false).map((r) => ({ ...r, conversationId: "c1" }));
+    expect(inCircle(memory, CIRCLE, "c1")).toHaveLength(1);
+    expect(inCircle(memory, CIRCLE, "c2")).toHaveLength(0);
+    expect(inCircle(memory, CIRCLE)).toHaveLength(0);
+  });
+
   it("un lieu porté uniquement par un étranger au cercle n'apparaît jamais", () => {
     const results = rankMemory(rows(place("secret"), [sig("recommended", STRANGER)]), CIRCLE, criteria(), NOW);
     expect(results).toEqual([]);

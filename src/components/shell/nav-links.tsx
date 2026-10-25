@@ -2,12 +2,29 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { NAV_ITEMS, isActive } from "@/lib/navigation";
 import { NAV_ICONS } from "./icons";
 
+/*
+ * Le chemin courant n'est connu qu'à la requête pour les routes dynamiques (/chat/[id]) :
+ * chaque navigation se pré-rend sans onglet actif, puis s'active sous <Suspense>.
+ */
+
 /** Onglets du bas, mobile uniquement (docs/prototype.html, renderTabs). */
 export function MobileTabs() {
-  const pathname = usePathname();
+  return (
+    <Suspense fallback={<TabsView pathname={null} />}>
+      <ActiveTabs />
+    </Suspense>
+  );
+}
+
+function ActiveTabs() {
+  return <TabsView pathname={usePathname()} />;
+}
+
+function TabsView({ pathname }: { pathname: string | null }) {
   return (
     <nav
       aria-label="Navigation principale"
@@ -15,7 +32,7 @@ export function MobileTabs() {
     >
       {NAV_ITEMS.map((item) => {
         const Icon = NAV_ICONS[item.key];
-        const active = isActive(pathname, item.href);
+        const active = pathname !== null && isActive(pathname, item.href);
         return (
           <Link
             key={item.key}
@@ -36,12 +53,23 @@ export function MobileTabs() {
 
 /** Liens de la barre latérale desktop (docs/prototype.html, renderSide). */
 export function SidebarLinks() {
-  const pathname = usePathname();
+  return (
+    <Suspense fallback={<SidebarView pathname={null} />}>
+      <ActiveSidebar />
+    </Suspense>
+  );
+}
+
+function ActiveSidebar() {
+  return <SidebarView pathname={usePathname()} />;
+}
+
+function SidebarView({ pathname }: { pathname: string | null }) {
   return (
     <nav aria-label="Navigation principale" className="flex flex-col gap-0.5">
       {NAV_ITEMS.map((item) => {
         const Icon = NAV_ICONS[item.key];
-        const active = isActive(pathname, item.href);
+        const active = pathname !== null && isActive(pathname, item.href);
         return (
           <Link
             key={item.key}

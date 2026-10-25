@@ -3,7 +3,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Criteria } from "@/lib/ask/schema";
 import type { Database } from "@/lib/supabase/database.types";
 import { discoveryQuery, discoveryResult, pickDiscovery, searchGooglePlaces, type FetchLike } from "./google-places";
-import { afterFor, introFor } from "./phrasing";
+import { suggestPeople, type CircleMember } from "@/lib/network/suggest";
+import { afterFor, askIntroFor, introFor, isConfident } from "./phrasing";
 import { MAX_RESULTS, rankMemory, type MemoryRow } from "./rank";
 import type { SearchResponse } from "./types";
 
@@ -13,7 +14,8 @@ const MEMORY_LIMIT = 1000;
 const SIGNAL_COLUMNS = `
   id, evidence_level, occasion, note, reusable, created_at, source_member_id,
   place:places!inner ( id, name, address, city, area, kind, vibe, noise, price, google_place_id, lat, lng ),
-  member:circle_members ( id, name, trust_domains )
+  member:circle_members ( id, name, trust_domains ),
+  reply:request_replies ( request:requests ( conversation_id ) )
 `;
 
 export class SearchError extends Error {
@@ -30,16 +32,17 @@ export class SearchError extends Error {
 export async function loadMemory(
   supabase: SupabaseClient<Database>,
   userId: string,
-): Promise<{ rows: MemoryRow[]; circleMemberIds: Set<string> }> {
+): Promise<{ rows: MemoryRow[]; circleMemberIds: Set<string>; members: CircleMember[] }> {
   const [signals, circle] = await Promise.all([
     supabase.from("signals").select(SIGNAL_COLUMNS).eq("user_id", userId).limit(MEMORY_LIMIT),
-    supabase.from("circle_members").select("id").eq("user_id", userId),
+    supabase.from("circle_members").select("id, name, trust_domains, phone").eq("user_id", userId),
   ]);
   if (signals.error) throw new SearchError(signals.error.message);
   if (circle.error) throw new SearchError(circle.error.message);
 
   const rows: MemoryRow[] = signals.data.map((s) => ({
     reusable: s.reusable,
+    conversationId: s.reply?.request?.conversation_id ?? null,
     place: {
       id: s.place.id,
       name: s.place.name,
@@ -74,13 +77,21 @@ export async function loadMemory(
     },
   }));
 
-  return { rows, circleMemberIds: new Set(circle.data.map((c) => c.id)) };
+  const members: CircleMember[] = circle.data.map((c) => ({
+    id: c.id,
+    name: c.name,
+    trustDomains: c.trust_domains,
+    phone: c.phone,
+  }));
+  return { rows, circleMemberIds: new Set(members.map((m) => m.id)), members };
 }
 
 export type SearchDeps = {
   supabase: SupabaseClient<Database>;
   userId: string;
   googlePlacesApiKey: string | undefined;
+  /** Conversation en cours : ses réponses non réutilisables comptent ici, et seulement ici. */
+  conversationId?: string | null;
   now?: Date;
   fetchImpl?: FetchLike;
 };
@@ -91,8 +102,8 @@ export type SearchDeps = {
  */
 export async function search(criteria: Criteria, deps: SearchDeps): Promise<SearchResponse> {
   const now = deps.now ?? new Date();
-  const { rows, circleMemberIds } = await loadMemory(deps.supabase, deps.userId);
-  const results = rankMemory(rows, circleMemberIds, criteria, now, MAX_RESULTS);
+  const { rows, circleMemberIds, members } = await loadMemory(deps.supabase, deps.userId);
+  const results = rankMemory(rows, circleMemberIds, criteria, now, MAX_RESULTS, deps.conversationId ?? null);
 
   const query = discoveryQuery(criteria);
   if (results.length < MAX_RESULTS && deps.googlePlacesApiKey && query) {
@@ -103,5 +114,15 @@ export async function search(criteria: Criteria, deps: SearchDeps): Promise<Sear
     if (pick) results.push(discoveryResult(pick, criteria, results.length));
   }
 
-  return { intro: introFor(results), results, after: afterFor(results) };
+  const people = isConfident(results) ? [] : suggestPeople(members, rows, criteria);
+  const askIntro = askIntroFor(results, people);
+  const hasPersonal = results.some((r) => r.origin === "personal");
+  return {
+    // Sans aucun lieu du cercle, l'appel au réseau tient lieu d'introduction.
+    intro: askIntro && !hasPersonal ? askIntro : introFor(results),
+    results,
+    after: afterFor(results),
+    askIntro: askIntro && hasPersonal ? askIntro : null,
+    people: askIntro ? people : [],
+  };
 }

@@ -31,6 +31,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"conversations": {
+                  Row: {
+                    "created_at": string,"criteria": NonNullable<Json>,"id": string,"question": string,"tags": (string)[],"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"criteria"?: NonNullable<Json>,"id"?: string,"question": string,"tags"?: (string)[],"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"criteria"?: NonNullable<Json>,"id"?: string,"question"?: string,"tags"?: (string)[],"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "conversations_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"places": {
                   Row: {
                     "address": string | null,"area": string | null,"city": string | null,"created_at": string,"created_by": string | null,"google_place_id": string | null,"id": string,"kind": string | null,"lat": number | null,"lng": number | null,"name": string,"noise": string | null,"price": string | null,"vibe": (string)[]
@@ -79,14 +99,14 @@ isOneToOne: false
                   ]
                 },"request_replies": {
                   Row: {
-                    "created_at": string,"id": string,"note": string | null,"place_id": string | null,"place_text": string | null,"recipient_id": string,"request_id": string,"reusable": boolean,"visible_only_to_requester": boolean,"visited": boolean
+                    "created_at": string,"id": string,"note": string | null,"place_id": string | null,"place_text": string | null,"place_url": string | null,"recipient_id": string,"request_id": string,"reusable": boolean,"visible_only_to_requester": boolean,"visited": boolean
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"recipient_id": string,"request_id": string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited": boolean
+                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id": string,"request_id": string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited": boolean
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"recipient_id"?: string,"request_id"?: string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited"?: boolean
+                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id"?: string,"request_id"?: string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited"?: boolean
                   }
                   Relationships: [
                     {
@@ -111,17 +131,23 @@ isOneToOne: false
                   ]
                 },"requests": {
                   Row: {
-                    "created_at": string,"id": string,"message": string,"question": string,"user_id": string
+                    "conversation_id": string | null,"created_at": string,"id": string,"message": string,"question": string,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"message": string,"question": string,"user_id": string
+                    "conversation_id"?: string | null,"created_at"?: string,"id"?: string,"message": string,"question": string,"user_id": string
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"message"?: string,"question"?: string,"user_id"?: string
+                    "conversation_id"?: string | null,"created_at"?: string,"id"?: string,"message"?: string,"question"?: string,"user_id"?: string
                   }
                   Relationships: [
                     {
+      foreignKeyName: "requests_conversation_id_fkey"
+      columns: ["conversation_id"]
+isOneToOne: false
+      referencedRelation: "conversations"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "requests_user_id_fkey"
       columns: ["user_id"]
 isOneToOne: false

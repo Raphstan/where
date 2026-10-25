@@ -54,9 +54,15 @@ export type SearchResult = {
 /** Texte riche minimal : segments, certains en gras (nom du lieu). */
 export type RichText = { text: string; strong?: boolean }[];
 
+/** Proche à qui demander (voir src/lib/network/suggest.ts). */
+export type SuggestedPerson = { id: string; name: string; initial: string; reason: string; relevant: boolean };
+
 export type SearchResponse = {
   intro: RichText;
   results: SearchResult[];
   /** Notice après les cartes, ex. « Le troisième est une découverte… ». */
   after: string | null;
+  /** Confiance insuffisante : phrase d'appel au réseau et proches suggérés (sinon null / vide). */
+  askIntro: RichText | null;
+  people: SuggestedPerson[];
 };

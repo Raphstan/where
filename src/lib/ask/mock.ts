@@ -88,7 +88,10 @@ export function mockUnderstanding(input: AskRequest): Understanding {
       ...out,
       clarification: null,
       tags: [...out.tags, input.clarification.answer],
-      criteria: { ...out.criteria, place_kind: input.clarification.answer },
+      // La réponse complète le critère sur lequel portait la question (ville ou type de lieu).
+      criteria: /ville/i.test(input.clarification.question)
+        ? { ...out.criteria, city: input.clarification.answer }
+        : { ...out.criteria, place_kind: input.clarification.answer },
     };
   }
 

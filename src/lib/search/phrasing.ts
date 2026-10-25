@@ -274,6 +274,29 @@ export function introFor(results: readonly SearchResult[]): RichText {
   ];
 }
 
+/** La recherche a-t-elle une réponse sûre ? Sinon, WHERE propose de demander au réseau. */
+export function isConfident(results: readonly SearchResult[]): boolean {
+  return results.some((r) => r.origin === "personal" && r.confidence.level === "forte");
+}
+
+/**
+ * Appel au réseau quand la confiance est insuffisante (maquette, scénario « zikhron ») :
+ * « Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec
+ * confiance. Mais trois personnes pourraient probablement t’aider. »
+ */
+export function askIntroFor(results: readonly SearchResult[], people: readonly { name: string; relevant: boolean }[]): RichText | null {
+  const helpers = people.filter((p) => p.relevant);
+  if (isConfident(results) || helpers.length === 0) return null;
+  const who: RichText =
+    helpers.length === 1
+      ? [{ text: helpers[0]!.name, strong: true }, { text: " pourrait probablement t’aider." }]
+      : [{ text: `${numberWord(helpers.length)} personnes`, strong: true }, { text: " pourraient probablement t’aider." }];
+  const lead = results.some((r) => r.origin === "personal")
+    ? "Aucune de ces pistes n’est encore confirmée par une recommandation récente. Mais "
+    : `${INTRO_TEXT.insufficient} Mais `;
+  return [{ text: lead }, ...who];
+}
+
 /** Notice après les cartes quand une découverte complète la liste. */
 export function afterFor(results: readonly SearchResult[]): string | null {
   const index = results.findIndex((r) => r.origin === "discovery");

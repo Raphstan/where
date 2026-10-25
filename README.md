@@ -61,6 +61,11 @@ src/components/chat/    écran de conversation : bulles, chips de critères, que
 src/app/api/search/     POST : critères → au plus trois lieux classés, avec leurs preuves
 src/lib/search/         confiance, formulations, classement, filtrage par cercle, découverte Google Places
 src/components/results/ cartes résultat et panneau « Pourquoi ce choix ? »
+src/app/(app)/chat/[id]/ conversation enregistrée, et ask/ : préparer une demande au réseau
+src/app/r/[token]/      page invité sans compte : le proche répond depuis son lien privé
+src/app/api/            conversations, requests (liens privés + wa.me), replies (suivi)
+src/lib/network/        proches suggérés, message pré-rédigé, wa.me, réponse invité → preuves
+src/components/network/ écran « Demander à mon réseau »
 supabase/migrations/    schéma SQL et politiques RLS
 supabase/tests/         tests RLS (pgTAP)
 supabase/templates/     template de l'email de lien magique
@@ -97,6 +102,20 @@ Mémoire de démonstration pour un compte local (après une première connexion)
 ```bash
 docker exec -i supabase_db_where psql -U postgres -v email="'toi@exemple.com'" < supabase/snippets/demo_memory.sql
 ```
+
+## Demande au réseau
+
+Quand aucun résultat n'atteint une confiance forte, WHERE propose les proches pertinents (domaines de
+confiance, lieux déjà attribués dans la zone) et « Leur demander ». L'écran de préparation laisse
+modifier le message et choisir les destinataires, puis demande une confirmation explicite. Le serveur
+crée alors un lien privé `/r/{token}` par proche et renvoie des liens `wa.me` pré-remplis :
+**rien n'est envoyé par le serveur**, l'utilisateur ouvre WhatsApp et envoie lui-même.
+
+Le proche répond sans compte. La page invité (`src/app/r`) est la seule à utiliser
+`SUPABASE_SERVICE_ROLE_KEY`, côté serveur, toujours restreinte au jeton. La réponse crée des signaux
+attribués au proche dans la mémoire du demandeur : « Oui » → `recommended` + `visited`, « Non, mais on
+m’en a parlé » → `saved`. Si la réutilisation est refusée, le signal ne sert qu'à cette conversation.
+La conversation (`/chat/[id]`) vérifie les réponses toutes les 10 secondes et relance le classement.
 
 ## Supabase hébergé (Vercel)
 

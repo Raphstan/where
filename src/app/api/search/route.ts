@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
       supabase,
       userId: user.id,
       googlePlacesApiKey: getServerEnv().GOOGLE_PLACES_API_KEY,
+      conversationId: parsed.data.conversationId ?? null,
     });
     return NextResponse.json<SearchResponse>(response);
   } catch (error) {

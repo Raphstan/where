@@ -3,6 +3,7 @@ import { EVIDENCE_LABEL_LONG } from "@/lib/evidence";
 import { DAVID, MAYA, ME, NOAM, NOW, SARAH, sig } from "@/test/search-fixtures";
 import {
   afterFor,
+  askIntroFor,
   DEDUCTION_LABEL,
   deductionLine,
   EVIDENCE_REMINDER,
@@ -168,6 +169,30 @@ describe("intro et notice", () => {
     expect(introFor([card("Hotel de’ Ricci", "personal", "Sarah le recommande")])[0]).toEqual({
       text: "Une réponse nette plutôt que trois. ",
     });
+  });
+
+  it("appelle le réseau quand la confiance est insuffisante (maquette, scénario zikhron)", () => {
+    const people = [
+      { name: "David", relevant: true },
+      { name: "Sarah", relevant: true },
+      { name: "Maya", relevant: true },
+      { name: "Noam", relevant: false },
+    ];
+    expect(askIntroFor([], people)).toEqual([
+      { text: "Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec confiance. Mais " },
+      { text: "trois personnes", strong: true },
+      { text: " pourraient probablement t’aider." },
+    ]);
+    expect(askIntroFor([], [{ name: "Sarah", relevant: true }])?.slice(1)).toEqual([
+      { text: "Sarah", strong: true },
+      { text: " pourrait probablement t’aider." },
+    ]);
+  });
+
+  it("n'appelle pas le réseau quand un résultat est sûr, ni sans proche pertinent", () => {
+    const sure = { ...card("Beit Kandinof", "personal", "x"), confidence: { level: "forte" as const, text: "" } };
+    expect(askIntroFor([sure], [{ name: "Sarah", relevant: true }])).toBeNull();
+    expect(askIntroFor([], [{ name: "Noam", relevant: false }])).toBeNull();
   });
 
   it("avoue l'absence de signaux fiables quand seule une découverte reste", () => {

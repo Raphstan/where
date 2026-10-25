@@ -33,18 +33,26 @@ export type MemoryPlace = PlaceFacts & {
   lng: number | null;
 };
 
-/** Ligne de la mémoire : un signal et son lieu, tels que lus sous RLS. */
-export type MemoryRow = { place: MemoryPlace; signal: MemorySignal; reusable: boolean };
+/**
+ * Ligne de la mémoire : un signal et son lieu, tels que lus sous RLS. `conversationId` est la
+ * conversation d'origine quand le signal vient d'une réponse du réseau.
+ */
+export type MemoryRow = { place: MemoryPlace; signal: MemorySignal; reusable: boolean; conversationId?: string | null };
 
 /**
  * Filtrage par cercle (CLAUDE.md § 5) : un signal compte seulement s'il vient de l'utilisateur
- * ou d'un membre de son cercle, et si son auteur a autorisé sa réutilisation.
- * La base le garantit déjà (RLS + trigger) ; ce filtre est la deuxième ceinture.
+ * ou d'un membre de son cercle. Un signal dont la réutilisation a été refusée ne sert qu'à la
+ * conversation où il a été donné. La base garantit déjà l'appartenance au cercle (RLS + trigger) ;
+ * ce filtre est la deuxième ceinture.
  */
-export function inCircle(rows: readonly MemoryRow[], circleMemberIds: ReadonlySet<string>): MemoryRow[] {
+export function inCircle(
+  rows: readonly MemoryRow[],
+  circleMemberIds: ReadonlySet<string>,
+  conversationId: string | null = null,
+): MemoryRow[] {
   return rows.filter(
     (r) =>
-      r.reusable &&
+      (r.reusable || (conversationId !== null && r.conversationId === conversationId)) &&
       (r.signal.author.kind === "self" || circleMemberIds.has(r.signal.author.id)),
   );
 }
@@ -141,9 +149,10 @@ export function rankMemory(
   criteria: Criteria,
   now: Date,
   limit = MAX_RESULTS,
+  conversationId: string | null = null,
 ): SearchResult[] {
   const byPlace = new Map<string, { place: MemoryPlace; signals: MemorySignal[] }>();
-  for (const row of inCircle(rows, circleMemberIds)) {
+  for (const row of inCircle(rows, circleMemberIds, conversationId)) {
     const entry = byPlace.get(row.place.id) ?? { place: row.place, signals: [] };
     entry.signals.push(row.signal);
     byPlace.set(row.place.id, entry);

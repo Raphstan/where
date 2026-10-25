@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { NoticeTone } from "./messages";
 
 export function WhereAvatar() {
   return (
@@ -45,12 +46,20 @@ export function TypingBubble() {
   );
 }
 
-export function Notice({ tone, icon, children }: { tone: "info" | "warn"; icon?: string; children: ReactNode }) {
-  const cls = tone === "warn" ? "bg-amber-2 text-[#6e4f14]" : "bg-blue-2 text-[#1f4f68]";
+const NOTICE_TONE: Record<NoticeTone, { cls: string; icon: string }> = {
+  warn: { cls: "bg-amber-2 text-[#6e4f14]", icon: "⚠️" },
+  info: { cls: "bg-blue-2 text-[#1f4f68]", icon: "ℹ️" },
+  coral: { cls: "bg-coral-2 text-[#8a3a28]", icon: "✦" },
+  soft: { cls: "bg-sand-2 text-ink-2", icon: "🔒" },
+};
+
+/** Notice de la conversation (maquette .notice : warn, info, coral, soft). */
+export function Notice({ tone, icon, children }: { tone: NoticeTone; icon?: string; children: ReactNode }) {
+  const t = NOTICE_TONE[tone];
   return (
-    <div className={`flex animate-pop items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13.5px] leading-[1.4] ${cls}`}>
+    <div className={`flex animate-pop items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13.5px] leading-[1.4] ${t.cls}`}>
       <span aria-hidden className="shrink-0">
-        {icon ?? (tone === "warn" ? "⚠️" : "ℹ️")}
+        {icon ?? t.icon}
       </span>
       <span>{children}</span>
     </div>

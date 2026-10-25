@@ -14,6 +14,7 @@ export const SearchRequestSchema = z.object({
     vibe: z.array(text).max(12),
     constraints: z.array(text).max(12),
   }),
+  conversationId: z.guid().nullable().optional(),
 });
 
 export type SearchRequest = z.infer<typeof SearchRequestSchema>;
