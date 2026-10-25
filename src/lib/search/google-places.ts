@@ -1,6 +1,7 @@
 import "server-only";
 import { z } from "zod";
 import type { Criteria } from "@/lib/ask/schema";
+import { BOOKING_LABEL } from "@/lib/booking/options";
 import { discoveryConfidence } from "./confidence";
 import { matchedVibes } from "./match";
 import {
@@ -130,5 +131,7 @@ export function discoveryResult(place: GooglePlace, criteria: Criteria, index: n
     people: [],
     staleNotice: null,
     links: { googleMapsUrl: place.googleMapsUri ?? null },
+    // Hors du cercle, seul le lien Google Maps est connu : ni Ontopo, ni Tabit, ni téléphone inventés.
+    booking: place.googleMapsUri ? [{ kind: "maps", label: BOOKING_LABEL.maps, url: place.googleMapsUri }] : [],
   };
 }

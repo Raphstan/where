@@ -17,6 +17,7 @@ do $$ begin
   end if;
 end $$;
 
+delete from public.visit_followups where user_id = (select id from demo_user);
 delete from public.signals where user_id = (select id from demo_user);
 delete from public.circle_members where user_id = (select id from demo_user) and email like '%@demo.where';
 delete from public.places where id::text like 'e0000000-0000-0000-0000-%';
@@ -38,6 +39,19 @@ values
   ('e0000000-0000-0000-0000-000000000004', 'Dallal Bakery', 'Tel Aviv', 'Neve Tzedek', 'Boulangerie-café', '{vivant}', 'Animé le week-end', '₪₪'),
   ('e0000000-0000-0000-0000-000000000005', 'Spicehaus', 'Tel Aviv', 'Dizengoff', 'Bar à cocktails', '{feutré,cuivre}', 'Variable', '₪₪₪'),
   ('e0000000-0000-0000-0000-000000000006', 'Hotel de’ Ricci', 'Rome', 'Campo de’ Fiori', 'Hôtel boutique', '{intime,romantique}', 'Calme', '€€€');
+
+-- Moyens de réserver de la maquette (BOOK) : Beit Kandinof → Ontopo, site, téléphone, WhatsApp, carte ;
+-- Herzl 16 → Tabit, site, carte. Liens et numéros fictifs (.example, 555) : démonstration uniquement.
+update public.places set
+  ontopo_url = 'https://ontopo.example/beit-kandinof',
+  website_url = 'https://beit-kandinof.example',
+  phone = '+972 3-555-0101',
+  whatsapp = '+972 50-555-0101'
+where id = 'e0000000-0000-0000-0000-000000000001';
+update public.places set
+  tabit_url = 'https://tabit.example/herzl-16',
+  website_url = 'https://herzl16.example'
+where id = 'e0000000-0000-0000-0000-000000000002';
 
 insert into public.signals (user_id, place_id, source_member_id, evidence_level, occasion, note, source_type, created_at)
 select (select id from demo_user), v.place::uuid, v.member::uuid, v.level::public.evidence_level, v.occasion::text[], v.note,

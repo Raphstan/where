@@ -9,6 +9,7 @@ const serverSchema = z.object({
   ANTHROPIC_API_KEY: z.string().min(1).optional(),
   GOOGLE_PLACES_API_KEY: z.string().min(1).optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
+  CRON_SECRET: z.string().min(16).optional(),
   WHERE_ASK_MOCK: z
     .string()
     .optional()
@@ -22,6 +23,7 @@ export function getServerEnv(): ServerEnv {
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY || undefined,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || undefined,
+    CRON_SECRET: process.env.CRON_SECRET || undefined,
     WHERE_ASK_MOCK: process.env.WHERE_ASK_MOCK,
   });
 }

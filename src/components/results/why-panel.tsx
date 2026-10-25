@@ -5,7 +5,7 @@ import { ConfidencePill, EvidenceText, PersonAvatar } from "./marks";
 const EYEBROW = "text-[11px] font-bold tracking-[0.14em] text-muted uppercase";
 
 /** « Pourquoi ce choix ? » (docs/prototype.html, whyBody). */
-export function WhyPanel({ result }: { result: SearchResult }) {
+export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (result: SearchResult) => void }) {
   return (
     <div className="flex flex-col gap-4">
       <div>
@@ -75,6 +75,16 @@ export function WhyPanel({ result }: { result: SearchResult }) {
           ))}
         </ol>
       </section>
+
+      {onBook ? (
+        <button
+          type="button"
+          onClick={() => onBook(result)}
+          className="inline-flex min-h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-cream transition-colors hover:bg-[#0f1722]"
+        >
+          Réserver
+        </button>
+      ) : null}
     </div>
   );
 }

@@ -4,11 +4,16 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EXAMPLE_QUESTIONS } from "@/lib/ask/examples";
 import type { AskRequest, AskResponse, Criteria, Understanding } from "@/lib/ask/schema";
+import { bookedQuestion, bookedReply, BOOKED_ANSWERS, type BookedAnswer, type DueFollowup } from "@/lib/booking/followup";
+import type { BookingOption } from "@/lib/booking/options";
 import type { StoredConversation } from "@/lib/conversations/load";
 import type { ReplySummary } from "@/lib/conversations/schema";
 import { askedText } from "@/lib/network/message";
 import { looselyEqual, withoutTag, withTag } from "@/lib/search/match";
-import type { SearchResponse } from "@/lib/search/types";
+import type { SearchResponse, SearchResult } from "@/lib/search/types";
+import { BookingPanel } from "@/components/booking/booking-panel";
+import { FeedbackBubble } from "@/components/booking/feedback-bubble";
+import { LeavingScreen } from "@/components/booking/leaving-screen";
 import { ResultCard } from "@/components/results/result-card";
 import { usePanel } from "@/components/shell/panel-context";
 import { Notice, TypingBubble, UserBubble, WhereBubble } from "./bubbles";
@@ -49,6 +54,8 @@ const isAskResponse = (json: unknown): json is AskResponse => isObject(json) && 
 const isSearchResponse = (json: unknown): json is SearchResponse => isObject(json) && "results" in json && "intro" in json;
 const isCreated = (json: unknown): json is { id: string } => isObject(json) && typeof json.id === "string";
 const isReplies = (json: unknown): json is { replies: ReplySummary[] } => isObject(json) && Array.isArray(json.replies);
+const isFollowups = (json: unknown): json is { followups: DueFollowup[] } => isObject(json) && Array.isArray(json.followups);
+const isBooking = (json: unknown): json is { followupId: string } => isObject(json) && typeof json.followupId === "string";
 
 async function ask(body: AskRequest): Promise<Understanding> {
   const json = await call("/api/ask", { method: "POST", body }, isAskResponse, "Je n’ai pas réussi à comprendre la question. Réessaie dans un instant.");
@@ -72,7 +79,8 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
   const [toast, setToast] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(initial?.id ?? null);
   const [watching, setWatching] = useState(Boolean(initial?.asked.length));
-  const { close: closePanel } = usePanel();
+  const [leaving, setLeaving] = useState<{ option: BookingOption; result: SearchResult } | null>(null);
+  const { open: openPanel, close: closePanel } = usePanel();
   const nextId = useRef(1);
   /* Modifications manuelles des critères, à conserver quand le serveur renvoie une nouvelle compréhension. */
   const removedTags = useRef(new Set<string>());
@@ -88,6 +96,8 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
   const started = useRef(false);
   const bottom = useRef<HTMLDivElement>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const leavingRef = useRef<{ option: BookingOption; result: SearchResult } | null>(null);
+  const shownFollowups = useRef(new Set<string>());
 
   const push = useCallback((m: NewMessage) => {
     const id = nextId.current++;
@@ -205,6 +215,22 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     }
   }
 
+  /** Retours après visite à proposer (le cron les a rendus dus le lendemain de la réservation). */
+  async function loadFollowups(forConversation: string | null) {
+    let followups: DueFollowup[];
+    try {
+      const query = forConversation ? `?conversationId=${forConversation}` : "";
+      ({ followups } = await call(`/api/followups${query}`, { method: "GET" }, isFollowups, ""));
+    } catch {
+      return; // Le retour attendra la prochaine visite.
+    }
+    for (const f of followups) {
+      if (shownFollowups.current.has(f.id)) continue;
+      shownFollowups.current.add(f.id);
+      push({ kind: "feedback", followup: f });
+    }
+  }
+
   /* Conversation rechargée (/chat/[id]) : on rejoue la question, les demandes, puis la recherche. */
   useEffect(() => {
     if (!initial || started.current) return;
@@ -217,9 +243,72 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     for (const r of initial.replies) {
       push({ kind: "notice", tone: "coral", strong: `${r.memberName} a répondu`, text: ` : ${r.placeName}.` });
     }
-    void runSearch(initial.criteria, { save: false });
+    void runSearch(initial.criteria, { save: false }).then(() => loadFollowups(initial.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois, au chargement
   }, []);
+
+  /* Nouvelle conversation (/chat) : les retours du lendemain rendus dus par le cron, toutes conversations. */
+  useEffect(() => {
+    if (!initial) void loadFollowups(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois, au chargement
+  }, []);
+
+  /* ----- Réserver : feuille → « Tu quittes WHERE » → « As-tu réservé ? » ----- */
+
+  function book(result: SearchResult) {
+    openPanel({
+      key: `book:${result.id}`,
+      title: "Réserver",
+      body: (
+        <BookingPanel
+          result={result}
+          onChoose={(option) => {
+            closePanel();
+            leavingRef.current = { option, result };
+            setLeaving({ option, result });
+          }}
+        />
+      ),
+    });
+  }
+
+  const backFromLeaving = useCallback(() => {
+    const left = leavingRef.current;
+    if (!left) return; // Déjà revenu (bouton et retour d'onglet à la fois).
+    leavingRef.current = null;
+    setLeaving(null);
+    push({ kind: "booked", result: left.result, picked: null });
+  }, [push]);
+
+  async function pickBooked(id: number, answer: BookedAnswer) {
+    const current = messages.find((m) => m.id === id);
+    if (current?.kind !== "booked" || current.picked !== null) return;
+    setMessages((prev) => prev.map((m) => (m.id === id && m.kind === "booked" ? { ...m, picked: answer } : m)));
+    const { result } = current;
+    if (answer === "Oui") {
+      const place =
+        result.origin === "discovery"
+          ? { googlePlaceId: result.id.replace(/^google:/, ""), name: result.name, address: result.area }
+          : { id: result.id };
+      try {
+        await call(
+          "/api/bookings",
+          { method: "POST", body: { place, conversationId: conversation.current } },
+          isBooking,
+          "Je n’arrive pas à enregistrer ta réservation. Réessaie dans un instant.",
+        );
+      } catch (error) {
+        setMessages((prev) => prev.map((m) => (m.id === id && m.kind === "booked" ? { ...m, picked: null } : m)));
+        push({
+          kind: "notice",
+          tone: "warn",
+          text: error instanceof Error ? error.message : "Je n’arrive pas à enregistrer ta réservation.",
+        });
+        return;
+      }
+    }
+    push({ kind: "where", parts: bookedReply(answer, result.name) });
+  }
 
   /* Réponses du cercle : vérifiées régulièrement tant que la page est visible. */
   useEffect(() => {
@@ -476,7 +565,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
               return (
                 <div key={m.id} className="mx-auto flex w-full max-w-[760px] animate-pop flex-col gap-2.5">
                   {m.results.map((r, i) => (
-                    <ResultCard key={r.id} result={r} first={i === 0} />
+                    <ResultCard key={r.id} result={r} first={i === 0} onBook={book} />
                   ))}
                 </div>
               );
@@ -500,6 +589,22 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
                 </div>
               );
             }
+            case "booked":
+              return (
+                <div key={m.id} className="mx-auto w-full max-w-[760px]">
+                  <ChoiceBubble
+                    clarification={{ question: bookedQuestion(m.result.name), options: [...BOOKED_ANSWERS] }}
+                    picked={m.picked}
+                    onPick={(option) => void pickBooked(m.id, option as BookedAnswer)}
+                  />
+                </div>
+              );
+            case "feedback":
+              return (
+                <div key={m.id} className="mx-auto w-full max-w-[760px]">
+                  <FeedbackBubble followup={m.followup} onNewQuestion={reset} onToast={showToast} />
+                </div>
+              );
           }
         })}
         <div ref={bottom} />
@@ -521,6 +626,10 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       ) : null}
 
       <Composer disabled={busy} onSend={send} />
+
+      {leaving ? (
+        <LeavingScreen option={leaving.option} placeName={leaving.result.name} onBack={backFromLeaving} />
+      ) : null}
 
       {toast ? (
         <div

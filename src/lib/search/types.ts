@@ -1,3 +1,4 @@
+import type { BookingOption } from "@/lib/booking/options";
 import type { EvidenceLevel } from "@/lib/evidence";
 
 /** Niveau de confiance affiché par la pastille à trois barres (CLAUDE.md § 4, maquette `.conf`). */
@@ -49,6 +50,8 @@ export type SearchResult = {
   /** Recommandation la plus récente si elle est ancienne : notice « Cette recommandation date de… ». */
   staleNotice: string | null;
   links: PlaceLinks;
+  /** Moyens réellement disponibles pour réserver ou joindre le lieu (feuille « Réserver »). */
+  booking: BookingOption[];
 };
 
 /** Texte riche minimal : segments, certains en gras (nom du lieu). */

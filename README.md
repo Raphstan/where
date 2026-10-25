@@ -66,6 +66,12 @@ src/app/r/[token]/      page invité sans compte : le proche répond depuis son 
 src/app/api/            conversations, requests (liens privés + wa.me), replies (suivi)
 src/lib/network/        proches suggérés, message pré-rédigé, wa.me, réponse invité → preuves
 src/components/network/ écran « Demander à mon réseau »
+src/app/api/bookings/   POST : « As-tu réservé ? » → Oui (signal booked + suivi du lendemain)
+src/app/api/followups/  retours après visite dus (GET), réponses (POST), partage avec le cercle (PATCH)
+src/app/api/cron/       tâche planifiée Vercel : rend dus les retours du lendemain
+src/lib/booking/        moyens de réserver, « Tu quittes WHERE », retour après visite → preuves
+src/components/booking/ feuille « Réserver », écran « Tu quittes WHERE », bulle de retour
+vercel.json             planification du cron (tous les jours à 8 h UTC)
 supabase/migrations/    schéma SQL et politiques RLS
 supabase/tests/         tests RLS (pgTAP)
 supabase/templates/     template de l'email de lien magique
@@ -117,6 +123,29 @@ attribués au proche dans la mémoire du demandeur : « Oui » → `recommended`
 m’en a parlé » → `saved`. Si la réutilisation est refusée, le signal ne sert qu'à cette conversation.
 La conversation (`/chat/[id]`) vérifie les réponses toutes les 10 secondes et relance le classement.
 
+## Réservation et retour après visite
+
+WHERE ne réserve pas. Le bouton « Réserver » d'une carte ouvre la liste des seuls moyens connus pour
+ce lieu (colonnes `places.ontopo_url`, `tabit_url`, `website_url`, `phone`, `whatsapp`, et Google Maps
+dès que le lieu est localisable). Aucun lien Ontopo ou Tabit n'est construit sans URL connue.
+
+Choisir un moyen affiche « Tu quittes WHERE » ; le lien s'ouvre dans un nouvel onglet. Au retour
+(onglet de nouveau visible, ou « Revenir à WHERE ») : « De retour. As-tu réservé chez X ? ».
+« Oui » crée un signal `booked` (jamais `visited`) et un suivi `visit_followups` dont l'échéance est
+le lendemain à 8 h, heure d'Israël.
+
+Le cron Vercel (`vercel.json`, `/api/cron/visit-followups`, protégé par `CRON_SECRET`) marque chaque
+jour les suivis arrivés à échéance. Le chat les propose alors : « Alors, X ? » → « Tu le
+recommanderais à quelqu’un ? » → « Pour quel contexte ? ». Visité + « Absolument » → `recommended`,
+autre visite → `visited`, « Je n’y suis finalement pas allé » → aucun signal. Le partage avec le
+cercle privé est désactivé par défaut.
+
+Tester le cron en local :
+
+```bash
+curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/visit-followups
+```
+
 ## Supabase hébergé (Vercel)
 
 1. Créer un projet Supabase, puis appliquer les migrations : `npx supabase link` puis `npx supabase db push`.
@@ -125,7 +154,7 @@ La conversation (`/chat/[id]`) vérifie les réponses toutes les 10 secondes et 
    Sans ce template, le flux PKCE par défaut fonctionne aussi : `/auth/confirm` accepte `code`.
 3. Dans Authentication → URL Configuration, mettre le Site URL de production et ajouter
    `https://<domaine>/auth/confirm` aux Redirect URLs.
-4. Renseigner les trois variables de `.env.example` dans Vercel.
+4. Renseigner les variables de `.env.example` dans Vercel, dont `CRON_SECRET` (Vercel l'envoie au cron).
 
 ## Mise en page
 

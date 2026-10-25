@@ -10,9 +10,19 @@ const SCENES = 6;
 const ACTION = "inline-flex min-h-[30px] items-center rounded-full px-[11px] text-[12.5px] font-semibold transition-colors";
 
 /** Carte résultat (docs/prototype.html, resCard). La découverte est en pointillés, hors du cercle. */
-export function ResultCard({ result, first }: { result: SearchResult; first: boolean }) {
+export function ResultCard({
+  result,
+  first,
+  onBook,
+}: {
+  result: SearchResult;
+  first: boolean;
+  /** Ouvre la feuille « Réserver ». Absent : pas de bouton. */
+  onBook?: (result: SearchResult) => void;
+}) {
   const { open } = usePanel();
   const discovery = result.origin === "discovery";
+  const canBook = Boolean(onBook) && result.booking.length > 0;
   const meta = [result.kind, result.vibe.join(", "), result.noise ? `🔈 ${result.noise}` : null, result.price].filter(
     (m): m is string => Boolean(m),
   );
@@ -79,7 +89,9 @@ export function ResultCard({ result, first }: { result: SearchResult; first: boo
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            onClick={() => open({ key: result.id, title: "Pourquoi ce choix ?", body: <WhyPanel result={result} /> })}
+            onClick={() =>
+              open({ key: result.id, title: "Pourquoi ce choix ?", body: <WhyPanel result={result} onBook={canBook ? onBook : undefined} /> })
+            }
             className={`${ACTION} bg-sand-2 text-ink hover:bg-sand`}
           >
             Pourquoi ce choix ?
@@ -93,6 +105,11 @@ export function ResultCard({ result, first }: { result: SearchResult; first: boo
             >
               Voir dans Google Maps
             </a>
+          ) : null}
+          {canBook ? (
+            <button type="button" onClick={() => onBook?.(result)} className={`${ACTION} bg-ink text-cream hover:bg-[#0f1722]`}>
+              Réserver
+            </button>
           ) : null}
         </div>
       </div>

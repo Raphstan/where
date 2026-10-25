@@ -1,4 +1,5 @@
 import type { Criteria } from "@/lib/ask/schema";
+import { bookingOptions, mapsUrl } from "@/lib/booking/options";
 import { evidenceRank, type EvidenceLevel } from "@/lib/evidence";
 import { CONFIDENCE_ORDER, computeConfidence } from "./confidence";
 import {
@@ -31,6 +32,11 @@ export type MemoryPlace = PlaceFacts & {
   googlePlaceId: string | null;
   lat: number | null;
   lng: number | null;
+  websiteUrl: string | null;
+  phone: string | null;
+  whatsapp: string | null;
+  ontopoUrl: string | null;
+  tabitUrl: string | null;
 };
 
 /**
@@ -130,11 +136,8 @@ function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Crit
       confidence: computeConfidence(distinct, now),
       people: [...people.values()],
       staleNotice: staleNotice(distinct, now),
-      links: {
-        googleMapsUrl: place.googlePlaceId
-          ? `https://www.google.com/maps/place/?q=place_id:${encodeURIComponent(place.googlePlaceId)}`
-          : null,
-      },
+      links: { googleMapsUrl: mapsUrl(place) },
+      booking: bookingOptions(place),
     },
   };
 }

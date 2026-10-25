@@ -53,14 +53,14 @@ isOneToOne: false
                   ]
                 },"places": {
                   Row: {
-                    "address": string | null,"area": string | null,"city": string | null,"created_at": string,"created_by": string | null,"google_place_id": string | null,"id": string,"kind": string | null,"lat": number | null,"lng": number | null,"name": string,"noise": string | null,"price": string | null,"vibe": (string)[]
+                    "address": string | null,"area": string | null,"city": string | null,"created_at": string,"created_by": string | null,"google_place_id": string | null,"id": string,"kind": string | null,"lat": number | null,"lng": number | null,"name": string,"noise": string | null,"ontopo_url": string | null,"phone": string | null,"price": string | null,"tabit_url": string | null,"vibe": (string)[],"website_url": string | null,"whatsapp": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "address"?: string | null,"area"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"kind"?: string | null,"lat"?: number | null,"lng"?: number | null,"name": string,"noise"?: string | null,"price"?: string | null,"vibe"?: (string)[]
+                    "address"?: string | null,"area"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"kind"?: string | null,"lat"?: number | null,"lng"?: number | null,"name": string,"noise"?: string | null,"ontopo_url"?: string | null,"phone"?: string | null,"price"?: string | null,"tabit_url"?: string | null,"vibe"?: (string)[],"website_url"?: string | null,"whatsapp"?: string | null
                   }
                   Update: {
-                    "address"?: string | null,"area"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"kind"?: string | null,"lat"?: number | null,"lng"?: number | null,"name"?: string,"noise"?: string | null,"price"?: string | null,"vibe"?: (string)[]
+                    "address"?: string | null,"area"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"kind"?: string | null,"lat"?: number | null,"lng"?: number | null,"name"?: string,"noise"?: string | null,"ontopo_url"?: string | null,"phone"?: string | null,"price"?: string | null,"tabit_url"?: string | null,"vibe"?: (string)[],"website_url"?: string | null,"whatsapp"?: string | null
                   }
                   Relationships: [
                     {
@@ -157,14 +157,14 @@ isOneToOne: false
                   ]
                 },"signals": {
                   Row: {
-                    "created_at": string,"evidence_level": Database["public"]['Enums']["evidence_level"],"id": string,"note": string | null,"occasion": (string)[],"place_id": string,"request_reply_id": string | null,"reusable": boolean,"source_member_id": string | null,"source_type": Database["public"]['Enums']["signal_source_type"],"source_user_id": string | null,"user_id": string
+                    "created_at": string,"evidence_level": Database["public"]['Enums']["evidence_level"],"id": string,"note": string | null,"occasion": (string)[],"place_id": string,"request_reply_id": string | null,"reusable": boolean,"shared_with_circle": boolean,"source_member_id": string | null,"source_type": Database["public"]['Enums']["signal_source_type"],"source_user_id": string | null,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"evidence_level": Database["public"]['Enums']["evidence_level"],"id"?: string,"note"?: string | null,"occasion"?: (string)[],"place_id": string,"request_reply_id"?: string | null,"reusable"?: boolean,"source_member_id"?: string | null,"source_type": Database["public"]['Enums']["signal_source_type"],"source_user_id"?: string | null,"user_id": string
+                    "created_at"?: string,"evidence_level": Database["public"]['Enums']["evidence_level"],"id"?: string,"note"?: string | null,"occasion"?: (string)[],"place_id": string,"request_reply_id"?: string | null,"reusable"?: boolean,"shared_with_circle"?: boolean,"source_member_id"?: string | null,"source_type": Database["public"]['Enums']["signal_source_type"],"source_user_id"?: string | null,"user_id": string
                   }
                   Update: {
-                    "created_at"?: string,"evidence_level"?: Database["public"]['Enums']["evidence_level"],"id"?: string,"note"?: string | null,"occasion"?: (string)[],"place_id"?: string,"request_reply_id"?: string | null,"reusable"?: boolean,"source_member_id"?: string | null,"source_type"?: Database["public"]['Enums']["signal_source_type"],"source_user_id"?: string | null,"user_id"?: string
+                    "created_at"?: string,"evidence_level"?: Database["public"]['Enums']["evidence_level"],"id"?: string,"note"?: string | null,"occasion"?: (string)[],"place_id"?: string,"request_reply_id"?: string | null,"reusable"?: boolean,"shared_with_circle"?: boolean,"source_member_id"?: string | null,"source_type"?: Database["public"]['Enums']["signal_source_type"],"source_user_id"?: string | null,"user_id"?: string
                   }
                   Relationships: [
                     {
@@ -213,6 +213,44 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"visit_followups": {
+                  Row: {
+                    "answered_at": string | null,"booked_at": string,"conversation_id": string | null,"created_at": string,"due_at": string,"id": string,"occasion": (string)[],"place_id": string,"prompted_at": string | null,"rating": string | null,"recommend": string | null,"signal_id": string | null,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "answered_at"?: string | null,"booked_at"?: string,"conversation_id"?: string | null,"created_at"?: string,"due_at": string,"id"?: string,"occasion"?: (string)[],"place_id": string,"prompted_at"?: string | null,"rating"?: string | null,"recommend"?: string | null,"signal_id"?: string | null,"user_id": string
+                  }
+                  Update: {
+                    "answered_at"?: string | null,"booked_at"?: string,"conversation_id"?: string | null,"created_at"?: string,"due_at"?: string,"id"?: string,"occasion"?: (string)[],"place_id"?: string,"prompted_at"?: string | null,"rating"?: string | null,"recommend"?: string | null,"signal_id"?: string | null,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "visit_followups_conversation_id_fkey"
+      columns: ["conversation_id"]
+isOneToOne: false
+      referencedRelation: "conversations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "visit_followups_place_id_fkey"
+      columns: ["place_id"]
+isOneToOne: false
+      referencedRelation: "places"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "visit_followups_signal_id_fkey"
+      columns: ["signal_id"]
+isOneToOne: false
+      referencedRelation: "signals"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "visit_followups_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -224,7 +262,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "evidence_level": "recommended"|"visited"|"booked_confirmed"|"booked"|"saved"|"public","signal_source_type": "manual"|"email_forward"|"link_share"|"network_reply"|"public","trust_domain": "all"|"restaurants"|"hotels"|"nightlife"|"travel"|"activities"|"family"|"business"
+            "evidence_level": "recommended"|"visited"|"booked_confirmed"|"booked"|"saved"|"public","signal_source_type": "manual"|"email_forward"|"link_share"|"network_reply"|"public"|"post_visit_feedback","trust_domain": "all"|"restaurants"|"hotels"|"nightlife"|"travel"|"activities"|"family"|"business"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -340,7 +378,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "evidence_level": ["recommended", "visited", "booked_confirmed", "booked", "saved", "public"],"signal_source_type": ["manual", "email_forward", "link_share", "network_reply", "public"],"trust_domain": ["all", "restaurants", "hotels", "nightlife", "travel", "activities", "family", "business"]
+            "evidence_level": ["recommended", "visited", "booked_confirmed", "booked", "saved", "public"],"signal_source_type": ["manual", "email_forward", "link_share", "network_reply", "public", "post_visit_feedback"],"trust_domain": ["all", "restaurants", "hotels", "nightlife", "travel", "activities", "family", "business"]
           }
         }
 } as const

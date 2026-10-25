@@ -45,6 +45,11 @@ export function place(id: string, overrides: Partial<MemoryPlace> = {}): MemoryP
     googlePlaceId: null,
     lat: null,
     lng: null,
+    websiteUrl: null,
+    phone: null,
+    whatsapp: null,
+    ontopoUrl: null,
+    tabitUrl: null,
     ...overrides,
   };
 }

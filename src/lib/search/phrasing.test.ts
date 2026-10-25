@@ -147,6 +147,7 @@ describe("intro et notice", () => {
     people: [],
     staleNotice: null,
     links: { googleMapsUrl: null },
+    booking: [],
   });
 
   it("« J’ai trois idées solides pour toi. » avec le meilleur match en gras", () => {

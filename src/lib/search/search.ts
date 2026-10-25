@@ -13,7 +13,8 @@ const MEMORY_LIMIT = 1000;
 
 const SIGNAL_COLUMNS = `
   id, evidence_level, occasion, note, reusable, created_at, source_member_id,
-  place:places!inner ( id, name, address, city, area, kind, vibe, noise, price, google_place_id, lat, lng ),
+  place:places!inner ( id, name, address, city, area, kind, vibe, noise, price, google_place_id, lat, lng,
+    website_url, phone, whatsapp, ontopo_url, tabit_url ),
   member:circle_members ( id, name, trust_domains ),
   reply:request_replies ( request:requests ( conversation_id ) )
 `;
@@ -56,6 +57,11 @@ export async function loadMemory(
       googlePlaceId: s.place.google_place_id,
       lat: s.place.lat,
       lng: s.place.lng,
+      websiteUrl: s.place.website_url,
+      phone: s.place.phone,
+      whatsapp: s.place.whatsapp,
+      ontopoUrl: s.place.ontopo_url,
+      tabitUrl: s.place.tabit_url,
     },
     signal: {
       id: s.id,
