@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
-import { AutoRefresh, CopyAddress, DeliveriesButton } from "@/components/import/import-widgets";
-import { GmailFilterGuide } from "@/components/import/gmail-filter-guide";
+import { AutoRefresh, DeliveriesButton } from "@/components/import/import-widgets";
+import { ImportSetup } from "@/components/import/import-setup";
 import { SourceLogo } from "@/components/import/source-logo";
 import { GMAIL_LINKS, gmailFilterQuery } from "@/lib/inbound/platforms";
 import { EmailSourceActions } from "@/components/privacy/email-source";
@@ -92,60 +92,35 @@ async function Results() {
   return (
     <>
       <AutoRefresh />
-      <div className={`${CARD} flex flex-col gap-2.5`}>
-        <div className={EYEBROW}>Adresse de transfert</div>
-        {token && domain ? (
-          <>
-            <CopyAddress address={forwardAddress(token, domain)} />
-            <p className="text-[12.5px] text-muted">
-              Transfère à cette adresse, depuis l’adresse de ton compte, tes confirmations de restaurants, hôtels et
-              activités.
-            </p>
-          </>
-        ) : !token ? (
-          <>
-            <p className="text-[12.5px] text-muted">Non connecté</p>
-            <EmailSourceActions connected={false} />
-          </>
-        ) : (
-          <p className="text-[12.5px] text-muted">L’adresse de transfert n’est pas encore disponible.</p>
-        )}
-        <p className="text-[11.5px] text-soft">
-          Les livraisons sont écartées : une commande Tabit ou Wolt n’est pas une visite au restaurant.
-        </p>
-      </div>
-
       {token && domain ? (
-        <GmailFilterGuide
+        <ImportSetup
           address={forwardAddress(token, domain)}
-          query={gmailFilterQuery()}
+          accountEmail={user?.email ?? ""}
           links={{ forwarding: GMAIL_LINKS.forwarding, search: GMAIL_LINKS.search(gmailFilterQuery()) }}
+          query={gmailFilterQuery()}
           confirmation={filter.confirmation}
-          lastPlatformEmailAt={filter.lastPlatformEmailAt}
+          active={filter.lastPlatformEmailAt !== null}
         />
-      ) : null}
-
-      <div className="flex flex-col gap-[9px] text-[13px] text-ink-2">
-        {[
-          "WHERE ne lit que les emails que tu lui transfères",
-          "Tu peux supprimer les données importées à tout moment",
-          "Les emails personnels sans rapport ne sont pas utilisés",
-          "Les résultats détectés te sont montrés avant d’être ajoutés à ton profil",
-        ].map((t) => (
-          <div key={t} className="flex items-start gap-2.5">
-            <span className="shrink-0 text-olive">✓</span>
-            {t}
-          </div>
-        ))}
-      </div>
-
-      {emails.length === 0 ? (
-        <div className={CARD}>
-          <p className="text-[12.5px] text-muted">
-            Aucun email reçu pour l’instant. Transfère une confirmation : elle apparaîtra ici en quelques secondes.
-          </p>
+      ) : !token ? (
+        <div className={`${CARD} flex flex-col gap-2.5`}>
+          <p className="text-[14px] text-ink-2">Le transfert d’email est déconnecté.</p>
+          <EmailSourceActions connected={false} />
         </div>
       ) : (
+        <div className={CARD}>
+          <p className="text-[12.5px] text-muted">L’adresse de transfert n’est pas encore disponible.</p>
+        </div>
+      )}
+
+      <p className="flex items-start gap-2 text-[12.5px] text-muted">
+        <span aria-hidden className="text-olive">
+          🔒
+        </span>
+        WHERE ne lit que les emails qu’il reçoit, et rien n’entre dans ta mémoire sans que tu le valides. Tu peux tout
+        supprimer à tout moment.
+      </p>
+
+      {emails.length === 0 ? null : (
         <>
           <h2 className="mt-2 font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">
             Voilà ce que j’ai retrouvé.
@@ -225,7 +200,7 @@ export default function ImportPage() {
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4">
-        <div className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">Transfert d’email</div>
+        <div className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">Mes anciennes réservations</div>
         <h1 className="font-display text-[22px] font-medium leading-tight">
           Tu as déjà une mémoire de tes sorties cachée dans tes emails.
         </h1>
