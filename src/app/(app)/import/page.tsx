@@ -5,7 +5,7 @@ import { Suspense, type ReactNode } from "react";
 import { AutoRefresh, DeliveriesButton } from "@/components/import/import-widgets";
 import { ImportSetup } from "@/components/import/import-setup";
 import { SourceLogo } from "@/components/import/source-logo";
-import { GMAIL_LINKS, gmailFilterQuery } from "@/lib/inbound/platforms";
+import { GMAIL_LINKS, gmailFilterQuery, isReservedDomain } from "@/lib/inbound/platforms";
 import { EmailSourceActions } from "@/components/privacy/email-source";
 import { getServerEnv } from "@/lib/env.server";
 import { forwardAddress } from "@/lib/inbound/resend";
@@ -85,7 +85,10 @@ async function Results() {
     listImported(supabase),
     gmailFilterState(supabase, user?.email ?? ""),
   ]);
-  const domain = getServerEnv().WHERE_INBOUND_DOMAIN;
+  const env = getServerEnv();
+  const domain = env.WHERE_INBOUND_DOMAIN;
+  // Sans Resend configuré (version locale, ou mise en ligne incomplète), aucun email n'arrive : on le dit.
+  const receiving = Boolean(domain && env.RESEND_API_KEY && env.RESEND_WEBHOOK_SECRET && !isReservedDomain(domain));
   const s = summarizeImport(emails);
   const found = s.restaurants.length + s.hotels.length + s.activities.length;
 
@@ -100,6 +103,7 @@ async function Results() {
           query={gmailFilterQuery()}
           confirmation={filter.confirmation}
           active={filter.lastPlatformEmailAt !== null}
+          receiving={receiving}
         />
       ) : !token ? (
         <div className={`${CARD} flex flex-col gap-2.5`}>

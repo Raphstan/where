@@ -118,6 +118,7 @@ export function ImportSetup({
   query,
   confirmation,
   active,
+  receiving,
 }: {
   address: string;
   accountEmail: string;
@@ -126,6 +127,8 @@ export function ImportSetup({
   confirmation: { code: string; requester: string | null } | null;
   /** Un email d'une plateforme est déjà arrivé : le filtre fonctionne. */
   active: boolean;
+  /** La réception des emails est configurée ; sinon, rien de ce qui est envoyé n'arriverait. */
+  receiving: boolean;
 }) {
   const [mode, setMode] = useState<Mode>(active ? "gmail" : "choose");
   const [step, setStep] = useState<Step>(active ? "done" : 1);
@@ -154,6 +157,18 @@ export function ImportSetup({
   }
 
   const card = "flex flex-col gap-4 rounded-card-lg border border-line bg-cream-2 p-5 shadow-soft";
+
+  if (!receiving) {
+    return (
+      <div className="flex items-start gap-3 rounded-card border border-line bg-amber-2 p-4 text-[14px] text-[#6e4f14]">
+        <span aria-hidden>⏳</span>
+        <span>
+          <b>La réception des emails n’est pas encore active sur cette version de WHERE.</b> Ne configure rien dans Gmail
+          pour l’instant : rien n’arriverait. Cette étape sera disponible une fois WHERE en ligne.
+        </span>
+      </div>
+    );
+  }
 
   if (mode === "choose") {
     return (
@@ -256,6 +271,10 @@ export function ImportSetup({
               <a href={links.forwarding} target="_blank" rel="noopener noreferrer" className={SECONDARY}>
                 Ouvrir Gmail ↗
               </a>
+              <p className="rounded-[12px] bg-amber-2 px-3 py-2 text-[12.5px] text-[#6e4f14]">
+                Tu vois un champ « Transférer une copie des messages reçus à » au lieu du bouton ? N’y mets
+                rien : il transférerait toute ta boîte. C’est l’affichage de certains comptes professionnels (Google Workspace).
+              </p>
             </Do>
           </ol>
           <button type="button" onClick={() => go(2)} className={PRIMARY}>

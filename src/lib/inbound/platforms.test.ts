@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { gmailFilterQuery, parseGmailForwardingConfirmation, platformDomain } from "./platforms";
+import { gmailFilterQuery, isReservedDomain, parseGmailForwardingConfirmation, platformDomain } from "./platforms";
 
 describe("platformDomain", () => {
   it("reconnaît les plateformes et leurs sous-domaines, rien d'autre", () => {
@@ -50,5 +50,15 @@ describe("parseGmailForwardingConfirmation", () => {
     expect(
       parseGmailForwardingConfirmation({ from: "pirate@exemple.com", subject: "(#170012345) Gmail Forwarding Confirmation", text: "" }),
     ).toBeNull();
+  });
+});
+
+describe("isReservedDomain", () => {
+  it("reconnaît les domaines de test, où aucun email n'arrive", () => {
+    expect(isReservedDomain("inbound.where.test")).toBe(true);
+    expect(isReservedDomain("example.com")).toBe(true);
+    expect(isReservedDomain("mail.localhost")).toBe(true);
+    expect(isReservedDomain("inbound.where.app")).toBe(false);
+    expect(isReservedDomain("abc123.resend.app")).toBe(false);
   });
 });

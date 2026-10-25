@@ -61,3 +61,11 @@ export function parseGmailForwardingConfirmation(email: {
   const requester = emailAddress(/\b(?:from|de)\s+(\S+@\S+)/i.exec(subject)?.[1] ?? email.text.split("\n")[0] ?? "");
   return { code, requester: requester && requester !== GMAIL_FORWARDING_SENDER ? requester : null };
 }
+
+/**
+ * Domaines réservés aux tests (RFC 2606, RFC 6761) : aucun email ne peut y arriver. Une adresse de
+ * transfert sur l'un d'eux ne doit jamais être proposée comme si elle fonctionnait.
+ */
+export function isReservedDomain(domain: string): boolean {
+  return /(^|\.)(test|example|invalid|localhost|local)$/i.test(domain.trim()) || /(^|\.)example\.(com|net|org)$/i.test(domain.trim());
+}
