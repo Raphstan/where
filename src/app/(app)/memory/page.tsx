@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageFrame } from "@/components/shell/page-frame";
 
 export const metadata: Metadata = { title: "Ma mémoire" };
@@ -14,6 +15,9 @@ export default function MemoryPage() {
           Ta mémoire est encore vide. Elle se remplira avec tes réservations, tes retours et les
           réponses de ton cercle.
         </p>
+        <Link href="/import" className="mt-2 inline-block text-[12.5px] font-semibold text-blue hover:underline">
+          Retrouver mes anciennes réservations →
+        </Link>
       </div>
       <p className="text-center text-[11.5px] text-soft">
         Cette section reste secondaire. Le chat demeure le point d&apos;entrée.

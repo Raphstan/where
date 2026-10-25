@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
+import Link from "next/link";
 import { Suspense } from "react";
 import { PageFrame } from "@/components/shell/page-frame";
 import { createClient } from "@/lib/supabase/server";
@@ -44,6 +45,21 @@ export default function ProfilePage() {
           WHERE n&apos;a encore rien appris. Tes préférences apparaîtront ici au fil de tes questions.
         </p>
       </div>
+      <Link
+        href="/import"
+        className="flex items-center gap-3.5 rounded-card border border-line bg-cream-2 p-4 shadow-soft transition hover:-translate-y-px hover:border-ink"
+      >
+        <span aria-hidden className="text-[20px]">
+          📬
+        </span>
+        <span className="grow">
+          <span className="block font-bold">Retrouver mes anciennes réservations</span>
+          <span className="block text-[12.5px] text-muted">Par transfert d’email. Tu valides avant tout ajout.</span>
+        </span>
+        <span aria-hidden className="text-soft">
+          ›
+        </span>
+      </Link>
       <Suspense
         fallback={
           <div className="h-[118px] animate-pulse rounded-card border border-line bg-cream-2" />

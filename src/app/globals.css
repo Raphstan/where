@@ -194,3 +194,23 @@ h4 {
     radial-gradient(40% 40% at 80% 70%, #b9654a 0%, transparent 60%),
     linear-gradient(190deg, #d9a27e, #5b3a33);
 }
+
+/* ---------- Qualifier mes expériences (docs/prototype.html : .qcard, outL, outR) ---------- */
+@theme {
+  --animate-out-l: out-l 0.35s forwards;
+  --animate-out-r: out-r 0.35s forwards;
+}
+
+@keyframes out-l {
+  to {
+    transform: translateX(-120%) rotate(-8deg);
+    opacity: 0;
+  }
+}
+
+@keyframes out-r {
+  to {
+    transform: translateX(120%) rotate(8deg);
+    opacity: 0;
+  }
+}

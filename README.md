@@ -40,7 +40,7 @@ http://127.0.0.1:54324, pas dans ta vraie boîte.
 | `npm run db:reset` | Recrée la base locale depuis `supabase/migrations` |
 | `npm run db:types` | Régénère `src/lib/supabase/database.types.ts` depuis la base locale |
 | `npm run db:test` | Tests RLS en pgTAP (`supabase/tests`) |
-| `npm run test:live` | Tests en direct contre l'API Anthropic sur les six questions de la maquette (`ANTHROPIC_API_KEY` requis, ignorés sinon) |
+| `npm run test:live` | Tests en direct contre l'API Anthropic : les six questions de la maquette et la classification des emails d'exemple (`ANTHROPIC_API_KEY` requis, ignorés sinon) |
 
 ## Structure
 
@@ -69,6 +69,11 @@ src/components/network/ écran « Demander à mon réseau »
 src/app/api/bookings/   POST : « As-tu réservé ? » → Oui (signal booked + suivi du lendemain)
 src/app/api/followups/  retours après visite dus (GET), réponses (POST), partage avec le cercle (PATCH)
 src/app/api/cron/       tâche planifiée Vercel : rend dus les retours du lendemain
+src/app/api/inbound/    webhook Resend « email.received » : emails transférés → classés → en attente
+src/app/api/imports/    POST : une carte de « Qualifier mes expériences » (crée les signaux)
+src/app/(app)/import/   adresse de transfert, « Voilà ce que j’ai retrouvé. », et qualify/ : la pile de cartes
+src/lib/inbound/        règles, classification Anthropic (prompt, schéma, factice), Resend (signature, contenu)
+src/components/import/  pile de qualification, logos des plateformes, liste des livraisons exclues
 src/lib/booking/        moyens de réserver, « Tu quittes WHERE », retour après visite → preuves
 src/components/booking/ feuille « Réserver », écran « Tu quittes WHERE », bulle de retour
 vercel.json             planification du cron (tous les jours à 8 h UTC)
@@ -146,6 +151,63 @@ Tester le cron en local :
 curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/visit-followups
 ```
 
+## Import par transfert d'email
+
+Pas de Gmail OAuth : l'utilisateur transfère lui-même ses confirmations à son adresse privée
+`inbox+{jeton}@WHERE_INBOUND_DOMAIN` (écran `/import`, accessible depuis Profil et Mémoire).
+
+### Pourquoi Resend (et pas Postmark)
+
+Les deux savent recevoir des emails et appeler un webhook. Resend est retenu parce que :
+
+- il est **déjà la brique email de la stack** (CLAUDE.md) : un seul fournisseur, une seule clé, un seul
+  domaine à vérifier, plutôt qu'un second service externe ;
+- la **réception couvre toutes les adresses du domaine** : `inbox+{jeton}@…` fonctionne sans créer
+  d'adresse par utilisateur ni de règle de routage ;
+- le webhook est **signé (Svix)**, et l'API de lecture renvoie le résultat **SPF / DKIM / DMARC** :
+  de quoi vérifier l'expéditeur sans dépendance supplémentaire.
+
+Contrepartie : le webhook Resend ne contient pas le corps de l'email (Postmark l'envoie en entier).
+On le lit ensuite par `GET /emails/receiving/{id}` (`RESEND_API_KEY`). Si l'on passait à Postmark,
+seuls `src/lib/inbound/resend.ts` et la route du webhook changeraient : classification, règles et
+écrans n'en dépendent pas.
+
+### Flux
+
+1. Resend appelle `POST /api/inbound/resend`. Signature vérifiée (`RESEND_WEBHOOK_SECRET`), sinon 401.
+2. Le jeton de l'adresse désigne le compte (`forward_addresses`). L'expéditeur doit être l'adresse du
+   compte, sans échec SPF/DKIM/DMARC : sinon l'email est ignoré (personne ne peut écrire dans la
+   mémoire d'un autre en usurpant son adresse).
+3. Le contenu est classé par `claude-opus-5` (sortie structurée, prompt système en cache) :
+   `table`, `hotel`, `activity`, `delivery`, `cancellation`, `other`, avec le lieu, la ville, la
+   plateforme et la date. Tabit envoie à la fois des tables et des commandes : le prompt décide sur le
+   contenu (heure et convives → table ; plats, total payé, livraison ou retrait → commande).
+4. Réservations : `pending`. Livraisons, annulations, autres : `excluded`, comptées sur l'écran de
+   résultats (« 12 commandes de livraison Tabit exclues »). Une annulation retire de la pile la
+   réservation encore en attente du même lieu. Un rappel de la même réservation est ignoré.
+   **Le webhook ne crée aucun signal.**
+5. `/import/qualify` : « Tu y es vraiment allé ? » → « Tu le recommanderais ? » → « Pour quelle
+   occasion ? » → « Une chose à savoir ? ». C'est cette validation qui crée les signaux :
+
+| Réponse | Signaux |
+|---|---|
+| Oui + Absolument | `booked` (email) + `recommended` (qualification) |
+| Oui + autre réponse | `booked` + `visited` |
+| Je ne sais plus | `booked` seulement |
+| Non, ou « Ignorer ce lieu » | aucun |
+| Livraison, annulation | aucun, jamais qualifiées |
+
+Une erreur transitoire (Resend, Anthropic, base) répond 503 : Resend rejoue l'événement, et
+`resend_email_id` (unique) rend le traitement idempotent. Avec `WHERE_ASK_MOCK=1` (hors production),
+la classification se fait par mots-clés (`src/lib/inbound/mock.ts`).
+
+Configuration : dans Resend, activer la réception sur le domaine (`WHERE_INBOUND_DOMAIN`, ou le
+sous-domaine `….resend.app` fourni), puis créer un webhook `email.received` vers
+`https://<domaine>/api/inbound/resend` et copier son secret dans `RESEND_WEBHOOK_SECRET`.
+
+`npm run test:live` classe aussi, contre l'API réelle, les emails de `src/lib/inbound/examples.ts`
+(dont une table Tabit et une livraison Tabit).
+
 ## Supabase hébergé (Vercel)
 
 1. Créer un projet Supabase, puis appliquer les migrations : `npx supabase link` puis `npx supabase db push`.
@@ -154,7 +216,8 @@ curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/visi
    Sans ce template, le flux PKCE par défaut fonctionne aussi : `/auth/confirm` accepte `code`.
 3. Dans Authentication → URL Configuration, mettre le Site URL de production et ajouter
    `https://<domaine>/auth/confirm` aux Redirect URLs.
-4. Renseigner les variables de `.env.example` dans Vercel, dont `CRON_SECRET` (Vercel l'envoie au cron).
+4. Renseigner les variables de `.env.example` dans Vercel, dont `CRON_SECRET` (Vercel l'envoie au cron)
+   et les trois variables Resend (`WHERE_INBOUND_DOMAIN`, `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`).
 
 ## Mise en page
 

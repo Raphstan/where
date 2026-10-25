@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { publicEnv } from "@/lib/env";
 
 /** Routes réservées aux utilisateurs connectés. */
-const PROTECTED_PREFIXES = ["/chat", "/memory", "/circle", "/profile"];
+const PROTECTED_PREFIXES = ["/chat", "/memory", "/circle", "/profile", "/import"];
 
 function isProtected(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));

@@ -51,6 +51,52 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"forward_addresses": {
+                  Row: {
+                    "created_at": string,"token": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"token"?: string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"token"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "forward_addresses_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: true
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"forwarded_emails": {
+                  Row: {
+                    "body_text": string,"city": string | null,"created_at": string,"from_address": string,"id": string,"kind": Database["public"]['Enums']["forwarded_email_kind"],"note": string | null,"occasion": (string)[],"place_id": string | null,"place_name": string | null,"platform": string | null,"qualified_at": string | null,"received_at": string,"recommend": string | null,"resend_email_id": string,"reserved_for": string | null,"status": Database["public"]['Enums']["forwarded_email_status"],"subject": string | null,"user_id": string,"visited": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body_text": string,"city"?: string | null,"created_at"?: string,"from_address": string,"id"?: string,"kind": Database["public"]['Enums']["forwarded_email_kind"],"note"?: string | null,"occasion"?: (string)[],"place_id"?: string | null,"place_name"?: string | null,"platform"?: string | null,"qualified_at"?: string | null,"received_at": string,"recommend"?: string | null,"resend_email_id": string,"reserved_for"?: string | null,"status": Database["public"]['Enums']["forwarded_email_status"],"subject"?: string | null,"user_id": string,"visited"?: string | null
+                  }
+                  Update: {
+                    "body_text"?: string,"city"?: string | null,"created_at"?: string,"from_address"?: string,"id"?: string,"kind"?: Database["public"]['Enums']["forwarded_email_kind"],"note"?: string | null,"occasion"?: (string)[],"place_id"?: string | null,"place_name"?: string | null,"platform"?: string | null,"qualified_at"?: string | null,"received_at"?: string,"recommend"?: string | null,"resend_email_id"?: string,"reserved_for"?: string | null,"status"?: Database["public"]['Enums']["forwarded_email_status"],"subject"?: string | null,"user_id"?: string,"visited"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "forwarded_emails_place_id_fkey"
+      columns: ["place_id"]
+isOneToOne: false
+      referencedRelation: "places"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "forwarded_emails_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"places": {
                   Row: {
                     "address": string | null,"area": string | null,"city": string | null,"created_at": string,"created_by": string | null,"google_place_id": string | null,"id": string,"kind": string | null,"lat": number | null,"lng": number | null,"name": string,"noise": string | null,"ontopo_url": string | null,"phone": string | null,"price": string | null,"tabit_url": string | null,"vibe": (string)[],"website_url": string | null,"whatsapp": string | null
@@ -262,7 +308,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "evidence_level": "recommended"|"visited"|"booked_confirmed"|"booked"|"saved"|"public","signal_source_type": "manual"|"email_forward"|"link_share"|"network_reply"|"public"|"post_visit_feedback","trust_domain": "all"|"restaurants"|"hotels"|"nightlife"|"travel"|"activities"|"family"|"business"
+            "evidence_level": "recommended"|"visited"|"booked_confirmed"|"booked"|"saved"|"public","forwarded_email_kind": "table"|"hotel"|"activity"|"delivery"|"cancellation"|"other","forwarded_email_status": "pending"|"qualified"|"skipped"|"cancelled"|"excluded","signal_source_type": "manual"|"email_forward"|"link_share"|"network_reply"|"public"|"post_visit_feedback"|"qualification","trust_domain": "all"|"restaurants"|"hotels"|"nightlife"|"travel"|"activities"|"family"|"business"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -378,7 +424,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "evidence_level": ["recommended", "visited", "booked_confirmed", "booked", "saved", "public"],"signal_source_type": ["manual", "email_forward", "link_share", "network_reply", "public", "post_visit_feedback"],"trust_domain": ["all", "restaurants", "hotels", "nightlife", "travel", "activities", "family", "business"]
+            "evidence_level": ["recommended", "visited", "booked_confirmed", "booked", "saved", "public"],"forwarded_email_kind": ["table", "hotel", "activity", "delivery", "cancellation", "other"],"forwarded_email_status": ["pending", "qualified", "skipped", "cancelled", "excluded"],"signal_source_type": ["manual", "email_forward", "link_share", "network_reply", "public", "post_visit_feedback", "qualification"],"trust_domain": ["all", "restaurants", "hotels", "nightlife", "travel", "activities", "family", "business"]
           }
         }
 } as const
