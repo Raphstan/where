@@ -145,6 +145,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       conversation.current = id;
       setConversationId(id);
       window.history.replaceState(null, "", `/chat/${id}`);
+      router.refresh(); // La nouvelle question apparaît dans l'historique de la barre latérale.
       return id;
     } catch {
       // La recherche reste possible ; seule la demande au réseau en dépend.

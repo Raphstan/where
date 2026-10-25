@@ -88,6 +88,8 @@ src/app/api/circle/     POST : ajouter une personne ; PATCH [id] : domaines de c
 src/app/api/privacy/    PATCH : « Utilisé pour les recommandations » (appliqué par la recherche)
 src/app/api/sources/    email : DELETE supprime l'adresse de transfert et les emails reçus, POST la rétablit
 src/app/api/account/    DELETE : supprime le compte (fonction SQL delete_my_account, sans service_role)
+src/lib/profile/        préférences apprises (déduites de ses propres visites), profil, historique des conversations
+src/app/api/profile/    PATCH : prénom et ville
 src/lib/memory/         mémoire affichée (preuve la plus forte, libellés courts, catégories, stats)
 src/lib/circle/         domaines de confiance (« Tout » exclusif), validation d'un nouveau proche
 src/lib/privacy/        interrupteurs d'utilisation, aperçu et suppressions
