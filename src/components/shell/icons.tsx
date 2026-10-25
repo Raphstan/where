@@ -47,9 +47,30 @@ export function ProfileIcon(props: IconProps) {
   );
 }
 
+export function SourcesIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="4" width="18" height="6" rx="2" />
+      <rect x="3" y="14" width="18" height="6" rx="2" />
+      <path d="M7 7h.01M7 17h.01" />
+    </svg>
+  );
+}
+
+export function LockIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="5" y="10" width="14" height="10" rx="2.5" />
+      <path d="M8 10V7.5a4 4 0 0 1 8 0V10" />
+    </svg>
+  );
+}
+
 export const NAV_ICONS: Record<NavKey, (props: IconProps) => React.JSX.Element> = {
   chat: ChatIcon,
   memory: MemoryIcon,
   circle: CircleIcon,
+  sources: SourcesIcon,
+  privacy: LockIcon,
   profile: ProfileIcon,
 };

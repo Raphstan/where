@@ -4,6 +4,7 @@ import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import { AutoRefresh, CopyAddress, DeliveriesButton } from "@/components/import/import-widgets";
 import { SourceLogo } from "@/components/import/source-logo";
+import { EmailSourceActions } from "@/components/privacy/email-source";
 import { getServerEnv } from "@/lib/env.server";
 import { forwardAddress } from "@/lib/inbound/resend";
 import {
@@ -91,6 +92,11 @@ async function Results() {
               Transfère à cette adresse, depuis l’adresse de ton compte, tes confirmations de restaurants, hôtels et
               activités.
             </p>
+          </>
+        ) : !token ? (
+          <>
+            <p className="text-[12.5px] text-muted">Non connecté</p>
+            <EmailSourceActions connected={false} />
           </>
         ) : (
           <p className="text-[12.5px] text-muted">L’adresse de transfert n’est pas encore disponible.</p>

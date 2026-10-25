@@ -62,8 +62,14 @@ export function hashIndex(id: string, modulo: number): number {
   return h % modulo;
 }
 
-export function PersonAvatar({ person, size = "md" }: { person: Person; size?: "sm" | "md" }) {
-  const dims = size === "sm" ? "size-[26px] text-[11px]" : "size-[34px] text-[13px]";
+const AVATAR_SIZE = {
+  sm: "size-[26px] text-[11px]",
+  md: "size-[34px] text-[13px]",
+  lg: "size-[52px] text-[19px]",
+} as const;
+
+export function PersonAvatar({ person, size = "md" }: { person: Person; size?: keyof typeof AVATAR_SIZE }) {
+  const dims = AVATAR_SIZE[size];
   return (
     <span
       title={person.name}

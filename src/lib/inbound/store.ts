@@ -182,15 +182,24 @@ export async function pendingReservations(supabase: Client): Promise<PendingRese
   );
 }
 
+/** Type en clair d'un lieu créé par l'import, pour le ranger dans la mémoire (Restaurants, Hôtels…). */
+const PLACE_KIND: Record<ReservationKind, string> = { table: "Restaurant", hotel: "Hôtel", activity: "Activité" };
+
 /** Le lieu de la mémoire qui porte ce nom (et cette ville), sinon un nouveau lieu. */
-async function resolvePlace(supabase: Client, userId: string, name: string, city: string | null): Promise<string> {
+async function resolvePlace(
+  supabase: Client,
+  userId: string,
+  name: string,
+  city: string | null,
+  kind: ReservationKind,
+): Promise<string> {
   const { data, error } = await supabase.from("places").select("id, city").ilike("name", exact(name)).limit(20);
   if (error) throw new InboundError("storage_unavailable", error.message);
   const sameCity = (c: string | null) => !city || !c || c.toLocaleLowerCase("fr") === city.toLocaleLowerCase("fr");
   const found = data.find((p) => city && p.city?.toLocaleLowerCase("fr") === city.toLocaleLowerCase("fr")) ?? data.find((p) => sameCity(p.city));
   if (found) return found.id;
 
-  const created = await supabase.from("places").insert({ name, city, created_by: userId }).select("id").single();
+  const created = await supabase.from("places").insert({ name, city, kind: PLACE_KIND[kind], created_by: userId }).select("id").single();
   if (created.error) throw new InboundError("storage_unavailable", created.error.message);
   return created.data.id;
 }
@@ -229,7 +238,7 @@ export async function qualifyEmail(
   let placeId: string | null = null;
   const signalIds: string[] = [];
   if (levels.length > 0) {
-    placeId = await resolvePlace(supabase, userId, found.data.place_name, found.data.city);
+    placeId = await resolvePlace(supabase, userId, found.data.place_name, found.data.city, found.data.kind);
     const visit = levels.find((l) => l !== "booked");
     const { data, error } = await supabase
       .from("signals")

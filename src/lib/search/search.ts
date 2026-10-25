@@ -4,6 +4,8 @@ import type { Criteria } from "@/lib/ask/schema";
 import type { Database } from "@/lib/supabase/database.types";
 import { discoveryQuery, discoveryResult, pickDiscovery, searchGooglePlaces, type FetchLike } from "./google-places";
 import { suggestPeople, type CircleMember } from "@/lib/network/suggest";
+import { loadUsagePrefs } from "@/lib/privacy/store";
+import { usableForRecommendations } from "@/lib/privacy/usage";
 import { afterFor, askIntroFor, introFor, isConfident } from "./phrasing";
 import { MAX_RESULTS, rankMemory, type MemoryRow } from "./rank";
 import type { SearchResponse } from "./types";
@@ -12,7 +14,7 @@ import type { SearchResponse } from "./types";
 const MEMORY_LIMIT = 1000;
 
 const SIGNAL_COLUMNS = `
-  id, evidence_level, occasion, note, reusable, created_at, source_member_id,
+  id, evidence_level, occasion, note, reusable, created_at, source_member_id, source_type,
   place:places!inner ( id, name, address, city, area, kind, vibe, noise, price, google_place_id, lat, lng,
     website_url, phone, whatsapp, ontopo_url, tabit_url ),
   member:circle_members ( id, name, trust_domains ),
@@ -29,19 +31,26 @@ export class SearchError extends Error {
 /**
  * Lit la mémoire de l'utilisateur (ses signaux et ceux attribués à son cercle) sous RLS.
  * Les signaux d'autres utilisateurs ne sont jamais lisibles : le cercle est unidirectionnel.
+ * Les signaux que l'utilisateur a retirés des recommandations (Confidentialité) sont écartés.
  */
 export async function loadMemory(
   supabase: SupabaseClient<Database>,
   userId: string,
 ): Promise<{ rows: MemoryRow[]; circleMemberIds: Set<string>; members: CircleMember[] }> {
-  const [signals, circle] = await Promise.all([
+  const [signals, circle, prefs] = await Promise.all([
     supabase.from("signals").select(SIGNAL_COLUMNS).eq("user_id", userId).limit(MEMORY_LIMIT),
     supabase.from("circle_members").select("id, name, trust_domains, phone").eq("user_id", userId),
+    loadUsagePrefs(supabase, userId).catch((e: Error) => {
+      throw new SearchError(e.message);
+    }),
   ]);
   if (signals.error) throw new SearchError(signals.error.message);
   if (circle.error) throw new SearchError(circle.error.message);
 
-  const rows: MemoryRow[] = signals.data.map((s) => ({
+  const usable = signals.data.filter((s) =>
+    usableForRecommendations({ sourceType: s.source_type, fromMember: s.source_member_id !== null }, prefs),
+  );
+  const rows: MemoryRow[] = usable.map((s) => ({
     reusable: s.reusable,
     conversationId: s.reply?.request?.conversation_id ?? null,
     place: {

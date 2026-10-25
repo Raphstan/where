@@ -43,9 +43,13 @@ set local request.jwt.claims to '{"sub":"00000000-0000-0000-0000-0000000000a7","
 select is((select count(*) from public.forward_addresses), 1::bigint, 'A ne voit que sa propre adresse');
 select is((select count(*) from public.forwarded_emails), 2::bigint, 'A ne voit que ses emails');
 
--- Sans politique de mise à jour, RLS ne laisse rien passer.
-update public.forward_addresses set token = 'aaaaaaaaaaaaaaaa';
-select is((select count(*) from public.forward_addresses where token = 'aaaaaaaaaaaaaaaa'), 0::bigint, 'A ne choisit pas son jeton');
+-- Le jeton n'est jamais modifiable par l'utilisateur (aucun droit de mise à jour).
+select throws_ok(
+  $$ update public.forward_addresses set token = 'aaaaaaaaaaaaaaaa' $$,
+  '42501',
+  null,
+  'A ne choisit pas son jeton'
+);
 
 select throws_ok(
   $$ insert into public.forwarded_emails (user_id, resend_email_id, from_address, body_text, received_at, kind, place_name, status)

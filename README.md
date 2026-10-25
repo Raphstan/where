@@ -70,12 +70,23 @@ src/app/api/bookings/   POST : « As-tu réservé ? » → Oui (signal booked + 
 src/app/api/followups/  retours après visite dus (GET), réponses (POST), partage avec le cercle (PATCH)
 src/app/api/cron/       tâche planifiée Vercel : rend dus les retours du lendemain
 src/app/api/inbound/    webhook Resend « email.received » : emails transférés → classés → en attente
-src/app/api/imports/    POST : une carte de « Qualifier mes expériences » (crée les signaux)
+src/app/api/imports/    POST [id] : une carte de « Qualifier mes expériences » ; DELETE : tous les lieux importés
 src/app/(app)/import/   adresse de transfert, « Voilà ce que j’ai retrouvé. », et qualify/ : la pile de cartes
 src/lib/inbound/        règles, classification Anthropic (prompt, schéma, factice), Resend (signature, contenu)
 src/components/import/  pile de qualification, logos des plateformes, liste des livraisons exclues
 src/lib/booking/        moyens de réserver, « Tu quittes WHERE », retour après visite → preuves
 src/components/booking/ feuille « Réserver », écran « Tu quittes WHERE », bulle de retour
+src/app/(app)/memory/   Ma mémoire : stats, filtres par catégorie, un lieu par carte avec sa preuve la plus forte
+src/app/(app)/circle/   Mon cercle : domaines de confiance cochables, « Ajouter une personne » (rien n'est envoyé)
+src/app/(app)/sources/  Mes sources : transfert d'email (connecter / déconnecter), sources à venir, plateformes
+src/app/(app)/privacy/  Confidentialité : interrupteurs d'utilisation, suppression (source, lieux importés, compte)
+src/app/api/circle/     POST : ajouter une personne ; PATCH [id] : domaines de confiance
+src/app/api/privacy/    PATCH : « Utilisé pour les recommandations » (appliqué par la recherche)
+src/app/api/sources/    email : DELETE supprime l'adresse de transfert et les emails reçus, POST la rétablit
+src/app/api/account/    DELETE : supprime le compte (fonction SQL delete_my_account, sans service_role)
+src/lib/memory/         mémoire affichée (preuve la plus forte, libellés courts, catégories, stats)
+src/lib/circle/         domaines de confiance (« Tout » exclusif), validation d'un nouveau proche
+src/lib/privacy/        interrupteurs d'utilisation, aperçu et suppressions
 vercel.json             planification du cron (tous les jours à 8 h UTC)
 supabase/migrations/    schéma SQL et politiques RLS
 supabase/tests/         tests RLS (pgTAP)

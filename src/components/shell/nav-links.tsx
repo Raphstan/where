@@ -31,6 +31,7 @@ function TabsView({ pathname }: { pathname: string | null }) {
       className="flex justify-around border-t border-line bg-cream px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
     >
       {NAV_ITEMS.map((item) => {
+        if (!item.tabLabel) return null;
         const Icon = NAV_ICONS[item.key];
         const active = pathname !== null && isActive(pathname, item.href);
         return (

@@ -3,10 +3,21 @@ import { NAV_ITEMS, isActive } from "./navigation";
 
 describe("navigation", () => {
   it("expose les quatre onglets de la maquette dans l'ordre", () => {
-    expect(NAV_ITEMS.map((i) => i.tabLabel)).toEqual([
+    expect(NAV_ITEMS.flatMap((i) => (i.tabLabel ? [i.tabLabel] : []))).toEqual([
       "Chat",
       "Mémoire",
       "Cercle",
+      "Profil",
+    ]);
+  });
+
+  it("expose la barre latérale de la maquette", () => {
+    expect(NAV_ITEMS.map((i) => i.sideLabel)).toEqual([
+      "Conversation",
+      "Ma mémoire",
+      "Mon cercle",
+      "Mes sources",
+      "Confidentialité",
       "Profil",
     ]);
   });

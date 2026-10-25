@@ -7,14 +7,14 @@ export type Database = {
           Tables: {
             "circle_members": {
                   Row: {
-                    "created_at": string,"email": string | null,"id": string,"member_id": string | null,"name": string,"phone": string | null,"relation": string | null,"trust_domains": (Database["public"]['Enums']["trust_domain"])[],"user_id": string
+                    "created_at": string,"description": string | null,"email": string | null,"id": string,"member_id": string | null,"name": string,"phone": string | null,"relation": string | null,"trust_domains": (Database["public"]['Enums']["trust_domain"])[],"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"email"?: string | null,"id"?: string,"member_id"?: string | null,"name": string,"phone"?: string | null,"relation"?: string | null,"trust_domains"?: (Database["public"]['Enums']["trust_domain"])[],"user_id": string
+                    "created_at"?: string,"description"?: string | null,"email"?: string | null,"id"?: string,"member_id"?: string | null,"name": string,"phone"?: string | null,"relation"?: string | null,"trust_domains"?: (Database["public"]['Enums']["trust_domain"])[],"user_id": string
                   }
                   Update: {
-                    "created_at"?: string,"email"?: string | null,"id"?: string,"member_id"?: string | null,"name"?: string,"phone"?: string | null,"relation"?: string | null,"trust_domains"?: (Database["public"]['Enums']["trust_domain"])[],"user_id"?: string
+                    "created_at"?: string,"description"?: string | null,"email"?: string | null,"id"?: string,"member_id"?: string | null,"name"?: string,"phone"?: string | null,"relation"?: string | null,"trust_domains"?: (Database["public"]['Enums']["trust_domain"])[],"user_id"?: string
                   }
                   Relationships: [
                     {
@@ -247,14 +247,14 @@ isOneToOne: false
                   ]
                 },"users": {
                   Row: {
-                    "city": string | null,"created_at": string,"display_name": string | null,"email": string,"id": string
+                    "city": string | null,"created_at": string,"display_name": string | null,"email": string,"id": string,"use_circle_replies": boolean,"use_imported_bookings": boolean,"use_visit_feedback": boolean
                   }
                   ComputedFields: never
                   Insert: {
-                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email": string,"id": string
+                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email": string,"id": string,"use_circle_replies"?: boolean,"use_imported_bookings"?: boolean,"use_visit_feedback"?: boolean
                   }
                   Update: {
-                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email"?: string,"id"?: string
+                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email"?: string,"id"?: string,"use_circle_replies"?: boolean,"use_imported_bookings"?: boolean,"use_visit_feedback"?: boolean
                   }
                   Relationships: [
                     
@@ -303,7 +303,16 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "is_reply_author":
+            "delete_imported_places":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"delete_my_account":
+{ Args: Record<PropertyKey, never>; Returns: undefined
+                           },
+"imported_places_count":
+{ Args: Record<PropertyKey, never>; Returns: number
+                           },
+"is_reply_author":
 { Args: { "p_recipient_id": string }; Returns: boolean
                            }
           }

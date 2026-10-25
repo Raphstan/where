@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import Link from "next/link";
 import { Suspense } from "react";
+import { LockIcon, SourcesIcon } from "@/components/shell/icons";
 import { PageFrame } from "@/components/shell/page-frame";
 import { createClient } from "@/lib/supabase/server";
 
@@ -60,6 +61,23 @@ export default function ProfilePage() {
           ›
         </span>
       </Link>
+      {/* docs/prototype.html, scrProfile : le profil mène à Mes sources et à Confidentialité. */}
+      <nav className="flex flex-col">
+        {(
+          [
+            ["/sources", "Mes sources", SourcesIcon],
+            ["/privacy", "Confidentialité", LockIcon],
+          ] as const
+        ).map(([href, label, Icon]) => (
+          <Link key={href} href={href} className="flex items-center gap-3 border-b border-line py-3 last:border-b-0">
+            <Icon className="size-[22px] text-muted" />
+            <span className="grow font-semibold">{label}</span>
+            <span aria-hidden className="text-soft">
+              ›
+            </span>
+          </Link>
+        ))}
+      </nav>
       <Suspense
         fallback={
           <div className="h-[118px] animate-pulse rounded-card border border-line bg-cream-2" />
