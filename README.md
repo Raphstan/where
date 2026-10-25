@@ -83,6 +83,7 @@ src/app/(app)/memory/   Ma mémoire : stats, filtres par catégorie, un lieu par
 src/app/(app)/circle/   Mon cercle : domaines de confiance cochables, « Ajouter une personne » (rien n'est envoyé)
 src/app/(app)/sources/  Mes sources : transfert d'email (connecter / déconnecter), sources à venir, plateformes
 src/app/(app)/privacy/  Confidentialité : interrupteurs d'utilisation, suppression (source, lieux importés, compte)
+src/app/(app)/edge/     États limites : les cas particuliers réellement gérés, chacun « Voir en situation »
 src/app/api/circle/     POST : ajouter une personne ; PATCH [id] : domaines de confiance
 src/app/api/privacy/    PATCH : « Utilisé pour les recommandations » (appliqué par la recherche)
 src/app/api/sources/    email : DELETE supprime l'adresse de transfert et les emails reçus, POST la rétablit

@@ -20,7 +20,7 @@ import { Notice, TypingBubble, UserBubble, WhereBubble } from "./bubbles";
 import { ChoiceBubble } from "./choice";
 import { Composer } from "./composer";
 import { CriteriaChips } from "./criteria-chips";
-import type { ChatMessage } from "./messages";
+import { closedText, WIDEN_LABEL, type ChatMessage } from "./messages";
 import { PeopleSuggestion } from "./people";
 
 const TYPING_DELAY_MS = 450;
@@ -198,6 +198,8 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       push({ kind: "where", parts: response.intro, search });
       if (response.results.length > 0) push({ kind: "results", results: response.results, search });
       if (response.after) push({ kind: "notice", tone: "info", icon: "🧭", text: response.after, search });
+      if (response.closed.length > 0) push({ kind: "notice", tone: "soft", icon: "🚪", ...closedText(response.closed), search });
+      if (response.results.length === 0 && tags.current.length > 1) push({ kind: "widen", search });
       if (response.askIntro) push({ kind: "where", parts: response.askIntro, search });
       if (response.people.length > 0) push({ kind: "people", people: response.people, search });
       return response;
@@ -452,6 +454,12 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     }
   }
 
+  /** « Élargir les critères » : retire le critère le plus précis (le dernier de la liste). */
+  function widen() {
+    const last = [...messages].reverse().find((m) => m.kind === "criteria");
+    if (last?.kind === "criteria" && last.tags.length > 1) removeTag(last.id, last.tags.length - 1);
+  }
+
   function addTag(id: number, tag: string) {
     setMessages((prev) =>
       prev.map((m) =>
@@ -573,6 +581,19 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
                     {m.strong ? <b>{m.strong}</b> : null}
                     {m.text}
                   </Notice>
+                </div>
+              );
+            case "widen":
+              return (
+                <div key={m.id} className="mx-auto flex w-full max-w-[760px] flex-wrap gap-2">
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={widen}
+                    className="inline-flex min-h-9 items-center rounded-full bg-sand-2 px-3.5 text-[13px] font-bold text-ink transition-colors hover:bg-sand disabled:opacity-50"
+                  >
+                    {WIDEN_LABEL}
+                  </button>
                 </div>
               );
             case "results":

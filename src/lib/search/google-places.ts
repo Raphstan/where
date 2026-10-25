@@ -130,8 +130,35 @@ export function discoveryResult(place: GooglePlace, criteria: Criteria, index: n
     confidence: discoveryConfidence(),
     people: [],
     staleNotice: null,
+    conflictNotice: null,
     links: { googleMapsUrl: place.googleMapsUri ?? null },
     // Hors du cercle, seul le lien Google Maps est connu : ni Ontopo, ni Tabit, ni téléphone inventés.
     booking: place.googleMapsUri ? [{ kind: "maps", label: BOOKING_LABEL.maps, url: place.googleMapsUri }] : [],
   };
+}
+
+/** Places API (New), Place Details : seul le statut est demandé. */
+export const PLACE_DETAILS_URL = "https://places.googleapis.com/v1/places/";
+
+const StatusSchema = z.object({ businessStatus: z.string().optional() });
+
+/**
+ * Le lieu est-il définitivement fermé selon Google ? Toute erreur donne « non » : on n'écarte
+ * jamais un lieu sur une information absente. Réponse gardée un jour (cache des fetch de Next).
+ */
+export async function isPermanentlyClosed(googlePlaceId: string, apiKey: string, fetchImpl: FetchLike = fetch): Promise<boolean> {
+  if (!/^[A-Za-z0-9_-]{10,300}$/.test(googlePlaceId)) return false;
+  try {
+    const res = await fetchImpl(`${PLACE_DETAILS_URL}${googlePlaceId}`, {
+      method: "GET",
+      headers: { "X-Goog-Api-Key": apiKey, "X-Goog-FieldMask": "businessStatus" },
+      signal: AbortSignal.timeout(3000),
+      next: { revalidate: 86_400 },
+    } as RequestInit);
+    if (!res.ok) return false;
+    const parsed = StatusSchema.safeParse(await res.json());
+    return parsed.success && parsed.data.businessStatus === "CLOSED_PERMANENTLY";
+  } catch {
+    return false;
+  }
 }

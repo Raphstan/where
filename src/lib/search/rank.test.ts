@@ -115,3 +115,27 @@ describe("signalWeight", () => {
     expect(signalWeight(sig("booked", SARAH), new Set(), NOW)).toBeLessThan(signalWeight(sig("visited", SARAH), new Set(), NOW));
   });
 });
+
+describe("signaux contradictoires", () => {
+  it("donne les deux avis et ne laisse pas la confiance « forte » (Spicehaus)", () => {
+    const spicehaus = place("Spicehaus", { kind: "Bar à cocktails" });
+    const [r] = rankMemory(
+      rows(spicehaus, [
+        sig("recommended", SARAH, { occasion: ["date", "calme"] }),
+        sig("visited", NOAM, { note: "bruyant après 22 h, DJ le jeudi" }),
+      ]),
+      CIRCLE,
+      criteria(),
+      NOW,
+    );
+    expect(r!.conflictNotice).toBe(
+      "Signaux contradictoires : Sarah le trouve calme, Noam indique qu’il devient bruyant après 22 h. Probablement calme en début de soirée, animé ensuite.",
+    );
+    expect(r!.confidence).toEqual({ level: "moyenne", text: "Moyenne — signaux contradictoires" });
+  });
+
+  it("sans désaccord, pas de notice", () => {
+    const [r] = rankMemory(rows(place("Beit Kandinof"), [sig("recommended", SARAH, { occasion: ["calme"] })]), CIRCLE, criteria(), NOW);
+    expect(r!.conflictNotice).toBeNull();
+  });
+});

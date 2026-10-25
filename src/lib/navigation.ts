@@ -1,4 +1,4 @@
-export type NavKey = "chat" | "memory" | "circle" | "sources" | "privacy" | "profile";
+export type NavKey = "chat" | "memory" | "circle" | "sources" | "privacy" | "edge" | "profile";
 
 export type NavItem = {
   key: NavKey;
@@ -16,6 +16,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   // Sur mobile, le profil y mène (scrProfile).
   { key: "sources", href: "/sources", tabLabel: null, sideLabel: "Mes sources" },
   { key: "privacy", href: "/privacy", tabLabel: null, sideLabel: "Confidentialité" },
+  { key: "edge", href: "/edge", tabLabel: null, sideLabel: "États limites" },
   { key: "profile", href: "/profile", tabLabel: "Profil", sideLabel: "Profil" },
 ] as const;
 

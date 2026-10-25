@@ -66,11 +66,21 @@ export function LockIcon(props: IconProps) {
   );
 }
 
+export function EdgeIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3l9.5 17h-19z" />
+      <path d="M12 10v4M12 17h.01" />
+    </svg>
+  );
+}
+
 export const NAV_ICONS: Record<NavKey, (props: IconProps) => React.JSX.Element> = {
   chat: ChatIcon,
   memory: MemoryIcon,
   circle: CircleIcon,
   sources: SourcesIcon,
   privacy: LockIcon,
+  edge: EdgeIcon,
   profile: ProfileIcon,
 };

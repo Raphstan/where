@@ -49,6 +49,8 @@ export type SearchResult = {
   people: Person[];
   /** Recommandation la plus récente si elle est ancienne : notice « Cette recommandation date de… ». */
   staleNotice: string | null;
+  /** Avis contradictoires de deux proches : WHERE donne les deux plutôt que de trancher. */
+  conflictNotice: string | null;
   links: PlaceLinks;
   /** Moyens réellement disponibles pour réserver ou joindre le lieu (feuille « Réserver »). */
   booking: BookingOption[];
@@ -68,4 +70,6 @@ export type SearchResponse = {
   /** Confiance insuffisante : phrase d'appel au réseau et proches suggérés (sinon null / vide). */
   askIntro: RichText | null;
   people: SuggestedPerson[];
+  /** Lieux de la mémoire écartés parce que Google les donne définitivement fermés. */
+  closed: string[];
 };

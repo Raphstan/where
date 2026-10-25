@@ -2,13 +2,47 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Criteria } from "@/lib/ask/schema";
 import type { Database } from "@/lib/supabase/database.types";
-import { discoveryQuery, discoveryResult, pickDiscovery, searchGooglePlaces, type FetchLike } from "./google-places";
+import {
+  discoveryQuery,
+  discoveryResult,
+  isPermanentlyClosed,
+  pickDiscovery,
+  searchGooglePlaces,
+  type FetchLike,
+} from "./google-places";
 import { suggestPeople, type CircleMember } from "@/lib/network/suggest";
 import { loadUsagePrefs } from "@/lib/privacy/store";
 import { usableForRecommendations } from "@/lib/privacy/usage";
-import { afterFor, askIntroFor, introFor, isConfident } from "./phrasing";
+import { afterFor, askIntroFor, BEST_MATCH_HEADLINE, introFor, isConfident, rankLabel } from "./phrasing";
 import { MAX_RESULTS, rankMemory, type MemoryRow } from "./rank";
-import type { SearchResponse } from "./types";
+import type { SearchResponse, SearchResult } from "./types";
+
+const CLOSED_SLACK = 2;
+
+/**
+ * Lieu fermé (maquette : « Suzana apparaît dans d’anciennes recommandations, mais semble désormais
+ * fermé. Je l’ai écarté. ») : vérifié auprès de Google pour les lieux de la mémoire qui y sont reliés.
+ * Le lieu reste dans la mémoire ; il sort seulement des résultats.
+ */
+async function withoutClosed(
+  ranked: SearchResult[],
+  rows: readonly MemoryRow[],
+  apiKey: string | undefined,
+  fetchImpl: FetchLike | undefined,
+): Promise<{ open: SearchResult[]; closed: string[] }> {
+  if (!apiKey) return { open: ranked, closed: [] };
+  const googleId = new Map(rows.map((r) => [r.place.id, r.place.googlePlaceId]));
+  const status = await Promise.all(
+    ranked.map((r) => {
+      const id = googleId.get(r.id);
+      return id ? isPermanentlyClosed(id, apiKey, fetchImpl) : Promise.resolve(false);
+    }),
+  );
+  return {
+    open: ranked.filter((_, i) => !status[i]),
+    closed: ranked.filter((_, i) => status[i]).map((r) => r.name),
+  };
+}
 
 /** Au-delà, la mémoire est lue par pages : largement suffisant pour le MVP. */
 const MEMORY_LIMIT = 1000;
@@ -118,7 +152,14 @@ export type SearchDeps = {
 export async function search(criteria: Criteria, deps: SearchDeps): Promise<SearchResponse> {
   const now = deps.now ?? new Date();
   const { rows, circleMemberIds, members } = await loadMemory(deps.supabase, deps.userId);
-  const results = rankMemory(rows, circleMemberIds, criteria, now, MAX_RESULTS, deps.conversationId ?? null);
+  // Quelques candidats de plus : un lieu fermé est écarté sans laisser de place vide.
+  const ranked = rankMemory(rows, circleMemberIds, criteria, now, MAX_RESULTS + CLOSED_SLACK, deps.conversationId ?? null);
+  const { open, closed } = await withoutClosed(ranked, rows, deps.googlePlacesApiKey, deps.fetchImpl);
+  const results = open.slice(0, MAX_RESULTS).map((r, i) => ({
+    ...r,
+    rank: rankLabel(i, "personal"),
+    headline: i === 0 ? BEST_MATCH_HEADLINE : null,
+  }));
 
   const query = discoveryQuery(criteria);
   if (results.length < MAX_RESULTS && deps.googlePlacesApiKey && query) {
@@ -139,5 +180,6 @@ export async function search(criteria: Criteria, deps: SearchDeps): Promise<Sear
     after: afterFor(results),
     askIntro: askIntro && hasPersonal ? askIntro : null,
     people: askIntro ? people : [],
+    closed,
   };
 }

@@ -19,6 +19,7 @@ import {
   rankLabel,
   staleNotice,
 } from "./phrasing";
+import { CONFLICT_CONFIDENCE, conflictNotice, noiseConflict } from "./conflict";
 import { distinctSignals, isPersonal, isStale, type MemorySignal } from "./signal";
 import type { EvidenceLine, Person, SearchResult } from "./types";
 
@@ -116,6 +117,8 @@ function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Crit
   for (const l of lines) if (l.person) people.set(l.person.id, l.person);
 
   const unmatched = criteria.vibe.filter((v) => !vibes.includes(v));
+  const conflict = noiseConflict(distinct);
+  const confidence = computeConfidence(distinct, now);
 
   return {
     score,
@@ -133,9 +136,11 @@ function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Crit
       headline: null,
       lines,
       unknowns: personalUnknowns(distinct, unmatched, criteria.when, now),
-      confidence: computeConfidence(distinct, now),
+      // Deux proches se contredisent : la confiance ne peut pas être forte.
+      confidence: conflict && confidence.level === "forte" ? { level: "moyenne", text: CONFLICT_CONFIDENCE } : confidence,
       people: [...people.values()],
       staleNotice: staleNotice(distinct, now),
+      conflictNotice: conflict ? conflictNotice(conflict) : null,
       links: { googleMapsUrl: mapsUrl(place) },
       booking: bookingOptions(place),
     },

@@ -75,6 +75,13 @@ export function ResultCard({
           </div>
         ) : null}
 
+        {result.conflictNotice ? (
+          <div className="flex items-start gap-2.5 rounded-[14px] bg-blue-2 px-3 py-[9px] text-[13.5px] leading-[1.4] text-[#1f4f68]">
+            <span aria-hidden>↔</span>
+            <span>{result.conflictNotice}</span>
+          </div>
+        ) : null}
+
         <div className="flex flex-wrap items-center gap-2">
           <ConfidencePill level={result.confidence.level} text={result.confidence.text} />
           {result.people.length > 0 ? (

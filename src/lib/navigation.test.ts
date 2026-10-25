@@ -18,6 +18,7 @@ describe("navigation", () => {
       "Mon cercle",
       "Mes sources",
       "Confidentialité",
+      "États limites",
       "Profil",
     ]);
   });

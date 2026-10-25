@@ -291,9 +291,13 @@ export function askIntroFor(results: readonly SearchResult[], people: readonly {
     helpers.length === 1
       ? [{ text: helpers[0]!.name, strong: true }, { text: " pourrait probablement t’aider." }]
       : [{ text: `${numberWord(helpers.length)} personnes`, strong: true }, { text: " pourraient probablement t’aider." }];
-  const lead = results.some((r) => r.origin === "personal")
-    ? "Aucune de ces pistes n’est encore confirmée par une recommandation récente. Mais "
-    : `${INTRO_TEXT.insufficient} Mais `;
+  const personal = results.filter((r) => r.origin === "personal");
+  const lead =
+    personal.length === 0
+      ? `${INTRO_TEXT.insufficient} Mais `
+      : personal[0]!.conflictNotice
+        ? "Les avis de ton cercle divergent sur ce lieu. Mais "
+        : "Aucune de ces pistes n’est encore confirmée par une recommandation récente. Mais ";
   return [{ text: lead }, ...who];
 }
 

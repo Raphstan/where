@@ -3,6 +3,7 @@ import { criteria } from "@/test/search-fixtures";
 import {
   discoveryQuery,
   discoveryResult,
+  isPermanentlyClosed,
   pickDiscovery,
   PLACES_SEARCH_URL,
   searchGooglePlaces,
@@ -72,5 +73,32 @@ describe("découverte", () => {
       ["Aucun proche ne l’a encore recommandé", "Information publique", "du web public", null],
       ["Note publique de 4,6 sur 5 (312 avis Google)", "Information publique", "du web public", null],
     ]);
+  });
+});
+
+describe("isPermanentlyClosed", () => {
+  const respond = (body: unknown, ok = true): FetchLike => vi.fn(async () => ({ ok, json: async () => body }) as Response);
+
+  it("ne retient que CLOSED_PERMANENTLY", async () => {
+    expect(await isPermanentlyClosed("ChIJsuzana1234", "k", respond({ businessStatus: "CLOSED_PERMANENTLY" }))).toBe(true);
+    expect(await isPermanentlyClosed("ChIJsuzana1234", "k", respond({ businessStatus: "CLOSED_TEMPORARILY" }))).toBe(false);
+    expect(await isPermanentlyClosed("ChIJsuzana1234", "k", respond({ businessStatus: "OPERATIONAL" }))).toBe(false);
+  });
+
+  it("n'écarte jamais un lieu sur une erreur ou un identifiant douteux", async () => {
+    expect(await isPermanentlyClosed("ChIJsuzana1234", "k", respond({}, false))).toBe(false);
+    expect(await isPermanentlyClosed("ChIJsuzana1234", "k", vi.fn(async () => { throw new Error("réseau"); }))).toBe(false);
+    const f = respond({ businessStatus: "CLOSED_PERMANENTLY" });
+    expect(await isPermanentlyClosed("../evil", "k", f)).toBe(false);
+    expect(f).not.toHaveBeenCalled();
+  });
+
+  it("ne demande que le statut", async () => {
+    const f = respond({ businessStatus: "OPERATIONAL" });
+    await isPermanentlyClosed("ChIJsuzana1234", "cle", f);
+    expect(f).toHaveBeenCalledWith(
+      "https://places.googleapis.com/v1/places/ChIJsuzana1234",
+      expect.objectContaining({ method: "GET", headers: { "X-Goog-Api-Key": "cle", "X-Goog-FieldMask": "businessStatus" } }),
+    );
   });
 });

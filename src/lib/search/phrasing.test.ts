@@ -146,6 +146,7 @@ describe("intro et notice", () => {
     confidence: { level: "forte", text: "" },
     people: [],
     staleNotice: null,
+    conflictNotice: null,
     links: { googleMapsUrl: null },
     booking: [],
   });
@@ -188,6 +189,17 @@ describe("intro et notice", () => {
       { text: "Sarah", strong: true },
       { text: " pourrait probablement t’aider." },
     ]);
+  });
+
+  it("ne prétend pas qu'une recommandation manque quand deux proches se contredisent", () => {
+    const split = {
+      ...card("Spicehaus", "personal", "x"),
+      confidence: { level: "moyenne" as const, text: "Moyenne — signaux contradictoires" },
+      conflictNotice: "Signaux contradictoires : …",
+    };
+    expect(askIntroFor([split], [{ name: "Noam", relevant: true }])?.[0]).toEqual({
+      text: "Les avis de ton cercle divergent sur ce lieu. Mais ",
+    });
   });
 
   it("n'appelle pas le réseau quand un résultat est sûr, ni sans proche pertinent", () => {
