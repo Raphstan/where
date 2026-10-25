@@ -8,7 +8,8 @@ dans `CLAUDE.md`.
 
 ## Stack
 
-Next.js (App Router, TypeScript strict), Tailwind CSS v4, Supabase, Vercel, API Anthropic, Resend.
+Next.js (App Router, TypeScript strict), Tailwind CSS v4, Supabase, Vercel, API Anthropic, Resend,
+Google Places API (New) pour la seule carte « Découverte ».
 
 ## Démarrer
 
@@ -57,19 +58,45 @@ src/app/auth/           arrivée du lien magique (confirm) et déconnexion (sign
 src/app/api/ask/        POST : question → critères compris (+ une question de précision au plus)
 src/lib/ask/            schémas zod, prompt système, appel Anthropic (sortie structurée), mode factice
 src/components/chat/    écran de conversation : bulles, chips de critères, question à choix, composer
+src/app/api/search/     POST : critères → au plus trois lieux classés, avec leurs preuves
+src/lib/search/         confiance, formulations, classement, filtrage par cercle, découverte Google Places
+src/components/results/ cartes résultat et panneau « Pourquoi ce choix ? »
 supabase/migrations/    schéma SQL et politiques RLS
 supabase/tests/         tests RLS (pgTAP)
 supabase/templates/     template de l'email de lien magique
+supabase/snippets/      mémoire de démonstration (local uniquement)
 ```
 
 ## Compréhension des questions (Anthropic)
 
 `/api/ask` appelle le modèle `claude-opus-5` avec une sortie structurée (zod) et renvoie les critères
-compris, les chips à afficher et, au plus, une question complémentaire. Il n'y a pas encore de résultats.
+compris, les chips à afficher et, au plus, une question complémentaire.
 
 - Mettre `ANTHROPIC_API_KEY` dans `.env.local` pour un fonctionnement réel.
 - Sans clé, `WHERE_ASK_MOCK=1` renvoie une compréhension simulée (développement uniquement).
 - `npm run test:live` vérifie les six questions d'exemple de la maquette contre l'API réelle.
+
+## Recherche et classement
+
+`/api/search` lit la mémoire de l'utilisateur sous RLS : ses propres signaux et ceux attribués à des
+membres de son cercle (jamais la mémoire d'un autre compte). Les signaux sont agrégés par lieu, filtrés
+par les critères (ville, type), puis classés : confiance d'abord, puis score (niveau de preuve, occasion,
+quartier, ambiance), puis fraîcheur. Trois résultats au maximum.
+
+| Confiance | Règle |
+|---|---|
+| Forte | au moins une recommandation explicite de moins de deux ans |
+| Moyenne | des signaux personnels, mais aucune recommandation, ou seulement d'anciennes |
+| Exploratoire | aucun signal personnel : information publique uniquement |
+
+Quand le cercle fournit moins de trois lieux, une « Découverte » Google Places complète la liste
+(`GOOGLE_PLACES_API_KEY`, facultative). Sans clé, la découverte est simplement omise.
+
+Mémoire de démonstration pour un compte local (après une première connexion) :
+
+```bash
+docker exec -i supabase_db_where psql -U postgres -v email="'toi@exemple.com'" < supabase/snippets/demo_memory.sql
+```
 
 ## Supabase hébergé (Vercel)
 

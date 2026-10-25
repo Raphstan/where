@@ -107,3 +107,90 @@ h4 {
     transform: translateY(-3px);
   }
 }
+
+/* ---------- Panneaux, feuilles et cartes résultat (docs/prototype.html : fade, up, slideL, .photo) ---------- */
+@theme {
+  --animate-fade: fade 0.25s ease;
+  --animate-up: up 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  --animate-slide-l: slide-l 0.3s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes up {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-l {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Scènes peintes de la maquette, en attendant de vraies photos : une par lieu, choisie par son identifiant. */
+.scene {
+  position: relative;
+  overflow: hidden;
+  background: #333;
+}
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 70% at 50% 110%, rgba(0, 0, 0, 0.35), transparent 60%);
+}
+.scene-0 {
+  background:
+    radial-gradient(60% 50% at 30% 30%, #f2b37a 0%, transparent 60%),
+    radial-gradient(40% 40% at 75% 65%, #d1623f 0%, transparent 60%),
+    linear-gradient(160deg, #5c2b2e 0%, #1c1a2b 60%, #0e1420 100%);
+}
+.scene-1 {
+  background:
+    radial-gradient(50% 50% at 70% 25%, #f6d28c 0%, transparent 55%),
+    radial-gradient(60% 40% at 20% 80%, #2e6e8e 0%, transparent 60%),
+    linear-gradient(200deg, #3b2a3b, #111a2a);
+}
+.scene-2 {
+  background:
+    radial-gradient(40% 50% at 25% 35%, #8fb8c8 0%, transparent 60%),
+    radial-gradient(50% 45% at 75% 75%, #e8a58a 0%, transparent 60%),
+    linear-gradient(180deg, #f1e6d3, #b9a590);
+}
+.scene-3 {
+  background:
+    radial-gradient(60% 55% at 30% 20%, #fbe2b0 0%, transparent 60%),
+    radial-gradient(60% 50% at 80% 80%, #7e9e63 0%, transparent 60%),
+    linear-gradient(190deg, #d9c9a4, #5f7b4c);
+}
+.scene-4 {
+  background:
+    radial-gradient(40% 50% at 25% 35%, #e7a35b 0%, transparent 60%),
+    radial-gradient(40% 40% at 80% 60%, #9b3f4a 0%, transparent 60%),
+    linear-gradient(190deg, #2a1e2e, #0f131f);
+}
+.scene-5 {
+  background:
+    radial-gradient(50% 50% at 30% 30%, #f7c9a5 0%, transparent 60%),
+    radial-gradient(40% 40% at 80% 70%, #b9654a 0%, transparent 60%),
+    linear-gradient(190deg, #d9a27e, #5b3a33);
+}

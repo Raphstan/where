@@ -2,7 +2,7 @@
 -- Vérifie : un utilisateur ne lit que ses propres données ; une réponse n'est lisible que par
 -- l'auteur de la demande et par son auteur ; un signal public n'est jamais attribué.
 begin;
-select plan(13);
+select plan(15);
 
 -- Trois comptes : A (demandeur), B (proche de A, avec compte), C (étranger).
 insert into auth.users (id, email) values
@@ -18,6 +18,10 @@ select is(
 
 insert into public.places (id, name, city) values
   ('10000000-0000-0000-0000-000000000001', 'Tishbi Winery', 'Zikhron Ya''akov');
+
+-- Un proche du cercle de C, pour vérifier qu'un signal de A ne peut pas le citer.
+insert into public.circle_members (id, user_id, name, email) values
+  ('20000000-0000-0000-0000-00000000000c', '00000000-0000-0000-0000-00000000000c', 'Proche de C', 'pc@test.local');
 
 -- Données de A
 insert into public.circle_members (id, user_id, member_id, name, trust_domains) values
@@ -73,6 +77,22 @@ select throws_ok(
   '23514',
   null,
   'une réponse du réseau doit être attribuée à un membre du cercle'
+);
+
+select throws_ok(
+  $$ insert into public.signals (user_id, place_id, evidence_level, source_type, source_member_id)
+     values ('00000000-0000-0000-0000-00000000000a', '10000000-0000-0000-0000-000000000001', 'recommended', 'manual',
+             '20000000-0000-0000-0000-00000000000c') $$,
+  '23514',
+  null,
+  'un signal ne peut citer qu''un proche du cercle de son propriétaire'
+);
+
+select lives_ok(
+  $$ insert into public.signals (user_id, place_id, evidence_level, source_type, source_member_id)
+     values ('00000000-0000-0000-0000-00000000000a', '10000000-0000-0000-0000-000000000001', 'recommended', 'manual',
+             '20000000-0000-0000-0000-000000000001') $$,
+  'un signal peut citer un proche du cercle de son propriétaire'
 );
 
 -- ---------------------------------------------------------------- en tant que B (le proche)

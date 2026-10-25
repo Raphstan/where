@@ -33,14 +33,14 @@ isOneToOne: false
                   ]
                 },"places": {
                   Row: {
-                    "address": string | null,"city": string | null,"created_at": string,"created_by": string | null,"google_place_id": string | null,"id": string,"lat": number | null,"lng": number | null,"name": string
+                    "address": string | null,"area": string | null,"city": string | null,"created_at": string,"created_by": string | null,"google_place_id": string | null,"id": string,"kind": string | null,"lat": number | null,"lng": number | null,"name": string,"noise": string | null,"price": string | null,"vibe": (string)[]
                   }
                   ComputedFields: never
                   Insert: {
-                    "address"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"lat"?: number | null,"lng"?: number | null,"name": string
+                    "address"?: string | null,"area"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"kind"?: string | null,"lat"?: number | null,"lng"?: number | null,"name": string,"noise"?: string | null,"price"?: string | null,"vibe"?: (string)[]
                   }
                   Update: {
-                    "address"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"lat"?: number | null,"lng"?: number | null,"name"?: string
+                    "address"?: string | null,"area"?: string | null,"city"?: string | null,"created_at"?: string,"created_by"?: string | null,"google_place_id"?: string | null,"id"?: string,"kind"?: string | null,"lat"?: number | null,"lng"?: number | null,"name"?: string,"noise"?: string | null,"price"?: string | null,"vibe"?: (string)[]
                   }
                   Relationships: [
                     {

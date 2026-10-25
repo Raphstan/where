@@ -7,6 +7,7 @@ import { z } from "zod";
  */
 const serverSchema = z.object({
   ANTHROPIC_API_KEY: z.string().min(1).optional(),
+  GOOGLE_PLACES_API_KEY: z.string().min(1).optional(),
   WHERE_ASK_MOCK: z
     .string()
     .optional()
@@ -18,6 +19,7 @@ export type ServerEnv = z.infer<typeof serverSchema>;
 export function getServerEnv(): ServerEnv {
   return serverSchema.parse({
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
+    GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY || undefined,
     WHERE_ASK_MOCK: process.env.WHERE_ASK_MOCK,
   });
 }

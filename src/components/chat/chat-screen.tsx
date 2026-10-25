@@ -2,12 +2,16 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EXAMPLE_QUESTIONS } from "@/lib/ask/examples";
-import type { AskRequest, AskResponse, Understanding } from "@/lib/ask/schema";
+import type { AskRequest, AskResponse, Criteria, Understanding } from "@/lib/ask/schema";
+import { withoutTag, withTag } from "@/lib/search/match";
+import type { SearchResponse } from "@/lib/search/types";
+import { ResultCard } from "@/components/results/result-card";
+import { usePanel } from "@/components/shell/panel-context";
 import { Notice, TypingBubble, UserBubble, WhereBubble } from "./bubbles";
 import { ChoiceBubble } from "./choice";
 import { Composer } from "./composer";
 import { CriteriaChips } from "./criteria-chips";
-import { ENDING_TEXT, type ChatMessage } from "./messages";
+import type { ChatMessage } from "./messages";
 
 const TYPING_DELAY_MS = 450;
 
@@ -16,21 +20,30 @@ type NewMessage = DistributiveOmit<ChatMessage, "id">;
 
 const normalize = (tag: string) => tag.trim().toLocaleLowerCase("fr");
 
-async function ask(body: AskRequest): Promise<Understanding> {
-  const res = await fetch("/api/ask", {
+async function post<T>(url: string, body: unknown, ok: (json: unknown) => json is T, fallback: string): Promise<T> {
+  const res = await fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(body),
   });
-  const json = (await res.json().catch(() => null)) as AskResponse | { error?: { message?: string } } | null;
-  if (!res.ok || !json || !("understanding" in json)) {
-    const message =
-      json && "error" in json && json.error?.message
-        ? json.error.message
-        : "Je n’ai pas réussi à comprendre la question. Réessaie dans un instant.";
-    throw new Error(message);
-  }
+  const json: unknown = await res.json().catch(() => null);
+  if (res.ok && ok(json)) return json;
+  const message = (json as { error?: { message?: string } } | null)?.error?.message;
+  throw new Error(message || fallback);
+}
+
+const isAskResponse = (json: unknown): json is AskResponse =>
+  typeof json === "object" && json !== null && "understanding" in json;
+const isSearchResponse = (json: unknown): json is SearchResponse =>
+  typeof json === "object" && json !== null && "results" in json && "intro" in json;
+
+async function ask(body: AskRequest): Promise<Understanding> {
+  const json = await post("/api/ask", body, isAskResponse, "Je n’ai pas réussi à comprendre la question. Réessaie dans un instant.");
   return json.understanding;
+}
+
+function searchPlaces(criteria: Criteria): Promise<SearchResponse> {
+  return post("/api/search", { criteria }, isSearchResponse, "Je n’arrive pas à chercher dans ton cercle. Réessaie dans un instant.");
 }
 
 export function ChatScreen() {
@@ -38,10 +51,15 @@ export function ChatScreen() {
   const [question, setQuestion] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const { close: closePanel } = usePanel();
   const nextId = useRef(1);
   /* Modifications manuelles des critères, à conserver quand le serveur renvoie une nouvelle compréhension. */
   const removedTags = useRef(new Set<string>());
   const addedTags = useRef<string[]>([]);
+  /* Critères courants (après retraits et ajouts manuels), et la dernière recherche affichée. */
+  const criteria = useRef<Criteria | null>(null);
+  const lastSearch = useRef(0);
+  const searched = useRef(false);
   const bottom = useRef<HTMLDivElement>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -80,10 +98,12 @@ export function ChatScreen() {
       ]);
       remove(typingId);
       push({ kind: "criteria", tags: applyManualEdits(understanding.tags) });
+      criteria.current = applyCriteriaEdits(understanding.criteria);
       if (understanding.clarification) {
         push({ kind: "choice", clarification: understanding.clarification, picked: null });
+        setBusy(false);
       } else {
-        push({ kind: "where", text: ENDING_TEXT });
+        await runSearch(criteria.current);
       }
     } catch (error) {
       remove(typingId);
@@ -92,9 +112,43 @@ export function ChatScreen() {
         tone: "warn",
         text: error instanceof Error ? error.message : "Quelque chose a coincé. Réessaie dans un instant.",
       });
-    } finally {
       setBusy(false);
     }
+  }
+
+  /** Lance (ou relance) la recherche ; les messages de la recherche précédente sont remplacés. */
+  async function runSearch(current: Criteria) {
+    setBusy(true);
+    searched.current = true;
+    const previous = lastSearch.current;
+    const search = ++lastSearch.current;
+    setMessages((prev) => prev.filter((m) => !("search" in m && m.search === previous)));
+    const typingId = push({ kind: "typing", search });
+    try {
+      const response = await searchPlaces(current);
+      if (lastSearch.current !== search) return; // Une recherche plus récente a pris le relais.
+      remove(typingId);
+      push({ kind: "where", parts: response.intro, search });
+      if (response.results.length > 0) push({ kind: "results", results: response.results, search });
+      if (response.after) push({ kind: "notice", tone: "info", icon: "🧭", text: response.after, search });
+    } catch (error) {
+      remove(typingId);
+      push({
+        kind: "notice",
+        tone: "warn",
+        text: error instanceof Error ? error.message : "Quelque chose a coincé. Réessaie dans un instant.",
+        search,
+      });
+    } finally {
+      if (lastSearch.current === search) setBusy(false);
+    }
+  }
+
+  function applyCriteriaEdits(c: Criteria): Criteria {
+    let out = c;
+    for (const removed of removedTags.current) out = withoutTag(out, removed);
+    for (const added of addedTags.current) out = withTag(out, added);
+    return out;
   }
 
   function applyManualEdits(tags: string[]): string[] {
@@ -114,6 +168,9 @@ export function ChatScreen() {
     setQuestion(text);
     removedTags.current = new Set();
     addedTags.current = [];
+    criteria.current = null;
+    searched.current = false;
+    lastSearch.current += 1; // Les résultats de la question précédente restent dans la conversation.
     push({ kind: "user", text });
     void runAsk({ question: text });
   }
@@ -150,7 +207,13 @@ export function ChatScreen() {
     if (label) {
       removedTags.current.add(normalize(label));
       addedTags.current = addedTags.current.filter((t) => normalize(t) !== normalize(label));
-      showToast(`« ${label} » retiré`);
+      if (criteria.current) criteria.current = withoutTag(criteria.current, label);
+      if (criteria.current && searched.current && !busy) {
+        showToast(`« ${label} » retiré — je mets les résultats à jour`);
+        void runSearch(criteria.current);
+      } else {
+        showToast(`« ${label} » retiré`);
+      }
     }
   }
 
@@ -164,7 +227,13 @@ export function ChatScreen() {
     );
     removedTags.current.delete(normalize(tag));
     if (!addedTags.current.some((t) => normalize(t) === normalize(tag))) addedTags.current.push(tag);
-    showToast(`« ${tag} » ajouté`);
+    if (criteria.current) criteria.current = withTag(criteria.current, tag);
+    if (criteria.current && searched.current && !busy) {
+      showToast(`« ${tag} » ajouté — résultats mis à jour`);
+      void runSearch(criteria.current);
+    } else {
+      showToast(`« ${tag} » ajouté`);
+    }
   }
 
   function reset() {
@@ -173,6 +242,10 @@ export function ChatScreen() {
     setBusy(false);
     removedTags.current = new Set();
     addedTags.current = [];
+    criteria.current = null;
+    searched.current = false;
+    lastSearch.current += 1; // Ignore une recherche encore en vol.
+    closePanel();
   }
 
   const empty = messages.length === 0;
@@ -245,13 +318,25 @@ export function ChatScreen() {
             case "where":
               return (
                 <div key={m.id} className="mx-auto w-full max-w-[760px]">
-                  <WhereBubble>{m.text}</WhereBubble>
+                  <WhereBubble>
+                    {m.parts.map((p, i) => (p.strong ? <b key={i}>{p.text}</b> : <span key={i}>{p.text}</span>))}
+                  </WhereBubble>
                 </div>
               );
             case "notice":
               return (
                 <div key={m.id} className="mx-auto w-full max-w-[760px]">
-                  <Notice tone={m.tone}>{m.text}</Notice>
+                  <Notice tone={m.tone} icon={m.icon}>
+                    {m.text}
+                  </Notice>
+                </div>
+              );
+            case "results":
+              return (
+                <div key={m.id} className="mx-auto flex w-full max-w-[760px] animate-pop flex-col gap-2.5">
+                  {m.results.map((r, i) => (
+                    <ResultCard key={r.id} result={r} first={i === 0} />
+                  ))}
                 </div>
               );
           }

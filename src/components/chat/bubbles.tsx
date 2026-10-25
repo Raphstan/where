@@ -45,12 +45,12 @@ export function TypingBubble() {
   );
 }
 
-export function Notice({ tone, children }: { tone: "info" | "warn"; children: ReactNode }) {
+export function Notice({ tone, icon, children }: { tone: "info" | "warn"; icon?: string; children: ReactNode }) {
   const cls = tone === "warn" ? "bg-amber-2 text-[#6e4f14]" : "bg-blue-2 text-[#1f4f68]";
   return (
     <div className={`flex animate-pop items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13.5px] leading-[1.4] ${cls}`}>
       <span aria-hidden className="shrink-0">
-        {tone === "warn" ? "⚠️" : "ℹ️"}
+        {icon ?? (tone === "warn" ? "⚠️" : "ℹ️")}
       </span>
       <span>{children}</span>
     </div>

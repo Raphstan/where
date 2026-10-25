@@ -32,6 +32,7 @@ personnes auxquelles tu fais confiance. »
 | Déploiement | Vercel |
 | IA | API Anthropic (compréhension des questions, classification) |
 | Email entrant | Resend (webhook inbound, transfert d'email uniquement, pas de Gmail OAuth au MVP) |
+| Lieux publics | Google Places API (New), Text Search, uniquement pour la carte « Découverte » (clé serveur) |
 
 Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, shadcn, etc.).
 
