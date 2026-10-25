@@ -47,6 +47,20 @@ export async function findForwardOwner(admin: Client, token: string): Promise<{ 
   return data ? { userId: data.user_id, email: data.user.email } : null;
 }
 
+/** Dernier code de confirmation de transfert Gmail reçu pour ce compte (écrase le précédent). */
+export async function saveGmailConfirmation(
+  admin: Client,
+  userId: string,
+  c: { code: string; requester: string | null },
+  now = new Date(),
+): Promise<void> {
+  const { error } = await admin
+    .from("forward_addresses")
+    .update({ gmail_confirmation_code: c.code, gmail_confirmation_from: c.requester, gmail_confirmation_at: now.toISOString() })
+    .eq("user_id", userId);
+  if (error) throw new InboundError("storage_unavailable", error.message);
+}
+
 export async function alreadyReceived(admin: Client, resendEmailId: string): Promise<boolean> {
   const { data, error } = await admin.from("forwarded_emails").select("id").eq("resend_email_id", resendEmailId).maybeSingle();
   if (error) throw new InboundError("storage_unavailable", error.message);
@@ -97,7 +111,8 @@ export async function ingestEmail(admin: Client, input: IngestInput): Promise<In
     resend_email_id: input.resendEmailId,
     from_address: input.fromAddress,
     subject: input.subject,
-    body_text: input.text.slice(0, MAX_BODY_CHARS),
+    // Un email écarté sans rapport (publicité, notification) ne garde pas son texte.
+    body_text: c.kind === "other" ? "" : input.text.slice(0, MAX_BODY_CHARS),
     received_at: input.receivedAt,
     kind: c.kind,
     platform: c.platform,
@@ -135,6 +150,37 @@ export async function forwardTokenOf(supabase: Client): Promise<string | null> {
   const { data, error } = await supabase.from("forward_addresses").select("token").maybeSingle();
   if (error) throw new InboundError("storage_unavailable", error.message);
   return data?.token ?? null;
+}
+
+/** Au-delà, un code de confirmation Gmail n'est plus montré (Gmail en renvoie un à la demande). */
+const CONFIRMATION_TTL_MS = 24 * 3600 * 1000;
+
+export type GmailFilterState = {
+  /** Code de confirmation reçu récemment, à recopier dans Gmail. */
+  confirmation: { code: string; requester: string | null } | null;
+  /** Dernier email reçu d'une plateforme (signe que le filtre transfère). */
+  lastPlatformEmailAt: string | null;
+};
+
+export async function gmailFilterState(supabase: Client, accountEmail: string, now = new Date()): Promise<GmailFilterState> {
+  const [address, last] = await Promise.all([
+    supabase.from("forward_addresses").select("gmail_confirmation_code, gmail_confirmation_from, gmail_confirmation_at").maybeSingle(),
+    supabase
+      .from("forwarded_emails")
+      .select("received_at")
+      .neq("from_address", accountEmail.toLowerCase())
+      .order("received_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  if (address.error) throw new InboundError("storage_unavailable", address.error.message);
+  if (last.error) throw new InboundError("storage_unavailable", last.error.message);
+  const a = address.data;
+  const fresh = a?.gmail_confirmation_code && a.gmail_confirmation_at && now.getTime() - new Date(a.gmail_confirmation_at).getTime() < CONFIRMATION_TTL_MS;
+  return {
+    confirmation: fresh ? { code: a.gmail_confirmation_code!, requester: a.gmail_confirmation_from } : null,
+    lastPlatformEmailAt: last.data?.received_at ?? null,
+  };
 }
 
 export async function listImported(supabase: Client): Promise<ImportedEmail[]> {

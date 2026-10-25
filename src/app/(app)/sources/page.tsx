@@ -89,7 +89,8 @@ async function EmailSource() {
       />
       <p className="text-[12.5px] text-muted">
         Détecte les confirmations de réservation et certains signaux post-visite (ex. « merci pour votre visite ») dans
-        les emails que tu transfères. Jamais les emails personnels.
+        les emails que tu transfères, à la main ou par un filtre Gmail qui ne vise que les plateformes de réservation.
+        Jamais les emails personnels.
       </p>
       <EmailSourceActions connected={connected} />
     </div>

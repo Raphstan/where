@@ -53,14 +53,14 @@ isOneToOne: false
                   ]
                 },"forward_addresses": {
                   Row: {
-                    "created_at": string,"token": string,"user_id": string
+                    "created_at": string,"gmail_confirmation_at": string | null,"gmail_confirmation_code": string | null,"gmail_confirmation_from": string | null,"token": string,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"token"?: string,"user_id": string
+                    "created_at"?: string,"gmail_confirmation_at"?: string | null,"gmail_confirmation_code"?: string | null,"gmail_confirmation_from"?: string | null,"token"?: string,"user_id": string
                   }
                   Update: {
-                    "created_at"?: string,"token"?: string,"user_id"?: string
+                    "created_at"?: string,"gmail_confirmation_at"?: string | null,"gmail_confirmation_code"?: string | null,"gmail_confirmation_from"?: string | null,"token"?: string,"user_id"?: string
                   }
                   Relationships: [
                     {

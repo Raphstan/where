@@ -1,6 +1,9 @@
 import { createHmac } from "node:crypto";
 import { describe, expect, it } from "vitest";
+import { platformDomain } from "./platforms";
 import { emailAddress, emailText, forwardToken, htmlToText, isVerifiedSender, verifyWebhookSignature } from "./resend";
+
+const isPlatform = (a: string | null) => platformDomain(a) !== null;
 
 const SECRET = `whsec_${Buffer.from("secret-de-test-0123456789").toString("base64")}`;
 const NOW = new Date("2026-10-25T10:00:00Z");
@@ -48,11 +51,25 @@ describe("adresse de transfert", () => {
 
 describe("isVerifiedSender", () => {
   it("exige l'adresse du compte, sans échec d'authentification", () => {
-    expect(isVerifiedSender({ from: "R <r@exemple.com>", authentication: { spf: "pass", dkim: "pass", dmarc: "pass" } }, "R@exemple.com")).toBe(true);
-    expect(isVerifiedSender({ from: "r@exemple.com", authentication: null }, "r@exemple.com")).toBe(true);
-    expect(isVerifiedSender({ from: "autre@exemple.com", authentication: null }, "r@exemple.com")).toBe(false);
-    expect(isVerifiedSender({ from: "r@exemple.com", authentication: { dmarc: "fail" } }, "r@exemple.com")).toBe(false);
-    expect(isVerifiedSender({ from: "r@exemple.com", authentication: { spf: "fail", dkim: "fail" } }, "r@exemple.com")).toBe(false);
+    expect(isVerifiedSender({ from: "R <r@exemple.com>", authentication: { spf: "pass", dkim: "pass", dmarc: "pass" } }, "R@exemple.com", isPlatform)).toBe(true);
+    expect(isVerifiedSender({ from: "r@exemple.com", authentication: null }, "r@exemple.com", isPlatform)).toBe(true);
+    expect(isVerifiedSender({ from: "autre@exemple.com", authentication: null }, "r@exemple.com", isPlatform)).toBe(false);
+    expect(isVerifiedSender({ from: "r@exemple.com", authentication: { dmarc: "fail" } }, "r@exemple.com", isPlatform)).toBe(false);
+    expect(isVerifiedSender({ from: "r@exemple.com", authentication: { spf: "fail", dkim: "fail" } }, "r@exemple.com", isPlatform)).toBe(false);
+  });
+
+  it("accepte un email transféré par filtre seulement d'une plateforme connue, authentifiée par DMARC", () => {
+    const pass = { spf: "pass", dkim: "pass", dmarc: "pass" };
+    expect(isVerifiedSender({ from: "Ontopo <no-reply@ontopo.com>", authentication: pass }, "r@exemple.com", isPlatform)).toBe(true);
+    expect(isVerifiedSender({ from: "noreply@mail.booking.com", authentication: pass }, "r@exemple.com", isPlatform)).toBe(true);
+    // Usurpation ou authentification absente : refusé.
+    expect(isVerifiedSender({ from: "no-reply@ontopo.com", authentication: { dmarc: "fail" } }, "r@exemple.com", isPlatform)).toBe(false);
+    expect(isVerifiedSender({ from: "no-reply@ontopo.com", authentication: null }, "r@exemple.com", isPlatform)).toBe(false);
+    expect(isVerifiedSender({ from: "no-reply@ontopo.com", authentication: { dmarc: "none" } }, "r@exemple.com", isPlatform)).toBe(false);
+    // Domaine qui imite une plateforme, ou expéditeur quelconque : refusé.
+    expect(isVerifiedSender({ from: "x@ontopo.com.evil.example", authentication: pass }, "r@exemple.com", isPlatform)).toBe(false);
+    expect(isVerifiedSender({ from: "x@notontopo.com", authentication: pass }, "r@exemple.com", isPlatform)).toBe(false);
+    expect(isVerifiedSender({ from: "ami@gmail.com", authentication: pass }, "r@exemple.com", isPlatform)).toBe(false);
   });
 });
 

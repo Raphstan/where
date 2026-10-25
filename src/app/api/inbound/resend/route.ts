@@ -8,11 +8,13 @@ import {
   emailText,
   fetchReceivedEmail,
   forwardToken,
+  isAuthenticatedFrom,
   isVerifiedSender,
   verifyWebhookSignature,
   WebhookEventSchema,
 } from "@/lib/inbound/resend";
-import { alreadyReceived, findForwardOwner, ingestEmail } from "@/lib/inbound/store";
+import { GMAIL_FORWARDING_SENDER, parseGmailForwardingConfirmation, platformDomain } from "@/lib/inbound/platforms";
+import { alreadyReceived, findForwardOwner, ingestEmail, saveGmailConfirmation } from "@/lib/inbound/store";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 /** Ignoré sans erreur : Resend ne rejoue pas un 2xx. */
@@ -24,7 +26,9 @@ function ignored(reason: string) {
  * POST /api/inbound/resend — webhook Resend « email.received » (réception, voir README).
  * 1. Signature Svix vérifiée sur le corps brut (RESEND_WEBHOOK_SECRET).
  * 2. Le destinataire inbox+{jeton}@WHERE_INBOUND_DOMAIN désigne le compte ; l'expéditeur doit être
- *    l'adresse de ce compte, authentifiée.
+ *    l'adresse de ce compte (transfert à la main), ou une plateforme de réservation authentifiée par
+ *    DMARC (transfert par filtre Gmail). Le code de confirmation de transfert envoyé par Gmail est
+ *    gardé pour être affiché à l'utilisateur, qui le recopie lui-même.
  * 3. Le contenu est lu chez Resend, classé par l'API Anthropic, puis enregistré en attente de
  *    qualification (réservation) ou écarté (livraison, annulation, autre). Aucun signal n'est créé ici.
  * Usage de service_role : la requête vient de Resend, sans session utilisateur.
@@ -68,10 +72,19 @@ export async function POST(request: NextRequest) {
     if (await alreadyReceived(admin, data.email_id)) return ignored("duplicate");
 
     const email = await fetchReceivedEmail(data.email_id, env.RESEND_API_KEY);
-    if (!isVerifiedSender(email, owner.email)) return ignored("unverified_sender");
-
     const text = emailText(email);
     const subject = email.subject ?? data.subject ?? null;
+
+    // Gmail demande à confirmer le transfert : on garde le code, on ne confirme rien soi-même.
+    if (isAuthenticatedFrom(email, GMAIL_FORWARDING_SENDER)) {
+      const confirmation = parseGmailForwardingConfirmation({ from: email.from, subject, text });
+      if (!confirmation) return ignored("gmail_unrecognized");
+      await saveGmailConfirmation(admin, owner.userId, confirmation);
+      return NextResponse.json({ gmailConfirmation: true });
+    }
+
+    if (!isVerifiedSender(email, owner.email, (a) => platformDomain(a) !== null)) return ignored("unverified_sender");
+
     if (!text && !subject) return ignored("empty");
 
     const classification =

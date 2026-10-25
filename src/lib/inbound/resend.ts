@@ -121,15 +121,30 @@ export async function fetchReceivedEmail(id: string, apiKey: string, fetchImpl: 
 }
 
 /**
- * Expéditeur vérifié : l'email est transféré depuis l'adresse du compte, et Resend n'a pas vu
- * d'échec d'authentification (SPF, DKIM ou DMARC « fail ») — sinon n'importe qui pourrait écrire
- * dans la mémoire de quelqu'un en usurpant son adresse.
+ * Expéditeur vérifié — sinon n'importe qui pourrait écrire dans la mémoire de quelqu'un :
+ * - transfert à la main : l'email vient de l'adresse du compte, sans échec d'authentification
+ *   (SPF, DKIM ou DMARC « fail ») ;
+ * - transfert par filtre Gmail : l'email garde son expéditeur d'origine ; il est accepté seulement
+ *   s'il vient d'une plateforme de réservation connue et que DMARC le confirme (« pass »), ce qui
+ *   rend l'usurpation du domaine impossible. Sans résultat d'authentification, il est refusé.
  */
-export function isVerifiedSender(email: Pick<ReceivedEmail, "from" | "authentication">, accountEmail: string): boolean {
-  if (emailAddress(email.from) !== accountEmail.toLowerCase()) return false;
+export function isVerifiedSender(
+  email: Pick<ReceivedEmail, "from" | "authentication">,
+  accountEmail: string,
+  isPlatform: (address: string | null) => boolean,
+): boolean {
+  const from = emailAddress(email.from);
   const auth = email.authentication;
-  if (!auth) return true;
-  return auth.dmarc !== "fail" && !(auth.spf === "fail" && auth.dkim === "fail");
+  if (from === accountEmail.toLowerCase()) {
+    if (!auth) return true;
+    return auth.dmarc !== "fail" && !(auth.spf === "fail" && auth.dkim === "fail");
+  }
+  return isPlatform(from) && auth?.dmarc === "pass";
+}
+
+/** Un email authentifié (DMARC « pass ») de cet expéditeur précis. */
+export function isAuthenticatedFrom(email: Pick<ReceivedEmail, "from" | "authentication">, sender: string): boolean {
+  return emailAddress(email.from) === sender && email.authentication?.dmarc === "pass";
 }
 
 /* ---------------------------------------------------------------------------

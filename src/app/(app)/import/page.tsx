@@ -3,7 +3,9 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import { AutoRefresh, CopyAddress, DeliveriesButton } from "@/components/import/import-widgets";
+import { GmailFilterGuide } from "@/components/import/gmail-filter-guide";
 import { SourceLogo } from "@/components/import/source-logo";
+import { GMAIL_LINKS, gmailFilterQuery } from "@/lib/inbound/platforms";
 import { EmailSourceActions } from "@/components/privacy/email-source";
 import { getServerEnv } from "@/lib/env.server";
 import { forwardAddress } from "@/lib/inbound/resend";
@@ -15,7 +17,7 @@ import {
   summarizeImport,
   type ImportedEmail,
 } from "@/lib/inbound/rules";
-import { forwardTokenOf, listImported } from "@/lib/inbound/store";
+import { forwardTokenOf, gmailFilterState, listImported } from "@/lib/inbound/store";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Retrouver mes réservations" };
@@ -75,7 +77,14 @@ async function Results() {
   // Rendu à la requête : la session vit dans les cookies.
   await connection();
   const supabase = await createClient();
-  const [token, emails] = await Promise.all([forwardTokenOf(supabase), listImported(supabase)]);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const [token, emails, filter] = await Promise.all([
+    forwardTokenOf(supabase),
+    listImported(supabase),
+    gmailFilterState(supabase, user?.email ?? ""),
+  ]);
   const domain = getServerEnv().WHERE_INBOUND_DOMAIN;
   const s = summarizeImport(emails);
   const found = s.restaurants.length + s.hotels.length + s.activities.length;
@@ -105,6 +114,16 @@ async function Results() {
           Les livraisons sont écartées : une commande Tabit ou Wolt n’est pas une visite au restaurant.
         </p>
       </div>
+
+      {token && domain ? (
+        <GmailFilterGuide
+          address={forwardAddress(token, domain)}
+          query={gmailFilterQuery()}
+          links={{ forwarding: GMAIL_LINKS.forwarding, search: GMAIL_LINKS.search(gmailFilterQuery()) }}
+          confirmation={filter.confirmation}
+          lastPlatformEmailAt={filter.lastPlatformEmailAt}
+        />
+      ) : null}
 
       <div className="flex flex-col gap-[9px] text-[13px] text-ink-2">
         {[

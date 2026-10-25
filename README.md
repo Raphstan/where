@@ -222,6 +222,22 @@ Configuration : dans Resend, activer la réception sur le domaine (`WHERE_INBOUN
 sous-domaine `….resend.app` fourni), puis créer un webhook `email.received` vers
 `https://<domaine>/api/inbound/resend` et copier son secret dans `RESEND_WEBHOOK_SECRET`.
 
+### Transfert automatique par filtre Gmail
+
+Pour ne pas partager sa boîte mail, l'utilisateur crée dans Gmail un filtre qui transfère seulement
+les emails des plateformes de réservation (`src/lib/inbound/platforms.ts` : Ontopo, Tabit, Booking,
+Airbnb, OpenTable, Resy, Restu). Le guide est sur `/import`.
+
+- Un email transféré par filtre garde son expéditeur d'origine : il est accepté seulement si ce domaine
+  est une plateforme de la liste **et** que Resend rapporte DMARC « pass » (usurpation impossible).
+  Un transfert à la main doit toujours venir de l'adresse du compte.
+- Gmail confirme l'adresse de transfert en y envoyant un code (`forwarding-noreply@google.com`,
+  DMARC « pass ») : le webhook le garde dans `forward_addresses` et `/import` l'affiche. WHERE ne
+  clique jamais sur le lien de confirmation : l'utilisateur recopie le code lui-même.
+- Les emails écartés comme « autre » (publicités, notifications) ne gardent pas leur texte.
+- Il n'existe pas d'API Ontopo ou Tabit pour lire l'historique d'un client : ce filtre est la voie
+  retenue au MVP, sans connexion à leurs comptes.
+
 `npm run test:live` classe aussi, contre l'API réelle, les emails de `src/lib/inbound/examples.ts`
 (dont une table Tabit et une livraison Tabit).
 
