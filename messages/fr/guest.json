@@ -26,7 +26,8 @@
     "placeNameRequired": "Indique le nom du lieu.",
     "placeUrlInvalid": "Ce lien ne semble pas valide.",
     "checkAnswer": "Vérifie ta réponse.",
-    "sendFailed": "Ta réponse n’est pas partie. Réessaie dans un instant."
+    "sendFailed": "Ta réponse n’est pas partie. Réessaie dans un instant.",
+    "quotaExceeded": "Tu as déjà envoyé beaucoup de réponses par ce lien aujourd’hui. Merci ! Tu pourras en envoyer d’autres demain."
   },
   "mine": {
     "timesHelped": "C’est la <b>{count, selectordinal, one {#re} other {#e}} fois</b> que tu aides {requester} à trouver un lieu. Tu veux voir ce que tu lui as recommandé ?",

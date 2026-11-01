@@ -7,6 +7,7 @@ import { mockUnderstanding } from "@/lib/ask/mock";
 import { AskRequestSchema, type AskResponse } from "@/lib/ask/schema";
 import { UnderstandError, understandQuestion } from "@/lib/ask/understand";
 import { createClient } from "@/lib/supabase/server";
+import { consumeMyQuota } from "@/lib/quota";
 
 type ErrorBody = { error: { code: string; message: string } };
 
@@ -30,6 +31,8 @@ export async function POST(request: NextRequest) {
   const json = await request.json().catch(() => null);
   const parsed = AskRequestSchema.safeParse(json);
   if (!parsed.success) return fail(400, "invalid_request", t("api.ask.invalid"));
+
+  if (!(await consumeMyQuota(supabase, "ask"))) return fail(429, "quota_exceeded", t("api.quotaExceeded"));
 
   const env = getServerEnv();
   if (env.WHERE_ASK_MOCK && process.env.NODE_ENV !== "production") {

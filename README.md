@@ -253,6 +253,20 @@ connexion, le serveur crée le compte seulement pour :
 Les autres voient « La bêta est privée pour l'instant » : aucun email n'est envoyé. La table n'a aucune
 policy RLS : seul le serveur (service_role) la lit (`src/lib/auth/beta-access.ts`).
 
+## Limites d'usage
+
+Plafonds quotidiens (UTC) dans `src/lib/quota.ts`, comptés dans `usage_counters` par la fonction
+atomique `consume_quota` (aucun service externe) :
+
+| Action | Plafond | Au-delà |
+|---|---|---|
+| Question comprise par Claude (`/api/ask`) | 50 / personne | 429 « Tu as posé beaucoup de questions aujourd'hui… » |
+| Recherche (`/api/search`) | 80 / personne | la mémoire répond toujours ; la découverte Google est omise |
+| Réponse depuis un lien privé | 20 / lien | message « Tu pourras en envoyer d'autres demain » |
+| Email transféré traité | 300 / adresse | ignoré (`quota_exceeded`), pas d'appel Claude |
+
+Une panne du compteur laisse passer (journalisée) : elle ne doit pas bloquer le produit.
+
 ## Supabase hébergé (Vercel)
 
 1. Créer un projet Supabase, puis appliquer les migrations : `npx supabase link` puis `npx supabase db push`.

@@ -3,6 +3,7 @@ import { StoredCriteriaSchema } from "@/lib/conversations/schema";
 import { looselyEqual } from "@/lib/search/match";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ownMemorySignals, replySignals, type GuestReply } from "./reply";
+import { consumeQuota } from "@/lib/quota";
 
 /**
  * Accès de la page invité (sans compte). Toutes les lectures et écritures passent par le jeton du
@@ -72,7 +73,9 @@ async function resolvePlace(admin: Admin, name: string, city: string | null): Pr
   return created.data.id;
 }
 
-export type SubmitResult = { ok: true; memberName: string; requesterName: string | null } | { ok: false; reason: "not_found" };
+export type SubmitResult =
+  | { ok: true; memberName: string; requesterName: string | null }
+  | { ok: false; reason: "not_found" | "quota_exceeded" };
 
 /**
  * Enregistre la réponse du proche : request_replies, puis les signaux attribués au proche dans la
@@ -82,6 +85,7 @@ export async function submitGuestReply(reply: GuestReply): Promise<SubmitResult>
   const admin = createAdminClient();
   const r = await recipientByToken(admin, reply.token);
   if (!r?.request || !r.member) return { ok: false, reason: "not_found" };
+  if (!(await consumeQuota(admin, `token:${reply.token}`, "guest_reply"))) return { ok: false, reason: "quota_exceeded" };
 
   const criteria = StoredCriteriaSchema.safeParse(r.request.conversation?.criteria);
   const city = criteria.success ? criteria.data.city : null;

@@ -16,6 +16,7 @@ import {
 import { GMAIL_FORWARDING_SENDER, parseGmailForwardingConfirmation, platformDomain } from "@/lib/inbound/platforms";
 import { alreadyReceived, findForwardOwner, ingestEmail, saveGmailConfirmation } from "@/lib/inbound/store";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { consumeQuota } from "@/lib/quota";
 
 /** Ignoré sans erreur : Resend ne rejoue pas un 2xx. */
 function ignored(reason: string) {
@@ -70,6 +71,8 @@ export async function POST(request: NextRequest) {
     const owner = await findForwardOwner(admin, token);
     if (!owner) return ignored("unknown_address");
     if (await alreadyReceived(admin, data.email_id)) return ignored("duplicate");
+    // Plafond par adresse : un filtre Gmail mal réglé ne doit pas déclencher des centaines d'appels Claude.
+    if (!(await consumeQuota(admin, `inbox:${token}`, "inbound_email"))) return ignored("quota_exceeded");
 
     const email = await fetchReceivedEmail(data.email_id, env.RESEND_API_KEY);
     const text = emailText(email);

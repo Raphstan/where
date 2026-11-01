@@ -72,6 +72,7 @@
       "invalidCriteria": "Critères invalides.",
       "updateFailed": "Je n’arrive pas à mettre à jour cette conversation.",
       "repliesFailed": "Je n’arrive pas à lire les réponses."
-    }
+    },
+    "quotaExceeded": "Tu as posé beaucoup de questions aujourd’hui. Reprends demain : ta mémoire et ton cercle sont toujours là."
   }
 }

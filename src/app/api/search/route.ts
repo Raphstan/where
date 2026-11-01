@@ -6,6 +6,7 @@ import { SearchRequestSchema } from "@/lib/search/request";
 import { search, SearchError } from "@/lib/search/search";
 import type { SearchResponse } from "@/lib/search/types";
 import { createClient } from "@/lib/supabase/server";
+import { consumeMyQuota } from "@/lib/quota";
 
 type ErrorBody = { error: { code: string; message: string } };
 
@@ -30,6 +31,9 @@ export async function POST(request: NextRequest) {
   const parsed = SearchRequestSchema.safeParse(json);
   if (!parsed.success) return fail(400, "invalid_request", t("api.search.invalid"));
 
+  // Au-delà du plafond, la mémoire du cercle répond toujours ; seule la découverte Google (payante) est omise.
+  const withinQuota = await consumeMyQuota(supabase, "search");
+
   try {
     const response = await search(parsed.data.criteria, {
       tr: { t: translator(locale, "search"), ev: translator(locale, "evidence") },
@@ -37,7 +41,7 @@ export async function POST(request: NextRequest) {
       locale,
       supabase,
       userId: user.id,
-      googlePlacesApiKey: getServerEnv().GOOGLE_PLACES_API_KEY,
+      googlePlacesApiKey: withinQuota ? getServerEnv().GOOGLE_PLACES_API_KEY : undefined,
       conversationId: parsed.data.conversationId ?? null,
     });
     return NextResponse.json<SearchResponse>(response);

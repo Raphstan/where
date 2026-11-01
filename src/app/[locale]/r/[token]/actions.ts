@@ -39,7 +39,7 @@ export async function sendGuestReply(_prev: GuestReplyState, form: FormData): Pr
 
   try {
     const result = await submitGuestReply(parsed.data);
-    if (!result.ok) return { status: "error", message: t("errors.expired") };
+    if (!result.ok) return { status: "error", message: t(result.reason === "quota_exceeded" ? "errors.quotaExceeded" : "errors.expired") };
     return { status: "sent", reusable: parsed.data.reusable, at: Date.now() };
   } catch {
     return { status: "error", message: t("errors.sendFailed") };

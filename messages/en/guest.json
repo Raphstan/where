@@ -26,7 +26,8 @@
     "placeNameRequired": "Enter the name of the place.",
     "placeUrlInvalid": "That link doesn’t look valid.",
     "checkAnswer": "Check your answer.",
-    "sendFailed": "Your answer didn’t go through. Try again in a moment."
+    "sendFailed": "Your answer didn’t go through. Try again in a moment.",
+    "quotaExceeded": "You’ve already sent a lot of answers through this link today. Thank you! You can send more tomorrow."
   },
   "mine": {
     "timesHelped": "This is the <b>{count, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} time</b> you’ve helped {requester} find a place. Want to see what you recommended?",

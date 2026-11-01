@@ -259,6 +259,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"usage_counters": {
+                  Row: {
+                    "action": string,"count": number,"day": string,"subject": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action": string,"count"?: number,"day"?: string,"subject": string
+                  }
+                  Update: {
+                    "action"?: string,"count"?: number,"day"?: string,"subject"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"users": {
                   Row: {
                     "city": string | null,"created_at": string,"display_name": string | null,"email": string,"id": string,"use_circle_replies": boolean,"use_imported_bookings": boolean,"use_visit_feedback": boolean
@@ -317,7 +331,13 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "delete_imported_places":
+            "consume_my_quota":
+{ Args: { "p_action": string,"p_limit": number }; Returns: boolean
+                           },
+"consume_quota":
+{ Args: { "p_action": string,"p_limit": number,"p_subject": string }; Returns: boolean
+                           },
+"delete_imported_places":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
 "delete_my_account":
