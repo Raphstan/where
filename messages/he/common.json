@@ -1,0 +1,13 @@
+{
+  "back": "חזרה",
+  "close": "סגירה",
+  "send": "שליחה",
+  "you": "את/ה",
+  "profile": "פרופיל",
+  "language": "שפה",
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "he": "עברית"
+  }
+}

@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { translator } from "@/i18n/translator";
 import { NAV_ITEMS, isActive } from "./navigation";
+
+const t = translator("fr", "nav");
 
 describe("navigation", () => {
   it("expose les quatre onglets de la maquette dans l'ordre", () => {
-    expect(NAV_ITEMS.flatMap((i) => (i.tabLabel ? [i.tabLabel] : []))).toEqual([
+    expect(NAV_ITEMS.flatMap((i) => (i.tab ? [t(`tab.${i.key}`)] : []))).toEqual([
       "Chat",
       "Mémoire",
       "Cercle",
@@ -12,7 +15,7 @@ describe("navigation", () => {
   });
 
   it("expose la barre latérale de la maquette", () => {
-    expect(NAV_ITEMS.map((i) => i.sideLabel)).toEqual([
+    expect(NAV_ITEMS.map((i) => t(`side.${i.key}`))).toEqual([
       "Conversation",
       "Ma mémoire",
       "Mon cercle",

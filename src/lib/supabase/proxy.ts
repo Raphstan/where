@@ -23,8 +23,9 @@ function isProtected(pathname: string): boolean {
  * Rafraîchit la session Supabase à chaque requête et applique les redirections d'accès.
  * Ne fait aucune requête en base : seulement la vérification du jeton (getUser).
  */
-export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request });
+export async function updateSession(request: NextRequest, base?: NextResponse) {
+  // `base` : réponse de next-intl (réécriture vers /[locale]/…, cookie de langue), à conserver.
+  let response = base ?? NextResponse.next({ request });
 
   const supabase = createServerClient(
     publicEnv.NEXT_PUBLIC_SUPABASE_URL,
@@ -36,7 +37,7 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
+          if (!base) response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options),
           );

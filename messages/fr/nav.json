@@ -1,0 +1,18 @@
+{
+  "aria": "Navigation principale",
+  "tab": {
+    "chat": "Chat",
+    "memory": "Mémoire",
+    "circle": "Cercle",
+    "profile": "Profil"
+  },
+  "side": {
+    "chat": "Conversation",
+    "memory": "Ma mémoire",
+    "circle": "Mon cercle",
+    "sources": "Mes sources",
+    "privacy": "Confidentialité",
+    "edge": "États limites",
+    "profile": "Profil"
+  }
+}

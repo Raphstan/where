@@ -1,3 +1,4 @@
+import type { T } from "@/i18n/translator";
 import type { Database } from "@/lib/supabase/database.types";
 
 type DbEvidenceLevel = Database["public"]["Enums"]["evidence_level"];
@@ -23,26 +24,17 @@ type MissingInTs = Exclude<DbEvidenceLevel, EvidenceLevel>;
 const _everyDbLevelIsCovered: MissingInTs extends never ? true : never = true;
 void _everyDbLevelIsCovered;
 
-/** Libellé long, mot pour mot depuis docs/prototype.html (EVLABEL et whyBody). */
-export const EVIDENCE_LABEL_LONG: Readonly<Record<EvidenceLevel, string>> = {
-  recommended: "Recommandé explicitement",
-  visited: "Visité et confirmé",
-  booked_confirmed: "Réservation confirmée",
-  booked: "Réservation confirmée / signal post-visite",
-  saved: "Sauvegardé ou partagé",
-  public: "Information publique",
-};
-
 export type PersonalEvidenceLevel = Exclude<EvidenceLevel, "public">;
 
-/** Libellé court, mot pour mot depuis docs/prototype.html (scrMemory, evTxt). */
-export const EVIDENCE_LABEL_SHORT: Readonly<Record<PersonalEvidenceLevel, string>> = {
-  recommended: "Recommandé",
-  visited: "Visité",
-  booked_confirmed: "Réservé",
-  booked: "Réservé",
-  saved: "Sauvegardé",
-};
+/*
+ * Libellés : messages/{langue}/evidence.json. En français, mot pour mot depuis docs/prototype.html :
+ * `long.{niveau}` (EVLABEL, whyBody) et `short.{niveau}` (scrMemory, evTxt ; jamais `public`).
+ */
+
+/** Libellé long d'un niveau de preuve (« Pourquoi ce choix ? »). `t` : traducteur de l'espace `evidence`. */
+export function evidenceLabelLong(t: T, level: EvidenceLevel): string {
+  return t(`long.${level}`);
+}
 
 export function isEvidenceLevel(value: unknown): value is EvidenceLevel {
   return typeof value === "string" && (EVIDENCE_LEVELS as readonly string[]).includes(value);
@@ -62,10 +54,10 @@ export function sortByStrength<T extends { evidence_level: EvidenceLevel }>(item
  * Libellé court de la mémoire : « Recommandé », ou « Recommandé par Sarah » quand le signal
  * vient d'un proche. Le niveau `public` n'a pas de place dans la mémoire personnelle.
  */
-export function memoryLabel(level: EvidenceLevel, authorFirstName?: string | null): string {
+export function memoryLabel(t: T, level: EvidenceLevel, authorFirstName?: string | null): string {
   if (level === "public") {
     throw new Error("Un signal public n'apparaît pas dans la mémoire personnelle.");
   }
-  const base = EVIDENCE_LABEL_SHORT[level];
-  return authorFirstName ? `${base} par ${authorFirstName}` : base;
+  const label = t(`short.${level}`);
+  return authorFirstName ? t("shortBy", { label, name: authorFirstName }) : label;
 }

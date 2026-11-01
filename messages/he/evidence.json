@@ -1,0 +1,18 @@
+{
+  "long": {
+    "recommended": "הומלץ במפורש",
+    "visited": "ביקור מאושר",
+    "booked_confirmed": "הזמנה מאושרת",
+    "booked": "הזמנה מאושרת / משוב אחרי ביקור",
+    "saved": "נשמר או שותף",
+    "public": "מידע ציבורי"
+  },
+  "short": {
+    "recommended": "הומלץ",
+    "visited": "ביקור",
+    "booked_confirmed": "הוזמן",
+    "booked": "הוזמן",
+    "saved": "נשמר"
+  },
+  "shortBy": "{label} · {name}"
+}

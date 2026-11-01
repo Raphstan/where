@@ -1,3 +1,4 @@
+import type { T } from "@/i18n/translator";
 import { evidenceRank, memoryLabel, type PersonalEvidenceLevel } from "@/lib/evidence";
 import type { ReservationKind } from "@/lib/inbound/rules";
 import { fold, kindCategories } from "@/lib/search/match";
@@ -68,7 +69,8 @@ export type MemoryStats = { visited: number; recosReceived: number; cities: numb
  * Un lieu par carte, avec sa preuve la plus forte (à égalité, la plus récente). Le niveau `public`
  * n'entre jamais dans la mémoire personnelle. Les lieux sont triés par preuve la plus récente.
  */
-export function buildMemory(rows: readonly MemorySignalRow[]): MemoryItem[] {
+/** `t` : traducteur de l'espace `evidence` (libellé court de la preuve). */
+export function buildMemory(rows: readonly MemorySignalRow[], t: T): MemoryItem[] {
   const best = new Map<string, { row: MemorySignalRow & { level: PersonalEvidenceLevel }; latest: number; imported: ReservationKind | null }>();
   for (const r of rows) {
     if (r.level === "public") continue;
@@ -92,7 +94,7 @@ export function buildMemory(rows: readonly MemorySignalRow[]): MemoryItem[] {
       city: row.place.city,
       category: memoryCategory(row.place.kind, imported),
       level: row.level,
-      label: memoryLabel(row.level, row.member?.name),
+      label: memoryLabel(t, row.level, row.member?.name),
     }));
 }
 

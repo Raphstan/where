@@ -1,4 +1,9 @@
-import { EVIDENCE_LABEL_LONG, type EvidenceLevel } from "@/lib/evidence";
+import { translator } from "@/i18n/translator";
+import { evidenceLabelLong, type EvidenceLevel } from "@/lib/evidence";
+
+// TEMPORAIRE (passage aux trois langues en cours) : libellés en français en attendant que
+// les formulations reçoivent le traducteur de la requête.
+const TEV = translator("fr", "evidence");
 import { fold } from "./match";
 import { ageInYears, isStale, type MemorySignal } from "./signal";
 import type { EvidenceLine, Person, RichText, SearchResult } from "./types";
@@ -141,7 +146,7 @@ export function evidenceLine(signal: MemorySignal, now: Date, wantedOccasion: st
     kind: "evidence",
     level: signal.level,
     text,
-    label: EVIDENCE_LABEL_LONG[signal.level],
+    label: evidenceLabelLong(TEV, signal.level),
     provenance: provenanceFor(signal.level, person !== null),
     person,
   };
@@ -177,7 +182,7 @@ export function ratingLine(rating: number, count: number | null): EvidenceLine {
     kind: "evidence",
     level: "public",
     text: `Note publique de ${r} sur 5${n}`,
-    label: EVIDENCE_LABEL_LONG.public,
+    label: evidenceLabelLong(TEV, "public"),
     provenance: PROVENANCE.web,
     person: null,
   };
@@ -188,7 +193,7 @@ export function noCircleLine(): EvidenceLine {
     kind: "evidence",
     level: "public",
     text: DISCOVERY_TEXT.noCircle,
-    label: EVIDENCE_LABEL_LONG.public,
+    label: evidenceLabelLong(TEV, "public"),
     provenance: PROVENANCE.web,
     person: null,
   };

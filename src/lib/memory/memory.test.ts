@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { buildMemory, filterMemory, memoryCategory, memoryStats, type MemorySignalRow } from "./memory";
+import { translator } from "@/i18n/translator";
+
+const tEv = translator("fr", "evidence");
 
 const sarah = { id: "m-sarah", name: "Sarah" };
 const maya = { id: "m-maya", name: "Maya" };
@@ -28,7 +31,7 @@ describe("buildMemory", () => {
       row("Beit Kandinof", "recommended", sarah),
       row("Herzl 16", "saved", maya),
       row("The Norman", "booked", null),
-    ]);
+    ], tEv);
     expect(items.map((i) => [i.name, i.label])).toEqual(
       expect.arrayContaining([
         ["Beit Kandinof", "Recommandé par Sarah"],
@@ -40,22 +43,22 @@ describe("buildMemory", () => {
   });
 
   it("n'affiche jamais « par » quand le signal vient de l'utilisateur", () => {
-    const [item] = buildMemory([row("Fantastic", "visited")]);
+    const [item] = buildMemory([row("Fantastic", "visited")], tEv);
     expect(item.label).toBe("Visité");
   });
 
   it("n'admet jamais le niveau public dans la mémoire personnelle", () => {
-    expect(buildMemory([row("Plage de Sdot Yam", "public")])).toEqual([]);
+    expect(buildMemory([row("Plage de Sdot Yam", "public")], tEv)).toEqual([]);
   });
 
   it("une réservation importée reste « Réservé » tant que la visite n'est pas confirmée", () => {
-    const [item] = buildMemory([row("MILA", "booked", null, { imported: "table" })]);
+    const [item] = buildMemory([row("MILA", "booked", null, { imported: "table" })], tEv);
     expect(item.label).toBe("Réservé");
     expect(item.category).toBe("restaurants");
   });
 
   it("trie par preuve la plus récente", () => {
-    const items = buildMemory([row("Ancien", "visited", null, { daysAgo: 300 }), row("Récent", "saved", null, { daysAgo: 2 })]);
+    const items = buildMemory([row("Ancien", "visited", null, { daysAgo: 300 }), row("Récent", "saved", null, { daysAgo: 2 })], tEv);
     expect(items.map((i) => i.name)).toEqual(["Récent", "Ancien"]);
   });
 });
@@ -77,7 +80,7 @@ describe("memoryCategory", () => {
   });
 
   it("filtre par catégorie, « Tout » garde tout", () => {
-    const items = buildMemory([row("Herzl 16", "saved", maya, { kind: "Bar-restaurant" }), row("Café Nahat", "recommended", maya, { kind: "Café" })]);
+    const items = buildMemory([row("Herzl 16", "saved", maya, { kind: "Bar-restaurant" }), row("Café Nahat", "recommended", maya, { kind: "Café" })], tEv);
     expect(filterMemory(items, "bars").map((i) => i.name)).toEqual(["Herzl 16"]);
     expect(filterMemory(items, "tous")).toHaveLength(2);
     expect(filterMemory(items, "hotels")).toEqual([]);

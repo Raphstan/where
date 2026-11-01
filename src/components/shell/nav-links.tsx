@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 import { NAV_ITEMS, isActive } from "@/lib/navigation";
@@ -25,13 +26,14 @@ function ActiveTabs() {
 }
 
 function TabsView({ pathname }: { pathname: string | null }) {
+  const t = useTranslations("nav");
   return (
     <nav
-      aria-label="Navigation principale"
+      aria-label={t("aria")}
       className="flex justify-around border-t border-line bg-paper px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
     >
       {NAV_ITEMS.map((item) => {
-        if (!item.tabLabel) return null;
+        if (!item.tab) return null;
         const Icon = NAV_ICONS[item.key];
         const active = pathname !== null && isActive(pathname, item.href);
         return (
@@ -44,7 +46,7 @@ function TabsView({ pathname }: { pathname: string | null }) {
             }`}
           >
             <Icon className="size-[22px]" />
-            {item.tabLabel}
+            {t(`tab.${item.key}`)}
           </Link>
         );
       })}
@@ -66,8 +68,9 @@ function ActiveSidebar() {
 }
 
 function SidebarView({ pathname }: { pathname: string | null }) {
+  const t = useTranslations("nav");
   return (
-    <nav aria-label="Navigation principale" className="flex flex-col gap-0.5">
+    <nav aria-label={t("aria")} className="flex flex-col gap-0.5">
       {NAV_ITEMS.map((item) => {
         const Icon = NAV_ICONS[item.key];
         const active = pathname !== null && isActive(pathname, item.href);
@@ -81,7 +84,7 @@ function SidebarView({ pathname }: { pathname: string | null }) {
             }`}
           >
             <Icon className="size-[18px] shrink-0" />
-            {item.sideLabel}
+            {t(`side.${item.key}`)}
           </Link>
         );
       })}

@@ -1,0 +1,17 @@
+{
+  "title1": "Où devrais-tu",
+  "title2": "vraiment aller ?",
+  "lead": "Trouve des lieux recommandés par les personnes auxquelles tu fais confiance.",
+  "promise": "Demande à ton réseau, sans avoir à demander à tout le monde.",
+  "question": "Ta question",
+  "start": "Commencer",
+  "how": "Voir comment ça marche →",
+  "examples": {
+    "date": "Où sortir à Tel Aviv ce soir, dans un endroit caché, pas trop bruyant, pour un date ?",
+    "group": "Un bon restaurant pour 6 personnes ce soir",
+    "rome": "Un hôtel romantique à Rome recommandé par mes proches",
+    "cafe": "Un café calme pour travailler à Neve Tzedek",
+    "beach": "Une plage pas trop touristique près de Tel Aviv",
+    "bar": "Un bar animé mais où l’on peut encore parler"
+  }
+}

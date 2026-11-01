@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 
 /**
  * Gabarit d'une page : titre Fraunces, accroche, contenu centré sur desktop (.pad + .desk-wrap).
@@ -18,14 +19,15 @@ export function PageFrame({
   wide?: boolean;
   children?: ReactNode;
 }) {
+  const t = useTranslations("common");
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className={`mx-auto flex w-full flex-col gap-3.5 ${wide ? "max-w-[860px]" : "max-w-[720px]"}`}>
         {back ? (
           <Link
             href={back}
-            aria-label="Retour"
-            className="inline-flex size-[34px] items-center justify-center rounded-full bg-lilac-2 text-[18px] lg:hidden"
+            aria-label={t("back")}
+            className="inline-flex size-[34px] items-center justify-center rounded-full bg-lilac-2 text-[18px] lg:hidden rtl:-scale-x-100"
           >
             ‹
           </Link>

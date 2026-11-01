@@ -38,8 +38,8 @@
   --color-night: #1e1029;
   --color-night-2: #2e1b3d;
 
-  --font-display: var(--font-bricolage), "Arial Rounded MT Bold", "Helvetica Neue", Arial, sans-serif;
-  --font-sans: var(--font-figtree), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-bricolage), var(--font-rubik), "Arial Rounded MT Bold", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-figtree), var(--font-rubik), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-dm-mono), ui-monospace, Menlo, monospace;
 
   --radius-card: 18px;

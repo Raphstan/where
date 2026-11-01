@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { EVIDENCE_LABEL_LONG } from "@/lib/evidence";
+import { translator } from "@/i18n/translator";
+import { evidenceLabelLong } from "@/lib/evidence";
 import { DAVID, MAYA, ME, NOAM, NOW, SARAH, sig } from "@/test/search-fixtures";
 import {
   afterFor,
@@ -62,7 +63,7 @@ describe("lignes de preuve — phrase libre", () => {
 describe("lignes de preuve — libellé long et provenance", () => {
   it("porte le libellé long exact du niveau", () => {
     for (const level of ["recommended", "visited", "booked_confirmed", "booked", "saved"] as const) {
-      expect(evidenceLine(sig(level, SARAH), NOW, null)?.label).toBe(EVIDENCE_LABEL_LONG[level]);
+      expect(evidenceLine(sig(level, SARAH), NOW, null)?.label).toBe(evidenceLabelLong(translator("fr", "evidence"), level));
     }
   });
 

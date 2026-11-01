@@ -1,0 +1,13 @@
+{
+  "back": "Retour",
+  "close": "Fermer",
+  "send": "Envoyer",
+  "you": "Toi",
+  "profile": "Profil",
+  "language": "Langue",
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "he": "עברית"
+  }
+}

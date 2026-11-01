@@ -3,21 +3,20 @@ export type NavKey = "chat" | "memory" | "circle" | "sources" | "privacy" | "edg
 export type NavItem = {
   key: NavKey;
   href: `/${string}`;
-  /** Libellé des onglets mobiles (docs/prototype.html, renderTabs) ; null : desktop seulement. */
-  tabLabel: string | null;
-  /** Libellé de la barre latérale desktop (docs/prototype.html, renderSide). */
-  sideLabel: string;
+  /** Présent dans les onglets mobiles (docs/prototype.html, renderTabs) ; sinon desktop seulement. */
+  tab: boolean;
 };
+// Libellés : messages/{langue}/nav.json, `tab.{key}` (onglets mobiles) et `side.{key}` (barre latérale).
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { key: "chat", href: "/chat", tabLabel: "Chat", sideLabel: "Conversation" },
-  { key: "memory", href: "/memory", tabLabel: "Mémoire", sideLabel: "Ma mémoire" },
-  { key: "circle", href: "/circle", tabLabel: "Cercle", sideLabel: "Mon cercle" },
+  { key: "chat", href: "/chat", tab: true },
+  { key: "memory", href: "/memory", tab: true },
+  { key: "circle", href: "/circle", tab: true },
   // Sur mobile, le profil y mène (scrProfile).
-  { key: "sources", href: "/sources", tabLabel: null, sideLabel: "Mes sources" },
-  { key: "privacy", href: "/privacy", tabLabel: null, sideLabel: "Confidentialité" },
-  { key: "edge", href: "/edge", tabLabel: null, sideLabel: "États limites" },
-  { key: "profile", href: "/profile", tabLabel: "Profil", sideLabel: "Profil" },
+  { key: "sources", href: "/sources", tab: false },
+  { key: "privacy", href: "/privacy", tab: false },
+  { key: "edge", href: "/edge", tab: false },
+  { key: "profile", href: "/profile", tab: true },
 ] as const;
 
 export function isActive(pathname: string, href: string): boolean {

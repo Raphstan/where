@@ -1,14 +1,17 @@
 import { describe, expect, it } from "vitest";
+import { translator } from "@/i18n/translator";
 import { Constants } from "@/lib/supabase/database.types";
 import {
-  EVIDENCE_LABEL_LONG,
-  EVIDENCE_LABEL_SHORT,
+  evidenceLabelLong,
   EVIDENCE_LEVELS,
   evidenceRank,
   isEvidenceLevel,
   memoryLabel,
   sortByStrength,
 } from "./evidence";
+
+const t = translator("fr", "evidence");
+const PERSONAL = ["recommended", "visited", "booked_confirmed", "booked", "saved"] as const;
 
 describe("niveaux de preuve", () => {
   it("sont exactement ceux de l'enum Postgres, dans le même ordre", () => {
@@ -28,7 +31,7 @@ describe("niveaux de preuve", () => {
   });
 
   it("ont les libellés longs de la maquette, mot pour mot", () => {
-    expect(EVIDENCE_LABEL_LONG).toEqual({
+    expect(Object.fromEntries(EVIDENCE_LEVELS.map((l) => [l, evidenceLabelLong(t, l)]))).toEqual({
       recommended: "Recommandé explicitement",
       visited: "Visité et confirmé",
       booked_confirmed: "Réservation confirmée",
@@ -39,14 +42,14 @@ describe("niveaux de preuve", () => {
   });
 
   it("ont les libellés courts de la maquette, sans le niveau public", () => {
-    expect(EVIDENCE_LABEL_SHORT).toEqual({
+    expect(Object.fromEntries(PERSONAL.map((l) => [l, t(`short.${l}`)]))).toEqual({
       recommended: "Recommandé",
       visited: "Visité",
       booked_confirmed: "Réservé",
       booked: "Réservé",
       saved: "Sauvegardé",
     });
-    expect("public" in EVIDENCE_LABEL_SHORT).toBe(false);
+    expect(() => memoryLabel(t, "public")).toThrow();
   });
 
   it("rejettent toute valeur hors énumération", () => {
@@ -59,17 +62,17 @@ describe("niveaux de preuve", () => {
 
 describe("memoryLabel", () => {
   it("ajoute « par {Prénom} » quand le signal vient d'un proche", () => {
-    expect(memoryLabel("recommended", "Sarah")).toBe("Recommandé par Sarah");
-    expect(memoryLabel("saved", "Maya")).toBe("Sauvegardé par Maya");
+    expect(memoryLabel(t, "recommended", "Sarah")).toBe("Recommandé par Sarah");
+    expect(memoryLabel(t, "saved", "Maya")).toBe("Sauvegardé par Maya");
   });
 
   it("n'ajoute rien quand le signal vient de l'utilisateur", () => {
-    expect(memoryLabel("visited")).toBe("Visité");
-    expect(memoryLabel("booked", null)).toBe("Réservé");
+    expect(memoryLabel(t, "visited")).toBe("Visité");
+    expect(memoryLabel(t, "booked", null)).toBe("Réservé");
   });
 
   it("refuse le niveau public : jamais attribué, jamais dans la mémoire", () => {
-    expect(() => memoryLabel("public", "Sarah")).toThrow();
+    expect(() => memoryLabel(t, "public", "Sarah")).toThrow();
   });
 });
 

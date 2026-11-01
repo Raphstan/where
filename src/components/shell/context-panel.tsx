@@ -2,13 +2,15 @@
 
 import { useEffect } from "react";
 import { usePanel } from "./panel-context";
+import { useTranslations } from "next-intl";
 
 function CloseButton({ onClick }: { onClick: () => void }) {
+  const t = useTranslations("common");
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-label="Fermer"
+      aria-label={t("close")}
       className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-lilac-2 text-base"
     >
       ×
@@ -23,6 +25,7 @@ function CloseButton({ onClick }: { onClick: () => void }) {
  */
 export function ContextPanel({ sheetOnly = false }: { sheetOnly?: boolean }) {
   const { panel, close } = usePanel();
+  const t = useTranslations("shell");
 
   useEffect(() => {
     if (!panel) return;
@@ -37,7 +40,7 @@ export function ContextPanel({ sheetOnly = false }: { sheetOnly?: boolean }) {
     <>
       <aside className={sheetOnly ? "hidden" : "hidden w-[380px] shrink-0 flex-col border-l border-line bg-paper-2 xl:flex"}>
         <div className="flex items-center gap-2.5 border-b border-line px-[18px] py-4">
-          <h2 className="font-display text-[21px] font-bold leading-tight">{panel ? panel.title : "Détails"}</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">{panel ? panel.title : t("details")}</h2>
           {panel ? <CloseButton onClick={close} /> : null}
         </div>
         {panel ? (
@@ -47,7 +50,7 @@ export function ContextPanel({ sheetOnly = false }: { sheetOnly?: boolean }) {
         ) : (
           <div className="flex flex-1 items-center justify-center p-[18px]">
             <p className="max-w-[240px] text-center text-[12.5px] text-muted">
-              « Pourquoi ce choix ? », la carte et les moyens de réserver s&apos;ouvriront ici.
+              {t("detailsEmpty")}
             </p>
           </div>
         )}

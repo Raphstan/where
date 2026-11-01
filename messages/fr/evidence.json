@@ -1,0 +1,18 @@
+{
+  "long": {
+    "recommended": "Recommandé explicitement",
+    "visited": "Visité et confirmé",
+    "booked_confirmed": "Réservation confirmée",
+    "booked": "Réservation confirmée / signal post-visite",
+    "saved": "Sauvegardé ou partagé",
+    "public": "Information publique"
+  },
+  "short": {
+    "recommended": "Recommandé",
+    "visited": "Visité",
+    "booked_confirmed": "Réservé",
+    "booked": "Réservé",
+    "saved": "Sauvegardé"
+  },
+  "shortBy": "{label} par {name}"
+}

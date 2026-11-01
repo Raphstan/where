@@ -1,0 +1,13 @@
+{
+  "back": "Back",
+  "close": "Close",
+  "send": "Send",
+  "you": "You",
+  "profile": "Profile",
+  "language": "Language",
+  "languages": {
+    "en": "English",
+    "fr": "Français",
+    "he": "עברית"
+  }
+}

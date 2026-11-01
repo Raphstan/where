@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { EVIDENCE_LABEL_LONG, memoryLabel } from "@/lib/evidence";
+import { translator } from "@/i18n/translator";
+import { evidenceLabelLong, memoryLabel } from "@/lib/evidence";
+
+const tEv = translator("fr", "evidence");
 import {
   canCountAsVisit,
   EMAIL_KINDS,
@@ -55,10 +58,10 @@ describe("qualification → niveaux de preuve", () => {
   });
 
   it("libellés exacts des niveaux créés", () => {
-    expect(EVIDENCE_LABEL_LONG.booked).toBe("Réservation confirmée / signal post-visite");
-    expect(memoryLabel("booked")).toBe("Réservé");
-    expect(memoryLabel("visited")).toBe("Visité");
-    expect(memoryLabel("recommended")).toBe("Recommandé");
+    expect(evidenceLabelLong(tEv, "booked")).toBe("Réservation confirmée / signal post-visite");
+    expect(memoryLabel(tEv, "booked")).toBe("Réservé");
+    expect(memoryLabel(tEv, "visited")).toBe("Visité");
+    expect(memoryLabel(tEv, "recommended")).toBe("Recommandé");
   });
 });
 
