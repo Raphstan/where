@@ -72,18 +72,16 @@ function SidebarView({ pathname }: { pathname: string | null }) {
   return (
     <nav aria-label={t("aria")} className="flex flex-col gap-0.5">
       {NAV_ITEMS.map((item) => {
-        const Icon = NAV_ICONS[item.key];
         const active = pathname !== null && isActive(pathname, item.href);
         return (
           <Link
             key={item.key}
             href={item.href}
             aria-current={active ? "page" : undefined}
-            className={`flex items-center gap-2.5 rounded-xl px-2.5 py-[9px] text-[13.5px] font-semibold transition-colors ${
+            className={`flex items-center rounded-xl px-3 py-[9px] text-[13.5px] font-semibold transition-colors ${
               active ? "bg-ink text-paper" : "text-ink-2 hover:bg-lilac-2"
             }`}
           >
-            <Icon className="size-[18px] shrink-0" />
             {t(`side.${item.key}`)}
           </Link>
         );
