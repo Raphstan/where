@@ -8,6 +8,7 @@ import { ChatIcon, EdgeIcon, LockIcon, SourcesIcon } from "@/components/shell/ic
 import { loadProfile } from "@/lib/profile/store";
 import { createClient } from "@/lib/supabase/server";
 import { LanguageSwitcher } from "@/components/shell/language-switcher";
+import { LegalLinks } from "@/components/legal/legal-links";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("profile");
@@ -90,6 +91,7 @@ async function Profile() {
           </button>
         </form>
       </div>
+      <LegalLinks className="pt-1" />
     </>
   );
 }

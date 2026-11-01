@@ -20,3 +20,12 @@ export function decideBetaAccess(input: { existing: boolean; invited: boolean; v
   if (input.validGuestToken) return "guest";
   return "waitlist";
 }
+
+/**
+ * Pas de compte sans acceptation des conditions (CGU + politique de confidentialité).
+ * Un compte existant entre sans la case : il l'a acceptée à sa création, ou avant qu'elle existe.
+ */
+export function termsGate(decision: BetaDecision, acceptedTerms: boolean): BetaDecision | "termsRequired" {
+  if ((decision === "invited" || decision === "guest") && !acceptedTerms) return "termsRequired";
+  return decision;
+}

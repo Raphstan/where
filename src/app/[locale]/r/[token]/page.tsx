@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { LegalLinks } from "@/components/legal/legal-links";
 import { Wordmark } from "@/components/shell/wordmark";
 import { loadInvitation } from "@/lib/network/guest";
 import { GuestForm } from "./guest-form";
@@ -60,6 +61,7 @@ export default function GuestPage({ params }: PageProps<"/[locale]/r/[token]">) 
             <Invitation token={token} />
           ))}
         </Suspense>
+        <LegalLinks />
       </main>
     </div>
   );

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import { Suspense } from "react";
 import { safeNextPath } from "@/lib/auth/redirect";
+import { TERMS_COOKIE, termsAcceptedOnDevice } from "@/lib/auth/terms";
 import { Wordmark } from "@/components/shell/wordmark";
 import { MagicLinkForm } from "./magic-link-form";
 
@@ -19,6 +21,7 @@ async function LoginCard({ searchParams }: { searchParams: SearchParams }) {
   const nextParam = Array.isArray(params.next) ? params.next[0] : params.next;
   const next = safeNextPath(nextParam);
   const linkError = params.error === "link";
+  const termsOnDevice = termsAcceptedOnDevice((await cookies()).get(TERMS_COOKIE)?.value);
   const t = await getTranslations("login");
 
   return (
@@ -29,7 +32,7 @@ async function LoginCard({ searchParams }: { searchParams: SearchParams }) {
         </p>
       ) : null}
       <div className="rounded-card border border-line bg-paper-2 p-4 shadow-soft">
-        <MagicLinkForm next={next === "/chat" ? undefined : next} />
+        <MagicLinkForm next={next === "/chat" ? undefined : next} termsOnDevice={termsOnDevice} />
       </div>
     </>
   );

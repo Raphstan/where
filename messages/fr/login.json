@@ -12,11 +12,13 @@
     "sending": "Envoi…",
     "noPassword": "Pas de mot de passe. Le lien reçu par email suffit.",
     "sent": "<b>Lien envoyé.</b> Ouvre l'email reçu à <b>{email}</b> et clique sur le lien : il te connecte, sans mot de passe.",
-    "resend": "Rien reçu ? Regarde dans les indésirables, ou <link>renvoie un lien</link>."
+    "resend": "Rien reçu ? Regarde dans les indésirables, ou <link>renvoie un lien</link>.",
+    "terms": "J’accepte les <terms>conditions d’utilisation</terms> et la <privacy>politique de confidentialité</privacy>."
   },
   "errors": {
     "invalidEmail": "Entre une adresse email valide.",
-    "sendFailed": "Impossible d'envoyer le lien pour l'instant. Réessaie dans un instant."
+    "sendFailed": "Impossible d'envoyer le lien pour l'instant. Réessaie dans un instant.",
+    "termsRequired": "Coche la case pour accepter les conditions d’utilisation et la politique de confidentialité."
   },
   "waitlist": {
     "text": "La bêta est privée pour l’instant. <b>{email}</b> n’a pas encore d’invitation : je t’écris dès que ta place est prête.",

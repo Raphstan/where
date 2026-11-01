@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decideBetaAccess, guestTokenFromNext } from "./beta";
+import { decideBetaAccess, guestTokenFromNext, termsGate } from "./beta";
 
 const TOKEN = "22acf3398f984b54801f532d131a4bad";
 
@@ -23,5 +23,17 @@ describe("accès à la bêta privée", () => {
     expect(guestTokenFromNext(`/chat?next=/join/${TOKEN}`)).toBeNull();
     expect(guestTokenFromNext("/join/abc")).toBeNull();
     expect(guestTokenFromNext(null)).toBeNull();
+  });
+
+  it("ne crée aucun compte sans acceptation des conditions", () => {
+    expect(termsGate("invited", false)).toBe("termsRequired");
+    expect(termsGate("guest", false)).toBe("termsRequired");
+    expect(termsGate("invited", true)).toBe("invited");
+    expect(termsGate("guest", true)).toBe("guest");
+  });
+
+  it("laisse entrer un compte existant sans la case, et ne change rien à la liste d'attente", () => {
+    expect(termsGate("existing", false)).toBe("existing");
+    expect(termsGate("waitlist", true)).toBe("waitlist");
   });
 });

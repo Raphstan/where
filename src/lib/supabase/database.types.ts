@@ -275,14 +275,14 @@ isOneToOne: false
                   ]
                 },"users": {
                   Row: {
-                    "city": string | null,"created_at": string,"display_name": string | null,"email": string,"id": string,"use_circle_replies": boolean,"use_imported_bookings": boolean,"use_visit_feedback": boolean
+                    "city": string | null,"created_at": string,"display_name": string | null,"email": string,"id": string,"terms_accepted_at": string | null,"terms_version": string | null,"use_circle_replies": boolean,"use_imported_bookings": boolean,"use_visit_feedback": boolean
                   }
                   ComputedFields: never
                   Insert: {
-                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email": string,"id": string,"use_circle_replies"?: boolean,"use_imported_bookings"?: boolean,"use_visit_feedback"?: boolean
+                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email": string,"id": string,"terms_accepted_at"?: string | null,"terms_version"?: string | null,"use_circle_replies"?: boolean,"use_imported_bookings"?: boolean,"use_visit_feedback"?: boolean
                   }
                   Update: {
-                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email"?: string,"id"?: string,"use_circle_replies"?: boolean,"use_imported_bookings"?: boolean,"use_visit_feedback"?: boolean
+                    "city"?: string | null,"created_at"?: string,"display_name"?: string | null,"email"?: string,"id"?: string,"terms_accepted_at"?: string | null,"terms_version"?: string | null,"use_circle_replies"?: boolean,"use_imported_bookings"?: boolean,"use_visit_feedback"?: boolean
                   }
                   Relationships: [
                     

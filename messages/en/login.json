@@ -12,11 +12,13 @@
     "sending": "Sending…",
     "noPassword": "No password. The link in your email is all you need.",
     "sent": "<b>Link sent.</b> Open the email sent to <b>{email}</b> and click the link: it signs you in, no password needed.",
-    "resend": "Nothing yet? Check your spam folder, or <link>send a new link</link>."
+    "resend": "Nothing yet? Check your spam folder, or <link>send a new link</link>.",
+    "terms": "I accept the <terms>terms of use</terms> and the <privacy>privacy policy</privacy>."
   },
   "errors": {
     "invalidEmail": "Enter a valid email address.",
-    "sendFailed": "Couldn’t send the link right now. Try again in a moment."
+    "sendFailed": "Couldn’t send the link right now. Try again in a moment.",
+    "termsRequired": "Tick the box to accept the terms of use and the privacy policy."
   },
   "waitlist": {
     "text": "The beta is private for now. <b>{email}</b> doesn’t have an invite yet: I’ll write as soon as your spot is ready.",
