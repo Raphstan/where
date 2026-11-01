@@ -9,5 +9,13 @@
     "en": "English",
     "fr": "Français",
     "he": "עברית"
+  },
+  "pages": {
+    "notFoundTitle": "Cette page n’existe pas.",
+    "notFoundLead": "Le lien est peut-être incomplet, ou la page a été déplacée.",
+    "errorTitle": "Quelque chose s’est mal passé.",
+    "errorLead": "Ce n’est pas toi : réessaie dans un instant. Rien de ce que tu as enregistré n’est perdu.",
+    "retry": "Réessayer",
+    "home": "Revenir au chat"
   }
 }

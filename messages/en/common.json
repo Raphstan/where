@@ -9,5 +9,13 @@
     "en": "English",
     "fr": "Français",
     "he": "עברית"
+  },
+  "pages": {
+    "notFoundTitle": "This page doesn’t exist.",
+    "notFoundLead": "The link may be incomplete, or the page has moved.",
+    "errorTitle": "Something went wrong.",
+    "errorLead": "It’s not you: try again in a moment. Nothing you saved is lost.",
+    "retry": "Try again",
+    "home": "Back to chat"
   }
 }

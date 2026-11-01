@@ -5,6 +5,7 @@ import { locale as rootLocale } from "next/root-params";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MESSAGES } from "@/i18n/messages";
+import { publicEnv } from "@/lib/env";
 import { isRtl, routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -44,8 +45,19 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await rootLocale();
   const t = await getTranslations({ locale, namespace: "meta" });
   return {
+    metadataBase: new URL(publicEnv.NEXT_PUBLIC_SITE_URL),
     title: { default: "WH3RE", template: "%s · WH3RE" },
     description: t("description"),
+    // Aperçu des liens partagés (WhatsApp, LinkedIn…) : l'image de la landing.
+    openGraph: {
+      siteName: "WH3RE",
+      type: "website",
+      locale,
+      title: t("ogTitle"),
+      description: t("description"),
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: t("ogTitle") }],
+    },
+    twitter: { card: "summary_large_image", title: t("ogTitle"), description: t("description"), images: ["/og.png"] },
   };
 }
 

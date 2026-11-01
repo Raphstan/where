@@ -10,10 +10,16 @@ import { GuestForm } from "./guest-form";
  * Langue : celle du navigateur ou du cookie du proche (segment [locale]), pas celle du demandeur.
  * Le message pré-rédigé, lui, reste dans la langue du demandeur.
  */
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("guest");
+export async function generateMetadata({ params }: PageProps<"/[locale]/r/[token]">): Promise<Metadata> {
+  const [{ token }, t] = await Promise.all([params, getTranslations("guest")]);
+  // Aperçu WhatsApp : seulement le prénom du demandeur, jamais la question (elle est déjà dans le message).
+  const invitation = await loadInvitation(token).catch(() => null);
+  const requester = invitation?.requesterName ?? t("requesterFallback");
+  const title = invitation ? t("ogTitle", { requester }) : t("metaTitle");
   return {
     title: t("metaTitle"),
+    openGraph: { title, description: t("ogDescription"), images: [{ url: "/og.png", width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title, description: t("ogDescription") },
     // Lien privé : jamais indexé, jamais transmis en referer.
     robots: { index: false, follow: false },
     referrer: "no-referrer",

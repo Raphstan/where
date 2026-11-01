@@ -67,5 +67,7 @@
       "addFailed": "Je n’ai pas pu l’ajouter à ton cercle. Réessaie dans un instant."
     },
     "toChat": "Aller au chat"
-  }
+  },
+  "ogTitle": "{requester} te demande un conseil",
+  "ogDescription": "Répondre en 20 secondes, sans installer d’appli"
 }

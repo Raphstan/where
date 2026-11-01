@@ -67,5 +67,7 @@
       "addFailed": "I couldn’t add them to your circle. Try again in a moment."
     },
     "toChat": "Go to chat"
-  }
+  },
+  "ogTitle": "{requester} is asking for your advice",
+  "ogDescription": "Answer in 20 seconds, no app to install"
 }
