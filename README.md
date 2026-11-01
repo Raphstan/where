@@ -267,17 +267,10 @@ atomique `consume_quota` (aucun service externe) :
 
 Une panne du compteur laisse passer (journalisée) : elle ne doit pas bloquer le produit.
 
-## Supabase hébergé (Vercel)
+## Mise en ligne
 
-1. Créer un projet Supabase, puis appliquer les migrations : `npx supabase link` puis `npx supabase db push`.
-   Dans Authentication → Sign In / Providers, **désactiver « Allow new users to sign up »** (bêta privée).
-2. Dans Authentication → Email Templates → Magic Link, coller le contenu de
-   `supabase/templates/magic_link.html` (il envoie vers `/auth/confirm` avec `token_hash`).
-   Sans ce template, le flux PKCE par défaut fonctionne aussi : `/auth/confirm` accepte `code`.
-3. Dans Authentication → URL Configuration, mettre le Site URL de production et ajouter
-   `https://<domaine>/auth/confirm` aux Redirect URLs.
-4. Renseigner les variables de `.env.example` dans Vercel, dont `CRON_SECRET` (Vercel l'envoie au cron)
-   et les trois variables Resend (`WHERE_INBOUND_DOMAIN`, `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`).
+Procédure complète, dans l'ordre (Supabase, Resend, Claude, Vercel, app.wh3re.com) :
+[docs/mise-en-ligne.md](docs/mise-en-ligne.md).
 
 ## Mise en page
 
