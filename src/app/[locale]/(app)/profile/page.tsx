@@ -4,7 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { ProfileHead } from "@/components/profile/profile-head";
-import { ChatIcon, EdgeIcon, LockIcon, SourcesIcon } from "@/components/shell/icons";
+import { ChatIcon, LockIcon, SourcesIcon } from "@/components/shell/icons";
 import { loadProfile } from "@/lib/profile/store";
 import { createClient } from "@/lib/supabase/server";
 import { LanguageSwitcher } from "@/components/shell/language-switcher";
@@ -16,13 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const CARD = "rounded-card border border-line bg-paper-2 p-4";
-const EYEBROW = "mb-2 font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
+const EYEBROW = "mb-2 text-[13px] font-semibold text-muted";
 
 /* docs/prototype.html, scrProfile : le profil mène aux sources, à la confidentialité, aux états limites. */
 const LINKS = [
   ["/sources", "sources", SourcesIcon],
   ["/privacy", "privacy", LockIcon],
-  ["/edge", "edge", EdgeIcon],
   ["/onboarding", "onboarding", ChatIcon],
 ] as const;
 

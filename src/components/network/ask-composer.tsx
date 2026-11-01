@@ -10,7 +10,7 @@ import type { CreateRequestResponse, PreparedRecipient } from "@/lib/conversatio
 import { joinNames } from "@/lib/network/message";
 import type { SuggestedPerson } from "@/lib/search/types";
 
-const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
+const EYEBROW = "text-[13px] font-semibold text-muted";
 const BTN = "inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full px-5 text-[14.5px] font-bold transition-colors disabled:opacity-50";
 const WA = "bg-[#25d366] text-white";
 const GHOST = "border-[1.5px] border-line bg-transparent text-ink hover:border-ink";

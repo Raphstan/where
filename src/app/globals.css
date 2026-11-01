@@ -154,56 +154,6 @@ h4 {
   }
 }
 
-/* Scènes peintes de la maquette, en attendant de vraies photos : une par lieu, choisie par son identifiant. */
-.scene {
-  position: relative;
-  overflow: hidden;
-  background: #333;
-}
-.scene::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 70% at 50% 110%, rgba(0, 0, 0, 0.35), transparent 60%);
-}
-/* Teintes de la landing : lilas, orange, prune, et un vert ou un bleu doux pour varier. */
-.scene-0 {
-  background:
-    radial-gradient(60% 50% at 30% 30%, #ff9b6a 0%, transparent 60%),
-    radial-gradient(40% 40% at 75% 65%, #ff5a1f 0%, transparent 60%),
-    linear-gradient(160deg, #5e2a4a 0%, #2a1438 60%, #1e1029 100%);
-}
-.scene-1 {
-  background:
-    radial-gradient(50% 50% at 70% 25%, #ffc08f 0%, transparent 55%),
-    radial-gradient(60% 40% at 20% 80%, #6a72d0 0%, transparent 60%),
-    linear-gradient(200deg, #4a2a5e, #1e1029);
-}
-.scene-2 {
-  background:
-    radial-gradient(40% 50% at 25% 35%, #b9b0e8 0%, transparent 60%),
-    radial-gradient(50% 45% at 75% 75%, #ffb08c 0%, transparent 60%),
-    linear-gradient(180deg, #efe8f6, #b3a5ca);
-}
-.scene-3 {
-  background:
-    radial-gradient(60% 55% at 30% 20%, #ffe1d4 0%, transparent 60%),
-    radial-gradient(60% 50% at 80% 80%, #6fa585 0%, transparent 60%),
-    linear-gradient(190deg, #dcd3e9, #4f7a64);
-}
-.scene-4 {
-  background:
-    radial-gradient(40% 50% at 25% 35%, #ff8a3d 0%, transparent 60%),
-    radial-gradient(40% 40% at 80% 60%, #9b3f6a 0%, transparent 60%),
-    linear-gradient(190deg, #2e1b3d, #130b1d);
-}
-.scene-5 {
-  background:
-    radial-gradient(50% 50% at 30% 30%, #ffc6aa 0%, transparent 60%),
-    radial-gradient(40% 40% at 80% 70%, #c0567a 0%, transparent 60%),
-    linear-gradient(190deg, #cfa3c4, #4a2a4e);
-}
-
 /* ---------- Qualifier mes expériences (docs/prototype.html : .qcard, outL, outR) ---------- */
 @theme {
   --animate-out-l: out-l 0.35s forwards;
@@ -224,29 +174,9 @@ h4 {
   }
 }
 
-/* ---------- Accueil et « Comment ça marche » (docs/prototype.html : .hero, .conv, drift, glow, blink2) ---------- */
+/* ---------- Mascotte du chat vide (glow) ---------- */
 @theme {
-  --animate-caret: caret 1s infinite;
-  --animate-drift: drift 4.5s ease-in-out infinite;
   --animate-glow: glow 2.4s ease-in-out infinite;
-}
-
-@keyframes caret {
-  50% {
-    opacity: 0;
-  }
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0);
-    opacity: 0.9;
-  }
-  50% {
-    transform: translate(var(--dx, 8px), var(--dy, -6px));
-    opacity: 1;
-  }
 }
 
 @keyframes glow {

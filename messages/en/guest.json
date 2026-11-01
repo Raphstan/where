@@ -57,7 +57,7 @@
     "added": "{requester} is in your circle.",
     "askPlaceholder": "A nice bar in Tel Aviv on Friday, not too loud…",
     "ask": "Ask my first question",
-    "pitch": "That’s how the circle grows: each person is useful before they’re convinced — and being useful is what convinces them.",
+    "pitch": "That’s how the circle grows: each person is useful before they’re convinced, and being useful is what convinces them.",
     "requesterFallback": "Your friend",
     "errors": {
       "own_link": "This is your own link: it’s for your friends to answer you.",

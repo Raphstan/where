@@ -3,7 +3,7 @@ import { evidenceReminder } from "@/lib/search/phrasing";
 import type { SearchResult } from "@/lib/search/types";
 import { ConfidencePill, EvidenceText, PersonAvatar } from "./marks";
 
-const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
+const EYEBROW = "text-[13px] font-semibold text-muted";
 
 /** « Pourquoi ce choix ? » (docs/prototype.html, whyBody). */
 export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (result: SearchResult) => void }) {

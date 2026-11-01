@@ -111,7 +111,7 @@
   "intro": {
     "none": "Personne dans ton cercle ne connaît encore suffisamment ce coin. Retire un critère pour élargir la recherche.",
     "insufficient": "Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec confiance.",
-    "discoveryOnlyAfter": "Une découverte publique — sans aucun signal de ton cercle, donc à prendre comme une piste.",
+    "discoveryOnlyAfter": "Une découverte publique, sans aucun signal de ton cercle : à prendre comme une piste.",
     "single": "Une réponse nette plutôt que trois. ",
     "singleReason": " : {reason}.",
     "singleEnd": ".",
@@ -134,15 +134,15 @@
   },
   "after": "{ordinal} est une découverte : personne de ton cercle ne l’a encore validé, je te le montre pour l’exploration.",
   "confidence": {
-    "forteRecoAndVisit": "Forte — recommandation explicite et visite confirmée",
-    "forteSignals": "Forte — basée sur {count, plural, one {# signal personnel} other {# signaux personnels}}",
-    "forteRecos": "Forte — {count} recommandations",
-    "forteRecentReco": "Forte — recommandation récente de {name}",
-    "moyenneMissingReco": "Moyenne — une recommandation personnelle manque",
-    "moyenneStaleReco": "Moyenne — recommandation ancienne",
-    "exploMostlyPublic": "Exploratoire — principalement basé sur des données publiques",
-    "exploPublicOnly": "Exploratoire — informations publiques uniquement",
-    "conflict": "Moyenne — signaux contradictoires"
+    "forteRecoAndVisit": "Forte : recommandation explicite et visite confirmée",
+    "forteSignals": "Forte : basée sur {count, plural, one {# signal personnel} other {# signaux personnels}}",
+    "forteRecos": "Forte : {count} recommandations",
+    "forteRecentReco": "Forte : recommandation récente de {name}",
+    "moyenneMissingReco": "Moyenne : une recommandation personnelle manque",
+    "moyenneStaleReco": "Moyenne : recommandation ancienne",
+    "exploMostlyPublic": "Exploratoire : principalement basé sur des données publiques",
+    "exploPublicOnly": "Exploratoire : informations publiques uniquement",
+    "conflict": "Moyenne : signaux contradictoires"
   },
   "conflict": {
     "after": "Signaux contradictoires : {calm} le trouve calme, {noisy} indique qu’il devient bruyant après {hour} h. Probablement calme en début de soirée, animé ensuite.",

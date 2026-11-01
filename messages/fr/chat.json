@@ -6,7 +6,7 @@
     "label": "Ta question"
   },
   "criteria": {
-    "hint": "Ce que j’ai compris — touche un critère pour le retirer",
+    "hint": "Ce que j’ai compris. Touche un critère pour le retirer.",
     "list": "Critères compris",
     "remove": "Retirer le critère {tag}",
     "placeholder": "un critère…",
@@ -35,12 +35,12 @@
     "repliedPlace": " : {place}.",
     "justReplied": "{name} vient de répondre.",
     "notReusable": "{name} n’a pas autorisé la réutilisation : cette réponse ne sert qu’à cette question et ne sera pas gardée.",
-    "changesRanking": " J’ai une nouvelle recommandation plus fiable — sa réponse change le classement."
+    "changesRanking": " J’ai une nouvelle recommandation plus fiable : sa réponse change le classement."
   },
   "toast": {
-    "removedUpdating": "« {tag} » retiré — je mets les résultats à jour",
+    "removedUpdating": "« {tag} » retiré, je mets les résultats à jour",
     "removed": "« {tag} » retiré",
-    "addedUpdated": "« {tag} » ajouté — résultats mis à jour",
+    "addedUpdated": "« {tag} » ajouté, résultats mis à jour",
     "added": "« {tag} » ajouté"
   },
   "new": "Nouveau",

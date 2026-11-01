@@ -14,15 +14,15 @@
     "or": "{a} או {b}",
     "whereCityArea": " ב־{city} ({area})",
     "where": " ב־{place}",
-    "details": " — {list}"
+    "details": ", {list}"
   },
   "replyIn20": "לענות ב־20 שניות",
   "names": {
     "and": "{rest} ו־{last}"
   },
   "asked": {
-    "many": "נשלח ל־{names} ב־WhatsApp. אעדכן אותך ברגע שיענו — שום דבר אחר לא נשלח.",
-    "one": "נשלח ל־{names} ב־WhatsApp. אעדכן אותך ברגע שתגיע תשובה — שום דבר אחר לא נשלח."
+    "many": "נשלח ל־{names} ב־WhatsApp. אעדכן אותך ברגע שיענו, שום דבר אחר לא נשלח.",
+    "one": "נשלח ל־{names} ב־WhatsApp. אעדכן אותך ברגע שתגיע תשובה, שום דבר אחר לא נשלח."
   },
   "suggest": {
     "knowsArea": "מכיר/ה טוב את האזור",
@@ -30,7 +30,7 @@
     "trustAll": "אמון מלא שלך, בכל תחום",
     "trustFor": "אמון שלך בתחום: {domain}",
     "lessRelevant": "פחות רלוונטי כאן",
-    "lessRelevantFor": "פחות רלוונטי כאן — {domains}"
+    "lessRelevantFor": "פחות רלוונטי כאן: {domains}"
   },
   "domains": {
     "phrase": {
@@ -73,7 +73,7 @@
     "confirm": "אישור ושליחה",
     "prepareFailed": "לא הצלחתי להכין את הבקשה.",
     "openTitle": "הודעה אחת לכל אחד.",
-    "openLead": "WhatsApp נפתח עם ההודעה והקישור הפרטי מוכנים — הלחיצה על ״שליחה״ נשארת אצלך.",
+    "openLead": "WhatsApp נפתח עם ההודעה והקישור הפרטי מוכנים, הלחיצה על ״שליחה״ נשארת אצלך.",
     "copied": "הקישור הועתק",
     "copy": "העתקת הקישור הפרטי",
     "opened": "WhatsApp נפתח",

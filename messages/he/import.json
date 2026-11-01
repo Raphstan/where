@@ -16,7 +16,7 @@
     "noOntopo": "<b>לא נמצאו הזמנות Ontopo</b> במיילים. ייתכן שחלק מהאישורים נשלחו רק ב-SMS.",
     "deliveries": "{count, plural, one {הזמנת משלוח אחת הוצאה.} other {# הזמנות משלוח הוצאו.}}",
     "deliveriesTabit": "{count, plural, one {הזמנת משלוח אחת של Tabit הוצאה.} other {# הזמנות משלוח של Tabit הוצאו.}}",
-    "deliveriesNote": "משלוח הוא לא ביקור במסעדה — הוא אף פעם לא ייחשב ככזה.",
+    "deliveriesNote": "משלוח הוא לא ביקור במסעדה, הוא אף פעם לא ייחשב ככזה.",
     "cancellations": "{count, plural, one {ביטול אחד הוצא.} other {# ביטולים הוצאו.}}",
     "cancellationsNote": "הזמנה שבוטלה אף פעם לא נחשבת ביקור.",
     "groups": {
@@ -156,7 +156,7 @@
     "recommends": "היית שם · מומלץ",
     "visited": "היית שם",
     "visitedWith": "היית שם · {answer}",
-    "notVisited": "הוזמן, לא היית שם — דילגנו",
+    "notVisited": "הוזמן, לא היית שם, דילגנו",
     "unsure": "הוזמן, לא ברור אם היית שם"
   }
 }

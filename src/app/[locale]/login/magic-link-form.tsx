@@ -64,7 +64,7 @@ export function MagicLinkForm({ next, termsOnDevice }: { next?: string; termsOnD
   return (
     <form action={action} className="flex flex-col gap-3">
       <label className="flex flex-col gap-1.5">
-        <span className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">
+        <span className="text-[13px] font-semibold text-muted">
           {t("form.emailLabel")}
         </span>
         <input

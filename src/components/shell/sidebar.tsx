@@ -72,7 +72,7 @@ export async function Sidebar() {
       </Link>
 
       <div className="mt-3.5 flex flex-1 flex-col gap-0.5 overflow-auto">
-        <div className="px-2.5 pt-3.5 pb-1.5 font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">
+        <div className="px-2.5 pt-3.5 pb-1.5 text-[13px] font-semibold text-muted">
           {t("history")}
         </div>
         <Suspense fallback={null}>

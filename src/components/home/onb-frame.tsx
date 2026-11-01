@@ -25,7 +25,7 @@ export function OnbFrame({ back, children }: { back: `/${string}`; children: Rea
   );
 }
 
-export const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
+export const EYEBROW = "text-[13px] font-semibold text-muted";
 export const H1 = "font-display text-[32px] font-extrabold leading-[1.05] tracking-[-0.02em] lg:text-[44px]";
 export const ORANGE_BTN =
   "inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10]";

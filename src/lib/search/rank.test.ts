@@ -134,7 +134,7 @@ describe("signaux contradictoires", () => {
     expect(r!.conflictNotice).toBe(
       "Signaux contradictoires : Sarah le trouve calme, Noam indique qu’il devient bruyant après 22 h. Probablement calme en début de soirée, animé ensuite.",
     );
-    expect(r!.confidence).toEqual({ level: "moyenne", text: "Moyenne — signaux contradictoires" });
+    expect(r!.confidence).toEqual({ level: "moyenne", text: "Moyenne : signaux contradictoires" });
   });
 
   it("sans désaccord, pas de notice", () => {

@@ -6,7 +6,7 @@
     "label": "Your question"
   },
   "criteria": {
-    "hint": "What I understood — tap a criterion to remove it",
+    "hint": "What I understood. Tap a criterion to remove it.",
     "list": "Understood criteria",
     "remove": "Remove the criterion {tag}",
     "placeholder": "a criterion…",
@@ -35,12 +35,12 @@
     "repliedPlace": ": {place}.",
     "justReplied": "{name} just replied.",
     "notReusable": "{name} didn’t allow reuse: this answer only serves this question and won’t be kept.",
-    "changesRanking": " I have a new, more reliable recommendation — their answer changes the ranking."
+    "changesRanking": " I have a new, more reliable recommendation: their answer changes the ranking."
   },
   "toast": {
-    "removedUpdating": "“{tag}” removed — updating the results",
+    "removedUpdating": "“{tag}” removed: updating the results",
     "removed": "“{tag}” removed",
-    "addedUpdated": "“{tag}” added — results updated",
+    "addedUpdated": "“{tag}” added: results updated",
     "added": "“{tag}” added"
   },
   "new": "New",

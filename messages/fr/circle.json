@@ -15,7 +15,7 @@
     "fromContacts": "Depuis mes contacts",
     "whatsapp": "Envoyer un lien WhatsApp",
     "email": "Inviter par email",
-    "added": "{name} — prêt"
+    "added": "{name} est ajouté"
   },
   "form": {
     "name": "Prénom",

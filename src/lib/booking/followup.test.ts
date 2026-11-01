@@ -34,7 +34,7 @@ describe("« As-tu réservé ? »", () => {
     expect(parts.find((p) => p.strong)?.text).toBe("Beit Kandinof");
     const text = parts.map((p) => p.text).join("");
     expect(text).toBe(
-      "Parfait. Je garde Beit Kandinof dans ta mémoire comme réservé — pas encore comme visité. Je te demanderai demain comment c’était.",
+      "Parfait. Je garde Beit Kandinof dans ta mémoire comme réservé, pas encore comme visité. Je te demanderai demain comment c’était.",
     );
   });
 });

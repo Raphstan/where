@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const CARD = "rounded-card border border-line bg-paper-2 p-4";
-const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
+const EYEBROW = "text-[13px] font-semibold text-muted";
 
 /** Principes de la maquette, dans l'ordre (libellés : `principles.{clé}`). */
 const PRINCIPLES = ["privateByDefault", "noPublishing", "noAttribution", "noSecretReading", "noSilentSend", "fullControl"] as const;

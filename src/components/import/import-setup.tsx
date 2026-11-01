@@ -76,7 +76,7 @@ function Progress({ step }: { step: 1 | 2 | 3 }) {
   const t = useTranslations("import");
   return (
     <div className="flex flex-col gap-2">
-      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("setup.progress", { step })}</div>
+      <div className="text-[13px] font-semibold text-muted">{t("setup.progress", { step })}</div>
       <div className="flex gap-1.5" aria-hidden>
         {[1, 2, 3].map((i) => (
           <i key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-orange" : "bg-lilac"}`} />

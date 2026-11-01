@@ -68,7 +68,7 @@ describe("découverte", () => {
       origin: "discovery",
       rank: "Découverte",
       headline: "Une découverte, pas encore validée par ton cercle",
-      confidence: { level: "explo", text: "Exploratoire — informations publiques uniquement" },
+      confidence: { level: "explo", text: "Exploratoire : informations publiques uniquement" },
       people: [],
       unknowns: ["Aucun signal personnel", "Ambiance réelle non confirmée", "Disponibilité ce soir non vérifiée"],
     });

@@ -14,14 +14,13 @@ describe("navigation", () => {
     ]);
   });
 
-  it("expose la barre latérale de la maquette", () => {
+  it("expose la barre latérale (sans l’écran de démo des états limites)", () => {
     expect(NAV_ITEMS.map((i) => t(`side.${i.key}`))).toEqual([
       "Conversation",
       "Ma mémoire",
       "Mon cercle",
       "Mes sources",
       "Confidentialité",
-      "États limites",
       "Profil",
     ]);
   });

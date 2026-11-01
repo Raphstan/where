@@ -57,7 +57,7 @@ export function GuestMemoryPanel({ token, requester }: { token: string; requeste
   return (
     <div className="flex animate-up flex-col gap-3.5">
       <div className="flex flex-col gap-1">
-        <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("eyebrow", { requester })}</div>
+        <div className="text-[13px] font-semibold text-muted">{t("eyebrow", { requester })}</div>
         <h2 className="font-display text-[21px] font-bold leading-tight">{t("title")}</h2>
       </div>
       <ul className="flex flex-col divide-y divide-line rounded-card bg-paper p-1.5">

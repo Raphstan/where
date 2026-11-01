@@ -15,7 +15,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
   // Sur mobile, le profil y mène (scrProfile).
   { key: "sources", href: "/sources", tab: false },
   { key: "privacy", href: "/privacy", tab: false },
-  { key: "edge", href: "/edge", tab: false },
   { key: "profile", href: "/profile", tab: true },
 ] as const;
 

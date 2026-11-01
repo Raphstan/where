@@ -14,15 +14,15 @@
     "or": "{a} ou {b}",
     "whereCityArea": " à {city} ({area})",
     "where": " à {place}",
-    "details": " — {list}"
+    "details": ", {list}"
   },
   "replyIn20": "Répondre en 20 secondes",
   "names": {
     "and": "{rest} et {last}"
   },
   "asked": {
-    "many": "Envoyé à {names} sur WhatsApp. Je te préviens dès qu’ils répondent — rien d’autre n’a été envoyé.",
-    "one": "Envoyé à {names} sur WhatsApp. Je te préviens dès qu’il ou elle répond — rien d’autre n’a été envoyé."
+    "many": "Envoyé à {names} sur WhatsApp. Je te préviens dès qu’ils répondent. Rien d’autre n’a été envoyé.",
+    "one": "Envoyé à {names} sur WhatsApp. Je te préviens dès qu’il ou elle répond. Rien d’autre n’a été envoyé."
   },
   "suggest": {
     "knowsArea": "Connaît bien la région",
@@ -30,7 +30,7 @@
     "trustAll": "Tu lui fais confiance pour tout",
     "trustFor": "Tu lui fais confiance pour {domain}",
     "lessRelevant": "Moins pertinent ici",
-    "lessRelevantFor": "Moins pertinent ici — {domains}"
+    "lessRelevantFor": "Moins pertinent ici : {domains}"
   },
   "domains": {
     "phrase": {

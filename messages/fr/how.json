@@ -16,27 +16,7 @@
       "text": "Trois idées solides, avec qui les recommande et pourquoi."
     }
   },
-  "signals": {
-    "sarah": {
-      "initial": "S",
-      "text": "Sarah recommande un lieu"
-    },
-    "noam": {
-      "initial": "N",
-      "text": "Noam y a réservé"
-    },
-    "maya": {
-      "initial": "M",
-      "text": "Maya a partagé une vidéo"
-    },
-    "me": {
-      "initial": "R",
-      "text": "Raphaël a aimé un lieu similaire"
-    }
-  },
-  "caption": "Plusieurs signaux de confiance, trois recommandations",
-  "promiseEyebrow": "La promesse",
-  "promise": "Ask your network without asking everyone.",
+  "promise": "Demande à ton réseau, sans demander à tout le monde.",
   "promiseText": "Au lieu de fouiller des centaines d’avis anonymes ou d’envoyer la même question dans cinq groupes WhatsApp.",
   "start": "Commencer"
 }

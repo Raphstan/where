@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
-import { EvidenceText, hashIndex } from "@/components/results/marks";
+import { EvidenceText } from "@/components/results/marks";
 import { PageFrame } from "@/components/shell/page-frame";
 import { buildMemory, filterMemory, isMemoryFilter, MEMORY_FILTERS, memoryStats, type MemoryFilter } from "@/lib/memory/memory";
 import { loadMemoryRows } from "@/lib/memory/store";
@@ -15,7 +15,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title") };
 }
 
-const SCENES = 6;
 
 /** Un chiffre de la maquette : `<n>` le nombre, `<l>` son libellé, accordé selon la langue. */
 const STAT_TAGS = {
@@ -83,8 +82,7 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/[locale]/mem
       <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-3">
         {items.map((i) => (
           <article key={i.placeId} className="flex flex-col overflow-hidden rounded-2xl border border-line bg-paper-2">
-            <div aria-hidden className={`scene aspect-[4/3] scene-${hashIndex(i.placeId, SCENES)}`} />
-            <div className="flex flex-col gap-1 px-3 pt-2.5 pb-3">
+            <div className="flex flex-col gap-1 px-3.5 pt-3 pb-3.5">
               <div className="text-[13.5px] font-bold">{i.name}</div>
               {i.city ? <div className="text-[11.5px] text-muted">{i.city}</div> : null}
               <EvidenceText level={i.level}>{i.label}</EvidenceText>
@@ -104,9 +102,6 @@ export default function MemoryPage({ searchParams }: PageProps<"/[locale]/memory
       <Suspense fallback={<div className="h-[260px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <Memory searchParams={searchParams} />
       </Suspense>
-      <p className="text-center text-[11.5px] text-soft">
-        {t("footnote")}
-      </p>
     </PageFrame>
   );
 }

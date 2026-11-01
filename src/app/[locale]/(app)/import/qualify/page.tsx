@@ -23,7 +23,7 @@ async function Deck() {
   if (reservations.length === 0) {
     return (
       <div className="flex flex-col gap-3 pt-10">
-        <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("qualify.eyebrow")}</div>
+        <div className="text-[13px] font-semibold text-muted">{t("qualify.eyebrow")}</div>
         <p className="text-[15px] leading-normal text-muted">
           {t("qualify.empty")}
         </p>

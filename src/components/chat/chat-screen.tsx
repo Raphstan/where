@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { EXAMPLE_QUESTIONS } from "@/lib/ask/examples";
 import type { AskRequest, AskResponse, Criteria, Understanding } from "@/lib/ask/schema";
 import {
   bookedAnswerFromLabel,
@@ -32,6 +31,9 @@ import { CriteriaChips } from "./criteria-chips";
 import { closedText, type ChatMessage } from "./messages";
 import { PeopleSuggestion } from "./people";
 import { Mascot } from "@/components/shell/wordmark";
+
+/* Suggestions du chat vide : libellé court, question complète envoyée (messages home.chips / home.examples). */
+const CHAT_SUGGESTIONS = ["group", "rome", "cafe"] as const;
 
 const TYPING_DELAY_MS = 450;
 /** Fréquence de vérification des réponses du cercle, tant qu'une demande est en cours. */
@@ -660,15 +662,15 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       </div>
 
       {empty ? (
-        <div className="flex shrink-0 gap-2 overflow-x-auto px-3.5 pb-2.5 [scrollbar-width:none] lg:flex-wrap lg:justify-center lg:px-9 lg:pb-2">
-          {EXAMPLE_QUESTIONS.map((ex) => (
+        <div className="flex shrink-0 flex-wrap justify-center gap-2 px-3.5 pb-2.5 lg:px-9 lg:pb-2">
+          {CHAT_SUGGESTIONS.map((key) => (
             <button
-              key={ex.key}
+              key={key}
               type="button"
-              onClick={() => send(th(`examples.${ex.key}`))}
+              onClick={() => send(th(`examples.${key}`))}
               className="inline-flex shrink-0 items-center rounded-full border-[1.5px] border-line bg-paper-2 px-3 py-[7px] text-[12.5px] font-medium whitespace-nowrap text-ink transition-colors hover:border-ink"
             >
-              {th(`examples.${ex.key}`)}
+              {th(`chips.${key}`)}
             </button>
           ))}
         </div>

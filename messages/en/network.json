@@ -14,15 +14,15 @@
     "or": "{a} or {b}",
     "whereCityArea": " in {city} ({area})",
     "where": " in {place}",
-    "details": " — {list}"
+    "details": ", {list}"
   },
   "replyIn20": "Reply in 20 seconds",
   "names": {
     "and": "{rest} and {last}"
   },
   "asked": {
-    "many": "Sent to {names} on WhatsApp. I’ll let you know as soon as they reply — nothing else was sent.",
-    "one": "Sent to {names} on WhatsApp. I’ll let you know as soon as they reply — nothing else was sent."
+    "many": "Sent to {names} on WhatsApp. I’ll let you know as soon as they reply. Nothing else was sent.",
+    "one": "Sent to {names} on WhatsApp. I’ll let you know as soon as they reply. Nothing else was sent."
   },
   "suggest": {
     "knowsArea": "Knows the area well",
@@ -30,7 +30,7 @@
     "trustAll": "You trust their taste in everything",
     "trustFor": "You trust their taste in {domain}",
     "lessRelevant": "Less relevant here",
-    "lessRelevantFor": "Less relevant here — {domains}"
+    "lessRelevantFor": "Less relevant here: {domains}"
   },
   "domains": {
     "phrase": {

@@ -11,7 +11,7 @@
   "intro": "WH3RE n’est pas le système de réservation. Voici les moyens réellement disponibles pour ce lieu :",
   "notes": {
     "tabit": "Tabit gère aussi des livraisons : seule une réservation de table comptera comme visite.",
-    "noPlatform": "Ce lieu ne propose ni Ontopo ni Tabit — je ne t’affiche que ce qui existe vraiment."
+    "noPlatform": "Ce lieu ne propose ni Ontopo ni Tabit. Je ne t’affiche que ce qui existe vraiment."
   },
   "leaving": {
     "eyebrow": "Tu quittes WH3RE",
@@ -33,8 +33,8 @@
       "otherPlace": "J’ai choisi un autre endroit"
     },
     "reply": {
-      "yes": "Parfait. Je garde {place} dans ta mémoire comme réservé — pas encore comme visité. Je te demanderai demain comment c’était.",
-      "notYet": "Pas de souci. Je laisse la table ouverte dans ta conversation — dis-moi si tu veux une autre heure ou un autre lieu.",
+      "yes": "Parfait. Je garde {place} dans ta mémoire comme réservé, pas encore comme visité. Je te demanderai demain comment c’était.",
+      "notYet": "Pas de souci. Je laisse la table ouverte dans ta conversation. Dis-moi si tu veux une autre heure ou un autre lieu.",
       "otherPlace": "Compris. Je ne compte pas cette réservation. Tu veux me dire où tu vas finalement ? Ça enrichira ta mémoire."
     }
   },
@@ -62,7 +62,7 @@
       "lunch": "déjeuner"
     },
     "skip": "Passer",
-    "notVisited": "Pas de problème — je ne compte pas cette visite.",
+    "notVisited": "Pas de problème, je ne compte pas cette visite.",
     "thanks": "Merci. C’est noté dans <b>ta mémoire</b>. Ça affinera mes prochaines réponses.",
     "thanksRecommended": "Merci. C’est noté dans <b>ta mémoire</b> comme un lieu que tu recommandes. Ça affinera mes prochaines réponses.",
     "share": "Partager ce retour avec mon cercle privé",

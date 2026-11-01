@@ -47,7 +47,7 @@ export function LeavingScreen({
       aria-labelledby="leaving-title"
       className="fixed inset-0 z-[60] flex animate-fade flex-col items-center justify-center gap-4 bg-night p-[30px] text-center text-paper"
     >
-      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-lilac uppercase">{t("leaving.eyebrow")}</div>
+      <div className="text-[13px] font-semibold text-lilac">{t("leaving.eyebrow")}</div>
       <h2 id="leaving-title" className="max-w-[420px] font-display text-[21px] font-bold leading-tight">
         {leavingText(t, option.kind)}
       </h2>

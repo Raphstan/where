@@ -197,7 +197,7 @@ describe("intro et notice", () => {
   it("ne prétend pas qu'une recommandation manque quand deux proches se contredisent", () => {
     const split = {
       ...card("Spicehaus", "personal", "x"),
-      confidence: { level: "moyenne" as const, text: "Moyenne — signaux contradictoires" },
+      confidence: { level: "moyenne" as const, text: "Moyenne : signaux contradictoires" },
       conflictNotice: "Signaux contradictoires : …",
     };
     expect(askIntroFor(t, [split], [{ name: "Noam", relevant: true }])?.[0]).toEqual({
@@ -216,6 +216,6 @@ describe("intro et notice", () => {
     expect(introFor(t, results)).toEqual([
       { text: "Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec confiance." },
     ]);
-    expect(afterFor(t, results)).toBe("Une découverte publique — sans aucun signal de ton cercle, donc à prendre comme une piste.");
+    expect(afterFor(t, results)).toBe("Une découverte publique, sans aucun signal de ton cercle : à prendre comme une piste.");
   });
 });

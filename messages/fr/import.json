@@ -16,7 +16,7 @@
     "noOntopo": "<b>Aucune réservation Ontopo trouvée</b> dans les emails. Certaines confirmations ont peut-être été envoyées uniquement par SMS.",
     "deliveries": "{count, plural, one {# commande de livraison exclue.} other {# commandes de livraison exclues.}}",
     "deliveriesTabit": "{count, plural, one {# commande de livraison Tabit exclue.} other {# commandes de livraison Tabit exclues.}}",
-    "deliveriesNote": "Une livraison n’est pas une visite au restaurant — elles ne compteront jamais comme telle.",
+    "deliveriesNote": "Une livraison n’est pas une visite au restaurant : elle ne comptera jamais comme telle.",
     "cancellations": "{count, plural, one {# annulation écartée.} other {# annulations écartées.}}",
     "cancellationsNote": "Une réservation annulée ne compte jamais comme visite.",
     "groups": {
@@ -156,7 +156,7 @@
     "recommends": "Visité · tu le recommandes",
     "visited": "Visité",
     "visitedWith": "Visité · {answer}",
-    "notVisited": "Réservé, non visité — ignoré",
+    "notVisited": "Réservé, non visité : ignoré",
     "unsure": "Réservé, présence incertaine"
   }
 }

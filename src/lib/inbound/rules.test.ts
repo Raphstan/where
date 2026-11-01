@@ -93,7 +93,7 @@ describe("résumé de fin de pile (maquette)", () => {
       text: "Visité · oui, dans certains contextes",
       level: "visited",
     });
-    expect(qualificationSummary(tImp, { visited: "Non", recommend: null, occasion: [] })).toEqual({ text: "Réservé, non visité — ignoré", level: "public" });
+    expect(qualificationSummary(tImp, { visited: "Non", recommend: null, occasion: [] })).toEqual({ text: "Réservé, non visité : ignoré", level: "public" });
     expect(qualificationSummary(tImp, { visited: "Je ne sais plus", recommend: null, occasion: [] })).toEqual({
       text: "Réservé, présence incertaine",
       level: "booked",

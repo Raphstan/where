@@ -22,7 +22,7 @@ describe("suggestPeople", () => {
 
   it("explique pourquoi un proche est moins pertinent, et ne le coche pas", () => {
     const out = suggestPeople(t, circle, [], criteria({ placeKind: "restaurant" }));
-    expect(out.find((p) => p.name === "Noam")).toMatchObject({ reason: "Moins pertinent ici — bars & nightlife", relevant: false });
+    expect(out.find((p) => p.name === "Noam")).toMatchObject({ reason: "Moins pertinent ici : bars & nightlife", relevant: false });
   });
 
   it("« Connaît bien la région » quand la mémoire lui attribue plusieurs lieux dans la zone", () => {
@@ -41,7 +41,7 @@ describe("suggestPeople", () => {
   it("un repas sans type de lieu (« samedi midi ») vise les restaurants (maquette, scénario zikhron)", () => {
     const out = suggestPeople(t, circle, [], criteria({ city: "Zikhron Ya’akov", when: "samedi midi", occasion: "famille" }));
     expect(out.filter((p) => p.relevant).map((p) => p.name).sort()).toEqual(["David", "Maya", "Sarah"]);
-    expect(out.find((p) => p.name === "Noam")).toMatchObject({ relevant: false, reason: "Moins pertinent ici — bars & nightlife" });
+    expect(out.find((p) => p.name === "Noam")).toMatchObject({ relevant: false, reason: "Moins pertinent ici : bars & nightlife" });
   });
 
   it("tient compte de l'occasion : « famille » met en avant le domaine Famille", () => {

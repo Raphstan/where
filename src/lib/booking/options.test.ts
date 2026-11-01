@@ -40,7 +40,7 @@ describe("bookingOptions", () => {
     const options = bookingOptions({ ...bare, city: "Tel Aviv", websiteUrl: "https://herzl16.example" });
     expect(options.some((o) => o.kind === "ontopo" || o.kind === "tabit")).toBe(false);
     expect(bookingNotes(t, options)).toEqual([
-      "Ce lieu ne propose ni Ontopo ni Tabit — je ne t’affiche que ce qui existe vraiment.",
+      "Ce lieu ne propose ni Ontopo ni Tabit. Je ne t’affiche que ce qui existe vraiment.",
     ]);
   });
 

@@ -111,7 +111,7 @@
   "intro": {
     "none": "No one in your circle knows this area well enough yet. Remove a criterion to widen the search.",
     "insufficient": "I don’t have enough reliable signals from your circle yet to give you a confident answer.",
-    "discoveryOnlyAfter": "A public discovery — no signal from your circle, so take it as a lead.",
+    "discoveryOnlyAfter": "A public discovery with no signal from your circle: take it as a lead.",
     "single": "One clear answer rather than three. ",
     "singleReason": ": {reason}.",
     "singleEnd": ".",
@@ -134,15 +134,15 @@
   },
   "after": "{ordinal} is a discovery: no one in your circle has vouched for it yet, I’m showing it so you can explore.",
   "confidence": {
-    "forteRecoAndVisit": "Strong — explicit recommendation and confirmed visit",
-    "forteSignals": "Strong — based on {count, plural, one {# personal signal} other {# personal signals}}",
-    "forteRecos": "Strong — {count} recommendations",
-    "forteRecentReco": "Strong — recent recommendation from {name}",
-    "moyenneMissingReco": "Medium — a personal recommendation is missing",
-    "moyenneStaleReco": "Medium — old recommendation",
-    "exploMostlyPublic": "Exploratory — mostly based on public data",
-    "exploPublicOnly": "Exploratory — public information only",
-    "conflict": "Medium — conflicting signals"
+    "forteRecoAndVisit": "Strong: explicit recommendation and confirmed visit",
+    "forteSignals": "Strong: based on {count, plural, one {# personal signal} other {# personal signals}}",
+    "forteRecos": "Strong: {count} recommendations",
+    "forteRecentReco": "Strong: recent recommendation from {name}",
+    "moyenneMissingReco": "Medium: a personal recommendation is missing",
+    "moyenneStaleReco": "Medium: old recommendation",
+    "exploMostlyPublic": "Exploratory: mostly based on public data",
+    "exploPublicOnly": "Exploratory: public information only",
+    "conflict": "Medium: conflicting signals"
   },
   "conflict": {
     "after": "Conflicting signals: {calm} finds it quiet, {noisy} says it gets loud after {hour}:00. Probably quiet early in the evening, lively later on.",

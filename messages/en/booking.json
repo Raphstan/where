@@ -11,7 +11,7 @@
   "intro": "WH3RE isn’t a booking system. Here’s what actually works for this place:",
   "notes": {
     "tabit": "Tabit also handles deliveries: only a table booking will count as a visit.",
-    "noPlatform": "This place isn’t on Ontopo or Tabit — I only show you what actually exists."
+    "noPlatform": "This place isn’t on Ontopo or Tabit. I only show you what actually exists."
   },
   "leaving": {
     "eyebrow": "You’re leaving WH3RE",
@@ -33,8 +33,8 @@
       "otherPlace": "I picked somewhere else"
     },
     "reply": {
-      "yes": "Perfect. I’m keeping {place} in your memory as booked — not visited yet. I’ll ask you tomorrow how it was.",
-      "notYet": "No worries. I’ll keep the table open in your conversation — tell me if you’d like another time or another place.",
+      "yes": "Perfect. I’m keeping {place} in your memory as booked, not visited yet. I’ll ask you tomorrow how it was.",
+      "notYet": "No worries. I’ll keep the table open in your conversation. Tell me if you’d like another time or another place.",
       "otherPlace": "Got it. I won’t count this booking. Want to tell me where you’re going instead? It’ll make your memory richer."
     }
   },
@@ -62,7 +62,7 @@
       "lunch": "lunch"
     },
     "skip": "Skip",
-    "notVisited": "No problem — I won’t count this visit.",
+    "notVisited": "No problem, I won’t count this visit.",
     "thanks": "Thanks. It’s saved in <b>your memory</b>. It’ll sharpen my next answers.",
     "thanksRecommended": "Thanks. It’s saved in <b>your memory</b> as a place you recommend. It’ll sharpen my next answers.",
     "share": "Share this feedback with my private circle",

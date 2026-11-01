@@ -15,7 +15,7 @@
     "fromContacts": "From my contacts",
     "whatsapp": "Send a WhatsApp link",
     "email": "Invite by email",
-    "added": "{name} — all set"
+    "added": "{name} added"
   },
   "form": {
     "name": "First name",

@@ -2,7 +2,6 @@
   "title1": "Où devrais-tu",
   "title2": "vraiment aller ?",
   "lead": "Trouve des lieux recommandés par les personnes auxquelles tu fais confiance.",
-  "promise": "Demande à ton réseau, sans avoir à demander à tout le monde.",
   "question": "Ta question",
   "start": "Commencer",
   "how": "Voir comment ça marche",
@@ -13,5 +12,11 @@
     "cafe": "Un café calme pour travailler à Neve Tzedek",
     "beach": "Une plage pas trop touristique près de Tel Aviv",
     "bar": "Un bar animé mais où l’on peut encore parler"
+  },
+  "placeholder": "Un endroit calme pour un date ce soir ?",
+  "chips": {
+    "group": "Dîner à 6 ce soir",
+    "rome": "Hôtel romantique à Rome",
+    "cafe": "Café calme pour travailler"
   }
 }

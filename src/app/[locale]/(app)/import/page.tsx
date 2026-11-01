@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const CARD = "rounded-card border border-line bg-paper-2 p-4 shadow-soft";
-const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
+const EYEBROW = "text-[13px] font-semibold text-muted";
 
 function Notice({ tone, children }: { tone: "warn" | "soft" | "info"; children: ReactNode }) {
   const bg = { warn: "bg-amber-2", soft: "bg-lilac-2", info: "bg-blue-2" }[tone];
@@ -47,7 +47,7 @@ function Line({ email, t, locale }: { email: ImportedEmail; t: T; locale: string
       <div className="min-w-0 grow">
         <div className="font-bold">
           {email.placeName}
-          {email.city ? <span className="text-[12.5px] font-medium text-muted"> — {email.city}</span> : null}
+          {email.city ? <span className="text-[12.5px] font-medium text-muted"> · {email.city}</span> : null}
         </div>
         <div className="text-[12.5px] text-muted">
           {[provenanceLabel(t, email.kind, email.platform), date].filter(Boolean).join(" · ")}
@@ -194,7 +194,7 @@ export default function ImportPage() {
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4">
-        <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("page.eyebrow")}</div>
+        <div className="text-[13px] font-semibold text-muted">{t("page.eyebrow")}</div>
         <h1 className="font-display text-[22px] font-bold leading-tight">
           {t("page.title")}
         </h1>

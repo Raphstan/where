@@ -14,12 +14,12 @@ describe("computeConfidence — niveaux", () => {
 
   it("moyenne sans aucune recommandation, même avec réservation et sauvegarde (Herzl 16)", () => {
     const c = computeConfidence(t, [sig("saved", MAYA), sig("booked", DAVID)], NOW);
-    expect(c).toEqual({ level: "moyenne", text: "Moyenne — une recommandation personnelle manque" });
+    expect(c).toEqual({ level: "moyenne", text: "Moyenne : une recommandation personnelle manque" });
   });
 
   it("moyenne quand la seule recommandation est ancienne (Dallal Bakery)", () => {
     const c = computeConfidence(t, [sig("recommended", SARAH, { daysAgo: THREE_YEARS })], NOW);
-    expect(c).toEqual({ level: "moyenne", text: "Moyenne — recommandation ancienne" });
+    expect(c).toEqual({ level: "moyenne", text: "Moyenne : recommandation ancienne" });
   });
 
   it("moyenne pour une visite seule (Port Sa’id)", () => {
@@ -29,16 +29,16 @@ describe("computeConfidence — niveaux", () => {
   it("exploratoire sans signal personnel", () => {
     expect(computeConfidence(t, [sig("public", ME, { note: "Ambiance musicale" })], NOW)).toEqual({
       level: "explo",
-      text: "Exploratoire — principalement basé sur des données publiques",
+      text: "Exploratoire : principalement basé sur des données publiques",
     });
     expect(computeConfidence(t, [], NOW)).toEqual({
       level: "explo",
-      text: "Exploratoire — informations publiques uniquement",
+      text: "Exploratoire : informations publiques uniquement",
     });
   });
 
   it("une découverte Google Places est exploratoire, informations publiques uniquement", () => {
-    expect(discoveryConfidence(t)).toEqual({ level: "explo", text: "Exploratoire — informations publiques uniquement" });
+    expect(discoveryConfidence(t)).toEqual({ level: "explo", text: "Exploratoire : informations publiques uniquement" });
   });
 
   it("une réservation ne remplace jamais une visite : réco + réservation n'est pas « visite confirmée »", () => {
@@ -51,21 +51,21 @@ describe("computeConfidence — niveaux", () => {
 describe("computeConfidence — textes de la maquette", () => {
   it("« recommandation explicite et visite confirmée » quand la même personne recommande et y est allée (Tishbi)", () => {
     const c = computeConfidence(t, [sig("recommended", SARAH), sig("visited", SARAH)], NOW);
-    expect(c.text).toBe("Forte — recommandation explicite et visite confirmée");
+    expect(c.text).toBe("Forte : recommandation explicite et visite confirmée");
   });
 
   it("« basée sur 3 signaux personnels » (Beit Kandinof)", () => {
     const c = computeConfidence(t, [sig("recommended", SARAH), sig("visited", NOAM), sig("visited", MAYA)], NOW);
-    expect(c.text).toBe("Forte — basée sur 3 signaux personnels");
+    expect(c.text).toBe("Forte : basée sur 3 signaux personnels");
   });
 
   it("« 2 recommandations » quand deux proches recommandent", () => {
     const c = computeConfidence(t, [sig("recommended", SARAH), sig("recommended", NOAM)], NOW);
-    expect(c.text).toBe("Forte — 2 recommandations");
+    expect(c.text).toBe("Forte : 2 recommandations");
   });
 
   it("« recommandation récente de Maya » pour une seule recommandation d'un proche", () => {
-    expect(computeConfidence(t, [sig("recommended", MAYA)], NOW).text).toBe("Forte — recommandation récente de Maya");
+    expect(computeConfidence(t, [sig("recommended", MAYA)], NOW).text).toBe("Forte : recommandation récente de Maya");
   });
 
   it("ne compte pas deux fois le même couple (personne, niveau)", () => {
@@ -73,10 +73,10 @@ describe("computeConfidence — textes de la maquette", () => {
       [sig("recommended", SARAH), sig("booked", DAVID), sig("booked", DAVID, { daysAgo: 40 })],
       NOW,
     );
-    expect(c.text).toBe("Forte — recommandation récente de Sarah");
+    expect(c.text).toBe("Forte : recommandation récente de Sarah");
   });
 
   it("accorde « signal » au singulier pour une recommandation de l'utilisateur seul", () => {
-    expect(computeConfidence(t, [sig("recommended", ME)], NOW).text).toBe("Forte — basée sur 1 signal personnel");
+    expect(computeConfidence(t, [sig("recommended", ME)], NOW).text).toBe("Forte : basée sur 1 signal personnel");
   });
 });

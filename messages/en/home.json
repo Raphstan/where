@@ -2,16 +2,21 @@
   "title1": "Where should you",
   "title2": "really go?",
   "lead": "Find places recommended by the people you trust.",
-  "promise": "Ask your network without asking everyone.",
   "question": "Your question",
   "start": "Get started",
   "how": "See how it works",
   "examples": {
-    "date": "Where to go out in Tel Aviv tonight — somewhere hidden, not too loud, for a date?",
+    "date": "Where to go out in Tel Aviv tonight for a date, somewhere hidden and not too loud?",
     "group": "A good restaurant for 6 people tonight",
     "rome": "A romantic hotel in Rome recommended by my people",
     "cafe": "A quiet café to work from in Neve Tzedek",
     "beach": "A beach near Tel Aviv that isn't too touristy",
     "bar": "A lively bar where you can still talk"
+  },
+  "placeholder": "A quiet spot for a date tonight?",
+  "chips": {
+    "group": "Dinner for 6 tonight",
+    "rome": "Romantic hotel in Rome",
+    "cafe": "Quiet café to work from"
   }
 }

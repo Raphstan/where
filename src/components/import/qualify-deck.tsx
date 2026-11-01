@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { EvidenceDot, hashIndex } from "@/components/results/marks";
+import { EvidenceDot } from "@/components/results/marks";
 import {
   OCCASIONS,
   occasionLabel,
@@ -17,7 +17,6 @@ import {
   type VisitedAnswer,
 } from "@/lib/inbound/rules";
 
-const SCENES = 6;
 const BTN = "inline-flex min-h-[50px] items-center justify-center rounded-full px-5 text-[14.5px] font-bold transition-[transform,background,border-color] active:scale-[0.97] disabled:opacity-50";
 const PRIMARY = `${BTN} bg-ink text-paper hover:bg-night`;
 const GHOST = `${BTN} border-[1.5px] border-line text-ink hover:border-ink`;
@@ -148,7 +147,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
           {idx + 1} / {cards.length}
         </span>
       </div>
-      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("qualify.eyebrow")}</div>
+      <div className="text-[13px] font-semibold text-muted">{t("qualify.eyebrow")}</div>
 
       <div className="relative h-[430px]">
         <div aria-hidden className="absolute inset-0 translate-y-3 scale-95 rounded-card-lg border border-line bg-lilac-2" />
@@ -158,10 +157,8 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
             out === "l" ? "animate-out-l" : out === "r" ? "animate-out-r" : "animate-pop"
           }`}
         >
-          <div className={`scene h-[150px] shrink-0 scene-${hashIndex(card.id, SCENES)}`}>
-            <span className="absolute bottom-3 start-3.5 z-[1] font-display text-[17px] text-white drop-shadow">{label}</span>
-          </div>
           <div className="flex flex-1 flex-col gap-3 p-4">
+            <div className="font-display text-[19px] font-bold leading-tight">{label}</div>
             <div className="text-[11.5px] text-soft">{card.provenance}</div>
 
             {step === 0 ? (

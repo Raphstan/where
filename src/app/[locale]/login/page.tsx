@@ -45,7 +45,7 @@ export default function LoginPage(props: PageProps<"/[locale]/login">) {
       <div className="flex w-full max-w-[420px] flex-col gap-[18px]">
         <Wordmark className="text-base" />
         <div className="flex flex-col gap-2">
-          <p className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("eyebrow")}</p>
+          <p className="text-[13px] font-semibold text-muted">{t("eyebrow")}</p>
           <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
             {t("title")}
           </h1>

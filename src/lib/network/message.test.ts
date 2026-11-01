@@ -9,7 +9,7 @@ describe("message pré-rédigé", () => {
   it("parle à la troisième personne quand le prénom est connu, sur le modèle de la maquette", () => {
     const c = criteria({ city: "Zikhron Ya’akov", when: "samedi midi", placeKind: "restaurant", constraints: ["pas touristique"] });
     expect(draftMessage(t, c, "Raphaël")).toBe(
-      "Raphaël cherche un restaurant à Zikhron Ya’akov samedi midi — pas touristique. Tu as une recommandation ?",
+      "Raphaël cherche un restaurant à Zikhron Ya’akov samedi midi, pas touristique. Tu as une recommandation ?",
     );
   });
 
@@ -47,7 +47,7 @@ describe("textes de la maquette", () => {
 
   it("« Je te préviens dès qu’ils répondent — rien d’autre n’a été envoyé. »", () => {
     expect(askedText(t, ["Sarah", "David"]).text).toBe(
-      " sur WhatsApp. Je te préviens dès qu’ils répondent — rien d’autre n’a été envoyé.",
+      " sur WhatsApp. Je te préviens dès qu’ils répondent. Rien d’autre n’a été envoyé.",
     );
     expect(askedText(t, ["Sarah"]).text).toContain("dès qu’il ou elle répond");
     expect(askedText(t, ["Sarah", "David"])).toMatchObject({ before: "Envoyé à ", strong: "Sarah et David" });
