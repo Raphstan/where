@@ -17,7 +17,7 @@ const CHOICES = [
   ["📬", "import", "/import"],
   ["👥", "circle", "/onboarding/circle"],
   ["💬", "chat", "/chat"],
-  ["✨", "demo", "/how"],
+  ["✨", "demo", "/demo"],
 ] as const;
 
 async function Welcome() {

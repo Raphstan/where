@@ -23,5 +23,15 @@
     }
   },
   "privacy": "Privé par défaut. Rien n’est publié, aucun message n’est envoyé sans ta confirmation.",
-  "allSources": "Voir toutes les sources possibles"
+  "allSources": "Voir toutes les sources possibles",
+  "demoPage": {
+    "metaTitle": "Démonstration",
+    "eyebrow": "Démonstration",
+    "lead": "Des données d’exemple : le cercle de Raphaël dans la maquette (Sarah, Noam, Maya, David). La réponse vient du vrai moteur de WH3RE ; rien n’est enregistré.",
+    "understood": "Ce que j’ai compris",
+    "chips": "Tel Aviv|ce soir|deux personnes|date|caché|calme",
+    "ctaTitle": "Et avec ton cercle ?",
+    "ctaLead": "Ajoute quelques personnes de confiance, ou retrouve tes anciennes réservations : les réponses deviennent les tiennes.",
+    "cta": "Commencer avec mon cercle"
+  }
 }

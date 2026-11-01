@@ -68,10 +68,9 @@ export class SearchError extends Error {
  * Les signaux d'autres utilisateurs ne sont jamais lisibles : le cercle est unidirectionnel.
  * Les signaux que l'utilisateur a retirés des recommandations (Confidentialité) sont écartés.
  */
-export async function loadMemory(
-  supabase: SupabaseClient<Database>,
-  userId: string,
-): Promise<{ rows: MemoryRow[]; circleMemberIds: Set<string>; members: CircleMember[] }> {
+export type Memory = { rows: MemoryRow[]; circleMemberIds: Set<string>; members: CircleMember[] };
+
+export async function loadMemory(supabase: SupabaseClient<Database>, userId: string): Promise<Memory> {
   const [signals, circle, prefs] = await Promise.all([
     supabase.from("signals").select(SIGNAL_COLUMNS).eq("user_id", userId).limit(MEMORY_LIMIT),
     supabase.from("circle_members").select("id, name, trust_domains, phone").eq("user_id", userId),
@@ -143,8 +142,10 @@ export type SearchDeps = {
   network: T;
   /** Langue de l'utilisateur, transmise à Google Places. */
   locale: string;
-  supabase: SupabaseClient<Database>;
-  userId: string;
+  /** Mémoire déjà chargée (démonstration) ; sinon elle est lue sous RLS avec supabase + userId. */
+  memory?: Memory;
+  supabase?: SupabaseClient<Database>;
+  userId?: string;
   googlePlacesApiKey: string | undefined;
   /** Conversation en cours : ses réponses non réutilisables comptent ici, et seulement ici. */
   conversationId?: string | null;
@@ -158,7 +159,9 @@ export type SearchDeps = {
  */
 export async function search(criteria: Criteria, deps: SearchDeps): Promise<SearchResponse> {
   const now = deps.now ?? new Date();
-  const { rows, circleMemberIds, members } = await loadMemory(deps.supabase, deps.userId);
+  const memory = deps.memory ?? (deps.supabase && deps.userId ? await loadMemory(deps.supabase, deps.userId) : null);
+  if (!memory) throw new SearchError("Ni mémoire fournie, ni session pour la lire.");
+  const { rows, circleMemberIds, members } = memory;
   // Quelques candidats de plus : un lieu fermé est écarté sans laisser de place vide.
   const ranked = rankMemory(deps.tr, rows, circleMemberIds, criteria, now, MAX_RESULTS + CLOSED_SLACK, deps.conversationId ?? null);
   const { open, closed } = await withoutClosed(ranked, rows, deps.googlePlacesApiKey, deps.fetchImpl);

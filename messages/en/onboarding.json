@@ -23,5 +23,15 @@
     }
   },
   "privacy": "Private by default. Nothing is published, and no message is sent without your confirmation.",
-  "allSources": "See all possible sources"
+  "allSources": "See all possible sources",
+  "demoPage": {
+    "metaTitle": "Demo",
+    "eyebrow": "Demo",
+    "lead": "Sample data: Raphaël’s circle from the mockup (Sarah, Noam, Maya, David). The answer comes from the real WH3RE engine; nothing is saved.",
+    "understood": "What I understood",
+    "chips": "Tel Aviv|tonight|two people|date|hidden|quiet",
+    "ctaTitle": "And with your circle?",
+    "ctaLead": "Add a few people you trust, or bring back your past bookings: the answers become yours.",
+    "cta": "Start with my circle"
+  }
 }
