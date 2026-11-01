@@ -25,7 +25,7 @@
     "cancelled": {
       "title": "Réservation annulée",
       "quote": "Une réservation annulée ne compte jamais comme visite.",
-      "text": "Email d’annulation détecté → la réservation est écartée, sans signal de visite."
+      "text": "Email d’annulation détecté : la réservation est écartée, sans signal de visite."
     },
     "delivery": {
       "title": "Livraison",

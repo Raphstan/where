@@ -82,18 +82,15 @@ function MemberForm({ channel, prefill, onDone }: { channel: Channel; prefill: P
   );
 }
 
-function Choice({ icon, label, onClick }: { icon: string; label: string; onClick: () => void }) {
+function Choice({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-start transition hover:-translate-y-px hover:border-ink"
     >
-      <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
-        {icon}
-      </span>
       <span className="font-bold">{label}</span>
-      <span aria-hidden className="ms-auto text-soft">
+      <span aria-hidden className="ms-auto text-soft inline-block rtl:-scale-x-100">
         ›
       </span>
     </button>
@@ -117,7 +114,6 @@ function InviteBody({ onDone }: { onDone: (name: string) => void }) {
         <>
           {contacts ? (
             <Choice
-              icon="📇"
               label={t("add.fromContacts")}
               onClick={async () => {
                 const [c] = await contacts.select(["name", "tel", "email"], { multiple: false }).catch(() => []);
@@ -130,8 +126,8 @@ function InviteBody({ onDone }: { onDone: (name: string) => void }) {
               }}
             />
           ) : null}
-          <Choice icon="💬" label={t("add.whatsapp")} onClick={() => setStep({ channel: "phone", prefill: {} })} />
-          <Choice icon="✉️" label={t("add.email")} onClick={() => setStep({ channel: "email", prefill: {} })} />
+          <Choice label={t("add.whatsapp")} onClick={() => setStep({ channel: "phone", prefill: {} })} />
+          <Choice label={t("add.email")} onClick={() => setStep({ channel: "email", prefill: {} })} />
         </>
       )}
     </div>
@@ -171,7 +167,7 @@ export function AddPersonButton() {
           <span className="block font-bold">{t("add.title")}</span>
           <span className="block text-[12.5px] text-muted">{t("add.hint")}</span>
         </span>
-        <span aria-hidden className="ms-auto text-soft">
+        <span aria-hidden className="ms-auto text-soft inline-block rtl:-scale-x-100">
           ›
         </span>
       </button>

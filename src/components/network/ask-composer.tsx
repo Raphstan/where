@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckIcon } from "@/components/shell/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -134,7 +135,7 @@ export function AskComposer({
                       aria-hidden
                       className={`ms-auto inline-flex size-6 shrink-0 items-center justify-center rounded-full border-[1.5px] text-[13px] text-white ${on ? "border-ink bg-ink" : "border-line"}`}
                     >
-                      ✓
+                      {on ? <CheckIcon className="size-3.5" /> : null}
                     </span>
                   </button>
                 );
@@ -143,7 +144,6 @@ export function AskComposer({
           )}
         </div>
         <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] leading-[1.4] text-ink-2">
-          <span aria-hidden>🎯</span>
           <span>{t("ask.onlyRelevant")}</span>
         </div>
         <button

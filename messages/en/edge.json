@@ -25,7 +25,7 @@
     "cancelled": {
       "title": "Cancelled booking",
       "quote": "A cancelled booking never counts as a visit.",
-      "text": "Cancellation email detected → the booking is set aside, with no visit signal."
+      "text": "Cancellation email detected: the booking is set aside, with no visit signal."
     },
     "delivery": {
       "title": "Delivery",

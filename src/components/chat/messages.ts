@@ -17,7 +17,7 @@ export type ChatMessage =
   | { id: number; kind: "criteria"; tags: string[] }
   | { id: number; kind: "choice"; clarification: Clarification; picked: string | null }
   | { id: number; kind: "where"; parts: RichText; search?: number }
-  | { id: number; kind: "notice"; tone: NoticeTone; icon?: string; strong?: string; text: string; search?: number }
+  | { id: number; kind: "notice"; tone: NoticeTone; strong?: string; text: string; search?: number }
   | { id: number; kind: "results"; results: SearchResult[]; search: number }
   | { id: number; kind: "people"; people: SuggestedPerson[]; search: number }
   /** Aucun résultat : « Élargir les critères » retire le critère le plus précis (maquette, scénario « beach »). */

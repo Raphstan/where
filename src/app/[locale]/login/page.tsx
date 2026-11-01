@@ -61,9 +61,6 @@ export default function LoginPage(props: PageProps<"/[locale]/login">) {
           <LoginCard searchParams={props.searchParams} />
         </Suspense>
         <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] text-ink-2">
-          <span aria-hidden className="shrink-0">
-            🔒
-          </span>
           <span>{t("privacy")}</span>
         </div>
       </div>

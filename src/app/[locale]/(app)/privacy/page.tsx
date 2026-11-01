@@ -79,10 +79,7 @@ export default function PrivacyPage() {
         <div className={EYEBROW}>{t("principles.title")}</div>
         <div className="mt-2 flex flex-col gap-[9px] text-[13px] text-ink-2">
           {PRINCIPLES.map((k) => (
-            <div key={k} className="flex items-start gap-2.5">
-              <span className="shrink-0 text-olive">✓</span>
-              {t(`principles.${k}`)}
-            </div>
+            <div key={k}>{t(`principles.${k}`)}</div>
           ))}
         </div>
       </div>

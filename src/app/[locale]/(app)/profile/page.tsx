@@ -65,7 +65,7 @@ async function Profile() {
           <Link key={href} href={href} className="flex items-center gap-3 border-b border-line py-3 last:border-b-0">
             <Icon className="size-[22px] text-muted" />
             <span className="grow font-semibold">{t(`links.${key}`)}</span>
-            <span aria-hidden className="text-soft">
+            <span aria-hidden className="text-soft inline-block rtl:-scale-x-100">
               ›
             </span>
           </Link>

@@ -7,7 +7,6 @@ import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import { AutoRefresh, DeliveriesButton } from "@/components/import/import-widgets";
 import { ImportSetup } from "@/components/import/import-setup";
-import { SourceLogo } from "@/components/import/source-logo";
 import { GMAIL_LINKS, gmailFilterQuery, isReservedDomain } from "@/lib/inbound/platforms";
 import { EmailSourceActions } from "@/components/privacy/email-source";
 import { getServerEnv } from "@/lib/env.server";
@@ -31,13 +30,10 @@ export async function generateMetadata(): Promise<Metadata> {
 const CARD = "rounded-card border border-line bg-paper-2 p-4 shadow-soft";
 const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
 
-function Notice({ icon, tone, children }: { icon: string; tone: "warn" | "soft" | "info"; children: ReactNode }) {
+function Notice({ tone, children }: { tone: "warn" | "soft" | "info"; children: ReactNode }) {
   const bg = { warn: "bg-amber-2", soft: "bg-lilac-2", info: "bg-blue-2" }[tone];
   return (
     <div className={`flex items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13px] leading-normal text-ink-2 ${bg}`}>
-      <span aria-hidden className="shrink-0">
-        {icon}
-      </span>
       {children}
     </div>
   );
@@ -48,7 +44,6 @@ function Line({ email, t, locale }: { email: ImportedEmail; t: T; locale: string
   const date = formatDay(email.reservedFor, true, locale);
   return (
     <div className="flex items-center gap-3 border-b border-line py-[11px] last:border-b-0">
-      <SourceLogo platform={email.platform} kind={email.kind} />
       <div className="min-w-0 grow">
         <div className="font-bold">
           {email.placeName}
@@ -125,12 +120,7 @@ async function Results() {
         </div>
       )}
 
-      <p className="flex items-start gap-2 text-[12.5px] text-muted">
-        <span aria-hidden className="text-olive">
-          🔒
-        </span>
-        {t("page.privacy")}
-      </p>
+      <p className="text-[12.5px] text-muted">{t("page.privacy")}</p>
 
       {emails.length === 0 ? null : (
         <>
@@ -153,12 +143,12 @@ async function Results() {
           </div>
 
           {s.noOntopo ? (
-            <Notice icon="⚠️" tone="warn">
+            <Notice tone="warn">
               <span>{t.rich("page.noOntopo", { b })}</span>
             </Notice>
           ) : null}
           {s.deliveries.length > 0 ? (
-            <Notice icon="🛵" tone="soft">
+            <Notice tone="soft">
               <span>
                 <b>{t(s.deliveriesAllTabit ? "page.deliveriesTabit" : "page.deliveries", { count: s.deliveries.length })}</b>{" "}
                 {t("page.deliveriesNote")}
@@ -167,7 +157,7 @@ async function Results() {
             </Notice>
           ) : null}
           {s.cancellations.length > 0 ? (
-            <Notice icon="✕" tone="soft">
+            <Notice tone="soft">
               <span>
                 <b>{t("page.cancellations", { count: s.cancellations.length })}</b>{" "}
                 {t("page.cancellationsNote")}

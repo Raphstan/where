@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { bookingLabel, leavingText, type BookingOption } from "@/lib/booking/options";
-import { PlatformLogo } from "./platform-logo";
 
 /**
  * « Tu quittes WH3RE » (docs/prototype.html, renderLeave). Le lien sortant s'ouvre dans un nouvel
@@ -54,7 +53,6 @@ export function LeavingScreen({
       </h2>
       <div className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-[16px] bg-white p-[18px] text-start text-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55)]">
         <div className="flex items-center gap-2.5">
-          <PlatformLogo kind={option.kind} />
           <b className="min-w-0 truncate">{placeName}</b>
         </div>
         <a

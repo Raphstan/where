@@ -1,7 +1,7 @@
 {
   "title": "Ma mémoire",
   "empty": "Ta mémoire est encore vide. Elle se remplira avec tes réservations, tes retours et les réponses de ton cercle.",
-  "emptyImport": "Retrouver mes anciennes réservations →",
+  "emptyImport": "Retrouver mes anciennes réservations",
   "stats": {
     "visited": "{count, plural, one {<n>#</n><l>lieu visité</l>} other {<n>#</n><l>lieux visités</l>}}",
     "recosReceived": "{count, plural, one {<n>#</n><l>reco reçue</l>} other {<n>#</n><l>recos reçues</l>}}",

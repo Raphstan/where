@@ -1,7 +1,6 @@
 import { useTranslations } from "next-intl";
 import { bookingLabel, bookingNotes, type BookingOption } from "@/lib/booking/options";
 import type { SearchResult } from "@/lib/search/types";
-import { PlatformLogo } from "./platform-logo";
 
 /**
  * Feuille « Réserver » (docs/prototype.html, bookBody) : uniquement les moyens réellement
@@ -24,9 +23,8 @@ export function BookingPanel({ result, onChoose }: { result: SearchResult; onCho
             onClick={() => onChoose(option)}
             className="flex w-full items-center gap-3.5 rounded-[18px] border-[1.5px] border-line bg-paper-2 px-3.5 py-3 text-start transition hover:-translate-y-px hover:border-ink"
           >
-            <PlatformLogo kind={option.kind} />
             <span className="font-bold">{bookingLabel(t, option.kind)}</span>
-            <span aria-hidden className="ms-auto text-soft">
+            <span aria-hidden className="ms-auto text-soft inline-block rtl:-scale-x-100">
               ›
             </span>
           </button>

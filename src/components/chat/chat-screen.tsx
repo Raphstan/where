@@ -207,8 +207,8 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       remove(typingId);
       push({ kind: "where", parts: response.intro, search });
       if (response.results.length > 0) push({ kind: "results", results: response.results, search });
-      if (response.after) push({ kind: "notice", tone: "info", icon: "🧭", text: response.after, search });
-      if (response.closed.length > 0) push({ kind: "notice", tone: "soft", icon: "🚪", ...closedText(t, response.closed), search });
+      if (response.after) push({ kind: "notice", tone: "info", text: response.after, search });
+      if (response.closed.length > 0) push({ kind: "notice", tone: "soft", ...closedText(t, response.closed), search });
       if (response.results.length === 0 && tags.current.length > 1) push({ kind: "widen", search });
       if (response.askIntro) push({ kind: "where", parts: response.askIntro, search });
       if (response.people.length > 0) push({ kind: "people", people: response.people, search });
@@ -584,7 +584,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
             case "notice":
               return (
                 <div key={m.id} className="mx-auto w-full max-w-[760px]">
-                  <Notice tone={m.tone} icon={m.icon}>
+                  <Notice tone={m.tone}>
                     {m.strong ? <b>{m.strong}</b> : null}
                     {m.text}
                   </Notice>

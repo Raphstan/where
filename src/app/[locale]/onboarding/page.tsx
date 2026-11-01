@@ -14,10 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /* Les quatre choix de la maquette (scrOnb). Import par transfert d'email au MVP, pas Gmail. */
 const CHOICES = [
-  ["📬", "import", "/import"],
-  ["👥", "circle", "/onboarding/circle"],
-  ["💬", "chat", "/chat"],
-  ["✨", "demo", "/demo"],
+  ["import", "/import"],
+  ["circle", "/onboarding/circle"],
+  ["chat", "/chat"],
+  ["demo", "/demo"],
 ] as const;
 
 async function Welcome() {
@@ -50,29 +50,23 @@ export default function OnboardingPage() {
         {t("lead")}
       </p>
       <div className="flex flex-col gap-2.5">
-        {CHOICES.map(([icon, key, href]) => (
+        {CHOICES.map(([key, href]) => (
           <Link
             key={href}
             href={href}
             className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-start transition hover:-translate-y-px hover:border-ink"
           >
-            <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
-              {icon}
-            </span>
             <span>
               <span className="block font-bold">{t(`choices.${key}.title`)}</span>
               <span className="block text-[12.5px] text-muted">{t(`choices.${key}.text`)}</span>
             </span>
-            <span aria-hidden className="ms-auto text-soft">
+            <span aria-hidden className="ms-auto text-soft inline-block rtl:-scale-x-100">
               ›
             </span>
           </Link>
         ))}
       </div>
       <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] text-ink-2">
-        <span aria-hidden className="shrink-0">
-          🔒
-        </span>
         <span>{t("privacy")}</span>
       </div>
       <Link href="/sources" className="self-center text-[13.5px] font-semibold text-blue hover:underline">

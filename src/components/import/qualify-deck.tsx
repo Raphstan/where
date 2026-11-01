@@ -111,9 +111,6 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
     const qualified = done.filter((d) => d.answers).length;
     return (
       <div className="flex flex-col items-center gap-4 pt-16 text-center">
-        <span className="inline-flex size-16 items-center justify-center rounded-full bg-olive font-display text-[26px] text-white">
-          ✓
-        </span>
         <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">{t("qualify.doneTitle")}</h1>
         <p className="text-[15px] leading-normal text-muted">{t("qualify.doneLead", { count: qualified })}</p>
         {done.length > 0 ? (
@@ -144,7 +141,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
   return (
     <div className="flex flex-col gap-3.5">
       <div className="flex min-h-10 items-center justify-between">
-        <Link href="/import" aria-label={tc("back")} className="inline-flex size-10 items-center justify-center rounded-full text-[22px] text-ink hover:bg-lilac-2">
+        <Link href="/import" aria-label={tc("back")} className="inline-flex size-10 items-center justify-center rounded-full text-[22px] text-ink hover:bg-lilac-2 rtl:-scale-x-100">
           ‹
         </Link>
         <span className="text-[12.5px] text-muted">

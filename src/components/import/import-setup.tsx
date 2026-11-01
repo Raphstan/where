@@ -86,16 +86,13 @@ function Progress({ step }: { step: 1 | 2 | 3 }) {
   );
 }
 
-function Choice({ icon, title, text, badge, onClick }: { icon: string; title: string; text: string; badge?: string; onClick: () => void }) {
+function Choice({ title, text, badge, onClick }: { title: string; text: string; badge?: string; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-start transition hover:-translate-y-px hover:border-ink"
     >
-      <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
-        {icon}
-      </span>
       <span className="min-w-0 grow">
         <span className="flex flex-wrap items-center gap-2 font-bold">
           {title}
@@ -103,7 +100,7 @@ function Choice({ icon, title, text, badge, onClick }: { icon: string; title: st
         </span>
         <span className="block text-[12.5px] text-muted">{text}</span>
       </span>
-      <span aria-hidden className="text-soft">
+      <span aria-hidden className="text-soft inline-block rtl:-scale-x-100">
         ›
       </span>
     </button>
@@ -166,7 +163,6 @@ export function ImportSetup({
   if (!receiving) {
     return (
       <div className="flex items-start gap-3 rounded-card border border-line bg-amber-2 p-4 text-[14px] text-[#6e4f14]">
-        <span aria-hidden>⏳</span>
         <span>{t.rich("setup.notReceiving", { b })}</span>
       </div>
     );
@@ -177,14 +173,12 @@ export function ImportSetup({
       <div className="flex flex-col gap-2.5">
         <h2 className="font-display text-[21px] font-bold leading-tight">{t("setup.chooseTitle")}</h2>
         <Choice
-          icon="✨"
           title={t("setup.auto.title")}
           badge={t("setup.auto.badge")}
           text={t("setup.auto.text")}
           onClick={() => go(1)}
         />
         <Choice
-          icon="✉️"
           title={t("setup.byHand.title")}
           text={t("setup.byHand.text")}
           onClick={() => setMode("manual")}
@@ -219,9 +213,6 @@ export function ImportSetup({
     return (
       <div className={card}>
         <div className="flex items-start gap-3">
-          <span aria-hidden className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-olive text-[18px] text-white">
-            ✓
-          </span>
           <div className="flex flex-col gap-1">
             <h2 className="font-display text-[21px] font-bold leading-tight">
               {active ? t("setup.done.activeTitle") : t("setup.done.title")}

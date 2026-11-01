@@ -75,7 +75,6 @@ export function GuestMemoryPanel({ token, requester }: { token: string; requeste
         ))}
       </ul>
       <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[12.5px] leading-snug text-ink-2">
-        <span aria-hidden>🔒</span>
         <span>{t("privacy", { requester })}</span>
       </div>
       <div className="flex flex-col gap-2 rounded-card bg-night p-4 text-paper">

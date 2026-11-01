@@ -49,7 +49,7 @@
   "copy": {
     "copy": "Copier",
     "copiedAddress": "Copiée",
-    "copied": "Copié ✓"
+    "copied": "Copié"
   },
   "setup": {
     "notReceiving": "<b>La réception des emails n’est pas encore active sur cette version de WH3RE.</b> Ne configure rien dans Gmail pour l’instant : rien n’arriverait. Cette étape sera disponible une fois WH3RE en ligne.",
@@ -84,7 +84,7 @@
       "title": "Donne ton adresse WH3RE à Gmail",
       "copy": "Copie ton adresse WH3RE :",
       "open": "Ouvre Gmail, clique sur <b>« Ajouter une adresse de transfert »</b>, colle l’adresse et valide.",
-      "openGmail": "Ouvrir Gmail ↗",
+      "openGmail": "Ouvrir Gmail",
       "workspace": "Tu vois un champ « Transférer une copie des messages reçus à » au lieu du bouton ? N’y mets rien : il transférerait toute ta boîte. C’est l’affichage de certains comptes professionnels (Google Workspace).",
       "next": "C’est fait, étape suivante"
     },
@@ -101,7 +101,7 @@
     "step3": {
       "title": "Ne transfère que les réservations",
       "open": "Ouvre Gmail : la recherche des emails de réservation est déjà remplie.",
-      "openSearch": "Ouvrir la recherche dans Gmail ↗",
+      "openSearch": "Ouvrir la recherche dans Gmail",
       "options": "Dans la barre de recherche, clique sur l’icône des options (à droite), puis sur <b>« Créer un filtre »</b>.",
       "forward": "Coche <b>« Le transférer à »</b>, choisis ton adresse WH3RE, puis clique sur <b>« Créer un filtre »</b>.",
       "notFilled": "La recherche ne s’est pas remplie ?",

@@ -49,22 +49,18 @@ export function TypingBubble() {
   );
 }
 
-const NOTICE_TONE: Record<NoticeTone, { cls: string; icon: string }> = {
-  warn: { cls: "bg-amber-2 text-[#6e4f14]", icon: "⚠️" },
-  info: { cls: "bg-blue-2 text-[#2c3a8c]", icon: "ℹ️" },
-  orange: { cls: "bg-orange-2 text-[#8a2e0e]", icon: "✦" },
-  soft: { cls: "bg-lilac-2 text-ink-2", icon: "🔒" },
+const NOTICE_TONE: Record<NoticeTone, string> = {
+  warn: "bg-amber-2 text-[#6e4f14]",
+  info: "bg-blue-2 text-[#2c3a8c]",
+  orange: "bg-orange-2 text-[#8a2e0e]",
+  soft: "bg-lilac-2 text-ink-2",
 };
 
 /** Notice de la conversation (maquette .notice : warn, info, orange, soft). */
-export function Notice({ tone, icon, children }: { tone: NoticeTone; icon?: string; children: ReactNode }) {
-  const t = NOTICE_TONE[tone];
+export function Notice({ tone, children }: { tone: NoticeTone; children: ReactNode }) {
   return (
-    <div className={`flex animate-pop items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13.5px] leading-[1.4] ${t.cls}`}>
-      <span aria-hidden className="shrink-0">
-        {icon ?? t.icon}
-      </span>
-      <span>{children}</span>
+    <div className={`animate-pop rounded-[14px] px-3.5 py-3 text-[13.5px] leading-[1.4] ${NOTICE_TONE[tone]}`}>
+      {children}
     </div>
   );
 }

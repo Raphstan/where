@@ -27,7 +27,7 @@ export function PageFrame({
           <Link
             href={back}
             aria-label={t("back")}
-            className="inline-flex size-[34px] items-center justify-center rounded-full bg-lilac-2 text-[18px] lg:hidden"
+            className="inline-flex size-[34px] items-center justify-center rounded-full bg-lilac-2 text-[18px] lg:hidden rtl:-scale-x-100"
           >
             ‹
           </Link>

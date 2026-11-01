@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePanel } from "@/components/shell/panel-context";
 import { formatDay, type ImportedEmail } from "@/lib/inbound/rules";
-import { SourceLogo } from "./source-logo";
 
 /** L'adresse de transfert, et un bouton pour la copier. */
 export function CopyAddress({ address }: { address: string }) {
@@ -63,7 +62,6 @@ export function DeliveriesButton({ deliveries, allTabit }: { deliveries: Importe
               <div className="flex flex-col">
                 {deliveries.map((d) => (
                   <div key={d.id} className="flex items-center gap-3 border-b border-line py-[11px] opacity-55 last:border-b-0">
-                    <SourceLogo platform={d.platform} kind="delivery" />
                     <div className="min-w-0 grow line-through decoration-soft">
                       <div className="font-bold">
                         {[d.placeName ?? t("deliveriesSheet.order"), formatDay(d.reservedFor, false, locale)].filter(Boolean).join(" · ")}

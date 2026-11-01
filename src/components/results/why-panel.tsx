@@ -25,16 +25,7 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
         <ul className="flex flex-col">
           {result.lines.map((line, i) => (
             <li key={i} className="flex items-start gap-3 border-t border-line py-3 first:border-t-0">
-              {line.person ? (
-                <PersonAvatar person={line.person} />
-              ) : (
-                <span
-                  aria-hidden
-                  className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-lilac text-[13px] text-muted"
-                >
-                  {line.kind === "evidence" && line.level === "public" ? "🌐" : "✦"}
-                </span>
-              )}
+              {line.person ? <PersonAvatar person={line.person} /> : null}
               <div className="min-w-0 flex-1">
                 <div className="font-semibold">{line.text}</div>
                 <div className="text-[12.5px] text-muted">

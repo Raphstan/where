@@ -24,7 +24,7 @@ export function ResultCard({
   const t = useTranslations("results");
   const discovery = result.origin === "discovery";
   const canBook = Boolean(onBook) && result.booking.length > 0;
-  const meta = [result.kind, result.vibe.join(", "), result.noise ? `🔈 ${result.noise}` : null, result.price].filter(
+  const meta = [result.kind, result.vibe.join(", "), result.noise ?? null, result.price].filter(
     (m): m is string => Boolean(m),
   );
 
@@ -71,14 +71,12 @@ export function ResultCard({
 
         {result.staleNotice ? (
           <div className="flex items-start gap-2.5 rounded-[14px] bg-amber-2 px-3 py-[9px] text-[13.5px] leading-[1.4] text-[#6e4f14]">
-            <span aria-hidden>🕰</span>
             <span>{result.staleNotice}</span>
           </div>
         ) : null}
 
         {result.conflictNotice ? (
           <div className="flex items-start gap-2.5 rounded-[14px] bg-blue-2 px-3 py-[9px] text-[13.5px] leading-[1.4] text-[#2c3a8c]">
-            <span aria-hidden>↔</span>
             <span>{result.conflictNotice}</span>
           </div>
         ) : null}

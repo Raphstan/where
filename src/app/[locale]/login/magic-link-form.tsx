@@ -20,9 +20,6 @@ export function MagicLinkForm({ next, termsOnDevice }: { next?: string; termsOnD
     return (
       <div className="flex flex-col gap-3.5" aria-live="polite">
         <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] leading-snug text-ink">
-          <span aria-hidden className="shrink-0">
-            ⏳
-          </span>
           <span>{t.rich("waitlist.text", { email: state.email, b: (chunks) => <b className="font-bold">{chunks}</b> })}</span>
         </div>
         <p className="text-[12.5px] text-muted">
@@ -42,9 +39,6 @@ export function MagicLinkForm({ next, termsOnDevice }: { next?: string; termsOnD
     return (
       <div className="flex flex-col gap-3.5" aria-live="polite">
         <div className="flex items-start gap-2.5 rounded-[14px] bg-olive-2 px-3.5 py-3 text-[13.5px] leading-snug text-[#28553b]">
-          <span aria-hidden className="shrink-0">
-            ✉️
-          </span>
           <span>
             {t.rich("form.sent", {
               email: state.email,

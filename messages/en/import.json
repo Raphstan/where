@@ -49,7 +49,7 @@
   "copy": {
     "copy": "Copy",
     "copiedAddress": "Copied",
-    "copied": "Copied ✓"
+    "copied": "Copied"
   },
   "setup": {
     "notReceiving": "<b>Receiving emails isn’t switched on in this version of WH3RE yet.</b> Don’t set anything up in Gmail for now: nothing would arrive. This step will be available once WH3RE is live.",
@@ -84,7 +84,7 @@
       "title": "Give Gmail your WH3RE address",
       "copy": "Copy your WH3RE address:",
       "open": "Open Gmail, click <b>“Add a forwarding address”</b>, paste the address and confirm.",
-      "openGmail": "Open Gmail ↗",
+      "openGmail": "Open Gmail",
       "workspace": "Seeing a “Forward a copy of incoming mail to” field instead of the button? Leave it empty: it would forward your whole inbox. Some work accounts (Google Workspace) look like that.",
       "next": "Done, next step"
     },
@@ -101,7 +101,7 @@
     "step3": {
       "title": "Forward bookings only",
       "open": "Open Gmail: the search for booking emails is already filled in.",
-      "openSearch": "Open the search in Gmail ↗",
+      "openSearch": "Open the search in Gmail",
       "options": "In the search bar, click the options icon (on the right), then <b>“Create filter”</b>.",
       "forward": "Tick <b>“Forward it to”</b>, pick your WH3RE address, then click <b>“Create filter”</b>.",
       "notFilled": "Search didn’t fill in?",

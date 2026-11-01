@@ -84,3 +84,11 @@ export const NAV_ICONS: Record<NavKey, (props: IconProps) => React.JSX.Element> 
   edge: EdgeIcon,
   profile: ProfileIcon,
 };
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <svg {...base} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </svg>
+  );
+}
