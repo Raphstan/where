@@ -57,6 +57,8 @@ export async function generateMetadata(): Promise<Metadata> {
       description: t("description"),
       images: [{ url: "/og.png", width: 1200, height: 630, alt: t("ogTitle") }],
     },
+    // iPhone : ajoutée à l'écran d'accueil, l'appli s'ouvre en plein écran sous ce nom.
+    appleWebApp: { capable: true, title: "WH3RE", statusBarStyle: "default" },
     twitter: { card: "summary_large_image", title: t("ogTitle"), description: t("description"), images: ["/og.png"] },
   };
 }

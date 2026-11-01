@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ContextPanel } from "./context-panel";
+import { InstallBanner } from "./install-banner";
 import { MobileTabs } from "./nav-links";
 import { PanelProvider } from "./panel-context";
 import { Sidebar } from "./sidebar";
@@ -19,6 +20,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <header className="flex shrink-0 items-center gap-2.5 px-[18px] pt-[max(14px,env(safe-area-inset-top))] pb-2.5 lg:hidden">
             <Wordmark />
           </header>
+          <InstallBanner />
           <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">{children}</main>
           <MobileTabs />
         </div>

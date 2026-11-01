@@ -3,5 +3,12 @@
   "history": "History",
   "historyEmpty": "Your questions will show up here.",
   "details": "Details",
-  "detailsEmpty": "“Why this pick?”, the map and booking options will open here."
+  "detailsEmpty": "“Why this pick?”, the map and booking options will open here.",
+  "install": {
+    "title": "Add WH3RE to your phone",
+    "ios": "Tap Share, then “Add to Home Screen”. WH3RE will open like an app.",
+    "android": "WH3RE will open like an app, right from your home screen.",
+    "install": "Install",
+    "dismiss": "Not now"
+  }
 }

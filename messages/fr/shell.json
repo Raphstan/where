@@ -3,5 +3,12 @@
   "history": "Historique",
   "historyEmpty": "Tes questions apparaîtront ici.",
   "details": "Détails",
-  "detailsEmpty": "« Pourquoi ce choix ? », la carte et les moyens de réserver s'ouvriront ici."
+  "detailsEmpty": "« Pourquoi ce choix ? », la carte et les moyens de réserver s'ouvriront ici.",
+  "install": {
+    "title": "Installe WH3RE sur ton téléphone",
+    "ios": "Touche Partager, puis « Sur l'écran d'accueil ». WH3RE s'ouvrira comme une appli.",
+    "android": "WH3RE s'ouvrira comme une appli, directement depuis ton écran d'accueil.",
+    "install": "Installer",
+    "dismiss": "Plus tard"
+  }
 }
