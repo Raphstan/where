@@ -77,6 +77,13 @@ h4 {
   outline-offset: 2px;
 }
 
+/* Champs de saisie : leur bordure fonce déjà au focus ; pas de second contour bleu par-dessus. */
+input:not([type="checkbox"]):not([type="radio"]):focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
