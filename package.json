@@ -15,7 +15,8 @@
     "db:reset": "supabase db reset",
     "db:types": "supabase gen types typescript --local --schema public > src/lib/supabase/database.types.ts",
     "db:test": "supabase test db",
-    "test:live": "vitest run --config vitest.live.config.mts"
+    "test:live": "vitest run --config vitest.live.config.mts",
+    "beta:metrics": "node scripts/beta-metrics.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
