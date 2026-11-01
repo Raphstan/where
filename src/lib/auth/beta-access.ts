@@ -1,5 +1,6 @@
 import "server-only";
 import { LEGAL_VERSION } from "@/content/legal";
+import type { Locale } from "@/i18n/routing";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { decideBetaAccess, guestTokenFromNext, termsGate, type BetaDecision } from "./beta";
 
@@ -11,11 +12,15 @@ import { decideBetaAccess, guestTokenFromNext, termsGate, type BetaDecision } fr
  *
  * `acceptedTerms` : la case « J'accepte les conditions » était cochée. Sans elle, aucun compte
  * n'est créé (« termsRequired ») ; un compte existant entre quand même.
+ *
+ * `locale` : langue de l'appli au moment de la demande, gardée dans user_metadata.locale. Le modèle
+ * de l'email de connexion (supabase/templates/magic_link.html) l'utilise pour n'écrire qu'une langue.
  */
 export async function ensureBetaAccount(
   email: string,
   next: string | null | undefined,
   acceptedTerms: boolean,
+  locale: Locale,
 ): Promise<BetaDecision | "termsRequired"> {
   const admin = createAdminClient();
   const token = guestTokenFromNext(next);
@@ -34,9 +39,15 @@ export async function ensureBetaAccount(
   );
   if (decision === "waitlist" || decision === "termsRequired") return decision;
   if (decision === "invited" || decision === "guest") {
-    const created = await admin.auth.admin.createUser({ email, email_confirm: true });
+    const created = await admin.auth.admin.createUser({ email, email_confirm: true, user_metadata: { locale } });
     // Course possible (deux envois rapprochés) : le compte existe déjà, c'est le résultat voulu.
     if (created.error && !/already|exists|registered/i.test(created.error.message)) throw new Error(created.error.message);
+  }
+  // Compte existant (ou créé à l'instant par une demande concurrente) : l'email suit la langue du moment.
+  const profile = user.data ?? (await admin.from("users").select("id").eq("email", email).maybeSingle()).data;
+  if (profile) {
+    const updated = await admin.auth.admin.updateUserById(profile.id, { user_metadata: { locale } });
+    if (updated.error) throw new Error(updated.error.message);
   }
   if (acceptedTerms) {
     // Le profil (public.users) est créé par le déclencheur handle_new_user, dans la même transaction.

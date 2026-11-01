@@ -246,7 +246,7 @@ otp_expiry = 3600
 
 # Uncomment to customize email template
 [auth.email.template.magic_link]
-subject = "Ton lien WH3RE · Your WH3RE sign-in link"
+subject = "{{ $l := or .Data.locale \"en\" }}{{ if eq $l \"fr\" }}Ton lien de connexion WH3RE{{ else if eq $l \"he\" }}קישור הכניסה שלך ל־WH3RE{{ else }}Your WH3RE sign-in link{{ end }}"
 content_path = "./supabase/templates/magic_link.html"
 
 # [auth.email.template.invite]

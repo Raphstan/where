@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { LEGAL_VERSION } from "@/content/legal";
+import { apiLocale } from "@/i18n/request-locale";
 import { ensureBetaAccount } from "@/lib/auth/beta-access";
 import { TERMS_COOKIE } from "@/lib/auth/terms";
 import { NEXT_COOKIE, NEXT_COOKIE_MAX_AGE, safeNextPath } from "@/lib/auth/redirect";
@@ -46,7 +47,7 @@ export async function sendMagicLink(
   // Bêta privée : le compte n'est créé (côté serveur) que pour une personne invitée.
   let access;
   try {
-    access = await ensureBetaAccount(email, next, acceptedTerms);
+    access = await ensureBetaAccount(email, next, acceptedTerms, await apiLocale());
   } catch {
     return { status: "error", error: "sendFailed" };
   }

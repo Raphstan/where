@@ -1,25 +1,33 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>WH3RE</title></head>
+{{ $l := or .Data.locale "en" }}<!doctype html><html lang="{{ $l }}"{{ if eq $l "he" }} dir="rtl"{{ end }}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>WH3RE</title></head>
 <body style="margin:0;padding:0;background:#ffffff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2A1438">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">Ton lien de connexion · Your sign-in link · קישור הכניסה שלך&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff"><tr><td align="center" style="padding:24px 12px 32px">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:500px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:500px"{{ if eq $l "he" }} dir="rtl"{{ end }}>
 
 <tr><td style="padding:0 8px 16px"><table role="presentation" cellpadding="0" cellspacing="0"><tr>
 <td><img src="https://wh3re.com/mail/mascot.png" width="30" height="35" alt="" style="display:block;border:0"></td>
-<td style="padding-left:8px;font:800 22px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.01em;color:#2A1438">WH3RE</td></tr></table></td></tr>
+<td style="padding:0 8px;font:800 22px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.01em;color:#2A1438">WH3RE</td></tr></table></td></tr>
 
-<tr><td style="background:#F7F4FB;border-radius:24px;padding:30px 26px">
-<div style="font:800 30px/1.08 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.02em;color:#2A1438">Ton lien <span style="color:#FF5A1F">WH3RE.</span></div>
-<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">Clique pour te connecter. Pas de mot de passe, le lien suffit.</div>
-<div style="font:15px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:8px" lang="en">Click to sign in. No password, the link is enough.</div>
-<div style="font:15px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:8px;text-align:right" lang="he" dir="rtl">לוחצים ונכנסים. בלי סיסמה, הקישור מספיק.</div>
-<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/chat" style="display:inline-block;margin-top:22px;background:#FF5A1F;color:#ffffff;text-decoration:none;font:700 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;padding:14px 24px;border-radius:999px">Me connecter · Sign in · כניסה</a>
-<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">Le lien expire dans une heure. · The link expires in one hour. · <span dir="rtl">הקישור פג תוקף בעוד שעה.</span></div>
+<tr><td style="background:#F7F4FB;border-radius:24px;padding:30px 26px;text-align:{{ if eq $l "he" }}right{{ else }}left{{ end }}">
+{{ if eq $l "fr" }}
+<div style="font:800 30px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.02em;color:#2A1438">Ton lien de connexion</div>
+<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">Touche le bouton pour te connecter à WH3RE. Pas de mot de passe : ce lien suffit.</div>
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/chat" style="display:inline-block;margin-top:22px;background:#FF5A1F;color:#ffffff;text-decoration:none;font:700 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;padding:14px 24px;border-radius:999px">Me connecter</a>
+<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">Le lien est valable une heure et ne sert qu'une fois.</div>
+{{ else if eq $l "he" }}
+<div style="font:800 30px/1.15 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2A1438">קישור הכניסה שלך</div>
+<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">לוחצים על הכפתור ונכנסים ל־WH3RE. בלי סיסמה, הקישור מספיק.</div>
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/chat" style="display:inline-block;margin-top:22px;background:#FF5A1F;color:#ffffff;text-decoration:none;font:700 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;padding:14px 24px;border-radius:999px">כניסה</a>
+<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">הקישור בתוקף לשעה אחת ולשימוש אחד בלבד.</div>
+{{ else }}
+<div style="font:800 30px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.02em;color:#2A1438">Your sign-in link</div>
+<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">Tap the button to sign in to WH3RE. No password needed: this link is enough.</div>
+<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/chat" style="display:inline-block;margin-top:22px;background:#FF5A1F;color:#ffffff;text-decoration:none;font:700 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;padding:14px 24px;border-radius:999px">Sign in</a>
+<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">The link works for one hour and only once.</div>
+{{ end }}
 </td></tr>
 
 <tr><td align="center" style="padding:22px 16px 0;font:12px/1.6 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90">
-<div style="font-weight:700;color:#5E4B6E">WH3RE · Les adresses que tes proches adorent</div>
-Pas à l'origine de cette demande ? Ignore cet email. · Didn't ask for it? Just ignore this email.<br>
+{{ if eq $l "fr" }}Tu n'as rien demandé ? Ignore simplement cet e-mail.{{ else if eq $l "he" }}לא ביקשת? אפשר להתעלם מהמייל הזה.{{ else }}Didn't ask for this? You can ignore this email.{{ end }}<br>
 <a href="mailto:privacy@wh3re.com" style="color:#7E6E90">privacy@wh3re.com</a>
 </td></tr>
 
