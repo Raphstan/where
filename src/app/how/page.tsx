@@ -7,12 +7,12 @@ export const metadata: Metadata = { title: "Comment ça marche" };
 
 const STEPS = [
   [
-    "WHERE retrouve les lieux que toi et tes proches connaissez déjà.",
+    "WH3RE retrouve les lieux que toi et tes proches connaissez déjà.",
     "Réservations dans tes emails, lieux partagés, réponses de tes proches. Jamais de lecture secrète.",
   ],
   [
     "Tu poses une question comme tu la poserais à un ami.",
-    "« Un endroit caché, pas trop bruyant, pour ce soir. » WHERE comprend le contexte.",
+    "« Un endroit caché, pas trop bruyant, pour ce soir. » WH3RE comprend le contexte.",
   ],
   [
     "Tu obtiens quelques réponses expliquées, pas une liste infinie.",
@@ -28,7 +28,7 @@ const AV = {
   me: "from-ink-2 to-ink",
 };
 
-/* Signaux qui flottent vers WHERE (maquette .conv .src), avec leur position et leur dérive. */
+/* Signaux qui flottent vers WH3RE (maquette .conv .src), avec leur position et leur dérive. */
 const SIGNALS = [
   { ini: "S", av: AV.sarah, text: "Sarah recommande un lieu", pos: "left-[6%] top-[12%]", d: "10px,6px", delay: "0s" },
   { ini: "N", av: AV.noam, text: "Noam y a réservé", pos: "right-[6%] top-[18%]", d: "-8px,8px", delay: ".6s" },

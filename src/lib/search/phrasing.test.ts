@@ -81,15 +81,15 @@ describe("lignes de preuve — libellé long et provenance", () => {
     expect(line).toMatchObject({ level: "public", label: "Information publique", provenance: "du web public", person: null });
   });
 
-  it("étiquette les déductions « Tes préférences / déduction WHERE », sans personne", () => {
+  it("étiquette les déductions « Tes préférences / déduction WH3RE », sans personne", () => {
     expect(deductionLine(["caché", "calme"])).toEqual({
       kind: "deduction",
       text: "Correspond à tes critères : caché, calme",
-      label: "Tes préférences / déduction WHERE",
+      label: "Tes préférences / déduction WH3RE",
       provenance: "de tes données",
       person: null,
     });
-    expect(DEDUCTION_LABEL).toBe("Tes préférences / déduction WHERE");
+    expect(DEDUCTION_LABEL).toBe("Tes préférences / déduction WH3RE");
   });
 
   it("rappelle les cinq niveaux mot pour mot (whyBody)", () => {

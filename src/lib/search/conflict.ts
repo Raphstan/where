@@ -3,7 +3,7 @@ import type { MemorySignal } from "./signal";
 
 /**
  * Signaux contradictoires sur le bruit (maquette, Spicehaus) : un proche trouve le lieu calme,
- * un autre le dit bruyant. WHERE ne tranche pas : il donne les deux avis, et la nuance horaire
+ * un autre le dit bruyant. WH3RE ne tranche pas : il donne les deux avis, et la nuance horaire
  * quand l'avis bruyant la précise (« après 22 h »).
  */
 const CALM = /\b(calme|tranquille|tranquillement|on peut (encore )?parler|discuter|conversation|pas trop bruyant|pas bruyant)\b/;

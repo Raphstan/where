@@ -47,7 +47,7 @@ async function Profile() {
           </div>
         ) : (
           <p className="text-[12.5px] text-muted">
-            WHERE n&apos;a encore rien appris. Tes préférences apparaîtront ici au fil de tes visites et de tes retours.
+            WH3RE n&apos;a encore rien appris. Tes préférences apparaîtront ici au fil de tes visites et de tes retours.
           </p>
         )}
       </div>

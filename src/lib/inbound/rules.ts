@@ -81,7 +81,7 @@ export const QUALIFY_TEXT = {
   skipPlace: "Ignorer ce lieu",
   doneTitle: "Ta mémoire commence à se former.",
   doneLead: (n: number) =>
-    `${n} lieux qualifiés. WHERE saura désormais ce qui compte vraiment pour toi, pas seulement où tu as réservé.`,
+    `${n} lieux qualifiés. WH3RE saura désormais ce qui compte vraiment pour toi, pas seulement où tu as réservé.`,
   doneCta: "Créer mon cercle de confiance",
 } as const;
 

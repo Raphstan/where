@@ -43,7 +43,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
     return (
       <div className="flex animate-up flex-col gap-3">
         <div className="flex items-center">
-          <span className="font-display tracking-[0.14em]">WHERE</span>
+          <span className="font-display tracking-[0.14em]">WH3RE</span>
           <span className="ml-auto rounded-full bg-olive-2 px-[9px] py-1 text-[11.5px] font-bold text-olive">
             Envoyé à {requester}
           </span>
@@ -51,7 +51,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
         <h2 className="font-display text-[21px] font-medium leading-tight">Merci, {memberName}.</h2>
         <p className="text-[12.5px] text-muted">
           {state.reusable
-            ? `Seul ${requester} voit ta réponse. Tu as autorisé WHERE à la réutiliser pour ${requester} à l’avenir.`
+            ? `Seul ${requester} voit ta réponse. Tu as autorisé WH3RE à la réutiliser pour ${requester} à l’avenir.`
             : `Seul ${requester} voit ta réponse. Elle ne sert qu’à cette question et ne sera pas gardée.`}
         </p>
         <button
@@ -146,7 +146,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
 
       <div>
         <Toggle name="visibleOnlyToRequester" label={`Visible seulement par ${requester}`} defaultOn />
-        <Toggle name="reusable" label={`Autoriser WHERE à réutiliser cette reco pour ${requester} à l’avenir`} defaultOn />
+        <Toggle name="reusable" label={`Autoriser WH3RE à réutiliser cette reco pour ${requester} à l’avenir`} defaultOn />
       </div>
 
       {localError || state.status === "error" ? (

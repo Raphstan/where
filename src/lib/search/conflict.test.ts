@@ -36,7 +36,7 @@ describe("noiseConflict", () => {
     expect(noiseConflict([s({ kind: "self" }, "visited", "calme"), s(noam, "visited", "bruyant")])).toBeNull();
   });
 
-  it("sans heure, WHERE donne les deux avis sans inventer de nuance", () => {
+  it("sans heure, WH3RE donne les deux avis sans inventer de nuance", () => {
     const c = noiseConflict([s(sarah, "recommended", "très calme"), s(noam, "visited", "trop de bruit")]);
     expect(conflictNotice(c!)).toBe(
       "Signaux contradictoires : Sarah le trouve calme, Noam le trouve bruyant. Je te donne les deux avis plutôt que de trancher.",

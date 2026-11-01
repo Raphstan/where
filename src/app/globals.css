@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  Design tokens de WHERE, repris de docs/prototype.html.
+  Design tokens de WH3RE, repris de docs/prototype.html.
   Tailwind v4 : les tokens vivent ici (@theme) et non dans tailwind.config.
   La palette par défaut de Tailwind est retirée : seules ces couleurs existent.
 */

@@ -21,7 +21,7 @@ export function bookedAnswerLevel(answer: BookedAnswer): EvidenceLevel | null {
   return answer === "Oui" ? "booked" : null;
 }
 
-/** Réponses de WHERE, mot pour mot (maquette pick). Le nom du lieu est en gras. */
+/** Réponses de WH3RE, mot pour mot (maquette pick). Le nom du lieu est en gras. */
 export function bookedReply(answer: BookedAnswer, placeName: string): RichText {
   switch (answer) {
     case "Oui":

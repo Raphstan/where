@@ -9,7 +9,7 @@ import {
   type Understanding,
 } from "./schema";
 
-export const ASK_MODEL = "claude-opus-5";
+export const ASK_MODEL = "claude-sonnet-5";
 
 /** Le sous-ensemble du client dont dépend la compréhension : remplaçable dans les tests. */
 export type AskClient = { messages: Pick<Anthropic["messages"], "parse"> };

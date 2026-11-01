@@ -256,7 +256,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois, au chargement
   }, []);
 
-  /* ----- Réserver : feuille → « Tu quittes WHERE » → « As-tu réservé ? » ----- */
+  /* ----- Réserver : feuille → « Tu quittes WH3RE » → « As-tu réservé ? » ----- */
 
   function book(result: SearchResult) {
     openPanel({

@@ -3,8 +3,8 @@ import { fold } from "./match";
 import { ageInYears, isStale, type MemorySignal } from "./signal";
 import type { EvidenceLine, Person, RichText, SearchResult } from "./types";
 
-/** Libellé des déductions de WHERE, mot pour mot (maquette EVLABEL.pref). Jamais attribué à un proche. */
-export const DEDUCTION_LABEL = "Tes préférences / déduction WHERE";
+/** Libellé des déductions de WH3RE, mot pour mot (maquette EVLABEL.pref). Jamais attribué à un proche. */
+export const DEDUCTION_LABEL = "Tes préférences / déduction WH3RE";
 
 /** Rappel des niveaux de preuve dans « Pourquoi ce choix ? », mot pour mot (maquette whyBody). */
 export const EVIDENCE_REMINDER: readonly { level: EvidenceLevel; label: string }[] = [
@@ -147,7 +147,7 @@ export function evidenceLine(signal: MemorySignal, now: Date, wantedOccasion: st
   };
 }
 
-/** Déduction de WHERE : ce qui, dans la fiche du lieu, correspond à la demande. */
+/** Déduction de WH3RE : ce qui, dans la fiche du lieu, correspond à la demande. */
 export function deductionLine(matches: readonly string[]): EvidenceLine | null {
   if (matches.length === 0) return null;
   return {
@@ -274,7 +274,7 @@ export function introFor(results: readonly SearchResult[]): RichText {
   ];
 }
 
-/** La recherche a-t-elle une réponse sûre ? Sinon, WHERE propose de demander au réseau. */
+/** La recherche a-t-elle une réponse sûre ? Sinon, WH3RE propose de demander au réseau. */
 export function isConfident(results: readonly SearchResult[]): boolean {
   return results.some((r) => r.origin === "personal" && r.confidence.level === "forte");
 }

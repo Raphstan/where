@@ -1,4 +1,7 @@
-# WHERE
+# WH3RE
+
+Le produit s'appelle **WH3RE** (domaine `wh3re.com`). La maquette dit encore « WHERE » : dans l'interface,
+reprendre ses textes mot pour mot en écrivant toujours « WH3RE ».
 
 Cahier des charges : `docs/prototype.html` (maquette interactive, 1292 lignes). La lire **en entier** avant
 tout ticket, y compris le JavaScript : `PEOPLE`, `PLACES`, `BOOK`, `EVLABEL`, `MEMORY`, `GMAIL_FOUND`,
@@ -90,7 +93,7 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
 - **Auth** : lien magique par email uniquement (`@supabase/ssr`). La session est rafraîchie dans
   `src/proxy.ts` (Next 16 : le middleware s'appelle `proxy`). Les routes de l'app sont protégées là.
   Tout composant serveur qui lit la session appelle `await connection()` avant (Cache Components).
-- **API Anthropic** : SDK officiel `@anthropic-ai/sdk`, modèle `claude-opus-5`, sorties structurées via
+- **API Anthropic** : SDK officiel `@anthropic-ai/sdk`, modèle `claude-sonnet-5`, sorties structurées via
   `client.messages.parse` + `zodOutputFormat`. Prompt système stable et mis en cache
   (`src/lib/ask/prompt.ts`), jamais de valeur variable dedans. Clé lue dans `src/lib/env.server.ts`
   uniquement. `WHERE_ASK_MOCK=1` permet de développer l'interface sans clé, jamais en production.

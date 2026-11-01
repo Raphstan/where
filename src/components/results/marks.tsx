@@ -1,7 +1,7 @@
 import type { EvidenceLevel } from "@/lib/evidence";
 import type { ConfidenceLevel, Person } from "@/lib/search/types";
 
-/** Pastille d'un niveau de preuve (maquette .ev) ; `deduction` = point encre de « déduction WHERE ». */
+/** Pastille d'un niveau de preuve (maquette .ev) ; `deduction` = point encre de « déduction WH3RE ». */
 const DOT: Record<EvidenceLevel | "deduction", string> = {
   recommended: "bg-coral",
   visited: "bg-olive",

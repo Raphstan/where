@@ -8,8 +8,8 @@ export const metadata: Metadata = { title: "États limites" };
 const ask = (key: ExampleKey) => `/chat?q=${encodeURIComponent(EXAMPLE_QUESTIONS.find((e) => e.key === key)!.text)}`;
 
 /*
- * Cas de la maquette (scrEdge) que WHERE gère réellement. « Pas de disponibilité » n'y figure pas :
- * WHERE ne connaît pas les disponibilités (aucune API Ontopo ou Tabit, liens sortants seulement).
+ * Cas de la maquette (scrEdge) que WH3RE gère réellement. « Pas de disponibilité » n'y figure pas :
+ * WH3RE ne connaît pas les disponibilités (aucune API Ontopo ou Tabit, liens sortants seulement).
  */
 const CASES: readonly { title: string; quote: string; text: string; href: string; action: string }[] = [
   {
@@ -22,7 +22,7 @@ const CASES: readonly { title: string; quote: string; text: string; href: string
   {
     title: "Informations contradictoires",
     quote: "« Sarah trouve ce lieu calme, mais Noam indique qu’il devient bruyant après 22 h. »",
-    text: "WHERE explique la nuance (calme avant 22 h) au lieu de trancher arbitrairement.",
+    text: "WH3RE explique la nuance (calme avant 22 h) au lieu de trancher arbitrairement.",
     href: ask("bar"),
     action: "Voir en situation",
   },
@@ -68,7 +68,7 @@ export default function EdgePage() {
   return (
     <PageFrame
       title="États limites"
-      lead="Ce que WHERE fait quand il ne sait pas, ou quand les signaux se contredisent."
+      lead="Ce que WH3RE fait quand il ne sait pas, ou quand les signaux se contredisent."
       back="/profile"
     >
       {CASES.map((c) => (

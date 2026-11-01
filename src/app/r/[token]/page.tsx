@@ -35,7 +35,7 @@ export default function GuestPage({ params }: PageProps<"/r/[token]">) {
     <div className="flex min-h-dvh flex-1 flex-col bg-[#efe7d8]">
       <main className="mx-auto mt-auto flex w-full max-w-[480px] flex-col gap-3.5 rounded-t-[24px] bg-cream px-5 pt-5 pb-[30px] sm:my-auto sm:rounded-[24px] sm:shadow-soft">
         <div className="flex items-center">
-          <span className="font-display tracking-[0.14em]">WHERE</span>
+          <span className="font-display tracking-[0.14em]">WH3RE</span>
           <span className="ml-auto text-[11.5px] text-soft">Sans compte · sans appli</span>
         </div>
         <Suspense fallback={<div className="h-[420px] animate-pulse rounded-card bg-cream-2" />}>

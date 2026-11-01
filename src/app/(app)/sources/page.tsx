@@ -52,7 +52,7 @@ const LATER: readonly { logo: [string, string]; name: string; text: string }[] =
   {
     logo: ["bg-[#25d366] text-white", "W"],
     name: "WhatsApp",
-    text: "WHERE ne peut pas lire tes conversations. Il utilise seulement : les messages que tu transfères, les liens envoyés au bot, les réponses reçues via un lien WHERE, ou une conversation que tu inities.",
+    text: "WH3RE ne peut pas lire tes conversations. Il utilise seulement : les messages que tu transfères, les liens envoyés au bot, les réponses reçues via un lien WH3RE, ou une conversation que tu inities.",
   },
   {
     logo: ["bg-linear-45 from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white", "I"],
@@ -100,7 +100,7 @@ async function EmailSource() {
 /* Mes sources (docs/prototype.html, scrSources). */
 export default function SourcesPage() {
   return (
-    <PageFrame title="Mes sources" lead="Ce que WHERE peut vraiment lire, et ce qu’il ne lira jamais." back="/profile">
+    <PageFrame title="Mes sources" lead="Ce que WH3RE peut vraiment lire, et ce qu’il ne lira jamais." back="/profile">
       <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-cream-2" />}>
         <EmailSource />
       </Suspense>
@@ -121,7 +121,7 @@ export default function SourcesPage() {
         </div>
         <p className="text-[12.5px] text-muted">
           Ce sont des destinations, pas des sources illimitées : leur disponibilité dépend du pays, du lieu et des
-          intégrations possibles. WHERE t’y envoie, il ne réserve pas à ta place.
+          intégrations possibles. WH3RE t’y envoie, il ne réserve pas à ta place.
         </p>
       </div>
     </PageFrame>

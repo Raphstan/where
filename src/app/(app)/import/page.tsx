@@ -120,7 +120,7 @@ async function Results() {
         <span aria-hidden className="text-olive">
           🔒
         </span>
-        WHERE ne lit que les emails qu’il reçoit, et rien n’entre dans ta mémoire sans que tu le valides. Tu peux tout
+        WH3RE ne lit que les emails qu’il reçoit, et rien n’entre dans ta mémoire sans que tu le valides. Tu peux tout
         supprimer à tout moment.
       </p>
 
@@ -209,7 +209,7 @@ export default function ImportPage() {
           Tu as déjà une mémoire de tes sorties cachée dans tes emails.
         </h1>
         <p className="text-[15px] leading-normal text-muted">
-          WHERE peut y retrouver les confirmations de restaurants, hôtels, activités, événements et voyages.
+          WH3RE peut y retrouver les confirmations de restaurants, hôtels, activités, événements et voyages.
         </p>
         <Suspense fallback={<div className="h-[220px] animate-pulse rounded-card border border-line bg-cream-2" />}>
           <Results />

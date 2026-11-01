@@ -4,7 +4,7 @@ import { PlatformLogo } from "./platform-logo";
 
 /**
  * Feuille « Réserver » (docs/prototype.html, bookBody) : uniquement les moyens réellement
- * disponibles pour ce lieu. Choisir un moyen ouvre l'écran « Tu quittes WHERE ».
+ * disponibles pour ce lieu. Choisir un moyen ouvre l'écran « Tu quittes WH3RE ».
  */
 export function BookingPanel({ result, onChoose }: { result: SearchResult; onChoose: (option: BookingOption) => void }) {
   return (

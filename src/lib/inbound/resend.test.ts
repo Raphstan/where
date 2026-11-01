@@ -35,7 +35,7 @@ describe("verifyWebhookSignature", () => {
 
 describe("adresse de transfert", () => {
   it("retrouve le jeton parmi les destinataires, sur notre domaine seulement", () => {
-    expect(forwardToken(["WHERE <inbox+abc123def456@where.app>"], "where.app")).toBe("abc123def456");
+    expect(forwardToken(["WH3RE <inbox+abc123def456@where.app>"], "where.app")).toBe("abc123def456");
     expect(forwardToken(["someone@gmail.com", "inbox+abc123def456@where.app"], "where.app")).toBe("abc123def456");
     expect(forwardToken(["inbox+abc123def456@evil.app"], "where.app")).toBeNull();
     expect(forwardToken(["inbox+abc123def456@where.app.evil.com"], "where.app")).toBeNull();

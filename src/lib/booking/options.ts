@@ -1,6 +1,6 @@
 /**
  * Moyens de réserver ou de joindre un lieu (docs/prototype.html, BOOK et bookBody).
- * WHERE ne réserve pas : ce sont des liens sortants, et seulement ceux qui existent vraiment pour
+ * WH3RE ne réserve pas : ce sont des liens sortants, et seulement ceux qui existent vraiment pour
  * ce lieu. Aucune intégration avec Ontopo ou Tabit (CLAUDE.md § 5) : un lien n'apparaît que si son
  * URL est connue.
  */
@@ -39,11 +39,11 @@ export type BookingPlace = {
 
 /** Textes de la feuille « Réserver », mot pour mot (maquette bookBody). */
 export const BOOKING_TEXT = {
-  intro: "WHERE n’est pas le système de réservation. Voici les moyens réellement disponibles pour ce lieu :",
+  intro: "WH3RE n’est pas le système de réservation. Voici les moyens réellement disponibles pour ce lieu :",
   tabitNote: "Tabit gère aussi des livraisons : seule une réservation de table comptera comme visite.",
   noPlatformNote: "Ce lieu ne propose ni Ontopo ni Tabit — je ne t’affiche que ce qui existe vraiment.",
-  leavingEyebrow: "Tu quittes WHERE",
-  back: "Revenir à WHERE",
+  leavingEyebrow: "Tu quittes WH3RE",
+  back: "Revenir à WH3RE",
 } as const;
 
 function httpUrl(value: string | null | undefined): string | null {
@@ -118,7 +118,7 @@ export function bookingNotes(options: readonly BookingOption[]): string[] {
 }
 
 /**
- * Écran « Tu quittes WHERE » (maquette renderLeave) : « Tu quittes WHERE pour finaliser ta
+ * Écran « Tu quittes WH3RE » (maquette renderLeave) : « Tu quittes WH3RE pour finaliser ta
  * réservation sur {Plateforme}. » La maquette dérive la plateforme du libellé, ce qui donnerait
  * « sur site du restaurant » ou « sur Appeler » : on garde la phrase, avec l’article et « par téléphone ».
  */
@@ -131,5 +131,5 @@ export function leavingText(kind: BookingKind): string {
     wa: "sur WhatsApp",
     maps: "sur Google Maps",
   };
-  return `Tu quittes WHERE pour finaliser ta réservation ${on[kind]}.`;
+  return `Tu quittes WH3RE pour finaliser ta réservation ${on[kind]}.`;
 }

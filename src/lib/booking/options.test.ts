@@ -82,10 +82,10 @@ describe("liens téléphone, WhatsApp et carte", () => {
   });
 });
 
-describe("écran « Tu quittes WHERE »", () => {
+describe("écran « Tu quittes WH3RE »", () => {
   it("reprend la phrase de la maquette", () => {
-    expect(leavingText("ontopo")).toBe("Tu quittes WHERE pour finaliser ta réservation sur Ontopo.");
-    expect(leavingText("tabit")).toBe("Tu quittes WHERE pour finaliser ta réservation sur Tabit.");
-    expect(leavingText("tel")).toBe("Tu quittes WHERE pour finaliser ta réservation par téléphone.");
+    expect(leavingText("ontopo")).toBe("Tu quittes WH3RE pour finaliser ta réservation sur Ontopo.");
+    expect(leavingText("tabit")).toBe("Tu quittes WH3RE pour finaliser ta réservation sur Tabit.");
+    expect(leavingText("tel")).toBe("Tu quittes WH3RE pour finaliser ta réservation par téléphone.");
   });
 });

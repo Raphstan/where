@@ -109,7 +109,7 @@ function Choice({ icon, title, text, badge, onClick }: { icon: string; title: st
 
 /**
  * « Comment veux-tu retrouver tes réservations ? » : automatiquement par un filtre Gmail (assistant
- * en trois étapes, une action à la fois) ou à la main. WHERE ne se connecte jamais à Gmail.
+ * en trois étapes, une action à la fois) ou à la main. WH3RE ne se connecte jamais à Gmail.
  */
 export function ImportSetup({
   address,
@@ -163,8 +163,8 @@ export function ImportSetup({
       <div className="flex items-start gap-3 rounded-card border border-line bg-amber-2 p-4 text-[14px] text-[#6e4f14]">
         <span aria-hidden>⏳</span>
         <span>
-          <b>La réception des emails n’est pas encore active sur cette version de WHERE.</b> Ne configure rien dans Gmail
-          pour l’instant : rien n’arriverait. Cette étape sera disponible une fois WHERE en ligne.
+          <b>La réception des emails n’est pas encore active sur cette version de WH3RE.</b> Ne configure rien dans Gmail
+          pour l’instant : rien n’arriverait. Cette étape sera disponible une fois WH3RE en ligne.
         </span>
       </div>
     );
@@ -178,7 +178,7 @@ export function ImportSetup({
           icon="✨"
           title="Automatiquement, depuis Gmail"
           badge="Recommandé"
-          text="3 étapes, 2 minutes. Gmail n’envoie à WHERE que les emails de réservation, rien d’autre."
+          text="3 étapes, 2 minutes. Gmail n’envoie à WH3RE que les emails de réservation, rien d’autre."
           onClick={() => go(1)}
         />
         <Choice
@@ -206,7 +206,7 @@ export function ImportSetup({
           </Do>
           <Do n={3}>
             <span>
-              Envoie-le depuis <b>{accountEmail}</b>, l’adresse de ton compte WHERE. Il apparaîtra ici en quelques secondes.
+              Envoie-le depuis <b>{accountEmail}</b>, l’adresse de ton compte WH3RE. Il apparaîtra ici en quelques secondes.
             </span>
           </Do>
         </ol>
@@ -258,10 +258,10 @@ export function ImportSetup({
 
       {step === 1 ? (
         <>
-          <h2 className="font-display text-[21px] font-medium leading-tight">Donne ton adresse WHERE à Gmail</h2>
+          <h2 className="font-display text-[21px] font-medium leading-tight">Donne ton adresse WH3RE à Gmail</h2>
           <ol className="flex flex-col gap-4">
             <Do n={1}>
-              Copie ton adresse WHERE :
+              Copie ton adresse WH3RE :
               <CopyBox value={address} />
             </Do>
             <Do n={2}>
@@ -287,7 +287,7 @@ export function ImportSetup({
           {confirmation ? (
             <ol className="flex flex-col gap-4">
               <Do n={1}>
-                Gmail a envoyé ce code à WHERE{confirmation.requester ? ` pour ${confirmation.requester}` : ""} :
+                Gmail a envoyé ce code à WH3RE{confirmation.requester ? ` pour ${confirmation.requester}` : ""} :
                 <CopyBox value={confirmation.code} big />
               </Do>
               <Do n={2}>
@@ -309,7 +309,7 @@ export function ImportSetup({
                   <i key={i} style={{ animationDelay: `${i * 0.2}s` }} className="size-1.5 animate-blink rounded-full bg-soft" />
                 ))}
               </span>
-              <span>J’attends le code que Gmail envoie à WHERE. Il apparaît ici tout seul, en quelques secondes.</span>
+              <span>J’attends le code que Gmail envoie à WH3RE. Il apparaît ici tout seul, en quelques secondes.</span>
             </div>
           )}
           <button type="button" onClick={() => go(3)} disabled={!confirmation} className={`${PRIMARY} disabled:opacity-40`}>
@@ -338,7 +338,7 @@ export function ImportSetup({
             </Do>
             <Do n={3}>
               <span>
-                Coche <b>« Le transférer à »</b>, choisis ton adresse WHERE, puis clique sur <b>« Créer un filtre »</b>.
+                Coche <b>« Le transférer à »</b>, choisis ton adresse WH3RE, puis clique sur <b>« Créer un filtre »</b>.
               </span>
             </Do>
           </ol>

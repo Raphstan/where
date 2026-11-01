@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof UnderstandError) {
       if (error.code === "missing_api_key") {
-        return fail(500, "not_configured", "WHERE n'est pas encore configuré pour comprendre les questions.");
+        return fail(500, "not_configured", "WH3RE n'est pas encore configuré pour comprendre les questions.");
       }
       return fail(422, error.code, "Je n'ai pas réussi à comprendre la question. Reformule-la ?");
     }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       return fail(429, "rate_limited", "Trop de questions d'un coup. Réessaie dans un instant.");
     }
     if (error instanceof Anthropic.AuthenticationError) {
-      return fail(500, "not_configured", "WHERE n'est pas encore configuré pour comprendre les questions.");
+      return fail(500, "not_configured", "WH3RE n'est pas encore configuré pour comprendre les questions.");
     }
     if (error instanceof Anthropic.APIConnectionError) {
       return fail(503, "upstream_unreachable", "Je n'arrive pas à joindre mon moteur. Réessaie dans un instant.");

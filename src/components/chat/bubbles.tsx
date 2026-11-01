@@ -35,7 +35,7 @@ export function WhereBubble({ children }: { children: ReactNode }) {
 
 export function TypingBubble() {
   return (
-    <div className="flex animate-pop items-end gap-2.5" aria-label="WHERE réfléchit">
+    <div className="flex animate-pop items-end gap-2.5" aria-label="WH3RE réfléchit">
       <WhereAvatar />
       <div className="inline-flex gap-1 rounded-[20px] rounded-bl-[6px] border border-line bg-cream-2 px-4 py-3.5">
         <i className="size-1.5 animate-blink rounded-full bg-soft" />

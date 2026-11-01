@@ -8,7 +8,7 @@ export const MAX_PREFERENCES = 7;
 /**
  * « Mes préférences apprises » (maquette scrProfile) : les ambiances et occasions qui reviennent
  * dans les lieux que l'utilisateur a visités ou recommandés, de la plus fréquente à la moins
- * fréquente. Une déduction de WHERE à partir de ses propres données, jamais d'un proche.
+ * fréquente. Une déduction de WH3RE à partir de ses propres données, jamais d'un proche.
  * Un mot compte une fois par lieu ; avec plusieurs lieux, un mot vu une seule fois ne suffit pas.
  */
 export function learnedPreferences(experiences: readonly OwnExperience[], max = MAX_PREFERENCES): string[] {

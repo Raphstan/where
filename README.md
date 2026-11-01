@@ -1,4 +1,4 @@
-# WHERE
+# WH3RE
 
 Moteur de recherche conversationnel de lieux qui répond à partir de ton cercle de confiance.
 « Demande à ton réseau, sans avoir à demander à tout le monde. »
@@ -77,8 +77,8 @@ src/app/api/imports/    POST [id] : une carte de « Qualifier mes expériences �
 src/app/(app)/import/   adresse de transfert, « Voilà ce que j’ai retrouvé. », et qualify/ : la pile de cartes
 src/lib/inbound/        règles, classification Anthropic (prompt, schéma, factice), Resend (signature, contenu)
 src/components/import/  pile de qualification, logos des plateformes, liste des livraisons exclues
-src/lib/booking/        moyens de réserver, « Tu quittes WHERE », retour après visite → preuves
-src/components/booking/ feuille « Réserver », écran « Tu quittes WHERE », bulle de retour
+src/lib/booking/        moyens de réserver, « Tu quittes WH3RE », retour après visite → preuves
+src/components/booking/ feuille « Réserver », écran « Tu quittes WH3RE », bulle de retour
 src/app/(app)/memory/   Ma mémoire : stats, filtres par catégorie, un lieu par carte avec sa preuve la plus forte
 src/app/(app)/circle/   Mon cercle : domaines de confiance cochables, « Ajouter une personne » (rien n'est envoyé)
 src/app/(app)/sources/  Mes sources : transfert d'email (connecter / déconnecter), sources à venir, plateformes
@@ -102,7 +102,7 @@ supabase/snippets/      mémoire de démonstration (local uniquement)
 
 ## Compréhension des questions (Anthropic)
 
-`/api/ask` appelle le modèle `claude-opus-5` avec une sortie structurée (zod) et renvoie les critères
+`/api/ask` appelle le modèle `claude-sonnet-5` avec une sortie structurée (zod) et renvoie les critères
 compris, les chips à afficher et, au plus, une question complémentaire.
 
 - Mettre `ANTHROPIC_API_KEY` dans `.env.local` pour un fonctionnement réel.
@@ -133,7 +133,7 @@ docker exec -i supabase_db_where psql -U postgres -v email="'toi@exemple.com'" <
 
 ## Demande au réseau
 
-Quand aucun résultat n'atteint une confiance forte, WHERE propose les proches pertinents (domaines de
+Quand aucun résultat n'atteint une confiance forte, WH3RE propose les proches pertinents (domaines de
 confiance, lieux déjà attribués dans la zone) et « Leur demander ». L'écran de préparation laisse
 modifier le message et choisir les destinataires, puis demande une confirmation explicite. Le serveur
 crée alors un lien privé `/r/{token}` par proche et renvoie des liens `wa.me` pré-remplis :
@@ -147,12 +147,12 @@ La conversation (`/chat/[id]`) vérifie les réponses toutes les 10 secondes et 
 
 ## Réservation et retour après visite
 
-WHERE ne réserve pas. Le bouton « Réserver » d'une carte ouvre la liste des seuls moyens connus pour
+WH3RE ne réserve pas. Le bouton « Réserver » d'une carte ouvre la liste des seuls moyens connus pour
 ce lieu (colonnes `places.ontopo_url`, `tabit_url`, `website_url`, `phone`, `whatsapp`, et Google Maps
 dès que le lieu est localisable). Aucun lien Ontopo ou Tabit n'est construit sans URL connue.
 
-Choisir un moyen affiche « Tu quittes WHERE » ; le lien s'ouvre dans un nouvel onglet. Au retour
-(onglet de nouveau visible, ou « Revenir à WHERE ») : « De retour. As-tu réservé chez X ? ».
+Choisir un moyen affiche « Tu quittes WH3RE » ; le lien s'ouvre dans un nouvel onglet. Au retour
+(onglet de nouveau visible, ou « Revenir à WH3RE ») : « De retour. As-tu réservé chez X ? ».
 « Oui » crée un signal `booked` (jamais `visited`) et un suivi `visit_followups` dont l'échéance est
 le lendemain à 8 h, heure d'Israël.
 
@@ -195,7 +195,7 @@ seuls `src/lib/inbound/resend.ts` et la route du webhook changeraient : classifi
 2. Le jeton de l'adresse désigne le compte (`forward_addresses`). L'expéditeur doit être l'adresse du
    compte, sans échec SPF/DKIM/DMARC : sinon l'email est ignoré (personne ne peut écrire dans la
    mémoire d'un autre en usurpant son adresse).
-3. Le contenu est classé par `claude-opus-5` (sortie structurée, prompt système en cache) :
+3. Le contenu est classé par `claude-sonnet-5` (sortie structurée, prompt système en cache) :
    `table`, `hotel`, `activity`, `delivery`, `cancellation`, `other`, avec le lieu, la ville, la
    plateforme et la date. Tabit envoie à la fois des tables et des commandes : le prompt décide sur le
    contenu (heure et convives → table ; plats, total payé, livraison ou retrait → commande).
@@ -232,7 +232,7 @@ Airbnb, OpenTable, Resy, Restu). Le guide est sur `/import`.
   est une plateforme de la liste **et** que Resend rapporte DMARC « pass » (usurpation impossible).
   Un transfert à la main doit toujours venir de l'adresse du compte.
 - Gmail confirme l'adresse de transfert en y envoyant un code (`forwarding-noreply@google.com`,
-  DMARC « pass ») : le webhook le garde dans `forward_addresses` et `/import` l'affiche. WHERE ne
+  DMARC « pass ») : le webhook le garde dans `forward_addresses` et `/import` l'affiche. WH3RE ne
   clique jamais sur le lien de confirmation : l'utilisateur recopie le code lui-même.
 - Les emails écartés comme « autre » (publicités, notifications) ne gardent pas leur texte.
 - Il n'existe pas d'API Ontopo ou Tabit pour lire l'historique d'un client : ce filtre est la voie

@@ -11,7 +11,7 @@ export type Person = { id: string; name: string; initial: string };
 
 /**
  * Une ligne de preuve. `kind: "evidence"` porte un niveau de preuve strict ; `kind: "deduction"`
- * est une déduction de WHERE (« Tes préférences / déduction WHERE »), jamais attribuée à un proche.
+ * est une déduction de WH3RE (« Tes préférences / déduction WH3RE »), jamais attribuée à un proche.
  */
 export type EvidenceLine =
   | {
@@ -49,7 +49,7 @@ export type SearchResult = {
   people: Person[];
   /** Recommandation la plus récente si elle est ancienne : notice « Cette recommandation date de… ». */
   staleNotice: string | null;
-  /** Avis contradictoires de deux proches : WHERE donne les deux plutôt que de trancher. */
+  /** Avis contradictoires de deux proches : WH3RE donne les deux plutôt que de trancher. */
   conflictNotice: string | null;
   links: PlaceLinks;
   /** Moyens réellement disponibles pour réserver ou joindre le lieu (feuille « Réserver »). */

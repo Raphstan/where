@@ -10,7 +10,7 @@ export default function Home() {
       <div aria-hidden className="hero-stars absolute inset-0" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-[34%] bg-linear-to-b from-transparent to-blue/35" />
       <div className="relative flex flex-col gap-[22px] px-[22px] pt-[max(70px,env(safe-area-inset-top))] pb-10 lg:mx-auto lg:w-full lg:max-w-[820px] lg:px-8 lg:pt-[70px] lg:pb-[60px] lg:text-center">
-        <div className="font-display text-[15px] tracking-[0.18em]">WHERE</div>
+        <div className="font-display text-[15px] tracking-[0.18em]">WH3RE</div>
         <h1 className="font-display text-[34px] font-normal leading-[1.08] tracking-[-0.01em] lg:text-[56px]">
           Où devrais-tu
           <br />

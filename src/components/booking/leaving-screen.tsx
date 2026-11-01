@@ -5,8 +5,8 @@ import { BOOKING_TEXT, leavingText, type BookingOption } from "@/lib/booking/opt
 import { PlatformLogo } from "./platform-logo";
 
 /**
- * « Tu quittes WHERE » (docs/prototype.html, renderLeave). Le lien sortant s'ouvre dans un nouvel
- * onglet ; au retour sur WHERE (onglet de nouveau visible) ou sur « Revenir à WHERE », on demande
+ * « Tu quittes WH3RE » (docs/prototype.html, renderLeave). Le lien sortant s'ouvre dans un nouvel
+ * onglet ; au retour sur WH3RE (onglet de nouveau visible) ou sur « Revenir à WH3RE », on demande
  * « As-tu réservé ? ».
  */
 export function LeavingScreen({

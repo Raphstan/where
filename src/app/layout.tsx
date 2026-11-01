@@ -17,8 +17,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: "WHERE",
-    template: "%s · WHERE",
+    default: "WH3RE",
+    template: "%s · WH3RE",
   },
   description:
     "Trouve des lieux recommandés par les personnes auxquelles tu fais confiance.",
