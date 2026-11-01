@@ -109,7 +109,7 @@
     "nth": "n°{n}"
   },
   "intro": {
-    "none": "Personne dans ton cercle ne connaît encore suffisamment ce coin. Retire un critère pour élargir la recherche.",
+    "none": "Personne dans ton cercle ne connaît encore assez ce coin. Je peux poser la question à tes proches, ou tu peux ajouter quelqu’un qui le connaît.",
     "insufficient": "Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec confiance.",
     "discoveryOnlyAfter": "Une découverte publique, sans aucun signal de ton cercle : à prendre comme une piste.",
     "single": "Une réponse nette plutôt que trois. ",
@@ -118,7 +118,8 @@
     "three": "J’ai trois idées solides pour toi. ",
     "two": "J’ai deux idées pour toi. ",
     "bestReason": " semble être le meilleur match : {reason}.",
-    "best": " semble être le meilleur match."
+    "best": " semble être le meilleur match.",
+    "emptyCircle": "Ton cercle est encore vide, alors je n'ai personne à qui demander. Ajoute deux ou trois proches qui sortent souvent : je leur prépare la question, et rien ne part sans ta confirmation."
   },
   "ask": {
     "one": " pourrait probablement t’aider.",

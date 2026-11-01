@@ -61,7 +61,7 @@
     "lead": "Modifie le message si tu veux, choisis les destinataires. Rien ne part sans ta confirmation.",
     "messageLabel": "Message",
     "suggested": "Destinataires suggérés",
-    "emptyCircle": "Ton cercle est vide pour l’instant. Ajoute quelques personnes de confiance dans Mon cercle.",
+    "emptyCircle": "Ton cercle est vide pour l’instant. Ajoute une ou deux personnes de confiance, puis choisis à qui envoyer la question.",
     "onlyRelevant": "Tu demandes seulement aux personnes les plus pertinentes, pas à tout ton carnet d’adresses.",
     "sendIndividually": "Envoyer individuellement sur WhatsApp",
     "sendIndividuallyCount": "Envoyer individuellement sur WhatsApp ({count})",

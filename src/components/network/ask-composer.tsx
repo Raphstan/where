@@ -2,6 +2,7 @@
 
 import { CheckIcon } from "@/components/shell/icons";
 import Link from "next/link";
+import { AddPersonButton } from "@/components/circle/add-person";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -113,7 +114,7 @@ export function AskComposer({
         <div>
           <div className={`${EYEBROW} mb-2`}>{t("ask.suggested")}</div>
           {candidates.length === 0 ? (
-            <p className="text-[12.5px] text-muted">{t("ask.emptyCircle")}</p>
+            <p className="text-[13.5px] text-ink-2">{t("ask.emptyCircle")}</p>
           ) : (
             <div className="flex flex-col gap-2">
               {candidates.map((c) => {
@@ -142,6 +143,10 @@ export function AskComposer({
               })}
             </div>
           )}
+          {/* Ajout sur place : la page se recharge et la personne apparaît dans la liste. */}
+          <div className="mt-2">
+            <AddPersonButton />
+          </div>
         </div>
         <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] leading-[1.4] text-ink-2">
           <span>{t("ask.onlyRelevant")}</span>

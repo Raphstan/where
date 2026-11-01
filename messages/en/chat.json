@@ -74,5 +74,9 @@
       "repliesFailed": "I can’t read the replies."
     },
     "quotaExceeded": "You’ve asked a lot of questions today. Pick it up tomorrow: your memory and your circle are still here."
+  },
+  "startCircle": {
+    "ask": "Ask people I trust",
+    "add": "Add people"
   }
 }

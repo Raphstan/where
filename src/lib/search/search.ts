@@ -183,13 +183,22 @@ export async function search(criteria: Criteria, deps: SearchDeps): Promise<Sear
   const people = isConfident(results) ? [] : suggestPeople(deps.network, members, rows, criteria);
   const askIntro = askIntroFor(deps.tr.t, results, people);
   const hasPersonal = results.some((r) => r.origin === "personal");
+  // Personne de pertinent à qui demander (premier jour, ou sujet que le cercle ne couvre pas) :
+  // plutôt qu'une impasse, le chat guide vers le cercle.
+  const helpers = people.filter((p) => p.relevant).length;
+  const circleHelp = hasPersonal || helpers > 0 ? null : members.length === 0 ? "empty" : "unknown";
   return {
     // Sans aucun lieu du cercle, l'appel au réseau tient lieu d'introduction.
-    intro: askIntro && !hasPersonal ? askIntro : introFor(deps.tr.t, results),
+    intro: circleHelp === "empty"
+      ? [{ text: deps.tr.t("intro.emptyCircle") }]
+      : askIntro && !hasPersonal
+        ? askIntro
+        : introFor(deps.tr.t, results),
     results,
     after: afterFor(deps.tr.t, results),
     askIntro: askIntro && hasPersonal ? askIntro : null,
     people: askIntro ? people : [],
     closed,
+    circleHelp,
   };
 }

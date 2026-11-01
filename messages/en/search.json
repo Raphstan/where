@@ -109,7 +109,7 @@
     "nth": "#{n}"
   },
   "intro": {
-    "none": "No one in your circle knows this area well enough yet. Remove a criterion to widen the search.",
+    "none": "No one in your circle knows this area well enough yet. I can ask your people, or you can add someone who knows it.",
     "insufficient": "I don’t have enough reliable signals from your circle yet to give you a confident answer.",
     "discoveryOnlyAfter": "A public discovery with no signal from your circle: take it as a lead.",
     "single": "One clear answer rather than three. ",
@@ -118,7 +118,8 @@
     "three": "I’ve got three solid ideas for you. ",
     "two": "I’ve got two ideas for you. ",
     "bestReason": " looks like the best match: {reason}.",
-    "best": " looks like the best match."
+    "best": " looks like the best match.",
+    "emptyCircle": "Your circle is still empty, so I have no one to ask yet. Add two or three people who go out a lot: I'll draft the question for them, and nothing is sent without your confirmation."
   },
   "ask": {
     "one": " could probably help.",

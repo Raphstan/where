@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -211,7 +212,9 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       if (response.results.length > 0) push({ kind: "results", results: response.results, search });
       if (response.after) push({ kind: "notice", tone: "info", text: response.after, search });
       if (response.closed.length > 0) push({ kind: "notice", tone: "soft", ...closedText(t, response.closed), search });
-      if (response.results.length === 0 && tags.current.length > 1) push({ kind: "widen", search });
+      // Personne à qui demander : on guide vers le cercle (les critères restent retirables d'un toucher).
+      if (response.circleHelp) push({ kind: "startCircle", search });
+      else if (response.results.length === 0 && tags.current.length > 1) push({ kind: "widen", search });
       if (response.askIntro) push({ kind: "where", parts: response.askIntro, search });
       if (response.people.length > 0) push({ kind: "people", people: response.people, search });
       return response;
@@ -603,6 +606,25 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
                   >
                     {t("widen")}
                   </button>
+                </div>
+              );
+            case "startCircle":
+              return (
+                <div key={m.id} className="mx-auto flex w-full max-w-[760px] flex-wrap gap-2">
+                  {conversationId ? (
+                    <Link
+                      href={`/chat/${conversationId}/ask`}
+                      className="inline-flex min-h-10 items-center rounded-full bg-orange px-4 text-[14px] font-bold text-white transition-colors hover:bg-[#ee4a10]"
+                    >
+                      {t("startCircle.ask")}
+                    </Link>
+                  ) : null}
+                  <Link
+                    href="/circle"
+                    className="inline-flex min-h-10 items-center rounded-full border-[1.5px] border-line px-4 text-[14px] font-semibold text-ink transition-colors hover:border-ink"
+                  >
+                    {t("startCircle.add")}
+                  </Link>
                 </div>
               );
             case "results":

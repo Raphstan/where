@@ -22,6 +22,8 @@ export type ChatMessage =
   | { id: number; kind: "people"; people: SuggestedPerson[]; search: number }
   /** Aucun résultat : « Élargir les critères » retire le critère le plus précis (maquette, scénario « beach »). */
   | { id: number; kind: "widen"; search: number }
+  /** Cercle vide : demander à des proches (page Demander, où l'on peut en ajouter) ou ouvrir Mon cercle. */
+  | { id: number; kind: "startCircle"; search: number }
   | { id: number; kind: "asked"; names: string[] }
   | { id: number; kind: "booked"; result: SearchResult; picked: BookedAnswer | null }
   | { id: number; kind: "feedback"; followup: DueFollowup };

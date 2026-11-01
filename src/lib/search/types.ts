@@ -72,4 +72,10 @@ export type SearchResponse = {
   people: SuggestedPerson[];
   /** Lieux de la mémoire écartés parce que Google les donne définitivement fermés. */
   closed: string[];
+  /**
+   * Aucun lieu personnel et personne de pertinent à qui demander : le chat propose de demander à des
+   * proches ou d'en ajouter, au lieu d'une impasse. « empty » : le cercle est vide ; « unknown » : personne
+   * du cercle ne connaît ce sujet.
+   */
+  circleHelp: "empty" | "unknown" | null;
 };
