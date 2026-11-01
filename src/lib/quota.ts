@@ -11,6 +11,8 @@ export const QUOTAS = {
   ask: 50,
   /** Recherches (dont la découverte Google Places), par utilisateur. */
   search: 80,
+  /** Liens partagés lus (Claude, Google Places), par utilisateur. */
+  save: 40,
   /** Réponses envoyées depuis un même lien privé de proche. */
   guest_reply: 20,
   /** Emails transférés traités pour une même adresse de transfert. */
@@ -25,7 +27,7 @@ type Client = SupabaseClient<Database>;
  * Quota de l'utilisateur connecté (client de session). En cas d'erreur de la base, on laisse passer :
  * une panne du compteur ne doit pas bloquer le produit.
  */
-export async function consumeMyQuota(supabase: Client, action: "ask" | "search"): Promise<boolean> {
+export async function consumeMyQuota(supabase: Client, action: "ask" | "search" | "save"): Promise<boolean> {
   const { data, error } = await supabase.rpc("consume_my_quota", { p_action: action, p_limit: QUOTAS[action] });
   if (error) {
     console.error(`[quota] ${action}`, error.message);

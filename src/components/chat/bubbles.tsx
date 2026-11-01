@@ -17,7 +17,7 @@ export function WhereAvatar() {
 export function UserBubble({ children }: { children: ReactNode }) {
   return (
     <div className="flex animate-pop justify-end">
-      <div className="max-w-[86%] rounded-[20px] rounded-ee-[6px] bg-ink px-[15px] py-3 text-[14.5px] leading-[1.45] text-paper">
+      <div className="max-w-[86%] rounded-[20px] rounded-ee-[6px] bg-ink px-[15px] py-3 text-[14.5px] leading-[1.45] wrap-anywhere text-paper">
         {children}
       </div>
     </div>

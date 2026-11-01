@@ -19,6 +19,8 @@ import type { StoredConversation } from "@/lib/conversations/load";
 import type { ReplySummary } from "@/lib/conversations/schema";
 import { askedText } from "@/lib/network/message";
 import { looselyEqual, withoutTag, withTag } from "@/lib/search/match";
+import type { SaveCandidate } from "@/lib/saves/candidate";
+import { findSharedLink } from "@/lib/saves/link";
 import type { SearchResponse, SearchResult } from "@/lib/search/types";
 import { BookingPanel } from "@/components/booking/booking-panel";
 import { FeedbackBubble } from "@/components/booking/feedback-bubble";
@@ -65,6 +67,10 @@ async function call<T>(
 const isObject = (json: unknown): json is Record<string, unknown> => typeof json === "object" && json !== null;
 const isAskResponse = (json: unknown): json is AskResponse => isObject(json) && "understanding" in json;
 const isSearchResponse = (json: unknown): json is SearchResponse => isObject(json) && "results" in json && "intro" in json;
+const isResolved = (json: unknown): json is { candidate: SaveCandidate | null; source: string } =>
+  isObject(json) && "candidate" in json && typeof json.source === "string";
+const isSaved = (json: unknown): json is { already: boolean; count: number } =>
+  isObject(json) && typeof json.already === "boolean" && typeof json.count === "number";
 const isCreated = (json: unknown): json is { id: string } => isObject(json) && typeof json.id === "string";
 const isReplies = (json: unknown): json is { replies: ReplySummary[] } => isObject(json) && Array.isArray(json.replies);
 const isFollowups = (json: unknown): json is { followups: DueFollowup[] } => isObject(json) && Array.isArray(json.followups);
@@ -400,8 +406,47 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     return kept;
   }
 
+  /** Lien collé : on identifie le lieu, puis l'utilisateur décide de le garder. Rien n'est gardé sans lui. */
+  async function runSave(text: string) {
+    setBusy(true);
+    const typingId = push({ kind: "typing" });
+    try {
+      const { candidate, source } = await call("/api/saves/resolve", { method: "POST", body: { message: text } }, isResolved, t("save.failed"));
+      remove(typingId);
+      if (candidate) push({ kind: "save", candidate, state: "pending" });
+      else push({ kind: "where", parts: [{ text: t(source === "instagram" ? "save.instagram" : "save.notFound") }] });
+    } catch (error) {
+      remove(typingId);
+      push({ kind: "notice", tone: "warn", text: error instanceof Error ? error.message : t("save.failed") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function setSaveState(id: number, state: Extract<ChatMessage, { kind: "save" }>["state"]) {
+    setMessages((prev) => prev.map((m) => (m.id === id && m.kind === "save" ? { ...m, state } : m)));
+  }
+
+  async function keep(id: number, candidate: SaveCandidate) {
+    setSaveState(id, "saving");
+    try {
+      const saved = await call("/api/saves", { method: "POST", body: { candidate } }, isSaved, t("save.failed"));
+      setSaveState(id, { saved });
+      router.refresh();
+    } catch (error) {
+      setSaveState(id, "pending");
+      showToast(error instanceof Error ? error.message : t("save.failed"));
+    }
+  }
+
   function send(text: string) {
     if (busy) return;
+    // Un lien n'est pas une question : la conversation en cours reste intacte.
+    if (findSharedLink(text)) {
+      push({ kind: "user", text });
+      void runSave(text);
+      return;
+    }
     setQuestion(text);
     questionRef.current = text;
     removedTags.current = new Set();
@@ -541,6 +586,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
             </span>
             <h1 className="font-display text-[21px] font-bold leading-tight">{t("empty.title")}</h1>
             <p className="max-w-[360px] text-[12.5px] text-muted">{t("empty.lead")}</p>
+            <p className="max-w-[360px] text-[12.5px] text-muted">{t("empty.saveHint")}</p>
           </div>
         ) : null}
 
@@ -608,6 +654,53 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
                   </button>
                 </div>
               );
+            case "save": {
+              const c = m.candidate;
+              const detail = c.address ?? [c.area, c.city].filter(Boolean).join(", ");
+              if (m.state === "dismissed") {
+                return (
+                  <div key={m.id} className="mx-auto w-full max-w-[760px]">
+                    <WhereBubble>{t("save.dismissed")}</WhereBubble>
+                  </div>
+                );
+              }
+              if (typeof m.state === "object") {
+                const { already, count } = m.state.saved;
+                return (
+                  <div key={m.id} className="mx-auto w-full max-w-[760px]">
+                    <WhereBubble>{already ? t("save.already", { name: c.name }) : t("save.saved", { name: c.name, count })}</WhereBubble>
+                  </div>
+                );
+              }
+              return (
+                <div key={m.id} className="mx-auto flex w-full max-w-[760px] animate-pop flex-col gap-2.5">
+                  <WhereBubble>{t("save.found")}</WhereBubble>
+                  <div className="flex flex-col gap-1 rounded-card bg-paper-2 px-4 py-3.5 shadow-soft">
+                    <div className="font-display text-[17px] font-bold leading-snug">{c.name}</div>
+                    {detail ? <div className="text-[13px] text-muted">{detail}</div> : null}
+                    {c.kind ? <div className="text-[13px] text-ink-2">{c.kind}</div> : null}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      disabled={m.state === "saving"}
+                      onClick={() => void keep(m.id, c)}
+                      className="inline-flex min-h-10 items-center rounded-full bg-orange px-4 text-[14px] font-bold text-white transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
+                    >
+                      {t("save.keep")}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={m.state === "saving"}
+                      onClick={() => setSaveState(m.id, "dismissed")}
+                      className="inline-flex min-h-10 items-center rounded-full border-[1.5px] border-line px-4 text-[14px] font-semibold text-ink transition-colors hover:border-ink disabled:opacity-60"
+                    >
+                      {t("save.notThis")}
+                    </button>
+                  </div>
+                </div>
+              );
+            }
             case "startCircle":
               return (
                 <div key={m.id} className="mx-auto flex w-full max-w-[760px] flex-wrap gap-2">

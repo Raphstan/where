@@ -1,6 +1,7 @@
 import type { T } from "@/i18n/translator";
 import type { Clarification } from "@/lib/ask/schema";
 import type { BookedAnswer, DueFollowup } from "@/lib/booking/followup";
+import type { SaveCandidate } from "@/lib/saves/candidate";
 import type { RichText, SearchResult, SuggestedPerson } from "@/lib/search/types";
 
 export type NoticeTone = "info" | "warn" | "orange" | "soft";
@@ -25,6 +26,13 @@ export type ChatMessage =
   /** Cercle vide : demander à des proches (page Demander, où l'on peut en ajouter) ou ouvrir Mon cercle. */
   | { id: number; kind: "startCircle"; search: number }
   | { id: number; kind: "asked"; names: string[] }
+  /** Lien collé : le lieu reconnu, à garder (ou non) dans la mémoire, puis le résultat. */
+  | {
+      id: number;
+      kind: "save";
+      candidate: SaveCandidate;
+      state: "pending" | "saving" | "dismissed" | { saved: { already: boolean; count: number } };
+    }
   | { id: number; kind: "booked"; result: SearchResult; picked: BookedAnswer | null }
   | { id: number; kind: "feedback"; followup: DueFollowup };
 

@@ -46,7 +46,8 @@
   "new": "New",
   "empty": {
     "title": "Where should you really go?",
-    "lead": "Ask like you’d ask a friend. I look at what your circle knows first, then fill in with public info."
+    "lead": "Ask like you’d ask a friend. I look at what your circle knows first, then fill in with public info.",
+    "saveHint": "You can also paste a Google Maps, Instagram or TikTok link: I’ll keep the place in your memory."
   },
   "api": {
     "ask": {
@@ -73,10 +74,27 @@
       "updateFailed": "I can’t update this conversation.",
       "repliesFailed": "I can’t read the replies."
     },
-    "quotaExceeded": "You’ve asked a lot of questions today. Pick it up tomorrow: your memory and your circle are still here."
+    "quotaExceeded": "You’ve asked a lot of questions today. Pick it up tomorrow: your memory and your circle are still here.",
+    "save": {
+      "unauthenticated": "Sign in to keep a place.",
+      "invalid": "Missing or invalid link.",
+      "readFailed": "I can’t read this link right now. Try again in a moment.",
+      "saveFailed": "I can’t keep this place right now. Try again in a moment."
+    }
   },
   "startCircle": {
     "ask": "Ask people I trust",
     "add": "Add people"
+  },
+  "save": {
+    "found": "I found this place. Keep it in your memory?",
+    "keep": "Keep in my memory",
+    "notThis": "That’s not it",
+    "saved": "Done: {name} is in your memory. You now have {count, plural, one {# place} other {# places}} there.",
+    "already": "{name} was already in your memory.",
+    "dismissed": "OK, I didn’t keep anything.",
+    "notFound": "I couldn’t spot a specific place in this link. Try the place’s Google Maps link.",
+    "failed": "I couldn’t keep it. Try again in a moment.",
+    "instagram": "Instagram doesn’t let its posts be read without an account. Send the link again with the place’s name next to it, or its Google Maps link."
   }
 }

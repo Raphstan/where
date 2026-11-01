@@ -46,7 +46,8 @@
   "new": "Nouveau",
   "empty": {
     "title": "Où devrais-tu vraiment aller ?",
-    "lead": "Pose ta question comme à un ami. Je regarde d’abord ce que ton cercle sait, puis je complète avec le public."
+    "lead": "Pose ta question comme à un ami. Je regarde d’abord ce que ton cercle sait, puis je complète avec le public.",
+    "saveHint": "Tu peux aussi coller un lien Google Maps, Instagram ou TikTok : je garde le lieu dans ta mémoire."
   },
   "api": {
     "ask": {
@@ -73,10 +74,27 @@
       "updateFailed": "Je n’arrive pas à mettre à jour cette conversation.",
       "repliesFailed": "Je n’arrive pas à lire les réponses."
     },
-    "quotaExceeded": "Tu as posé beaucoup de questions aujourd’hui. Reprends demain : ta mémoire et ton cercle sont toujours là."
+    "quotaExceeded": "Tu as posé beaucoup de questions aujourd’hui. Reprends demain : ta mémoire et ton cercle sont toujours là.",
+    "save": {
+      "unauthenticated": "Connecte-toi pour garder un lieu.",
+      "invalid": "Lien manquant ou invalide.",
+      "readFailed": "Je n’arrive pas à lire ce lien. Réessaie dans un instant.",
+      "saveFailed": "Je n’arrive pas à garder ce lieu. Réessaie dans un instant."
+    }
   },
   "startCircle": {
     "ask": "Demander à des proches",
     "add": "Ajouter des personnes"
+  },
+  "save": {
+    "found": "J’ai trouvé ce lieu. Je le garde dans ta mémoire ?",
+    "keep": "Garder dans ma mémoire",
+    "notThis": "Ce n’est pas ça",
+    "saved": "C’est gardé : {name} est dans ta mémoire. Tu y as maintenant {count, plural, one {# lieu} other {# lieux}}.",
+    "already": "{name} était déjà dans ta mémoire.",
+    "dismissed": "D’accord, je n’ai rien gardé.",
+    "notFound": "Je n’ai pas reconnu de lieu précis dans ce lien. Essaie avec le lien Google Maps du lieu.",
+    "failed": "Je n’ai pas réussi à le garder. Réessaie dans un instant.",
+    "instagram": "Instagram ne laisse pas lire ses publications sans compte. Renvoie le lien avec le nom du lieu à côté, ou son lien Google Maps."
   }
 }
