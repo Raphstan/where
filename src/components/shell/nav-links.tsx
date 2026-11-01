@@ -30,7 +30,7 @@ function TabsView({ pathname }: { pathname: string | null }) {
   return (
     <nav
       aria-label={t("aria")}
-      className="flex justify-around border-t border-line bg-paper px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
+      className="mobile-tabs flex justify-around border-t border-line bg-paper px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
     >
       {NAV_ITEMS.map((item) => {
         if (!item.tab) return null;

@@ -83,7 +83,11 @@ export function InstallBanner() {
             {t("install")}
           </button>
         )}
-        <button type="button" onClick={dismiss} className="inline-flex min-h-10 items-center px-3 text-[14px] font-semibold text-ink-2">
+        <button
+          type="button"
+          onClick={dismiss}
+          className={`inline-flex min-h-10 items-center px-3 text-[14px] font-semibold text-ink-2 ${mode === "prompt" ? "" : "-ms-3"}`}
+        >
           {t("dismiss")}
         </button>
       </div>

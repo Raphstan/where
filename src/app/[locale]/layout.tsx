@@ -66,6 +66,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = {
   themeColor: "#ebe5f2",
   viewportFit: "cover",
+  // Android : le clavier réduit la page au lieu de la recouvrir.
+  interactiveWidget: "resizes-content",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/[locale]">) {

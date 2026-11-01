@@ -84,6 +84,20 @@ select:focus-visible {
   outline: none;
 }
 
+/* Téléphones et tablettes. */
+@media (pointer: coarse) {
+  /* Safari iPhone zoome la page au toucher d'un champ dont le texte fait moins de 16 px. */
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+  /* Clavier ouvert : les onglets du bas se cachent, comme dans une appli. */
+  body:has(:is(input:not([type="checkbox"]):not([type="radio"]), textarea):focus) .mobile-tabs {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

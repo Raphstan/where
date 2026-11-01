@@ -59,7 +59,7 @@ async function Account() {
 export async function Sidebar() {
   const t = await getTranslations("shell");
   return (
-    <aside className="hidden w-[248px] shrink-0 flex-col border-e border-line bg-paper px-3.5 py-[18px] lg:flex">
+    <aside className="hidden w-[248px] shrink-0 flex-col overflow-y-auto border-e border-line bg-paper px-3.5 py-[18px] lg:flex">
       <div className="px-2 pt-1 pb-4">
         <Wordmark className="text-base" />
       </div>
