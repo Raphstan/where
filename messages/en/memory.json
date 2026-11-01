@@ -1,1 +1,21 @@
-{}
+{
+  "title": "My memory",
+  "empty": "Your memory is still empty. It will fill up with your bookings, your feedback and your circle’s answers.",
+  "emptyImport": "Find my past bookings →",
+  "stats": {
+    "visited": "{count, plural, one {<n>#</n><l>place visited</l>} other {<n>#</n><l>places visited</l>}}",
+    "recosReceived": "{count, plural, one {<n>#</n><l>rec received</l>} other {<n>#</n><l>recs received</l>}}",
+    "cities": "{count, plural, one {<n>#</n><l>city</l>} other {<n>#</n><l>cities</l>}}"
+  },
+  "filterAria": "Filter",
+  "filters": {
+    "tous": "All",
+    "restaurants": "Restaurants",
+    "hotels": "Hotels",
+    "bars": "Bars",
+    "cafes": "Cafés",
+    "activites": "Activities",
+    "voyages": "Trips"
+  },
+  "footnote": "This section stays secondary. Chat is still where it all starts."
+}

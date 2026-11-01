@@ -1,7 +1,8 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import { call } from "@/components/privacy/confirm-sheet";
+import { call, useErrorText } from "@/components/privacy/confirm-sheet";
 import { PersonAvatar } from "@/components/results/marks";
 import { useToast } from "@/components/shell/toast";
 import { TRUST_DOMAINS, toggleDomain, type TrustDomain } from "@/lib/circle/domains";
@@ -11,15 +12,17 @@ import type { CircleMemberView } from "@/lib/circle/store";
 export function PersonCard({ member }: { member: CircleMemberView }) {
   const [domains, setDomains] = useState<TrustDomain[]>(member.trustDomains);
   const toast = useToast();
-  const initial = member.name.trim().charAt(0).toLocaleUpperCase("fr");
+  const t = useTranslations("circle");
+  const errorText = useErrorText();
+  const initial = member.name.trim().charAt(0).toLocaleUpperCase(useLocale());
 
   function toggle(d: TrustDomain) {
     const before = domains;
     const next = toggleDomain(domains, d);
     setDomains(next);
-    call(`/api/circle/${member.id}`, "PATCH", { trustDomains: next }).catch((e: Error) => {
+    call(`/api/circle/${member.id}`, "PATCH", { trustDomains: next }).catch((e: unknown) => {
       setDomains(before);
-      toast.show(e.message);
+      toast.show(errorText(e));
     });
   }
 
@@ -34,7 +37,7 @@ export function PersonCard({ member }: { member: CircleMemberView }) {
         {member.relation ? <span className="shrink-0 text-[11.5px] text-soft">{member.relation}</span> : null}
       </div>
       <div className="flex flex-wrap gap-1.5">
-        {TRUST_DOMAINS.map(([k, label]) => {
+        {TRUST_DOMAINS.map((k) => {
           const on = domains.includes(k);
           return (
             <button
@@ -46,7 +49,7 @@ export function PersonCard({ member }: { member: CircleMemberView }) {
                 on ? "border-ink bg-ink text-paper" : "border-line bg-paper-2 text-ink hover:border-ink"
               }`}
             >
-              {label}
+              {t(`domains.${k}`)}
             </button>
           );
         })}

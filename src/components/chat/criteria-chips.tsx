@@ -1,7 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { CRITERIA_HINT } from "./messages";
 
 /** Critères compris en chips retirables, plus « + ajouter » (docs/prototype.html, case 'criteria'). */
 export function CriteriaChips({
@@ -13,6 +13,7 @@ export function CriteriaChips({
   onRemove: (index: number) => void;
   onAdd: (tag: string) => void;
 }) {
+  const t = useTranslations("chat");
   const [adding, setAdding] = useState(false);
   const [draft, setDraft] = useState("");
 
@@ -25,16 +26,16 @@ export function CriteriaChips({
 
   return (
     <div className="flex w-full animate-pop flex-col gap-2.5">
-      <div className="pl-1 text-[11.5px] text-soft">{CRITERIA_HINT}</div>
-      <div className="flex flex-wrap gap-1.5" role="list" aria-label="Critères compris">
+      <div className="ps-1 text-[11.5px] text-soft">{t("criteria.hint")}</div>
+      <div className="flex flex-wrap gap-1.5" role="list" aria-label={t("criteria.list")}>
         {tags.map((tag, i) => (
           <button
             key={`${tag}-${i}`}
             type="button"
             role="listitem"
             onClick={() => onRemove(i)}
-            aria-label={`Retirer le critère ${tag}`}
-            className="inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-transparent bg-blue-2 py-1.5 pr-2 pl-2.5 text-[12.5px] font-semibold text-blue transition-colors hover:border-blue"
+            aria-label={t("criteria.remove", { tag })}
+            className="inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-transparent bg-blue-2 py-1.5 pe-2 ps-2.5 text-[12.5px] font-semibold text-blue transition-colors hover:border-blue"
           >
             {tag}
             <span aria-hidden className="text-[15px] leading-none opacity-60">
@@ -62,8 +63,8 @@ export function CriteriaChips({
                 }
               }}
               maxLength={40}
-              placeholder="un critère…"
-              aria-label="Nouveau critère"
+              placeholder={t("criteria.placeholder")}
+              aria-label={t("criteria.new")}
               className="w-[140px] rounded-full border-[1.5px] border-ink bg-paper-2 px-2.5 py-1.5 text-[12.5px] text-ink outline-none placeholder:text-soft"
             />
           </form>
@@ -73,7 +74,7 @@ export function CriteriaChips({
             onClick={() => setAdding(true)}
             className="inline-flex items-center rounded-full border-[1.5px] border-line bg-paper-2 px-2.5 py-1.5 text-[12.5px] font-semibold text-ink transition-colors hover:border-ink"
           >
-            + ajouter
+            {t("criteria.add")}
           </button>
         )}
       </div>

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import type { T } from "@/i18n/translator";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import { AutoRefresh, DeliveriesButton } from "@/components/import/import-widgets";
@@ -12,7 +15,7 @@ import { forwardAddress } from "@/lib/inbound/resend";
 import {
   formatDay,
   isReservation,
-  KIND_BADGE,
+  kindBadge,
   provenanceLabel,
   summarizeImport,
   type ImportedEmail,
@@ -20,7 +23,10 @@ import {
 import { forwardTokenOf, gmailFilterState, listImported } from "@/lib/inbound/store";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Retrouver mes réservations" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("import");
+  return { title: t("metaTitle") };
+}
 
 const CARD = "rounded-card border border-line bg-paper-2 p-4 shadow-soft";
 const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
@@ -37,9 +43,9 @@ function Notice({ icon, tone, children }: { icon: string; tone: "warn" | "soft" 
   );
 }
 
-function Line({ email }: { email: ImportedEmail }) {
+function Line({ email, t, locale }: { email: ImportedEmail; t: T; locale: string }) {
   if (!isReservation(email.kind)) return null;
-  const date = formatDay(email.reservedFor, true);
+  const date = formatDay(email.reservedFor, true, locale);
   return (
     <div className="flex items-center gap-3 border-b border-line py-[11px] last:border-b-0">
       <SourceLogo platform={email.platform} kind={email.kind} />
@@ -49,24 +55,24 @@ function Line({ email }: { email: ImportedEmail }) {
           {email.city ? <span className="text-[12.5px] font-medium text-muted"> — {email.city}</span> : null}
         </div>
         <div className="text-[12.5px] text-muted">
-          {[provenanceLabel(email.kind, email.platform), date].filter(Boolean).join(" · ")}
+          {[provenanceLabel(t, email.kind, email.platform), date].filter(Boolean).join(" · ")}
         </div>
       </div>
       <span className="shrink-0 rounded-full bg-lilac-2 px-[9px] py-1 text-[11.5px] font-bold text-ink-2">
-        {KIND_BADGE[email.kind]}
+        {kindBadge(t, email.kind)}
       </span>
     </div>
   );
 }
 
-function Group({ title, emails }: { title: string; emails: ImportedEmail[] }) {
+function Group({ title, emails, t, locale }: { title: string; emails: ImportedEmail[]; t: T; locale: string }) {
   if (emails.length === 0) return null;
   return (
     <div className={CARD}>
       <div className={EYEBROW}>{title}</div>
       <div className="flex flex-col">
         {emails.map((e) => (
-          <Line key={e.id} email={e} />
+          <Line key={e.id} email={e} t={t} locale={locale} />
         ))}
       </div>
     </div>
@@ -90,6 +96,9 @@ async function Results() {
   // Sans Resend configuré (version locale, ou mise en ligne incomplète), aucun email n'arrive : on le dit.
   const receiving = Boolean(domain && env.RESEND_API_KEY && env.RESEND_WEBHOOK_SECRET && !isReservedDomain(domain));
   const s = summarizeImport(emails);
+  const t = await getTranslations("import");
+  const locale = await getLocale();
+  const b = (chunks: ReactNode) => <b>{chunks}</b>;
   const found = s.restaurants.length + s.hotels.length + s.activities.length;
 
   return (
@@ -107,12 +116,12 @@ async function Results() {
         />
       ) : !token ? (
         <div className={`${CARD} flex flex-col gap-2.5`}>
-          <p className="text-[14px] text-ink-2">Le transfert d’email est déconnecté.</p>
+          <p className="text-[14px] text-ink-2">{t("page.disconnected")}</p>
           <EmailSourceActions connected={false} />
         </div>
       ) : (
         <div className={CARD}>
-          <p className="text-[12.5px] text-muted">L’adresse de transfert n’est pas encore disponible.</p>
+          <p className="text-[12.5px] text-muted">{t("page.addressUnavailable")}</p>
         </div>
       )}
 
@@ -120,21 +129,20 @@ async function Results() {
         <span aria-hidden className="text-olive">
           🔒
         </span>
-        WH3RE ne lit que les emails qu’il reçoit, et rien n’entre dans ta mémoire sans que tu le valides. Tu peux tout
-        supprimer à tout moment.
+        {t("page.privacy")}
       </p>
 
       {emails.length === 0 ? null : (
         <>
           <h2 className="mt-2 font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
-            Voilà ce que j’ai retrouvé.
+            {t("page.foundTitle")}
           </h2>
           <div className="grid grid-cols-3 gap-2.5">
             {(
               [
-                [s.restaurants.length, "restaurants"],
-                [s.hotels.length, "hôtels"],
-                [s.activities.length, "activités"],
+                [s.restaurants.length, t("page.stats.restaurants")],
+                [s.hotels.length, t("page.stats.hotels")],
+                [s.activities.length, t("page.stats.activities")],
               ] as const
             ).map(([n, label]) => (
               <div key={label} className="flex flex-col gap-0.5 rounded-2xl border border-line bg-paper-2 p-3.5">
@@ -146,20 +154,14 @@ async function Results() {
 
           {s.noOntopo ? (
             <Notice icon="⚠️" tone="warn">
-              <span>
-                <b>Aucune réservation Ontopo trouvée</b> dans les emails. Certaines confirmations ont peut-être été
-                envoyées uniquement par SMS.
-              </span>
+              <span>{t.rich("page.noOntopo", { b })}</span>
             </Notice>
           ) : null}
           {s.deliveries.length > 0 ? (
             <Notice icon="🛵" tone="soft">
               <span>
-                <b>
-                  {s.deliveries.length} {s.deliveries.length > 1 ? "commandes" : "commande"} de livraison
-                  {s.deliveriesAllTabit ? " Tabit" : ""} {s.deliveries.length > 1 ? "exclues" : "exclue"}.
-                </b>{" "}
-                Une livraison n’est pas une visite au restaurant — elles ne compteront jamais comme telle.
+                <b>{t(s.deliveriesAllTabit ? "page.deliveriesTabit" : "page.deliveries", { count: s.deliveries.length })}</b>{" "}
+                {t("page.deliveriesNote")}
               </span>
               <DeliveriesButton deliveries={s.deliveries} allTabit={s.deliveriesAllTabit} />
             </Notice>
@@ -167,22 +169,19 @@ async function Results() {
           {s.cancellations.length > 0 ? (
             <Notice icon="✕" tone="soft">
               <span>
-                <b>
-                  {s.cancellations.length} {s.cancellations.length > 1 ? "annulations écartées" : "annulation écartée"}.
-                </b>{" "}
-                Une réservation annulée ne compte jamais comme visite.
+                <b>{t("page.cancellations", { count: s.cancellations.length })}</b>{" "}
+                {t("page.cancellationsNote")}
               </span>
             </Notice>
           ) : null}
 
-          <Group title="Restaurants" emails={s.restaurants} />
-          <Group title="Hôtels" emails={s.hotels} />
-          <Group title="Activités & événements" emails={s.activities} />
+          <Group title={t("page.groups.restaurants")} emails={s.restaurants} t={t} locale={locale} />
+          <Group title={t("page.groups.hotels")} emails={s.hotels} t={t} locale={locale} />
+          <Group title={t("page.groups.activities")} emails={s.activities} t={t} locale={locale} />
 
           {found > 0 ? (
             <p className="text-[12.5px] text-muted">
-              Une réservation ne veut pas dire que tu y es allé, ni que tu as aimé. Prochaine étape : quelques
-              questions rapides pour qualifier ces expériences.
+              {t("page.qualifyHint")}
             </p>
           ) : null}
           {s.pending > 0 ? (
@@ -190,7 +189,7 @@ async function Results() {
               href="/import/qualify"
               className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-paper transition-colors hover:bg-night"
             >
-              Qualifier mes expériences
+              {t("page.qualifyCta")}
             </Link>
           ) : null}
         </>
@@ -201,15 +200,16 @@ async function Results() {
 
 /* Import par transfert d'email (docs/prototype.html, scrGmail et scrGmailResults, sans Gmail OAuth). */
 export default function ImportPage() {
+  const t = useTranslations("import");
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4">
-        <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">Mes anciennes réservations</div>
+        <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("page.eyebrow")}</div>
         <h1 className="font-display text-[22px] font-bold leading-tight">
-          Tu as déjà une mémoire de tes sorties cachée dans tes emails.
+          {t("page.title")}
         </h1>
         <p className="text-[15px] leading-normal text-muted">
-          WH3RE peut y retrouver les confirmations de restaurants, hôtels, activités, événements et voyages.
+          {t("page.lead")}
         </p>
         <Suspense fallback={<div className="h-[220px] animate-pulse rounded-card border border-line bg-paper-2" />}>
           <Results />

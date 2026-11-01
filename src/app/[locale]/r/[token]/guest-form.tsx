@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { Wordmark } from "@/components/shell/wordmark";
 import { sendGuestReply, type GuestReplyState } from "./actions";
@@ -22,7 +23,7 @@ function Toggle({ name, label, defaultOn }: { name: string; label: string; defau
         className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors ${on ? "bg-orange" : "bg-line-strong"}`}
       >
         <span
-          className={`absolute top-[3px] size-5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-[left] ${on ? "left-[21px]" : "left-[3px]"}`}
+          className={`absolute top-[3px] size-5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-[inset-inline-start] ${on ? "start-[21px]" : "start-[3px]"}`}
         />
       </button>
     </div>
@@ -31,6 +32,7 @@ function Toggle({ name, label, defaultOn }: { name: string; label: string; defau
 
 /** Formulaire de la page invité (docs/prototype.html, scrSarah). */
 export function GuestForm({ token, memberName, requester }: { token: string; memberName: string; requester: string }) {
+  const t = useTranslations("guest");
   const [state, action, pending] = useActionState<GuestReplyState, FormData>(sendGuestReply, { status: "idle" });
   const [visited, setVisited] = useState<"oui" | "non" | null>(null);
   const [another, setAnother] = useState<number | null>(null);
@@ -45,15 +47,13 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
       <div className="flex animate-up flex-col gap-3">
         <div className="flex items-center">
           <Wordmark className="text-[16px]" />
-          <span className="ml-auto rounded-full bg-olive-2 px-[9px] py-1 text-[11.5px] font-bold text-olive">
-            Envoyé à {requester}
+          <span className="ms-auto rounded-full bg-olive-2 px-[9px] py-1 text-[11.5px] font-bold text-olive">
+            {t("sentTo", { requester })}
           </span>
         </div>
-        <h2 className="font-display text-[21px] font-bold leading-tight">Merci, {memberName}.</h2>
+        <h2 className="font-display text-[21px] font-bold leading-tight">{t("thanks", { name: memberName })}</h2>
         <p className="text-[12.5px] text-muted">
-          {state.reusable
-            ? `Seul ${requester} voit ta réponse. Tu as autorisé WH3RE à la réutiliser pour ${requester} à l’avenir.`
-            : `Seul ${requester} voit ta réponse. Elle ne sert qu’à cette question et ne sera pas gardée.`}
+          {state.reusable ? t("reusableYes", { requester }) : t("reusableNo", { requester })}
         </p>
         <button
           type="button"
@@ -66,7 +66,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
           }}
           className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-lilac-2 px-5 text-[14.5px] font-bold text-ink transition-colors hover:bg-lilac"
         >
-          Recommander un autre lieu
+          {t("another")}
         </button>
       </div>
     );
@@ -78,7 +78,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
       onSubmit={(e) => {
         if (visited === null) {
           e.preventDefault();
-          setLocalError("Dis-moi si tu y es réellement allé·e.");
+          setLocalError(t("errors.visitedRequired"));
         }
       }}
       className="flex flex-col gap-3.5"
@@ -92,8 +92,8 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
         required
         minLength={2}
         maxLength={120}
-        placeholder="Nom du lieu"
-        aria-label="Nom du lieu"
+        placeholder={t("placeName")}
+        aria-label={t("placeName")}
         className={INPUT}
       />
       <input
@@ -102,19 +102,19 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
         onChange={(e) => setPlaceUrl(e.target.value)}
         type="url"
         maxLength={500}
-        placeholder="Lien Google Maps / Instagram / TikTok (facultatif)"
-        aria-label="Lien Google Maps, Instagram ou TikTok"
+        placeholder={t("placeUrlPlaceholder")}
+        aria-label={t("placeUrlLabel")}
         className={INPUT}
       />
 
       <fieldset>
-        <legend className="mb-1.5 text-[11.5px] text-soft">Tu y es réellement allé·e ?</legend>
+        <legend className="mb-1.5 text-[11.5px] text-soft">{t("visitedQuestion")}</legend>
         <input type="hidden" name="visited" value={visited ?? ""} />
         <div className="flex flex-wrap gap-2">
           {(
             [
-              ["oui", "Oui"],
-              ["non", "Non, mais on m’en a parlé"],
+              ["oui", t("visitedYes")],
+              ["non", t("visitedNo")],
             ] as const
           ).map(([value, label]) => (
             <button
@@ -140,14 +140,14 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
         value={note}
         onChange={(e) => setNote(e.target.value)}
         maxLength={600}
-        placeholder="Pourquoi tu le recommandes ?"
-        aria-label="Pourquoi tu le recommandes ?"
+        placeholder={t("note")}
+        aria-label={t("note")}
         className={`${INPUT} min-h-[88px] resize-none rounded-[14px]`}
       />
 
       <div>
-        <Toggle name="visibleOnlyToRequester" label={`Visible seulement par ${requester}`} defaultOn />
-        <Toggle name="reusable" label={`Autoriser WH3RE à réutiliser cette reco pour ${requester} à l’avenir`} defaultOn />
+        <Toggle name="visibleOnlyToRequester" label={t("visibleOnly", { requester })} defaultOn />
+        <Toggle name="reusable" label={t("allowReuse", { requester })} defaultOn />
       </div>
 
       {localError || state.status === "error" ? (
@@ -161,7 +161,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
         disabled={pending}
         className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
       >
-        Envoyer ma recommandation
+        {t("submit")}
       </button>
     </form>
   );

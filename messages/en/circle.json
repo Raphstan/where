@@ -1,1 +1,50 @@
-{}
+{
+  "title": "My circle",
+  "lead": "Not everyone is the right person for every topic. Choose what you trust each person on.",
+  "notice": "This circle is private. Nobody sees they’re part of it, and nothing is ever published.",
+  "onboarding": {
+    "metaTitle": "Your circle of trust",
+    "title": "Your circle of trust.",
+    "firstQuestion": "Ask my first question",
+    "skip": "Skip for now"
+  },
+  "add": {
+    "title": "Add someone",
+    "hint": "Contact, WhatsApp link or email",
+    "invisible": "They won’t know they’re in your circle, unless you ask them something.",
+    "fromContacts": "From my contacts",
+    "whatsapp": "Send a WhatsApp link",
+    "email": "Invite by email",
+    "added": "{name} — all set"
+  },
+  "form": {
+    "name": "First name",
+    "relation": "Relationship",
+    "relationPlaceholder": "Close friend, brother, colleague…",
+    "description": "What you trust them on",
+    "descriptionPlaceholder": "Romantic restaurants and hotels",
+    "whatsapp": "WhatsApp number",
+    "email": "Email"
+  },
+  "domains": {
+    "all": "I trust them on everything",
+    "restaurants": "Restaurants",
+    "hotels": "Hotels",
+    "nightlife": "Nightlife",
+    "travel": "Travel",
+    "activities": "Activities",
+    "family": "Family",
+    "business": "Business"
+  },
+  "api": {
+    "unauthenticated": "Log in to continue.",
+    "checkFields": "Check the fields.",
+    "invalidPhone": "Invalid number.",
+    "invalidEmail": "Invalid email.",
+    "contactRequired": "A WhatsApp number or an email.",
+    "saveMemberFailed": "I can’t save this person right now.",
+    "notFound": "Person not found.",
+    "invalidDomains": "Invalid topics.",
+    "saveChoiceFailed": "I can’t save this choice right now."
+  }
+}

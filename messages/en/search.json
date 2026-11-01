@@ -1,1 +1,151 @@
-{}
+{
+  "deductionLabel": "Your preferences / WH3RE inference",
+  "reminderPublic": "Public information only",
+  "provenance": {
+    "circle": "from your circle",
+    "booking": "from a booking",
+    "share": "from a share",
+    "web": "from the public web",
+    "mine": "from your data"
+  },
+  "numbers": {
+    "n0": "zero",
+    "n1": "one",
+    "n2": "two",
+    "n3": "three",
+    "n4": "four",
+    "n5": "five",
+    "n6": "six",
+    "n7": "seven",
+    "n8": "eight",
+    "n9": "nine",
+    "n10": "ten"
+  },
+  "months": {
+    "m1": "January",
+    "m2": "February",
+    "m3": "March",
+    "m4": "April",
+    "m5": "May",
+    "m6": "June",
+    "m7": "July",
+    "m8": "August",
+    "m9": "September",
+    "m10": "October",
+    "m11": "November",
+    "m12": "December"
+  },
+  "whenMonth": "in {month}",
+  "whenYear": "in {year}",
+  "occasion": {
+    "date": "for a date",
+    "amis": "with friends",
+    "groupe": "for groups",
+    "famille": "with family",
+    "business": "for a business meal",
+    "calme": "for some quiet",
+    "fete": "for a night out",
+    "occasionSpeciale": "for a special occasion",
+    "dejeuner": "for lunch",
+    "touristes": "for visitors",
+    "travail": "to work from",
+    "sejourADeux": "for a getaway for two"
+  },
+  "occasionOther": "for “{occasion}”",
+  "quote": "“{note}”",
+  "noteSplit": ": “",
+  "sentence": {
+    "recommendedStale": {
+      "member": "{name} recommended it in {year}",
+      "self": "You recommended it in {year}"
+    },
+    "recommendedFor": {
+      "member": "{name} recommends it {occasion}",
+      "self": "You recommend it {occasion}"
+    },
+    "recommended": {
+      "member": "{name} recommends it",
+      "self": "You recommend it"
+    },
+    "withNote": "{base}: {note}",
+    "visitedNote": {
+      "member": "{name}: {note}",
+      "self": "Your note: {note}"
+    },
+    "visited": {
+      "member": "Visit confirmed by {name}",
+      "self": "Your visit is confirmed"
+    },
+    "booked": {
+      "member": "{name} booked here {when}",
+      "self": "You booked here {when}"
+    },
+    "saved": {
+      "member": "{name} saved it",
+      "self": "You saved it"
+    }
+  },
+  "deduction": "Matches your criteria: {matches}",
+  "discovery": {
+    "headline": "A discovery, not yet vouched for by your circle",
+    "noCircle": "No one close to you has recommended it yet",
+    "unknownPersonal": "No personal signal",
+    "unknownVibe": "Actual vibe not confirmed"
+  },
+  "bestMatch": "The best match for what you asked",
+  "rating": "Public rating of {rating, number, ::.0} out of 5",
+  "ratingWithCount": "Public rating of {rating, number, ::.0} out of 5 ({count, plural, one {# Google review} other {# Google reviews}})",
+  "unknown": {
+    "noVisit": "No confirmed visit in your circle",
+    "noSecondOpinion": "No second opinion in your circle",
+    "noRecentSignal": "No recent signal in your circle",
+    "vibe": "“{vibe}”: not confirmed",
+    "availability": "Availability {when} not checked"
+  },
+  "stale": "This recommendation is {years} years old.",
+  "rank": {
+    "discovery": "Discovery",
+    "best": "Best match",
+    "nth": "#{n}"
+  },
+  "intro": {
+    "none": "No one in your circle knows this area well enough yet. Remove a criterion to widen the search.",
+    "insufficient": "I don’t have enough reliable signals from your circle yet to give you a confident answer.",
+    "discoveryOnlyAfter": "A public discovery — no signal from your circle, so take it as a lead.",
+    "single": "One clear answer rather than three. ",
+    "singleReason": ": {reason}.",
+    "singleEnd": ".",
+    "three": "I’ve got three solid ideas for you. ",
+    "two": "I’ve got two ideas for you. ",
+    "bestReason": " looks like the best match: {reason}.",
+    "best": " looks like the best match."
+  },
+  "ask": {
+    "one": " could probably help.",
+    "people": "{n} people",
+    "many": " could probably help.",
+    "conflict": "Your circle disagrees about this place.",
+    "noRecent": "None of these leads is backed by a recent recommendation yet.",
+    "but": "{lead} But "
+  },
+  "afterOrdinal": {
+    "o1": "The second one",
+    "o2": "The third one"
+  },
+  "after": "{ordinal} is a discovery: no one in your circle has vouched for it yet, I’m showing it so you can explore.",
+  "confidence": {
+    "forteRecoAndVisit": "Strong — explicit recommendation and confirmed visit",
+    "forteSignals": "Strong — based on {count, plural, one {# personal signal} other {# personal signals}}",
+    "forteRecos": "Strong — {count} recommendations",
+    "forteRecentReco": "Strong — recent recommendation from {name}",
+    "moyenneMissingReco": "Medium — a personal recommendation is missing",
+    "moyenneStaleReco": "Medium — old recommendation",
+    "exploMostlyPublic": "Exploratory — mostly based on public data",
+    "exploPublicOnly": "Exploratory — public information only",
+    "conflict": "Medium — conflicting signals"
+  },
+  "conflict": {
+    "after": "Conflicting signals: {calm} finds it quiet, {noisy} says it gets loud after {hour}:00. Probably quiet early in the evening, lively later on.",
+    "plain": "Conflicting signals: {calm} finds it quiet, {noisy} finds it loud. I’m giving you both views rather than picking one."
+  }
+}

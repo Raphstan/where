@@ -1,3 +1,4 @@
+import type { T } from "@/i18n/translator";
 import type { Criteria } from "@/lib/ask/schema";
 import { fold, kindCategories, looselyEqual, trustDomainsFor } from "@/lib/search/match";
 import type { MemoryRow } from "@/lib/search/rank";
@@ -14,38 +15,23 @@ export type CircleMember = {
 /** Proche proposé pour une demande ; `relevant` = coché par défaut, visiblement. */
 export type { SuggestedPerson };
 
-/** Domaines de confiance en clair (enum trust_domain → libellés de la maquette, en minuscules). */
-export const DOMAIN_PHRASE: Record<string, string> = {
-  all: "tout",
-  restaurants: "les restaurants",
-  hotels: "les hôtels",
-  nightlife: "les bars & la nightlife",
-  travel: "les voyages",
-  activities: "les activités",
-  family: "la famille",
-  business: "le business",
-};
+/** Domaines de confiance (enum trust_domain) ; libellés dans messages/{langue}/network.json, `domains.*`. */
+const TRUST_DOMAINS = ["all", "restaurants", "hotels", "nightlife", "travel", "activities", "family", "business"] as const;
+const isTrustDomain = (d: string): boolean => (TRUST_DOMAINS as readonly string[]).includes(d);
 
-const DOMAIN_SHORT: Record<string, string> = {
-  restaurants: "restaurants",
-  hotels: "hôtels",
-  nightlife: "bars & nightlife",
-  travel: "voyages",
-  activities: "activités",
-  family: "famille",
-  business: "business",
-};
+/**
+ * Raisons affichées sous chaque proche (maquette scrAsk : « Connaît bien la région »…).
+ * `t` : traducteur de l'espace `network`.
+ */
+function trustFor(t: T, domain: string): string {
+  return t("suggest.trustFor", { domain: isTrustDomain(domain) ? t(`domains.phrase.${domain}`) : domain });
+}
 
-export const SUGGEST_TEXT = {
-  knowsArea: "Connaît bien la région",
-  knowsOnePlace: "Connaît un lieu dans ce coin",
-  trustAll: "Tu lui fais confiance pour tout",
-  trustFor: (domain: string) => `Tu lui fais confiance pour ${DOMAIN_PHRASE[domain] ?? domain}`,
-  lessRelevant: (domains: readonly string[]) =>
-    domains.length > 0
-      ? `Moins pertinent ici — ${domains.map((d) => DOMAIN_SHORT[d] ?? d).join(", ")}`
-      : "Moins pertinent ici",
-} as const;
+function lessRelevant(t: T, domains: readonly string[]): string {
+  if (domains.length === 0) return t("suggest.lessRelevant");
+  const list = domains.map((d) => (isTrustDomain(d) && d !== "all" ? t(`domains.short.${d}`) : d)).join(", ");
+  return t("suggest.lessRelevantFor", { domains: list });
+}
 
 /** Au plus quatre proches proposés, dont trois cochés : demander aux plus pertinents, pas à tout le monde. */
 export const MAX_SUGGESTED = 4;
@@ -82,9 +68,10 @@ function placesKnownInArea(memberId: string, rows: readonly MemoryRow[], criteri
 /**
  * Proches à qui demander, selon leurs domaines de confiance et ce qu'ils connaissent déjà de la
  * zone. La raison ne dit jamais plus que les données : domaine coché par l'utilisateur, ou lieux
- * attribués à ce proche dans la mémoire.
+ * attribués à ce proche dans la mémoire. `t` : traducteur de l'espace `network`.
  */
 export function suggestPeople(
+  t: T,
   members: readonly CircleMember[],
   rows: readonly MemoryRow[],
   criteria: Criteria,
@@ -102,12 +89,12 @@ export function suggestPeople(
     const relevant = trusted || known > 0;
 
     let reason: string;
-    if (known >= 2) reason = SUGGEST_TEXT.knowsArea;
-    else if (known === 1) reason = SUGGEST_TEXT.knowsOnePlace;
-    else if (trustsAll) reason = SUGGEST_TEXT.trustAll;
-    else if (matched) reason = SUGGEST_TEXT.trustFor(matched);
-    else if (relevant && m.trustDomains[0]) reason = SUGGEST_TEXT.trustFor(m.trustDomains[0]);
-    else reason = SUGGEST_TEXT.lessRelevant(m.trustDomains);
+    if (known >= 2) reason = t("suggest.knowsArea");
+    else if (known === 1) reason = t("suggest.knowsOnePlace");
+    else if (trustsAll) reason = t("suggest.trustAll");
+    else if (matched) reason = trustFor(t, matched);
+    else if (relevant && m.trustDomains[0]) reason = trustFor(t, m.trustDomains[0]);
+    else reason = lessRelevant(t, m.trustDomains);
 
     const score = (known > 0 ? 2 + known : 0) + (matched ? 2 : 0) + (trustsAll ? 1 : 0);
     return { m, reason, relevant, score };

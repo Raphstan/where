@@ -3,6 +3,7 @@ import { translator } from "@/i18n/translator";
 import { evidenceLabelLong, memoryLabel } from "@/lib/evidence";
 
 const tEv = translator("fr", "evidence");
+const tImp = translator("fr", "import");
 import {
   canCountAsVisit,
   EMAIL_KINDS,
@@ -84,20 +85,20 @@ describe("QualificationSchema", () => {
 
 describe("résumé de fin de pile (maquette)", () => {
   it("reprend les textes de la maquette", () => {
-    expect(qualificationSummary({ visited: "Oui", recommend: "Absolument", occasion: ["date", "amis"] })).toEqual({
+    expect(qualificationSummary(tImp, { visited: "Oui", recommend: "Absolument", occasion: ["date", "amis"] })).toEqual({
       text: "Visité · tu le recommandes · date, amis",
       level: "recommended",
     });
-    expect(qualificationSummary({ visited: "Oui", recommend: "Oui, dans certains contextes", occasion: [] })).toEqual({
+    expect(qualificationSummary(tImp, { visited: "Oui", recommend: "Oui, dans certains contextes", occasion: [] })).toEqual({
       text: "Visité · oui, dans certains contextes",
       level: "visited",
     });
-    expect(qualificationSummary({ visited: "Non", recommend: null, occasion: [] })).toEqual({ text: "Réservé, non visité — ignoré", level: "public" });
-    expect(qualificationSummary({ visited: "Je ne sais plus", recommend: null, occasion: [] })).toEqual({
+    expect(qualificationSummary(tImp, { visited: "Non", recommend: null, occasion: [] })).toEqual({ text: "Réservé, non visité — ignoré", level: "public" });
+    expect(qualificationSummary(tImp, { visited: "Je ne sais plus", recommend: null, occasion: [] })).toEqual({
       text: "Réservé, présence incertaine",
       level: "booked",
     });
-    expect(qualificationSummary(null)).toEqual({ text: "Ignoré", level: "booked" });
+    expect(qualificationSummary(tImp, null)).toEqual({ text: "Ignoré", level: "booked" });
   });
 });
 
@@ -134,11 +135,11 @@ describe("résultats de l'import", () => {
   });
 
   it("formate les dates et la provenance comme la maquette", () => {
-    expect(formatDay("2026-09-12", true)).toBe("12 sept. 2026");
-    expect(formatDay("2026-09-12", false)).toBe("12 sept.");
-    expect(formatDay(null, true)).toBeNull();
-    expect(provenanceLabel("table", "Tabit")).toBe("Réservation Tabit");
-    expect(provenanceLabel("hotel", "Booking")).toBe("Confirmation hôtel");
-    expect(provenanceLabel("activity", null)).toBe("Activité");
+    expect(formatDay("2026-09-12", true, "fr")).toBe("12 sept. 2026");
+    expect(formatDay("2026-09-12", false, "fr")).toBe("12 sept.");
+    expect(formatDay(null, true, "fr")).toBeNull();
+    expect(provenanceLabel(tImp, "table", "Tabit")).toBe("Réservation Tabit");
+    expect(provenanceLabel(tImp, "hotel", "Booking")).toBe("Confirmation hôtel");
+    expect(provenanceLabel(tImp, "activity", null)).toBe("Activité");
   });
 });

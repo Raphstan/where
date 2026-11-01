@@ -105,8 +105,17 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
   et validées par zod dans `src/lib/env.ts`. Les clés `NEXT_PUBLIC_*` y sont référencées littéralement.
 - Tests : Vitest. Un test minimal par logique métier (voir § 5).
 - Nommage : fichiers `kebab-case`, composants `PascalCase`, tables et colonnes Postgres `snake_case`.
-- Langue de l'interface : français, tutoiement, typographie française (espace avant « ? » et « : »,
-  guillemets « »), comme dans la maquette.
+- **Trois langues : anglais, français, hébreu (RTL)**, avec `next-intl`. Aucun texte d'interface en dur :
+  tout passe par `messages/{en,fr,he}/{espace}.json` (mêmes clés et mêmes variables ICU partout, vérifié
+  par `src/i18n/messages.test.ts`). Composants : `useTranslations` / `getTranslations` ; code de `src/lib`
+  qui fabrique du texte : paramètre `t: T` (`src/i18n/translator.ts`) ; routes API : `apiLocale()`.
+  Langue : segment interne `src/app/[locale]` sans préfixe d'URL (cookie `WH3RE_LOCALE`, sinon
+  Accept-Language, sinon anglais), lue par `next/root-params`. Directions logiques uniquement
+  (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`…). Les valeurs stockées en base restent en
+  français (codes) ; seul leur affichage est traduit.
+- Français : tutoiement, typographie française (espace avant « ? » et « : », guillemets « »), textes de la
+  maquette mot pour mot. Anglais : même voix courte et chaleureuse que la landing. Hébreu : informel,
+  neutre en genre autant que possible.
 
 ## 4. Direction artistique
 

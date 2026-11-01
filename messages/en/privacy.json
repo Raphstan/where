@@ -1,1 +1,60 @@
-{}
+{
+  "title": "Privacy",
+  "lead": "Private by default. You stay in control of every connection and every deletion.",
+  "principles": {
+    "title": "Principles",
+    "privateByDefault": "Private by default",
+    "noPublishing": "Nothing is ever published automatically",
+    "noAttribution": "No recommendation credited to a friend without proof",
+    "noSecretReading": "No secret reading of your conversations",
+    "noSilentSend": "No message sent without your confirmation",
+    "fullControl": "Full control over connections and deletion"
+  },
+  "connected": {
+    "title": "Connected data",
+    "email": "Email forwarding",
+    "emailOn": "Forwarded emails only · {count, plural, one {# confirmation} other {# confirmations}}",
+    "emailOff": "Not connected",
+    "importedPlaces": "Imported places"
+  },
+  "circle": {
+    "title": "My circle",
+    "people": "People",
+    "peopleValue": "{count} · invisible to them",
+    "theySee": "What they see",
+    "theySeeValue": "Only the questions you send them",
+    "feedback": "My post-visit feedback",
+    "feedbackValue": "Private, unless you choose to share"
+  },
+  "usage": {
+    "title": "Used for recommendations",
+    "importedBookings": "My imported bookings",
+    "visitFeedback": "My post-visit feedback",
+    "circleReplies": "My circle’s answers (with their consent)"
+  },
+  "delete": {
+    "title": "Delete",
+    "source": "Delete a source",
+    "sourceConfirm": "Delete the “email forwarding” source? Future confirmations won’t be read anymore.",
+    "sourceAction": "Delete the source",
+    "sourceDone": "“Email forwarding” source deleted",
+    "places": "Delete all imported places",
+    "placesConfirmOne": "Delete the imported place? Your manual recommendations and your circle’s answers are kept.",
+    "placesConfirmMany": "Delete the {count} imported places? Your manual recommendations and your circle’s answers are kept.",
+    "placesAction": "Delete the places",
+    "placesDone": "{count, plural, one {# imported place deleted} other {# imported places deleted}}",
+    "account": "Delete my account",
+    "accountConfirm": "Delete your account and all your data? This can’t be undone."
+  },
+  "confirm": {
+    "title": "Confirm",
+    "cancel": "Cancel"
+  },
+  "error": "Something went wrong.",
+  "api": {
+    "unauthenticated": "Log in to continue.",
+    "invalidUsage": "Invalid setting.",
+    "saveUsageFailed": "I can’t save this setting right now.",
+    "deleteAccountFailed": "I can’t delete your account right now."
+  }
+}

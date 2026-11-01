@@ -1,39 +1,38 @@
+import type { T } from "@/i18n/translator";
 import type { Criteria } from "@/lib/ask/schema";
-import { kindCategories, type KindCategory } from "@/lib/search/match";
+import { kindCategories } from "@/lib/search/match";
 
-const KIND_PHRASE: Record<KindCategory, string> = {
-  restaurant: "un restaurant",
-  bar: "un bar",
-  cafe: "un café",
-  hotel: "un hôtel",
-  beach: "une plage",
-  activity: "une activité",
-};
+/*
+ * Textes : messages/{langue}/network.json. `t` : traducteur de l'espace `network`, dans la langue
+ * du DEMANDEUR (c'est lui qui envoie le message, même si le proche parle une autre langue).
+ */
 
-function placePhrase(placeKind: string | null): string {
+function placePhrase(t: T, placeKind: string | null): string {
   const cats = [...kindCategories(placeKind)];
-  if (cats.length === 0) return "un bon endroit";
-  return cats.map((c) => KIND_PHRASE[c]).join(" ou ");
+  if (cats.length === 0) return t("draft.kinds.any");
+  return cats.map((c) => t(`draft.kinds.${c}`)).reduce((a, b) => t("draft.or", { a, b }));
 }
 
 /**
  * Message pré-rédigé, modifiable, sur le modèle de la maquette :
  * « Raphaël cherche un bon endroit pour déjeuner samedi à Zikhron Ya’akov … Tu as une recommandation ? »
  * À la troisième personne quand le prénom est connu, sinon à la première (« Je cherche »).
+ * Les critères (moment, ambiance…) sont repris tels que le modèle les a compris.
  */
-export function draftMessage(criteria: Criteria, requesterName: string | null): string {
-  const subject = requesterName?.trim() ? `${requesterName.trim()} cherche` : "Je cherche";
+export function draftMessage(t: T, criteria: Criteria, requesterName: string | null): string {
   const where = criteria.area && criteria.city
-    ? ` à ${criteria.city} (${criteria.area})`
+    ? t("draft.whereCityArea", { city: criteria.city, area: criteria.area })
     : criteria.area || criteria.city
-      ? ` à ${criteria.area ?? criteria.city}`
+      ? t("draft.where", { place: (criteria.area ?? criteria.city)! })
       : "";
   const when = criteria.when ? ` ${criteria.when}` : "";
   const extras = [criteria.occasion, ...criteria.vibe, ...criteria.constraints].filter(
     (v): v is string => Boolean(v && v.trim()),
   );
-  const details = extras.length > 0 ? ` — ${extras.join(", ")}` : "";
-  return `${subject} ${placePhrase(criteria.placeKind)}${where}${when}${details}. Tu as une recommandation ?`;
+  const details = extras.length > 0 ? t("draft.details", { list: extras.join(", ") }) : "";
+  const values = { what: placePhrase(t, criteria.placeKind), where, when, details };
+  const name = requesterName?.trim();
+  return name ? t("draft.withName", { name, ...values }) : t("draft.anonymous", values);
 }
 
 /** Lien privé de réponse : un par proche. */
@@ -42,8 +41,8 @@ export function replyLink(siteUrl: string, token: string): string {
 }
 
 /** Texte envoyé sur WhatsApp : le message, puis le lien privé (maquette : « Répondre en 20 secondes »). */
-export function whatsappText(message: string, link: string): string {
-  return `${message.trim()}\n\n${link} · Répondre en 20 secondes`;
+export function whatsappText(t: T, message: string, link: string): string {
+  return `${message.trim()}\n\n${link} · ${t("replyIn20")}`;
 }
 
 /**
@@ -58,19 +57,19 @@ export function waMeUrl(phone: string | null, text: string): string {
 }
 
 /** « Sarah », « Sarah et David », « Sarah, David et Maya » (maquette : « Envoyer à Sarah, David et Maya ? »). */
-export function joinNames(names: readonly string[]): string {
+export function joinNames(t: T, names: readonly string[]): string {
   if (names.length <= 1) return names[0] ?? "";
-  return `${names.slice(0, -1).join(", ")} et ${names.at(-1)}`;
+  return t("names.and", { rest: names.slice(0, -1).join(", "), last: names.at(-1)! });
 }
 
 /**
  * Message du chat après l'ouverture de WhatsApp (maquette confirmSend) :
  * « Envoyé à Sarah, David et Maya sur WhatsApp. Je te préviens dès qu’ils répondent — rien d’autre
- * n’a été envoyé. » Au singulier : « dès qu’il ou elle répond ».
+ * n’a été envoyé. » Au singulier : « dès qu’il ou elle répond ». Les prénoms (`strong`) sont en gras,
+ * entre `before` et `text`.
  */
-export function askedText(names: readonly string[]): { strong: string; text: string } {
-  return {
-    strong: joinNames(names),
-    text: ` sur WhatsApp. Je te préviens dès ${names.length > 1 ? "qu’ils répondent" : "qu’il ou elle répond"} — rien d’autre n’a été envoyé.`,
-  };
+const MARK = "\uE000";
+export function askedText(t: T, names: readonly string[]): { before: string; strong: string; text: string } {
+  const [before = "", text = ""] = t(names.length > 1 ? "asked.many" : "asked.one", { names: MARK }).split(MARK);
+  return { before, strong: joinNames(t, names), text };
 }

@@ -1,1 +1,31 @@
-{}
+{
+  "metaTitle": "Une question pour toi",
+  "noAccount": "Sans compte · sans appli",
+  "invalidTitle": "Ce lien privé n’est plus valide.",
+  "invalidLead": "Demande à la personne qui te l’a envoyé de t’en renvoyer un.",
+  "requesterFallback": "la personne qui te demande",
+  "sentTo": "Envoyé à {requester}",
+  "thanks": "Merci, {name}.",
+  "reusableYes": "Seul {requester} voit ta réponse. Tu as autorisé WH3RE à la réutiliser pour {requester} à l’avenir.",
+  "reusableNo": "Seul {requester} voit ta réponse. Elle ne sert qu’à cette question et ne sera pas gardée.",
+  "another": "Recommander un autre lieu",
+  "placeName": "Nom du lieu",
+  "placeUrlPlaceholder": "Lien Google Maps / Instagram / TikTok (facultatif)",
+  "placeUrlLabel": "Lien Google Maps, Instagram ou TikTok",
+  "visitedQuestion": "Tu y es réellement allé·e ?",
+  "visitedYes": "Oui",
+  "visitedNo": "Non, mais on m’en a parlé",
+  "note": "Pourquoi tu le recommandes ?",
+  "visibleOnly": "Visible seulement par {requester}",
+  "allowReuse": "Autoriser WH3RE à réutiliser cette reco pour {requester} à l’avenir",
+  "submit": "Envoyer ma recommandation",
+  "errors": {
+    "visitedRequired": "Dis-moi si tu y es réellement allé·e.",
+    "invalidToken": "Ce lien privé n’est pas valide.",
+    "expired": "Ce lien privé n’est plus valide.",
+    "placeNameRequired": "Indique le nom du lieu.",
+    "placeUrlInvalid": "Ce lien ne semble pas valide.",
+    "checkAnswer": "Vérifie ta réponse.",
+    "sendFailed": "Ta réponse n’est pas partie. Réessaie dans un instant."
+  }
+}

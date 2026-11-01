@@ -1,83 +1,113 @@
-import { translator } from "@/i18n/translator";
+import type { T } from "@/i18n/translator";
 import { evidenceLabelLong, type EvidenceLevel } from "@/lib/evidence";
-
-// TEMPORAIRE (passage aux trois langues en cours) : libellés en français en attendant que
-// les formulations reçoivent le traducteur de la requête.
-const TEV = translator("fr", "evidence");
 import { fold } from "./match";
 import { ageInYears, isStale, type MemorySignal } from "./signal";
 import type { EvidenceLine, Person, RichText, SearchResult } from "./types";
 
-/** Libellé des déductions de WH3RE, mot pour mot (maquette EVLABEL.pref). Jamais attribué à un proche. */
-export const DEDUCTION_LABEL = "Tes préférences / déduction WH3RE";
+/*
+ * Textes : messages/{langue}/search.json. En français, mot pour mot depuis docs/prototype.html.
+ * Les libellés longs des niveaux de preuve viennent de l'espace `evidence` (jamais dupliqués).
+ */
 
-/** Rappel des niveaux de preuve dans « Pourquoi ce choix ? », mot pour mot (maquette whyBody). */
-export const EVIDENCE_REMINDER: readonly { level: EvidenceLevel; label: string }[] = [
-  { level: "recommended", label: "Recommandé explicitement" },
-  { level: "visited", label: "Visité et confirmé" },
-  { level: "booked", label: "Réservation confirmée / signal post-visite" },
-  { level: "saved", label: "Sauvegardé ou partagé" },
-  { level: "public", label: "Information publique uniquement" },
-];
+/** Traducteurs de la recherche : `t` pour l'espace `search`, `ev` pour l'espace `evidence`. */
+export type SearchT = { t: T; ev: T };
+
+/** Libellé des déductions de WH3RE (maquette EVLABEL.pref). Jamais attribué à un proche. */
+export function deductionLabel(t: T): string {
+  return t("deductionLabel");
+}
+
+/** Niveaux rappelés dans « Pourquoi ce choix ? », dans l'ordre de la maquette (whyBody). */
+export const EVIDENCE_REMINDER_LEVELS: readonly EvidenceLevel[] = ["recommended", "visited", "booked", "saved", "public"];
+
+/** Rappel des niveaux de preuve, mot pour mot (maquette whyBody : « Information publique uniquement »). */
+export function evidenceReminder({ t, ev }: SearchT): { level: EvidenceLevel; label: string }[] {
+  return EVIDENCE_REMINDER_LEVELS.map((level) => ({
+    level,
+    label: level === "public" ? t("reminderPublic") : evidenceLabelLong(ev, level),
+  }));
+}
 
 /** Provenances autorisées (CLAUDE.md § 2.3). */
-export const PROVENANCE = {
-  circle: "de ton cercle",
-  booking: "d’une réservation",
-  share: "d’un partage",
-  web: "du web public",
-  mine: "de tes données",
-} as const;
+export type Provenance = "circle" | "booking" | "share" | "web" | "mine";
 
-export function provenanceFor(level: EvidenceLevel, fromCircle: boolean): string {
+export function provenanceKey(level: EvidenceLevel, fromCircle: boolean): Provenance {
   switch (level) {
     case "recommended":
     case "visited":
-      return fromCircle ? PROVENANCE.circle : PROVENANCE.mine;
+      return fromCircle ? "circle" : "mine";
     case "booked_confirmed":
     case "booked":
-      return PROVENANCE.booking;
+      return "booking";
     case "saved":
-      return PROVENANCE.share;
+      return "share";
     case "public":
-      return PROVENANCE.web;
+      return "web";
   }
 }
 
-const NUMBER_WORDS = ["zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix"];
+export function provenanceFor(t: T, level: EvidenceLevel, fromCircle: boolean): string {
+  return t(`provenance.${provenanceKey(level, fromCircle)}`);
+}
 
 /** « trois » pour 3, comme la maquette ; au-delà de dix, en chiffres. */
-export function numberWord(n: number): string {
-  return NUMBER_WORDS[n] ?? String(n);
+export function numberWord(t: T, n: number): string {
+  return Number.isInteger(n) && n >= 0 && n <= 10 ? t(`numbers.n${n}`) : String(n);
 }
-
-const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 
 /** « en juin » la même année, « en 2025 » sinon (maquette : « David y a réservé en juin »). */
-export function whenPhrase(date: Date, now: Date): string {
+export function whenPhrase(t: T, date: Date, now: Date): string {
   return date.getUTCFullYear() === now.getUTCFullYear()
-    ? `en ${MONTHS[date.getUTCMonth()]}`
-    : `en ${date.getUTCFullYear()}`;
+    ? t("whenMonth", { month: t(`months.m${date.getUTCMonth() + 1}`) })
+    : t("whenYear", { year: String(date.getUTCFullYear()) });
 }
 
-const OCCASION_PHRASES: Record<string, string> = {
-  date: "pour un date",
-  amis: "entre amis",
-  groupe: "pour les groupes",
-  famille: "en famille",
-  business: "pour un repas d’affaires",
-  calme: "pour le calme",
-  fete: "pour faire la fête",
-  "occasion speciale": "pour une occasion spéciale",
-  dejeuner: "pour un déjeuner",
-  touristes: "pour des touristes",
-  travail: "pour travailler",
-  "pour travailler": "pour travailler",
-  "sejour a deux": "pour un séjour à deux",
+/** Occasions connues (forme repliée → clé de message), en français, anglais et hébreu. */
+const OCCASION_KEYS: Record<string, string> = {
+  date: "date",
+  amis: "amis",
+  groupe: "groupe",
+  famille: "famille",
+  business: "business",
+  calme: "calme",
+  fete: "fete",
+  "occasion speciale": "occasionSpeciale",
+  dejeuner: "dejeuner",
+  touristes: "touristes",
+  travail: "travail",
+  "pour travailler": "travail",
+  "sejour a deux": "sejourADeux",
+  // English
+  friends: "amis",
+  group: "groupe",
+  family: "famille",
+  quiet: "calme",
+  party: "fete",
+  "special occasion": "occasionSpeciale",
+  lunch: "dejeuner",
+  tourists: "touristes",
+  work: "travail",
+  "to work": "travail",
+  "romantic getaway": "sejourADeux",
+  "couple getaway": "sejourADeux",
+  // Hebrew
+  "דייט": "date",
+  "חברים": "amis",
+  "קבוצה": "groupe",
+  "משפחה": "famille",
+  "עסקים": "business",
+  "שקט": "calme",
+  "מסיבה": "fete",
+  "אירוע מיוחד": "occasionSpeciale",
+  "ארוחת צהריים": "dejeuner",
+  "תיירים": "touristes",
+  "עבודה": "travail",
+  "חופשה זוגית": "sejourADeux",
 };
 
-export function occasionPhrase(occasion: string): string {
-  return OCCASION_PHRASES[fold(occasion)] ?? `pour « ${occasion} »`;
+export function occasionPhrase(t: T, occasion: string): string {
+  const key = OCCASION_KEYS[fold(occasion)];
+  return key ? t(`occasion.${key}`) : t("occasionOther", { occasion });
 }
 
 /** L'occasion du signal qui correspond à la recherche, sinon la première. */
@@ -91,9 +121,9 @@ export function pickOccasion(signal: Pick<MemorySignal, "occasion">, wanted: str
 
 const NOTE_MAX = 140;
 
-function quote(note: string): string {
+function quote(t: T, note: string): string {
   const n = note.trim().replace(/\s+/g, " ");
-  return `« ${n.length > NOTE_MAX ? `${n.slice(0, NOTE_MAX - 1).trimEnd()}…` : n} »`;
+  return t("quote", { note: n.length > NOTE_MAX ? `${n.slice(0, NOTE_MAX - 1).trimEnd()}…` : n });
 }
 
 export function personOf(signal: MemorySignal): Person | null {
@@ -106,111 +136,99 @@ export function personOf(signal: MemorySignal): Person | null {
  * Phrase libre d'une ligne de preuve. Elle ne dit jamais plus que le signal :
  * une réservation reste une réservation, jamais une visite.
  */
-export function signalSentence(signal: MemorySignal, now: Date, wantedOccasion: string | null): string | null {
-  const member = signal.author.kind === "member" ? signal.author.name.trim() : null;
+export function signalSentence(t: T, signal: MemorySignal, now: Date, wantedOccasion: string | null): string | null {
+  const name = signal.author.kind === "member" ? signal.author.name.trim() : null;
   const occ = pickOccasion(signal, wantedOccasion);
-  const note = signal.note?.trim() ? quote(signal.note) : null;
+  const note = signal.note?.trim() ? quote(t, signal.note) : null;
+  const who = name ? "member" : "self";
 
   switch (signal.level) {
     case "recommended": {
-      const year = signal.createdAt.getUTCFullYear();
+      const year = String(signal.createdAt.getUTCFullYear());
       const base = isStale(signal, now)
-        ? member
-          ? `${member} l’a recommandé en ${year}`
-          : `Tu l’as recommandé en ${year}`
-        : member
-          ? `${member} le recommande${occ ? ` ${occasionPhrase(occ)}` : ""}`
-          : `Tu le recommandes${occ ? ` ${occasionPhrase(occ)}` : ""}`;
-      return note ? `${base} : ${note}` : base;
+        ? t(`sentence.recommendedStale.${who}`, { name: name ?? "", year })
+        : occ
+          ? t(`sentence.recommendedFor.${who}`, { name: name ?? "", occasion: occasionPhrase(t, occ) })
+          : t(`sentence.recommended.${who}`, { name: name ?? "" });
+      return note ? t("sentence.withNote", { base, note }) : base;
     }
     case "visited":
-      if (member) return note ? `${member} : ${note}` : `Visite confirmée par ${member}`;
-      return note ? `Ta note : ${note}` : "Ta visite est confirmée";
+      if (name) return note ? t("sentence.visitedNote.member", { name, note }) : t("sentence.visited.member", { name });
+      return note ? t("sentence.visitedNote.self", { note }) : t("sentence.visited.self");
     case "booked_confirmed":
     case "booked":
-      return member
-        ? `${member} y a réservé ${whenPhrase(signal.createdAt, now)}`
-        : `Tu y as réservé ${whenPhrase(signal.createdAt, now)}`;
+      return t(`sentence.booked.${who}`, { name: name ?? "", when: whenPhrase(t, signal.createdAt, now) });
     case "saved":
-      return member ? `${member} l’a enregistré` : "Tu l’as enregistré";
+      return t(`sentence.saved.${who}`, { name: name ?? "" });
     case "public":
       return note;
   }
 }
 
-export function evidenceLine(signal: MemorySignal, now: Date, wantedOccasion: string | null): EvidenceLine | null {
-  const text = signalSentence(signal, now, wantedOccasion);
+export function evidenceLine(tr: SearchT, signal: MemorySignal, now: Date, wantedOccasion: string | null): EvidenceLine | null {
+  const text = signalSentence(tr.t, signal, now, wantedOccasion);
   if (!text) return null;
   const person = signal.level === "public" ? null : personOf(signal);
   return {
     kind: "evidence",
     level: signal.level,
     text,
-    label: evidenceLabelLong(TEV, signal.level),
-    provenance: provenanceFor(signal.level, person !== null),
+    label: evidenceLabelLong(tr.ev, signal.level),
+    provenance: provenanceFor(tr.t, signal.level, person !== null),
     person,
   };
 }
 
 /** Déduction de WH3RE : ce qui, dans la fiche du lieu, correspond à la demande. */
-export function deductionLine(matches: readonly string[]): EvidenceLine | null {
+export function deductionLine(t: T, matches: readonly string[]): EvidenceLine | null {
   if (matches.length === 0) return null;
   return {
     kind: "deduction",
-    text: `Correspond à tes critères : ${matches.join(", ")}`,
-    label: DEDUCTION_LABEL,
-    provenance: PROVENANCE.mine,
+    text: t("deduction", { matches: matches.join(", ") }),
+    label: deductionLabel(t),
+    provenance: t("provenance.mine"),
     person: null,
   };
 }
 
-/** Phrases de la maquette pour la découverte publique. */
-export const DISCOVERY_TEXT = {
-  headline: "Une découverte, pas encore validée par ton cercle",
-  noCircle: "Aucun proche ne l’a encore recommandé",
-  outsideCircle: "Hors de ton cercle",
-  unknownPersonal: "Aucun signal personnel",
-  unknownVibe: "Ambiance réelle non confirmée",
-} as const;
+/** Phrases de la maquette pour la découverte publique (clés de `discovery.*`). */
+export type DiscoveryText = "headline" | "noCircle" | "unknownPersonal" | "unknownVibe";
 
-export const BEST_MATCH_HEADLINE = "Le meilleur match pour ta demande";
+export function discoveryText(t: T, key: DiscoveryText): string {
+  return t(`discovery.${key}`);
+}
 
-export function ratingLine(rating: number, count: number | null): EvidenceLine {
-  const r = rating.toLocaleString("fr-FR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const n = count ? ` (${count.toLocaleString("fr-FR")} avis Google)` : "";
+export function bestMatchHeadline(t: T): string {
+  return t("bestMatch");
+}
+
+export function ratingLine(tr: SearchT, rating: number, count: number | null): EvidenceLine {
   return {
     kind: "evidence",
     level: "public",
-    text: `Note publique de ${r} sur 5${n}`,
-    label: evidenceLabelLong(TEV, "public"),
-    provenance: PROVENANCE.web,
+    text: count ? tr.t("ratingWithCount", { rating, count }) : tr.t("rating", { rating }),
+    label: evidenceLabelLong(tr.ev, "public"),
+    provenance: tr.t("provenance.web"),
     person: null,
   };
 }
 
-export function noCircleLine(): EvidenceLine {
+export function noCircleLine(tr: SearchT): EvidenceLine {
   return {
     kind: "evidence",
     level: "public",
-    text: DISCOVERY_TEXT.noCircle,
-    label: evidenceLabelLong(TEV, "public"),
-    provenance: PROVENANCE.web,
+    text: discoveryText(tr.t, "noCircle"),
+    label: evidenceLabelLong(tr.ev, "public"),
+    provenance: tr.t("provenance.web"),
     person: null,
   };
 }
-
-export const UNKNOWN_TEXT = {
-  noVisit: "Aucune visite confirmée dans ton cercle",
-  noSecondOpinion: "Aucun second avis dans ton cercle",
-  noRecentSignal: "Aucun signal récent dans ton cercle",
-  vibe: (v: string) => `« ${v} » : non confirmé`,
-  availability: (when: string) => `Disponibilité ${when} non vérifiée`,
-} as const;
 
 export const MAX_UNKNOWNS = 4;
 
 /** « Ce que nous ne savons pas encore » pour un lieu de la mémoire : les trous réels des preuves. */
 export function personalUnknowns(
+  t: T,
   signals: readonly MemorySignal[],
   unmatchedVibes: readonly string[],
   when: string | null,
@@ -218,64 +236,55 @@ export function personalUnknowns(
 ): string[] {
   const personal = signals.filter((s) => s.level !== "public");
   const out: string[] = [];
-  if (!personal.some((s) => s.level === "visited")) out.push(UNKNOWN_TEXT.noVisit);
+  if (!personal.some((s) => s.level === "visited")) out.push(t("unknown.noVisit"));
   const authors = new Set(personal.map((s) => (s.author.kind === "self" ? "self" : s.author.id)));
-  if (authors.size === 1 && personal[0]?.author.kind === "member") out.push(UNKNOWN_TEXT.noSecondOpinion);
-  if (personal.length > 0 && personal.every((s) => isStale(s, now))) out.push(UNKNOWN_TEXT.noRecentSignal);
-  for (const v of unmatchedVibes) out.push(UNKNOWN_TEXT.vibe(v));
-  if (when) out.push(UNKNOWN_TEXT.availability(when));
+  if (authors.size === 1 && personal[0]?.author.kind === "member") out.push(t("unknown.noSecondOpinion"));
+  if (personal.length > 0 && personal.every((s) => isStale(s, now))) out.push(t("unknown.noRecentSignal"));
+  for (const v of unmatchedVibes) out.push(t("unknown.vibe", { vibe: v }));
+  if (when) out.push(t("unknown.availability", { when }));
   return out.slice(0, MAX_UNKNOWNS);
 }
 
-export function discoveryUnknowns(when: string | null): string[] {
-  const out: string[] = [DISCOVERY_TEXT.unknownPersonal, DISCOVERY_TEXT.unknownVibe];
-  if (when) out.push(UNKNOWN_TEXT.availability(when));
+export function discoveryUnknowns(t: T, when: string | null): string[] {
+  const out: string[] = [discoveryText(t, "unknownPersonal"), discoveryText(t, "unknownVibe")];
+  if (when) out.push(t("unknown.availability", { when }));
   return out;
 }
 
 /** Notice d'ancienneté (maquette : « Cette recommandation date de trois ans. »). */
-export function staleNotice(signals: readonly MemorySignal[], now: Date): string | null {
+export function staleNotice(t: T, signals: readonly MemorySignal[], now: Date): string | null {
   const recos = signals.filter((s) => s.level === "recommended");
   if (recos.length === 0 || recos.some((s) => !isStale(s, now))) return null;
   const newest = recos.reduce((a, b) => (a.createdAt > b.createdAt ? a : b));
   const years = ageInYears(newest.createdAt, now);
-  return `Cette recommandation date de ${numberWord(years)} ans.`;
+  return t("stale", { years: numberWord(t, years) });
 }
 
-export function rankLabel(index: number, origin: SearchResult["origin"]): string {
-  if (origin === "discovery") return "Découverte";
-  return index === 0 ? "Meilleur match" : `n°${index + 1}`;
+export function rankLabel(t: T, index: number, origin: SearchResult["origin"]): string {
+  if (origin === "discovery") return t("rank.discovery");
+  return index === 0 ? t("rank.best") : t("rank.nth", { n: String(index + 1) });
 }
-
-const ORDINALS = ["premier", "deuxième", "troisième"];
-
-export const INTRO_TEXT = {
-  none: "Personne dans ton cercle ne connaît encore suffisamment ce coin. Retire un critère pour élargir la recherche.",
-  insufficient: "Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec confiance.",
-  discoveryOnlyAfter: "Une découverte publique — sans aucun signal de ton cercle, donc à prendre comme une piste.",
-} as const;
 
 /** Phrase d'introduction, sur le modèle de la maquette (« J’ai trois idées solides pour toi. »). */
-export function introFor(results: readonly SearchResult[]): RichText {
+export function introFor(t: T, results: readonly SearchResult[]): RichText {
   const personal = results.filter((r) => r.origin === "personal");
-  if (results.length === 0) return [{ text: INTRO_TEXT.none }];
-  if (personal.length === 0) return [{ text: INTRO_TEXT.insufficient }];
+  if (results.length === 0) return [{ text: t("intro.none") }];
+  if (personal.length === 0) return [{ text: t("intro.insufficient") }];
 
   const [best] = personal;
   // La citation éventuelle reste sur la carte : l'intro garde la phrase seule.
-  const reason = best!.lines[0]?.text.split(" : «")[0] ?? null;
+  const reason = best!.lines[0]?.text.split(t("noteSplit"))[0] ?? null;
   if (results.length === 1) {
     return [
-      { text: "Une réponse nette plutôt que trois. " },
+      { text: t("intro.single") },
       { text: best!.name, strong: true },
-      { text: reason ? ` : ${reason}.` : "." },
+      { text: reason ? t("intro.singleReason", { reason }) : t("intro.singleEnd") },
     ];
   }
-  const lead = results.length === 3 ? "J’ai trois idées solides pour toi. " : "J’ai deux idées pour toi. ";
   return [
-    { text: lead },
+    { text: results.length === 3 ? t("intro.three") : t("intro.two") },
     { text: best!.name, strong: true },
-    { text: reason ? ` semble être le meilleur match : ${reason}.` : " semble être le meilleur match." },
+    { text: reason ? t("intro.bestReason", { reason }) : t("intro.best") },
   ];
 }
 
@@ -289,27 +298,34 @@ export function isConfident(results: readonly SearchResult[]): boolean {
  * « Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec
  * confiance. Mais trois personnes pourraient probablement t’aider. »
  */
-export function askIntroFor(results: readonly SearchResult[], people: readonly { name: string; relevant: boolean }[]): RichText | null {
+export function askIntroFor(
+  t: T,
+  results: readonly SearchResult[],
+  people: readonly { name: string; relevant: boolean }[],
+): RichText | null {
   const helpers = people.filter((p) => p.relevant);
   if (isConfident(results) || helpers.length === 0) return null;
   const who: RichText =
     helpers.length === 1
-      ? [{ text: helpers[0]!.name, strong: true }, { text: " pourrait probablement t’aider." }]
-      : [{ text: `${numberWord(helpers.length)} personnes`, strong: true }, { text: " pourraient probablement t’aider." }];
+      ? [{ text: helpers[0]!.name, strong: true }, { text: t("ask.one") }]
+      : [
+          { text: t("ask.people", { n: numberWord(t, helpers.length) }), strong: true },
+          { text: t("ask.many") },
+        ];
   const personal = results.filter((r) => r.origin === "personal");
   const lead =
     personal.length === 0
-      ? `${INTRO_TEXT.insufficient} Mais `
+      ? t("intro.insufficient")
       : personal[0]!.conflictNotice
-        ? "Les avis de ton cercle divergent sur ce lieu. Mais "
-        : "Aucune de ces pistes n’est encore confirmée par une recommandation récente. Mais ";
-  return [{ text: lead }, ...who];
+        ? t("ask.conflict")
+        : t("ask.noRecent");
+  return [{ text: t("ask.but", { lead }) }, ...who];
 }
 
 /** Notice après les cartes quand une découverte complète la liste. */
-export function afterFor(results: readonly SearchResult[]): string | null {
+export function afterFor(t: T, results: readonly SearchResult[]): string | null {
   const index = results.findIndex((r) => r.origin === "discovery");
   if (index < 0) return null;
-  if (index === 0) return INTRO_TEXT.discoveryOnlyAfter;
-  return `Le ${ORDINALS[index]} est une découverte : personne de ton cercle ne l’a encore validé, je te le montre pour l’exploration.`;
+  if (index === 0) return t("intro.discoveryOnlyAfter");
+  return t("after", { ordinal: t(`afterOrdinal.o${index}`) });
 }

@@ -1,1 +1,27 @@
-{}
+{
+  "metaTitle": "How do you want to start?",
+  "welcome": "Welcome",
+  "welcomeName": "Welcome, {name}",
+  "title": "How do you want to start?",
+  "lead": "You can skip any step. The more context you add, the more personal the answers get.",
+  "choices": {
+    "import": {
+      "title": "Find my past bookings",
+      "text": "By forwarding emails. You approve everything before it’s added."
+    },
+    "circle": {
+      "title": "Add a few people I trust",
+      "text": "Sarah for restaurants, Noam for bars…"
+    },
+    "chat": {
+      "title": "Ask my first question right away",
+      "text": "Without connecting anything. Answers will be less personal."
+    },
+    "demo": {
+      "title": "Explore a demo",
+      "text": "A full walkthrough with sample data."
+    }
+  },
+  "privacy": "Private by default. Nothing is published, and no message is sent without your confirmation.",
+  "allSources": "See all possible sources"
+}

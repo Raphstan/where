@@ -1,1 +1,93 @@
-{}
+{
+  "panelTitle": "Réserver",
+  "labels": {
+    "ontopo": "Réserver avec Ontopo",
+    "tabit": "Réserver avec Tabit",
+    "site": "Ouvrir le site du restaurant",
+    "tel": "Appeler",
+    "wa": "Envoyer un WhatsApp",
+    "maps": "Voir dans Google Maps"
+  },
+  "intro": "WH3RE n’est pas le système de réservation. Voici les moyens réellement disponibles pour ce lieu :",
+  "notes": {
+    "tabit": "Tabit gère aussi des livraisons : seule une réservation de table comptera comme visite.",
+    "noPlatform": "Ce lieu ne propose ni Ontopo ni Tabit — je ne t’affiche que ce qui existe vraiment."
+  },
+  "leaving": {
+    "eyebrow": "Tu quittes WH3RE",
+    "back": "Revenir à WH3RE",
+    "text": {
+      "ontopo": "Tu quittes WH3RE pour finaliser ta réservation sur Ontopo.",
+      "tabit": "Tu quittes WH3RE pour finaliser ta réservation sur Tabit.",
+      "site": "Tu quittes WH3RE pour finaliser ta réservation sur le site du restaurant.",
+      "tel": "Tu quittes WH3RE pour finaliser ta réservation par téléphone.",
+      "wa": "Tu quittes WH3RE pour finaliser ta réservation sur WhatsApp.",
+      "maps": "Tu quittes WH3RE pour finaliser ta réservation sur Google Maps."
+    }
+  },
+  "booked": {
+    "question": "De retour. As-tu réservé chez {place} ?",
+    "answers": {
+      "yes": "Oui",
+      "notYet": "Pas encore",
+      "otherPlace": "J’ai choisi un autre endroit"
+    },
+    "reply": {
+      "yes": "Parfait. Je garde {place} dans ta mémoire comme réservé — pas encore comme visité. Je te demanderai demain comment c’était.",
+      "notYet": "Pas de souci. Je laisse la table ouverte dans ta conversation — dis-moi si tu veux une autre heure ou un autre lieu.",
+      "otherPlace": "Compris. Je ne compte pas cette réservation. Tu veux me dire où tu vas finalement ? Ça enrichira ta mémoire."
+    }
+  },
+  "feedback": {
+    "rating": "Alors, <b>{place}</b> ?",
+    "ratings": {
+      "excellent": "Excellent",
+      "good": "Bien",
+      "average": "Moyen",
+      "notForMe": "Pas pour moi",
+      "notVisited": "Je n’y suis finalement pas allé"
+    },
+    "recommend": "Tu le recommanderais à quelqu’un ?",
+    "recommendAnswers": {
+      "absolutely": "Absolument",
+      "someContexts": "Dans certains contextes",
+      "notReally": "Pas vraiment"
+    },
+    "context": "Pour quel contexte ?",
+    "contexts": {
+      "date": "date",
+      "friends": "amis",
+      "quiet": "calme",
+      "specialOccasion": "occasion spéciale",
+      "lunch": "déjeuner"
+    },
+    "skip": "Passer",
+    "notVisited": "Pas de problème — je ne compte pas cette visite.",
+    "thanks": "Merci. C’est noté dans <b>ta mémoire</b>. Ça affinera mes prochaines réponses.",
+    "thanksRecommended": "Merci. C’est noté dans <b>ta mémoire</b> comme un lieu que tu recommandes. Ça affinera mes prochaines réponses.",
+    "share": "Partager ce retour avec mon cercle privé",
+    "shareNote": "Désactivé par défaut. Jamais publié publiquement.",
+    "shared": "Partagé avec ton cercle privé",
+    "kept": "Retour gardé pour toi",
+    "memory": "Voir ma mémoire",
+    "newQuestion": "Nouvelle question",
+    "sendFailed": "Ton retour n’est pas parti. Réessaie dans un instant.",
+    "shareFailed": "Je n’arrive pas à modifier le partage."
+  },
+  "api": {
+    "unauthenticated": "Connecte-toi pour continuer.",
+    "invalidPlace": "Lieu invalide.",
+    "placeNotFound": "Lieu introuvable.",
+    "bookingFailed": "Je n’arrive pas à enregistrer ta réservation.",
+    "conversationNotFound": "Conversation introuvable.",
+    "followupsFailed": "Je n’arrive pas à lire tes retours.",
+    "followupNotFound": "Retour introuvable.",
+    "invalidAnswer": "Réponse invalide.",
+    "alreadyAnswered": "Ce retour est déjà enregistré.",
+    "nothingToShare": "Sans visite, il n’y a rien à partager.",
+    "feedbackFailed": "Je n’arrive pas à enregistrer ton retour.",
+    "shareFailed": "Je n’arrive pas à modifier le partage.",
+    "cronUnauthorized": "Accès réservé à la tâche planifiée.",
+    "cronFailed": "Mise à jour des retours impossible."
+  }
+}

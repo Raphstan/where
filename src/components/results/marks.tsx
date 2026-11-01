@@ -84,7 +84,7 @@ export function PeopleStack({ people }: { people: Person[] }) {
   return (
     <span className="inline-flex" aria-label={people.map((p) => p.name).join(", ")}>
       {people.map((p, i) => (
-        <span key={p.id} className={`rounded-full border-2 border-paper-2 ${i > 0 ? "-ml-2" : ""}`}>
+        <span key={p.id} className={`rounded-full border-2 border-paper-2 ${i > 0 ? "-ms-2" : ""}`}>
           <PersonAvatar person={p} size="sm" />
         </span>
       ))}

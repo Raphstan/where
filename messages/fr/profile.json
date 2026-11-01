@@ -1,1 +1,31 @@
-{}
+{
+  "title": "Profil",
+  "head": {
+    "noCity": "Ville non renseignée",
+    "edit": "Modifier",
+    "name": "Prénom",
+    "city": "Ville",
+    "nameHint": "Ton prénom apparaît dans les questions que tu envoies à tes proches.",
+    "save": "Enregistrer"
+  },
+  "preferences": {
+    "title": "Mes préférences apprises",
+    "empty": "WH3RE n'a encore rien appris. Tes préférences apparaîtront ici au fil de tes visites et de tes retours."
+  },
+  "links": {
+    "sources": "Mes sources",
+    "privacy": "Confidentialité",
+    "edge": "États limites & cas particuliers",
+    "onboarding": "Revoir l’onboarding"
+  },
+  "account": {
+    "title": "Compte",
+    "email": "Email",
+    "signOut": "Se déconnecter"
+  },
+  "api": {
+    "unauthenticated": "Connecte-toi pour continuer.",
+    "checkFields": "Vérifie les champs.",
+    "saveFailed": "Je n’arrive pas à enregistrer ton profil."
+  }
+}

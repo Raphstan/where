@@ -20,21 +20,31 @@ export function looselyEqual(a: string, b: string): boolean {
 
 export type KindCategory = "restaurant" | "bar" | "cafe" | "hotel" | "beach" | "activity";
 
+/** Mots reconnus en français, en anglais et en hébreu (les critères suivent la langue de l'utilisateur). */
 const KIND_WORDS: Record<KindCategory, readonly string[]> = {
-  restaurant: ["restaurant", "bistrot", "bistro", "brasserie", "trattoria", "table", "cantine", "dejeuner", "diner", "winery"],
-  bar: ["bar", "cocktail", "pub", "cave a vin", "bar a vin", "nightlife", "club"],
-  cafe: ["cafe", "coffee", "boulangerie", "bakery", "salon de the", "brunch"],
-  hotel: ["hotel", "auberge", "b&b", "chambre d hote", "sejour", "hebergement"],
-  beach: ["plage", "beach"],
-  activity: ["activite", "musee", "kayak", "spa", "concert", "degustation", "visite", "parc", "exposition"],
+  restaurant: [
+    "restaurant", "bistrot", "bistro", "brasserie", "trattoria", "table", "cantine", "dejeuner", "diner", "winery",
+    "lunch", "dinner", "eatery", "מסעדה", "מסעדות", "ביסטרו",
+  ],
+  bar: ["bar", "cocktail", "pub", "cave a vin", "bar a vin", "nightlife", "club", "wine bar", "בר", "פאב", "קוקטייל"],
+  cafe: ["cafe", "coffee", "boulangerie", "bakery", "salon de the", "brunch", "קפה", "בית קפה", "מאפייה"],
+  hotel: ["hotel", "auberge", "b&b", "chambre d hote", "sejour", "hebergement", "hostel", "inn", "stay", "מלון", "צימר"],
+  beach: ["plage", "beach", "חוף"],
+  activity: [
+    "activite", "musee", "kayak", "spa", "concert", "degustation", "visite", "parc", "exposition",
+    "activity", "museum", "tasting", "park", "exhibition", "פעילות", "מוזיאון", "ספא", "הופעה", "סיור",
+  ],
 };
+
+/** « les deux » (restaurant et bar), dans les trois langues. */
+const BOTH = /\b(les deux|both)\b|שניהם|גם וגם/;
 
 /** Catégories reconnues dans un libellé libre : « Bar-restaurant » → {bar, restaurant}. */
 export function kindCategories(label: string | null): Set<KindCategory> {
   const out = new Set<KindCategory>();
   if (!label) return out;
   const f = ` ${fold(label)} `;
-  if (/\bles deux\b/.test(f)) return new Set(["restaurant", "bar"]);
+  if (BOTH.test(f)) return new Set(["restaurant", "bar"]);
   for (const [category, words] of Object.entries(KIND_WORDS) as [KindCategory, readonly string[]][]) {
     if (words.some((w) => f.includes(` ${w}`))) out.add(category);
   }
@@ -95,7 +105,9 @@ export function matchedVibes(place: PlaceFacts, criteria: Criteria): string[] {
 export function withoutTag(criteria: Criteria, tag: string): Criteria {
   const hit = (v: string | null) => v !== null && looselyEqual(v, tag);
   const partyHit =
-    criteria.partySize !== null && /\b(personnes?|enfants?|deux|trois|quatre|\d+)\b/.test(fold(tag));
+    criteria.partySize !== null &&
+    (/\b(personnes?|enfants?|deux|trois|quatre|people|persons?|kids?|children|two|three|four|\d+)\b/.test(fold(tag)) ||
+      /אנשים|ילדים|זוג|שניים|שלושה|ארבעה/.test(tag));
   return {
     city: hit(criteria.city) ? null : criteria.city,
     area: hit(criteria.area) ? null : criteria.area,

@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { Mascot } from "@/components/shell/wordmark";
 import type { NoticeTone } from "./messages";
@@ -16,7 +17,7 @@ export function WhereAvatar() {
 export function UserBubble({ children }: { children: ReactNode }) {
   return (
     <div className="flex animate-pop justify-end">
-      <div className="max-w-[86%] rounded-[20px] rounded-br-[6px] bg-ink px-[15px] py-3 text-[14.5px] leading-[1.45] text-paper">
+      <div className="max-w-[86%] rounded-[20px] rounded-ee-[6px] bg-ink px-[15px] py-3 text-[14.5px] leading-[1.45] text-paper">
         {children}
       </div>
     </div>
@@ -27,7 +28,7 @@ export function WhereBubble({ children }: { children: ReactNode }) {
   return (
     <div className="flex animate-pop items-end gap-2.5">
       <WhereAvatar />
-      <div className="max-w-[86%] rounded-[20px] rounded-bl-[6px] bg-paper-2 shadow-soft px-[15px] py-3 text-[14.5px] leading-[1.45] text-ink">
+      <div className="max-w-[86%] rounded-[20px] rounded-es-[6px] bg-paper-2 shadow-soft px-[15px] py-3 text-[14.5px] leading-[1.45] text-ink">
         {children}
       </div>
     </div>
@@ -35,10 +36,11 @@ export function WhereBubble({ children }: { children: ReactNode }) {
 }
 
 export function TypingBubble() {
+  const t = useTranslations("chat");
   return (
-    <div className="flex animate-pop items-end gap-2.5" aria-label="WH3RE réfléchit">
+    <div className="flex animate-pop items-end gap-2.5" aria-label={t("typing")}>
       <WhereAvatar />
-      <div className="inline-flex gap-1 rounded-[20px] rounded-bl-[6px] bg-paper-2 shadow-soft px-4 py-3.5">
+      <div className="inline-flex gap-1 rounded-[20px] rounded-es-[6px] bg-paper-2 shadow-soft px-4 py-3.5">
         <i className="size-1.5 animate-blink rounded-full bg-soft" />
         <i className="size-1.5 animate-blink rounded-full bg-soft [animation-delay:.2s]" />
         <i className="size-1.5 animate-blink rounded-full bg-soft [animation-delay:.4s]" />

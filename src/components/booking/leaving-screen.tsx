@@ -1,7 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
-import { BOOKING_TEXT, leavingText, type BookingOption } from "@/lib/booking/options";
+import { bookingLabel, leavingText, type BookingOption } from "@/lib/booking/options";
 import { PlatformLogo } from "./platform-logo";
 
 /**
@@ -18,6 +19,7 @@ export function LeavingScreen({
   placeName: string;
   onBack: () => void;
 }) {
+  const t = useTranslations("booking");
   const left = useRef(false);
   const back = useRef<HTMLButtonElement>(null);
 
@@ -46,11 +48,11 @@ export function LeavingScreen({
       aria-labelledby="leaving-title"
       className="fixed inset-0 z-[60] flex animate-fade flex-col items-center justify-center gap-4 bg-night p-[30px] text-center text-paper"
     >
-      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-lilac uppercase">{BOOKING_TEXT.leavingEyebrow}</div>
+      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-lilac uppercase">{t("leaving.eyebrow")}</div>
       <h2 id="leaving-title" className="max-w-[420px] font-display text-[21px] font-bold leading-tight">
-        {leavingText(option.kind)}
+        {leavingText(t, option.kind)}
       </h2>
-      <div className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-[16px] bg-white p-[18px] text-left text-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55)]">
+      <div className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-[16px] bg-white p-[18px] text-start text-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55)]">
         <div className="flex items-center gap-2.5">
           <PlatformLogo kind={option.kind} />
           <b className="min-w-0 truncate">{placeName}</b>
@@ -64,11 +66,11 @@ export function LeavingScreen({
           }}
           className="inline-flex min-h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-paper transition-colors hover:bg-night"
         >
-          {option.label}
+          {bookingLabel(t, option.kind)}
         </a>
       </div>
       <button ref={back} type="button" onClick={onBack} className="text-[13.5px] font-semibold text-lilac hover:underline">
-        {BOOKING_TEXT.back}
+        {t("leaving.back")}
       </button>
     </div>
   );

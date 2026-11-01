@@ -1,24 +1,17 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ORANGE_BTN, EYEBROW, H1, OnbFrame } from "@/components/home/onb-frame";
 
-export const metadata: Metadata = { title: "Comment ça marche" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("how");
+  return { title: t("metaTitle") };
+}
 
-const STEPS = [
-  [
-    "WH3RE retrouve les lieux que toi et tes proches connaissez déjà.",
-    "Réservations dans tes emails, lieux partagés, réponses de tes proches. Jamais de lecture secrète.",
-  ],
-  [
-    "Tu poses une question comme tu la poserais à un ami.",
-    "« Un endroit caché, pas trop bruyant, pour ce soir. » WH3RE comprend le contexte.",
-  ],
-  [
-    "Tu obtiens quelques réponses expliquées, pas une liste infinie.",
-    "Trois idées solides, avec qui les recommande et pourquoi.",
-  ],
-] as const;
+/* Les trois étapes ; textes dans messages/{langue}/how.json (`steps.*`). */
+const STEPS = ["memory", "ask", "answers"] as const;
 
 /* Dégradés des avatars de la maquette (.av.sarah, .noam, .maya, .me). */
 const AV = {
@@ -30,26 +23,27 @@ const AV = {
 
 /* Signaux qui flottent vers WH3RE (maquette .conv .src), avec leur position et leur dérive. */
 const SIGNALS = [
-  { ini: "S", av: AV.sarah, text: "Sarah recommande un lieu", pos: "left-[6%] top-[12%]", d: "10px,6px", delay: "0s" },
-  { ini: "N", av: AV.noam, text: "Noam y a réservé", pos: "right-[6%] top-[18%]", d: "-8px,8px", delay: ".6s" },
-  { ini: "M", av: AV.maya, text: "Maya a partagé une vidéo", pos: "left-[10%] bottom-[14%]", d: "8px,-8px", delay: "1.2s" },
-  { ini: "R", av: AV.me, text: "Raphaël a aimé un lieu similaire", pos: "right-[8%] bottom-[10%]", d: "-10px,-6px", delay: "1.8s" },
-];
+  { key: "sarah", av: AV.sarah, pos: "start-[6%] top-[12%]", d: "10px,6px", delay: "0s" },
+  { key: "noam", av: AV.noam, pos: "end-[6%] top-[18%]", d: "-8px,8px", delay: ".6s" },
+  { key: "maya", av: AV.maya, pos: "start-[10%] bottom-[14%]", d: "8px,-8px", delay: "1.2s" },
+  { key: "me", av: AV.me, pos: "end-[8%] bottom-[10%]", d: "-10px,-6px", delay: "1.8s" },
+] as const;
 
 const CARDS = ["from-[#f2b37a] to-[#d1623f]", "from-[#f6d28c] to-blue", "from-[#8fb8c8] to-[#e8a58a]"];
 
 /* Comment ça marche (docs/prototype.html, scrHow). */
 export default function HowPage() {
+  const t = useTranslations("how");
   return (
     <OnbFrame back="/">
-      <div className={EYEBROW}>Comment ça marche</div>
-      <h1 className={H1}>Trois étapes, pas une appli de plus.</h1>
+      <div className={EYEBROW}>{t("eyebrow")}</div>
+      <h1 className={H1}>{t("title")}</h1>
       <div className="flex flex-col gap-3.5 lg:flex-row">
-        {STEPS.map(([title, text], i) => (
-          <div key={title} className="flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-paper-2 p-[18px]">
+        {STEPS.map((step, i) => (
+          <div key={step} className="flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-paper-2 p-[18px]">
             <div className="font-display text-[26px] text-orange">{i + 1}</div>
-            <div className="text-[15px] font-bold">{title}</div>
-            <p className="text-[12.5px] text-muted">{text}</p>
+            <div className="text-[15px] font-bold">{t(`steps.${step}.title`)}</div>
+            <p className="text-[12.5px] text-muted">{t(`steps.${step}.text`)}</p>
           </div>
         ))}
       </div>
@@ -57,14 +51,14 @@ export default function HowPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,90,31,0.25),transparent_45%)]" />
         {SIGNALS.map((s) => (
           <div
-            key={s.text}
+            key={s.key}
             style={{ "--dx": s.d.split(",")[0], "--dy": s.d.split(",")[1], animationDelay: s.delay } as CSSProperties}
-            className={`absolute flex animate-drift items-center gap-2 rounded-full border border-white/12 bg-white/8 py-1.5 pr-2.5 pl-1.5 text-[12px] whitespace-nowrap text-paper ${s.pos}`}
+            className={`absolute flex animate-drift items-center gap-2 rounded-full border border-white/12 bg-white/8 py-1.5 pe-2.5 ps-1.5 text-[12px] whitespace-nowrap text-paper ${s.pos}`}
           >
             <span className={`inline-flex size-[26px] items-center justify-center rounded-full bg-linear-145 font-display text-[11px] font-bold text-white ${s.av}`}>
-              {s.ini}
+              {t(`signals.${s.key}.initial`)}
             </span>
-            {s.text}
+            {t(`signals.${s.key}.text`)}
           </div>
         ))}
         <div className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 gap-1.5">
@@ -77,18 +71,18 @@ export default function HowPage() {
           ))}
         </div>
         <div className="absolute inset-x-0 bottom-2 text-center text-[11.5px] text-lilac">
-          Plusieurs signaux de confiance → trois recommandations
+          {t("caption")}
         </div>
       </div>
       <div className="flex flex-col gap-1.5 rounded-card bg-night p-4 text-paper">
-        <div className={`${EYEBROW} text-lilac`}>La promesse</div>
-        <div className="font-display text-[21px] font-bold leading-tight">Ask your network without asking everyone.</div>
+        <div className={`${EYEBROW} text-lilac`}>{t("promiseEyebrow")}</div>
+        <div className="font-display text-[21px] font-bold leading-tight">{t("promise")}</div>
         <p className="text-[12.5px] text-lilac">
-          Au lieu de fouiller des centaines d’avis anonymes ou d’envoyer la même question dans cinq groupes WhatsApp.
+          {t("promiseText")}
         </p>
       </div>
       <Link href="/onboarding" className={ORANGE_BTN}>
-        Commencer
+        {t("start")}
       </Link>
     </OnbFrame>
   );

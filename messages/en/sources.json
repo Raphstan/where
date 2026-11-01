@@ -1,1 +1,33 @@
-{}
+{
+  "title": "My sources",
+  "lead": "What WH3RE can actually read, and what it never will.",
+  "soon": "Coming soon",
+  "email": {
+    "name": "Email forwarding",
+    "on": "Connected · forwarded emails only",
+    "off": "Not connected",
+    "text": "Spots booking confirmations and some post-visit signals (like “thanks for your visit”) in the emails you forward, by hand or with a Gmail filter that only targets booking platforms. Never personal emails.",
+    "connect": "Connect",
+    "viewAddress": "See the forwarding address",
+    "disconnect": "Disconnect",
+    "disconnectConfirm": "Disconnect email forwarding? Places already imported stay, unless you delete them.",
+    "disconnected": "Email forwarding disconnected"
+  },
+  "later": {
+    "sms": "Depends on your phone’s permissions. A web app can’t freely read your texts. Handy for Ontopo, which often confirms by text.",
+    "whatsapp": "WH3RE can’t read your chats. It only uses: messages you forward, links sent to the bot, answers received through a WH3RE link, or a conversation you start.",
+    "instagram": "No access to your DMs or your collections. You choose to share a post, a Reel, a place’s profile or a link.",
+    "tiktok": "Same idea: you choose to share a link or a video.",
+    "maps": "Shared links, public data about places, and authorized integrations where available."
+  },
+  "platforms": {
+    "title": "Booking platforms",
+    "direct": "Direct websites",
+    "text": "These are destinations, not unlimited sources: availability depends on the country, the place and the integrations possible. WH3RE sends you there, it doesn’t book for you."
+  },
+  "api": {
+    "unauthenticated": "Log in to continue.",
+    "deleteFailed": "I can’t delete this source right now.",
+    "connectFailed": "I can’t connect this source right now."
+  }
+}

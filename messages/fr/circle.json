@@ -1,1 +1,50 @@
-{}
+{
+  "title": "Mon cercle",
+  "lead": "Une personne n’est pas forcément pertinente pour tous les sujets. Choisis sur quoi tu fais confiance à chacun.",
+  "notice": "Ce cercle est privé. Personne ne voit qu’il en fait partie, et rien n’est publié.",
+  "onboarding": {
+    "metaTitle": "Ton cercle de confiance",
+    "title": "Ton cercle de confiance.",
+    "firstQuestion": "Poser ma première question",
+    "skip": "Passer pour l’instant"
+  },
+  "add": {
+    "title": "Ajouter une personne",
+    "hint": "Contact, lien WhatsApp ou email",
+    "invisible": "La personne ne saura pas qu’elle fait partie de ton cercle, sauf si tu lui demandes quelque chose.",
+    "fromContacts": "Depuis mes contacts",
+    "whatsapp": "Envoyer un lien WhatsApp",
+    "email": "Inviter par email",
+    "added": "{name} — prêt"
+  },
+  "form": {
+    "name": "Prénom",
+    "relation": "Relation",
+    "relationPlaceholder": "Amie proche, frère, collègue…",
+    "description": "Ce pour quoi tu lui fais confiance",
+    "descriptionPlaceholder": "Restaurants romantiques et hôtels",
+    "whatsapp": "Numéro WhatsApp",
+    "email": "Email"
+  },
+  "domains": {
+    "all": "Je lui fais confiance pour tout",
+    "restaurants": "Restaurants",
+    "hotels": "Hôtels",
+    "nightlife": "Nightlife",
+    "travel": "Voyages",
+    "activities": "Activités",
+    "family": "Famille",
+    "business": "Business"
+  },
+  "api": {
+    "unauthenticated": "Connecte-toi pour continuer.",
+    "checkFields": "Vérifie les champs.",
+    "invalidPhone": "Numéro invalide.",
+    "invalidEmail": "Email invalide.",
+    "contactRequired": "Un numéro WhatsApp ou un email.",
+    "saveMemberFailed": "Je n’arrive pas à enregistrer cette personne.",
+    "notFound": "Personne introuvable.",
+    "invalidDomains": "Domaines invalides.",
+    "saveChoiceFailed": "Je n’arrive pas à enregistrer ce choix."
+  }
+}

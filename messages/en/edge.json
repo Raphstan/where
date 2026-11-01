@@ -1,1 +1,47 @@
-{}
+{
+  "title": "Edge cases",
+  "lead": "What WH3RE does when it doesn’t know, or when signals contradict each other.",
+  "cases": {
+    "noResults": {
+      "title": "No personal results",
+      "quote": "“Nobody in your circle knows this neighborhood well enough yet.”",
+      "text": "Widen the criteria · a public discovery · ask the most relevant people"
+    },
+    "conflicting": {
+      "title": "Conflicting information",
+      "quote": "“Sarah finds this place quiet, but Noam says it gets loud after 10 pm.”",
+      "text": "WH3RE explains the nuance (quiet before 10 pm) instead of picking a side arbitrarily."
+    },
+    "closed": {
+      "title": "Closed place",
+      "quote": "“This place shows up in old recommendations, but now seems to be closed.”",
+      "text": "Left out of results, kept in your memory with a note."
+    },
+    "old": {
+      "title": "Old recommendation",
+      "quote": "“This recommendation is three years old. Want to ask for something more recent?”",
+      "text": "One button drafts the question for the right person."
+    },
+    "cancelled": {
+      "title": "Cancelled booking",
+      "quote": "A cancelled booking never counts as a visit.",
+      "text": "Cancellation email detected → the booking is set aside, with no visit signal."
+    },
+    "delivery": {
+      "title": "Delivery",
+      "quote": "A Tabit or Wolt order, or any delivery, is not a visit to the restaurant.",
+      "text": "Delivery orders are left out of the import."
+    },
+    "noImport": {
+      "title": "Without email import",
+      "quote": "The product still works.",
+      "text": "Answers from your friends, post-visit feedback, public data."
+    }
+  },
+  "actions": {
+    "inContext": "See it in action",
+    "imports": "See my imports",
+    "exclusions": "See what’s excluded",
+    "resumeWithoutImport": "Continue without import"
+  }
+}

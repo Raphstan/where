@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { translator } from "@/i18n/translator";
 import { conflictNotice, noiseConflict } from "./conflict";
+
+const t = translator("fr", "search");
 import type { MemorySignal } from "./signal";
 
 const member = (id: string, name: string) => ({ kind: "member" as const, id, name, trustDomains: [] });
@@ -15,8 +18,8 @@ describe("noiseConflict", () => {
       s(sarah, "recommended", null, ["date", "calme"]),
       s(noam, "visited", "bruyant après 22 h, DJ le jeudi", ["amis"]),
     ]);
-    expect(c).toEqual({ calm: "Sarah", noisy: "Noam", after: "22 h" });
-    expect(conflictNotice(c!)).toBe(
+    expect(c).toEqual({ calm: "Sarah", noisy: "Noam", after: "22" });
+    expect(conflictNotice(t, c!)).toBe(
       "Signaux contradictoires : Sarah le trouve calme, Noam indique qu’il devient bruyant après 22 h. Probablement calme en début de soirée, animé ensuite.",
     );
   });
@@ -38,7 +41,7 @@ describe("noiseConflict", () => {
 
   it("sans heure, WH3RE donne les deux avis sans inventer de nuance", () => {
     const c = noiseConflict([s(sarah, "recommended", "très calme"), s(noam, "visited", "trop de bruit")]);
-    expect(conflictNotice(c!)).toBe(
+    expect(conflictNotice(t, c!)).toBe(
       "Signaux contradictoires : Sarah le trouve calme, Noam le trouve bruyant. Je te donne les deux avis plutôt que de trancher.",
     );
   });

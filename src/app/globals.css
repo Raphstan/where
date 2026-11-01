@@ -267,3 +267,8 @@ h4 {
     linear-gradient(180deg, #e4dcee 0%, #dcd3e9 100%);
   background-attachment: fixed;
 }
+
+/* Hébreu : pas d'interlettrage (ni positif sur les surtitres, ni négatif sur les titres). */
+html[dir="rtl"] [class*="tracking-"] {
+  letter-spacing: normal !important;
+}

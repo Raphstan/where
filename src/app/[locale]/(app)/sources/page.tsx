@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { EmailSourceActions } from "@/components/privacy/email-source";
 import { PageFrame } from "@/components/shell/page-frame";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Mes sources" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("sources");
+  return { title: t("title") };
+}
 
 const CARD = "flex flex-col gap-2 rounded-card border border-line bg-paper-2 p-4";
 const BADGE = {
@@ -40,38 +45,19 @@ function Head({ logo, name, badge, status }: { logo: [string, string]; name: str
 }
 
 /*
- * Sources pas encore disponibles au MVP : descriptions de la maquette (scrSources), badge « Bientôt ».
+ * Sources pas encore disponibles au MVP : descriptions de la maquette (scrSources, `later.{clé}`), badge « Bientôt ».
  * Seul le transfert d'email est actif (CLAUDE.md § 5).
  */
-const LATER: readonly { logo: [string, string]; name: string; text: string }[] = [
-  {
-    logo: ["bg-[#5bc236] text-white", "S"],
-    name: "SMS",
-    text: "Dépend des autorisations de ton téléphone. Une web app ne peut pas lire librement tes SMS. Utile pour Ontopo, qui confirme souvent par SMS.",
-  },
-  {
-    logo: ["bg-[#25d366] text-white", "W"],
-    name: "WhatsApp",
-    text: "WH3RE ne peut pas lire tes conversations. Il utilise seulement : les messages que tu transfères, les liens envoyés au bot, les réponses reçues via un lien WH3RE, ou une conversation que tu inities.",
-  },
-  {
-    logo: ["bg-linear-45 from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white", "I"],
-    name: "Instagram",
-    text: "Pas d’accès à tes messages privés ni à tes collections. Tu partages volontairement un post, un Reel, un profil de lieu ou un lien.",
-  },
-  {
-    logo: ["bg-[#111111] text-white", "T"],
-    name: "TikTok",
-    text: "Même logique : partage volontaire d’un lien ou d’une vidéo.",
-  },
-  {
-    logo: ["bg-[#34a853] text-white", "G"],
-    name: "Google Maps",
-    text: "Liens partagés, données publiques sur les lieux, et intégrations autorisées le cas échéant.",
-  },
+const LATER: readonly { key: "sms" | "whatsapp" | "instagram" | "tiktok" | "maps"; logo: [string, string]; name: string }[] = [
+  { key: "sms", logo: ["bg-[#5bc236] text-white", "S"], name: "SMS" },
+  { key: "whatsapp", logo: ["bg-[#25d366] text-white", "W"], name: "WhatsApp" },
+  { key: "instagram", logo: ["bg-linear-45 from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white", "I"], name: "Instagram" },
+  { key: "tiktok", logo: ["bg-[#111111] text-white", "T"], name: "TikTok" },
+  { key: "maps", logo: ["bg-[#34a853] text-white", "G"], name: "Google Maps" },
 ];
 
-const PLATFORMS = ["Ontopo", "Tabit", "Resy", "OpenTable", "Restu", "Google Reserve", "Sites directs"];
+/** Noms de marque ; seule « Sites directs » se traduit (`platforms.direct`). */
+const PLATFORMS = ["Ontopo", "Tabit", "Resy", "OpenTable", "Restu", "Google Reserve"];
 
 async function EmailSource() {
   // Rendu à la requête : la session vit dans les cookies.
@@ -79,18 +65,17 @@ async function EmailSource() {
   const supabase = await createClient();
   const { data } = await supabase.from("forward_addresses").select("user_id").maybeSingle();
   const connected = data !== null;
+  const t = await getTranslations("sources");
   return (
     <div className={CARD}>
       <Head
         logo={["border border-line bg-white text-[#d44638]", "M"]}
-        name="Transfert d’email"
+        name={t("email.name")}
         badge={connected ? "ok" : "off"}
-        status={connected ? "Connecté · emails transférés uniquement" : "Non connecté"}
+        status={connected ? t("email.on") : t("email.off")}
       />
       <p className="text-[12.5px] text-muted">
-        Détecte les confirmations de réservation et certains signaux post-visite (ex. « merci pour votre visite ») dans
-        les emails que tu transfères, à la main ou par un filtre Gmail qui ne vise que les plateformes de réservation.
-        Jamais les emails personnels.
+        {t("email.text")}
       </p>
       <EmailSourceActions connected={connected} />
     </div>
@@ -99,29 +84,29 @@ async function EmailSource() {
 
 /* Mes sources (docs/prototype.html, scrSources). */
 export default function SourcesPage() {
+  const t = useTranslations("sources");
   return (
-    <PageFrame title="Mes sources" lead="Ce que WH3RE peut vraiment lire, et ce qu’il ne lira jamais." back="/profile">
+    <PageFrame title={t("title")} lead={t("lead")} back="/profile">
       <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <EmailSource />
       </Suspense>
       {LATER.map((s) => (
         <div key={s.name} className={CARD}>
-          <Head logo={s.logo} name={s.name} badge="soon" status="Bientôt" />
-          <p className="text-[12.5px] text-muted">{s.text}</p>
+          <Head logo={s.logo} name={s.name} badge="soon" status={t("soon")} />
+          <p className="text-[12.5px] text-muted">{t(`later.${s.key}`)}</p>
         </div>
       ))}
       <div className={CARD}>
-        <h2 className="text-[15px] font-bold">Plateformes de réservation</h2>
+        <h2 className="text-[15px] font-bold">{t("platforms.title")}</h2>
         <div className="flex flex-wrap gap-1.5">
-          {PLATFORMS.map((p) => (
+          {[...PLATFORMS, t("platforms.direct")].map((p) => (
             <span key={p} className="inline-flex rounded-full border-[1.5px] border-line bg-paper-2 px-3 py-[7px] text-[12px] font-medium">
               {p}
             </span>
           ))}
         </div>
         <p className="text-[12.5px] text-muted">
-          Ce sont des destinations, pas des sources illimitées : leur disponibilité dépend du pays, du lieu et des
-          intégrations possibles. WH3RE t’y envoie, il ne réserve pas à ta place.
+          {t("platforms.text")}
         </p>
       </div>
     </PageFrame>

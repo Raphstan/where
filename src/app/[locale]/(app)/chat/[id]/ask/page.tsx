@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { z } from "zod";
@@ -10,7 +11,10 @@ import { suggestPeople } from "@/lib/network/suggest";
 import { loadMemory } from "@/lib/search/search";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Demander à mon réseau" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("network");
+  return { title: t("ask.metaTitle") };
+}
 
 async function Ask({ id }: { id: string }) {
   await connection();
@@ -21,7 +25,8 @@ async function Ask({ id }: { id: string }) {
   } = await supabase.auth.getUser();
   if (!user) notFound();
 
-  const [conversation, memory, profile] = await Promise.all([
+  const [t, conversation, memory, profile] = await Promise.all([
+    getTranslations("network"),
     loadConversation(supabase, id),
     loadMemory(supabase, user.id),
     supabase.from("users").select("display_name").eq("id", user.id).maybeSingle(),
@@ -29,12 +34,12 @@ async function Ask({ id }: { id: string }) {
   if (!conversation) notFound();
 
   // Tout le cercle est proposé, les plus pertinents d'abord ; seuls ceux-là sont cochés.
-  const candidates = suggestPeople(memory.members, memory.rows, conversation.criteria, Number.POSITIVE_INFINITY);
+  const candidates = suggestPeople(t, memory.members, memory.rows, conversation.criteria, Number.POSITIVE_INFINITY);
 
   return (
     <AskComposer
       conversationId={conversation.id}
-      draft={draftMessage(conversation.criteria, profile.data?.display_name ?? null)}
+      draft={draftMessage(t, conversation.criteria, profile.data?.display_name ?? null)}
       candidates={candidates}
     />
   );

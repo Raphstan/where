@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
+import type { Locale } from "@/i18n/routing";
 import { getServerEnv } from "@/lib/env.server";
 import { UNDERSTAND_SYSTEM_PROMPT } from "./prompt";
 import {
@@ -36,9 +37,21 @@ export function getAskClient(): AskClient {
   return cached;
 }
 
-/** Construit les tours de conversation : la question, puis l'éventuelle question/réponse de précision. */
-export function buildMessages(input: AskRequest): Anthropic.MessageParam[] {
-  const messages: Anthropic.MessageParam[] = [{ role: "user", content: input.question }];
+/**
+ * Ligne de langue placée en tête du premier message (jamais dans le prompt système, qui reste
+ * stable et mis en cache) : chips, critères et question de précision sont écrits dans cette langue.
+ */
+export function languageLine(locale: Locale): string {
+  return `Langue de réponse : ${locale}`;
+}
+
+/**
+ * Construit les tours de conversation : la question (précédée de la langue de réponse quand elle
+ * est connue), puis l'éventuelle question/réponse de précision.
+ */
+export function buildMessages(input: AskRequest, locale?: Locale): Anthropic.MessageParam[] {
+  const first = locale ? `${languageLine(locale)}\n\n${input.question}` : input.question;
+  const messages: Anthropic.MessageParam[] = [{ role: "user", content: first }];
   if (input.clarification) {
     messages.push(
       { role: "assistant", content: input.clarification.question },
@@ -55,6 +68,8 @@ export function buildMessages(input: AskRequest): Anthropic.MessageParam[] {
 export async function understandQuestion(
   input: AskRequest,
   client: AskClient = getAskClient(),
+  /** Langue de l'interface : celle des chips, des critères et de la question de précision. */
+  locale?: Locale,
 ): Promise<Understanding> {
   const response = await client.messages.parse({
     model: ASK_MODEL,
@@ -66,7 +81,7 @@ export async function understandQuestion(
         cache_control: { type: "ephemeral" },
       },
     ],
-    messages: buildMessages(input),
+    messages: buildMessages(input, locale),
     output_config: {
       effort: "low",
       format: zodOutputFormat(UnderstandingOutputSchema),

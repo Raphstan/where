@@ -1,1 +1,9 @@
-{}
+{
+  "why": "Pourquoi ce choix ?",
+  "maps": "Voir dans Google Maps",
+  "book": "Réserver",
+  "outsideCircle": "Hors de ton cercle",
+  "basis": "Cette recommandation repose sur",
+  "unknowns": "Ce que nous ne savons pas encore",
+  "levels": "Niveaux de preuve"
+}

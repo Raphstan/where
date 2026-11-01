@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePanel } from "@/components/shell/panel-context";
@@ -9,6 +10,7 @@ import { SourceLogo } from "./source-logo";
 /** L'adresse de transfert, et un bouton pour la copier. */
 export function CopyAddress({ address }: { address: string }) {
   const [copied, setCopied] = useState(false);
+  const t = useTranslations("import");
   return (
     <div className="flex items-center gap-2.5 rounded-[14px] border-[1.5px] border-line bg-paper px-3.5 py-2.5">
       <code className="min-w-0 grow truncate font-sans text-[14px] font-semibold text-ink">{address}</code>
@@ -22,7 +24,7 @@ export function CopyAddress({ address }: { address: string }) {
         }}
         className="inline-flex min-h-8 shrink-0 items-center rounded-full bg-ink px-3 text-[12.5px] font-bold text-paper transition-colors hover:bg-night"
       >
-        {copied ? "Copiée" : "Copier"}
+        {copied ? t("copy.copiedAddress") : t("copy.copy")}
       </button>
     </div>
   );
@@ -43,20 +45,20 @@ export function AutoRefresh({ everyMs = 10_000 }: { everyMs?: number }) {
 /** « Voir » : la liste des livraisons écartées (maquette, feuille « Livraisons exclues »). */
 export function DeliveriesButton({ deliveries, allTabit }: { deliveries: ImportedEmail[]; allTabit: boolean }) {
   const { open } = usePanel();
+  const t = useTranslations("import");
+  const locale = useLocale();
   return (
     <button
       type="button"
-      className="ml-auto shrink-0 text-[12.5px] font-semibold text-blue hover:underline"
+      className="ms-auto shrink-0 text-[12.5px] font-semibold text-blue hover:underline"
       onClick={() =>
         open({
           key: "deliveries",
-          title: "Livraisons exclues",
+          title: t("deliveriesSheet.title"),
           body: (
             <div className="flex flex-col gap-3">
               <p className="text-[12.5px] text-muted">
-                {allTabit
-                  ? "Ces emails viennent de Tabit mais correspondent à des commandes livrées. Ils ne compteront jamais comme une visite."
-                  : "Ces emails correspondent à des commandes livrées. Ils ne compteront jamais comme une visite."}
+                {allTabit ? t("deliveriesSheet.textTabit") : t("deliveriesSheet.text")}
               </p>
               <div className="flex flex-col">
                 {deliveries.map((d) => (
@@ -64,9 +66,9 @@ export function DeliveriesButton({ deliveries, allTabit }: { deliveries: Importe
                     <SourceLogo platform={d.platform} kind="delivery" />
                     <div className="min-w-0 grow line-through decoration-soft">
                       <div className="font-bold">
-                        {[d.placeName ?? "Commande", formatDay(d.reservedFor, false)].filter(Boolean).join(" · ")}
+                        {[d.placeName ?? t("deliveriesSheet.order"), formatDay(d.reservedFor, false, locale)].filter(Boolean).join(" · ")}
                       </div>
-                      <div className="text-[12.5px] text-muted">Commande de livraison · exclue</div>
+                      <div className="text-[12.5px] text-muted">{t("deliveriesSheet.orderLine")}</div>
                     </div>
                   </div>
                 ))}
@@ -76,7 +78,7 @@ export function DeliveriesButton({ deliveries, allTabit }: { deliveries: Importe
         })
       }
     >
-      Voir
+      {t("deliveriesSheet.see")}
     </button>
   );
 }

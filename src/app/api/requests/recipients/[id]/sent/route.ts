@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
+import { apiLocale } from "@/i18n/request-locale";
+import { translator } from "@/i18n/translator";
 import { authenticated, fail } from "@/lib/api";
 
 /**
@@ -8,16 +10,17 @@ import { authenticated, fail } from "@/lib/api";
  */
 export async function POST(_request: NextRequest, ctx: RouteContext<"/api/requests/recipients/[id]/sent">) {
   const { id } = await ctx.params;
-  if (!z.guid().safeParse(id).success) return fail(404, "not_found", "Destinataire introuvable.");
+  const t = translator(await apiLocale(), "network");
+  if (!z.guid().safeParse(id).success) return fail(404, "not_found", t("api.recipientNotFound"));
 
   const auth = await authenticated();
-  if (!auth) return fail(401, "unauthenticated", "Connecte-toi pour continuer.");
+  if (!auth) return fail(401, "unauthenticated", t("api.unauthenticated"));
 
   const { error } = await auth.supabase
     .from("request_recipients")
     .update({ sent_at: new Date().toISOString() })
     .eq("id", id)
     .is("sent_at", null);
-  if (error) return fail(503, "storage_unavailable", "Je n’arrive pas à enregistrer l’envoi.");
+  if (error) return fail(503, "storage_unavailable", t("api.sentFailed"));
   return new NextResponse(null, { status: 204 });
 }

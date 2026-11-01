@@ -1,1 +1,77 @@
-{}
+{
+  "metaTitle": "Conversation",
+  "typing": "WH3RE réfléchit",
+  "composer": {
+    "placeholder": "Où devrais-tu aller… ?",
+    "label": "Ta question"
+  },
+  "criteria": {
+    "hint": "Ce que j’ai compris — touche un critère pour le retirer",
+    "list": "Critères compris",
+    "remove": "Retirer le critère {tag}",
+    "placeholder": "un critère…",
+    "new": "Nouveau critère",
+    "add": "+ ajouter"
+  },
+  "widen": "Élargir les critères",
+  "closed": {
+    "one": " apparaît dans d’anciennes recommandations, mais semble désormais fermé. Je l’ai écarté.",
+    "many": " apparaissent dans d’anciennes recommandations, mais semblent désormais fermés. Je les ai écartés."
+  },
+  "people": {
+    "ask": "Leur demander",
+    "note": "Tu demandes seulement aux personnes les plus pertinentes, pas à tout ton carnet d’adresses."
+  },
+  "errors": {
+    "ask": "Je n’ai pas réussi à comprendre la question. Réessaie dans un instant.",
+    "search": "Je n’arrive pas à chercher dans ton cercle. Réessaie dans un instant.",
+    "generic": "Quelque chose a coincé. Réessaie dans un instant.",
+    "booking": "Je n’arrive pas à enregistrer ta réservation. Réessaie dans un instant.",
+    "bookingShort": "Je n’arrive pas à enregistrer ta réservation."
+  },
+  "book": "Réserver",
+  "replies": {
+    "replied": "{name} a répondu",
+    "repliedPlace": " : {place}.",
+    "justReplied": "{name} vient de répondre.",
+    "notReusable": "{name} n’a pas autorisé la réutilisation : cette réponse ne sert qu’à cette question et ne sera pas gardée.",
+    "changesRanking": " J’ai une nouvelle recommandation plus fiable — sa réponse change le classement."
+  },
+  "toast": {
+    "removedUpdating": "« {tag} » retiré — je mets les résultats à jour",
+    "removed": "« {tag} » retiré",
+    "addedUpdated": "« {tag} » ajouté — résultats mis à jour",
+    "added": "« {tag} » ajouté"
+  },
+  "new": "Nouveau",
+  "empty": {
+    "title": "Où devrais-tu vraiment aller ?",
+    "lead": "Pose ta question comme à un ami. Je regarde d’abord ce que ton cercle sait, puis je complète avec le public."
+  },
+  "api": {
+    "ask": {
+      "unauthenticated": "Connecte-toi pour poser une question.",
+      "invalid": "Question manquante ou trop longue.",
+      "notConfigured": "WH3RE n'est pas encore configuré pour comprendre les questions.",
+      "unparseable": "Je n'ai pas réussi à comprendre la question. Reformule-la ?",
+      "rateLimited": "Trop de questions d'un coup. Réessaie dans un instant.",
+      "unreachable": "Je n'arrive pas à joindre mon moteur. Réessaie dans un instant.",
+      "upstream": "Mon moteur a répondu de travers. Réessaie dans un instant."
+    },
+    "search": {
+      "unauthenticated": "Connecte-toi pour lancer une recherche.",
+      "invalid": "Critères manquants ou invalides.",
+      "memory": "Je n’arrive pas à lire ta mémoire. Réessaie dans un instant."
+    },
+    "conversations": {
+      "unauthenticated": "Connecte-toi pour poser une question.",
+      "invalid": "Conversation invalide.",
+      "saveFailed": "Je n’arrive pas à garder cette conversation.",
+      "notFound": "Conversation introuvable.",
+      "signIn": "Connecte-toi pour continuer.",
+      "invalidCriteria": "Critères invalides.",
+      "updateFailed": "Je n’arrive pas à mettre à jour cette conversation.",
+      "repliesFailed": "Je n’arrive pas à lire les réponses."
+    }
+  }
+}

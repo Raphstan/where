@@ -1,1 +1,10 @@
-{}
+{
+  "unauthenticated": "Sign in to continue.",
+  "invalidAnswer": "Invalid answer.",
+  "imports": {
+    "reservationNotFound": "Booking not found.",
+    "alreadyQualified": "You’ve already answered for this place.",
+    "saveAnswerFailed": "I can’t save your answer.",
+    "deletePlacesFailed": "I can’t delete these places."
+  }
+}

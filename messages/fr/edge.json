@@ -1,1 +1,47 @@
-{}
+{
+  "title": "États limites",
+  "lead": "Ce que WH3RE fait quand il ne sait pas, ou quand les signaux se contredisent.",
+  "cases": {
+    "noResults": {
+      "title": "Aucun résultat personnel",
+      "quote": "« Personne dans ton cercle ne connaît encore suffisamment ce quartier. »",
+      "text": "Élargir les critères · une découverte publique · demander aux personnes les plus pertinentes"
+    },
+    "conflicting": {
+      "title": "Informations contradictoires",
+      "quote": "« Sarah trouve ce lieu calme, mais Noam indique qu’il devient bruyant après 22 h. »",
+      "text": "WH3RE explique la nuance (calme avant 22 h) au lieu de trancher arbitrairement."
+    },
+    "closed": {
+      "title": "Lieu fermé",
+      "quote": "« Ce lieu apparaît dans d’anciennes recommandations, mais semble désormais fermé. »",
+      "text": "Écarté des résultats, gardé dans la mémoire avec une mention."
+    },
+    "old": {
+      "title": "Ancienne recommandation",
+      "quote": "« Cette recommandation date de trois ans. Veux-tu demander une information plus récente ? »",
+      "text": "Un bouton prépare la question à la bonne personne."
+    },
+    "cancelled": {
+      "title": "Réservation annulée",
+      "quote": "Une réservation annulée ne compte jamais comme visite.",
+      "text": "Email d’annulation détecté → la réservation est écartée, sans signal de visite."
+    },
+    "delivery": {
+      "title": "Livraison",
+      "quote": "Une commande Tabit, Wolt ou une livraison n’est pas une visite au restaurant.",
+      "text": "Les commandes de livraison sont exclues de l’import."
+    },
+    "noImport": {
+      "title": "Sans import d’emails",
+      "quote": "Le produit reste utilisable.",
+      "text": "Réponses de tes proches, retours après visite, données publiques."
+    }
+  },
+  "actions": {
+    "inContext": "Voir en situation",
+    "imports": "Voir mes imports",
+    "exclusions": "Voir les exclusions",
+    "resumeWithoutImport": "Reprendre sans import"
+  }
+}

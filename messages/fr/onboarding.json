@@ -1,1 +1,27 @@
-{}
+{
+  "metaTitle": "Comment veux-tu commencer ?",
+  "welcome": "Bienvenue",
+  "welcomeName": "Bienvenue, {name}",
+  "title": "Comment veux-tu commencer ?",
+  "lead": "Tu peux ignorer n’importe quelle étape. Plus tu ajoutes de contexte, plus les réponses deviennent personnelles.",
+  "choices": {
+    "import": {
+      "title": "Retrouver mes anciennes réservations",
+      "text": "Par transfert d’email. Tu valides avant tout ajout."
+    },
+    "circle": {
+      "title": "Ajouter quelques personnes de confiance",
+      "text": "Sarah pour les tables, Noam pour les bars…"
+    },
+    "chat": {
+      "title": "Poser directement ma première question",
+      "text": "Sans rien connecter. Les réponses seront moins personnelles."
+    },
+    "demo": {
+      "title": "Explorer une démonstration",
+      "text": "Un parcours complet avec des données d’exemple."
+    }
+  },
+  "privacy": "Privé par défaut. Rien n’est publié, aucun message n’est envoyé sans ta confirmation.",
+  "allSources": "Voir toutes les sources possibles"
+}

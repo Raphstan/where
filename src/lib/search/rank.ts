@@ -12,14 +12,15 @@ import {
   type PlaceFacts,
 } from "./match";
 import {
-  BEST_MATCH_HEADLINE,
+  bestMatchHeadline,
   deductionLine,
   evidenceLine,
   personalUnknowns,
   rankLabel,
   staleNotice,
+  type SearchT,
 } from "./phrasing";
-import { CONFLICT_CONFIDENCE, conflictNotice, noiseConflict } from "./conflict";
+import { conflictConfidence, conflictNotice, noiseConflict } from "./conflict";
 import { distinctSignals, isPersonal, isStale, type MemorySignal } from "./signal";
 import type { EvidenceLine, Person, SearchResult } from "./types";
 
@@ -90,7 +91,7 @@ export function signalWeight(signal: MemorySignal, domains: ReadonlySet<string>,
 
 type Candidate = { result: SearchResult; score: number; latest: number };
 
-function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Criteria, now: Date): Candidate {
+function placeResult(tr: SearchT, place: MemoryPlace, signals: MemorySignal[], criteria: Criteria, now: Date): Candidate {
   const distinct = distinctSignals(signals).sort(
     (a, b) => evidenceRank(a.level) - evidenceRank(b.level) || b.createdAt.getTime() - a.createdAt.getTime(),
   );
@@ -108,9 +109,9 @@ function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Crit
     vibes.length;
 
   const lines: EvidenceLine[] = distinct
-    .map((s) => evidenceLine(s, now, criteria.occasion))
+    .map((s) => evidenceLine(tr, s, now, criteria.occasion))
     .filter((l): l is EvidenceLine => l !== null);
-  const deduction = deductionLine([...(inArea && criteria.area ? [criteria.area] : []), ...vibes]);
+  const deduction = deductionLine(tr.t, [...(inArea && criteria.area ? [criteria.area] : []), ...vibes]);
   if (deduction) lines.push(deduction);
 
   const people = new Map<string, Person>();
@@ -118,7 +119,7 @@ function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Crit
 
   const unmatched = criteria.vibe.filter((v) => !vibes.includes(v));
   const conflict = noiseConflict(distinct);
-  const confidence = computeConfidence(distinct, now);
+  const confidence = computeConfidence(tr.t, distinct, now);
 
   return {
     score,
@@ -135,12 +136,12 @@ function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Crit
       price: place.price,
       headline: null,
       lines,
-      unknowns: personalUnknowns(distinct, unmatched, criteria.when, now),
+      unknowns: personalUnknowns(tr.t, distinct, unmatched, criteria.when, now),
       // Deux proches se contredisent : la confiance ne peut pas être forte.
-      confidence: conflict && confidence.level === "forte" ? { level: "moyenne", text: CONFLICT_CONFIDENCE } : confidence,
+      confidence: conflict && confidence.level === "forte" ? { level: "moyenne", text: conflictConfidence(tr.t) } : confidence,
       people: [...people.values()],
-      staleNotice: staleNotice(distinct, now),
-      conflictNotice: conflict ? conflictNotice(conflict) : null,
+      staleNotice: staleNotice(tr.t, distinct, now),
+      conflictNotice: conflict ? conflictNotice(tr.t, conflict) : null,
       links: { googleMapsUrl: mapsUrl(place) },
       booking: bookingOptions(place),
     },
@@ -152,6 +153,7 @@ function placeResult(place: MemoryPlace, signals: MemorySignal[], criteria: Crit
  * signal personnel, puis classe : confiance d'abord, score ensuite, fraîcheur enfin.
  */
 export function rankMemory(
+  tr: SearchT,
   rows: readonly MemoryRow[],
   circleMemberIds: ReadonlySet<string>,
   criteria: Criteria,
@@ -170,7 +172,7 @@ export function rankMemory(
   for (const { place, signals } of byPlace.values()) {
     if (!signals.some(isPersonal)) continue;
     if (!placeMatchesCriteria(place, criteria)) continue;
-    candidates.push(placeResult(place, signals, criteria, now));
+    candidates.push(placeResult(tr, place, signals, criteria, now));
   }
 
   candidates.sort(
@@ -182,7 +184,7 @@ export function rankMemory(
 
   return candidates.slice(0, limit).map(({ result }, i) => ({
     ...result,
-    rank: rankLabel(i, "personal"),
-    headline: i === 0 ? BEST_MATCH_HEADLINE : null,
+    rank: rankLabel(tr.t, i, "personal"),
+    headline: i === 0 ? bestMatchHeadline(tr.t) : null,
   }));
 }

@@ -1,1 +1,31 @@
-{}
+{
+  "metaTitle": "A question for you",
+  "noAccount": "No account · no app",
+  "invalidTitle": "This private link is no longer valid.",
+  "invalidLead": "Ask the person who sent it to send you a new one.",
+  "requesterFallback": "the person asking",
+  "sentTo": "Sent to {requester}",
+  "thanks": "Thanks, {name}.",
+  "reusableYes": "Only {requester} sees your answer. You’ve let WH3RE reuse it for {requester} in the future.",
+  "reusableNo": "Only {requester} sees your answer. It’s only used for this question and won’t be kept.",
+  "another": "Recommend another place",
+  "placeName": "Place name",
+  "placeUrlPlaceholder": "Google Maps / Instagram / TikTok link (optional)",
+  "placeUrlLabel": "Google Maps, Instagram or TikTok link",
+  "visitedQuestion": "Have you actually been?",
+  "visitedYes": "Yes",
+  "visitedNo": "No, but I’ve heard about it",
+  "note": "Why do you recommend it?",
+  "visibleOnly": "Only visible to {requester}",
+  "allowReuse": "Let WH3RE reuse this rec for {requester} in the future",
+  "submit": "Send my recommendation",
+  "errors": {
+    "visitedRequired": "Tell me whether you’ve actually been.",
+    "invalidToken": "This private link isn’t valid.",
+    "expired": "This private link is no longer valid.",
+    "placeNameRequired": "Enter the name of the place.",
+    "placeUrlInvalid": "That link doesn’t look valid.",
+    "checkAnswer": "Check your answer.",
+    "sendFailed": "Your answer didn’t go through. Try again in a moment."
+  }
+}

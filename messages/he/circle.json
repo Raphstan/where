@@ -1,1 +1,50 @@
-{}
+{
+  "title": "המעגל שלי",
+  "lead": "לא כל אחד מתאים לכל נושא. אפשר לבחור על מה סומכים על כל אחד.",
+  "notice": "המעגל הזה פרטי. אף אחד לא רואה שהוא חלק ממנו, ושום דבר לא מתפרסם.",
+  "onboarding": {
+    "metaTitle": "מעגל האמון שלך",
+    "title": "מעגל האמון שלך.",
+    "firstQuestion": "לשאול את השאלה הראשונה",
+    "skip": "לדלג בינתיים"
+  },
+  "add": {
+    "title": "להוסיף מישהו",
+    "hint": "איש קשר, קישור WhatsApp או אימייל",
+    "invisible": "האדם לא יידע שהוא במעגל שלך, אלא אם תבקשו ממנו משהו.",
+    "fromContacts": "מאנשי הקשר שלי",
+    "whatsapp": "לשלוח קישור WhatsApp",
+    "email": "להזמין באימייל",
+    "added": "{name} — מוכן"
+  },
+  "form": {
+    "name": "שם פרטי",
+    "relation": "קשר",
+    "relationPlaceholder": "חברה קרובה, אח, עמית לעבודה…",
+    "description": "על מה סומכים עליו/ה",
+    "descriptionPlaceholder": "מסעדות רומנטיות ומלונות",
+    "whatsapp": "מספר WhatsApp",
+    "email": "אימייל"
+  },
+  "domains": {
+    "all": "סומך/ת עליו/ה בכל דבר",
+    "restaurants": "מסעדות",
+    "hotels": "מלונות",
+    "nightlife": "חיי לילה",
+    "travel": "טיולים",
+    "activities": "פעילויות",
+    "family": "משפחה",
+    "business": "עסקים"
+  },
+  "api": {
+    "unauthenticated": "צריך להתחבר כדי להמשיך.",
+    "checkFields": "כדאי לבדוק את השדות.",
+    "invalidPhone": "מספר לא תקין.",
+    "invalidEmail": "אימייל לא תקין.",
+    "contactRequired": "מספר WhatsApp או אימייל.",
+    "saveMemberFailed": "לא הצלחתי לשמור את האדם הזה.",
+    "notFound": "האדם לא נמצא.",
+    "invalidDomains": "תחומים לא תקינים.",
+    "saveChoiceFailed": "לא הצלחתי לשמור את הבחירה הזו."
+  }
+}

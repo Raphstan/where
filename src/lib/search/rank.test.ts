@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { CIRCLE, DAVID, MAYA, ME, NOAM, NOW, SARAH, criteria, place, rows, sig } from "@/test/search-fixtures";
+import { translator } from "@/i18n/translator";
 import { inCircle, MAX_RESULTS, rankMemory, signalWeight } from "./rank";
 import type { SignalAuthor } from "./signal";
+
+const tr = { t: translator("fr", "search"), ev: translator("fr", "evidence") };
 
 const STRANGER: SignalAuthor = { kind: "member", id: "stranger", name: "Inconnu", trustDomains: [] };
 
@@ -27,13 +30,13 @@ describe("filtrage par cercle", () => {
   });
 
   it("un lieu porté uniquement par un étranger au cercle n'apparaît jamais", () => {
-    const results = rankMemory(rows(place("secret"), [sig("recommended", STRANGER)]), CIRCLE, criteria(), NOW);
+    const results = rankMemory(tr, rows(place("secret"), [sig("recommended", STRANGER)]), CIRCLE, criteria(), NOW);
     expect(results).toEqual([]);
   });
 
   it("aucun nom hors du cercle n'apparaît dans les preuves", () => {
     const memory = rows(place("p1"), [sig("recommended", SARAH), sig("recommended", STRANGER)]);
-    const [result] = rankMemory(memory, CIRCLE, criteria(), NOW);
+    const [result] = rankMemory(tr, memory, CIRCLE, criteria(), NOW);
     expect(JSON.stringify(result)).not.toContain("Inconnu");
     expect(result!.people.map((p) => p.name)).toEqual(["Sarah"]);
   });
@@ -53,27 +56,27 @@ describe("rankMemory", () => {
   ];
 
   it("classe la confiance forte avant la moyenne, et coupe à trois résultats", () => {
-    const results = rankMemory(memory, CIRCLE, criteria(), NOW);
+    const results = rankMemory(tr, memory, CIRCLE, criteria(), NOW);
     expect(results).toHaveLength(MAX_RESULTS);
     expect(results.map((r) => r.confidence.level)).toEqual(["forte", "forte", "moyenne"]);
   });
 
   it("donne les rangs de la maquette et la phrase principale au premier", () => {
-    const results = rankMemory(memory, CIRCLE, criteria(), NOW);
+    const results = rankMemory(tr, memory, CIRCLE, criteria(), NOW);
     expect(results.map((r) => r.rank)).toEqual(["Meilleur match", "n°2", "n°3"]);
     expect(results[0]!.headline).toBe("Le meilleur match pour ta demande");
     expect(results[1]!.headline).toBeNull();
   });
 
   it("favorise l'occasion et l'ambiance demandées", () => {
-    const results = rankMemory(memory, CIRCLE, criteria({ occasion: "date", vibe: ["caché"] }), NOW);
+    const results = rankMemory(tr, memory, CIRCLE, criteria({ occasion: "date", vibe: ["caché"] }), NOW);
     expect(results[0]!.name).toBe("Beit Kandinof");
     expect(results[0]!.lines.at(-1)).toMatchObject({ kind: "deduction", text: "Correspond à tes critères : caché" });
   });
 
   it("écarte un lieu dont le type contredit la demande, garde ceux dont le type est inconnu", () => {
     const unknownKind = place("Sans type", { kind: null });
-    const results = rankMemory(
+    const results = rankMemory(tr, 
       [...memory, ...rows(unknownKind, [sig("recommended", SARAH)])],
       CIRCLE,
       criteria({ placeKind: "café" }),
@@ -85,17 +88,17 @@ describe("rankMemory", () => {
 
   it("écarte un lieu d'une autre ville", () => {
     const rome = place("Hotel de’ Ricci", { city: "Rome", kind: "Hôtel boutique" });
-    const results = rankMemory(rows(rome, [sig("recommended", SARAH)]), CIRCLE, criteria({ city: "Tel Aviv" }), NOW);
+    const results = rankMemory(tr, rows(rome, [sig("recommended", SARAH)]), CIRCLE, criteria({ city: "Tel Aviv" }), NOW);
     expect(results).toEqual([]);
   });
 
   it("ignore un lieu sans aucun signal personnel", () => {
     const pub = place("Public", {});
-    expect(rankMemory(rows(pub, [sig("public", ME, { note: "x" })]), CIRCLE, criteria(), NOW)).toEqual([]);
+    expect(rankMemory(tr, rows(pub, [sig("public", ME, { note: "x" })]), CIRCLE, criteria(), NOW)).toEqual([]);
   });
 
   it("affiche la notice d'ancienneté pour une recommandation de trois ans", () => {
-    const [result] = rankMemory(rows(dallal, [sig("recommended", SARAH, { daysAgo: 3 * 365 + 1 })]), CIRCLE, criteria(), NOW);
+    const [result] = rankMemory(tr, rows(dallal, [sig("recommended", SARAH, { daysAgo: 3 * 365 + 1 })]), CIRCLE, criteria(), NOW);
     expect(result!.staleNotice).toBe("Cette recommandation date de trois ans.");
   });
 });
@@ -119,7 +122,7 @@ describe("signalWeight", () => {
 describe("signaux contradictoires", () => {
   it("donne les deux avis et ne laisse pas la confiance « forte » (Spicehaus)", () => {
     const spicehaus = place("Spicehaus", { kind: "Bar à cocktails" });
-    const [r] = rankMemory(
+    const [r] = rankMemory(tr, 
       rows(spicehaus, [
         sig("recommended", SARAH, { occasion: ["date", "calme"] }),
         sig("visited", NOAM, { note: "bruyant après 22 h, DJ le jeudi" }),
@@ -135,7 +138,7 @@ describe("signaux contradictoires", () => {
   });
 
   it("sans désaccord, pas de notice", () => {
-    const [r] = rankMemory(rows(place("Beit Kandinof"), [sig("recommended", SARAH, { occasion: ["calme"] })]), CIRCLE, criteria(), NOW);
+    const [r] = rankMemory(tr, rows(place("Beit Kandinof"), [sig("recommended", SARAH, { occasion: ["calme"] })]), CIRCLE, criteria(), NOW);
     expect(r!.conflictNotice).toBeNull();
   });
 });

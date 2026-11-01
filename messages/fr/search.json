@@ -1,1 +1,151 @@
-{}
+{
+  "deductionLabel": "Tes préférences / déduction WH3RE",
+  "reminderPublic": "Information publique uniquement",
+  "provenance": {
+    "circle": "de ton cercle",
+    "booking": "d’une réservation",
+    "share": "d’un partage",
+    "web": "du web public",
+    "mine": "de tes données"
+  },
+  "numbers": {
+    "n0": "zéro",
+    "n1": "un",
+    "n2": "deux",
+    "n3": "trois",
+    "n4": "quatre",
+    "n5": "cinq",
+    "n6": "six",
+    "n7": "sept",
+    "n8": "huit",
+    "n9": "neuf",
+    "n10": "dix"
+  },
+  "months": {
+    "m1": "janvier",
+    "m2": "février",
+    "m3": "mars",
+    "m4": "avril",
+    "m5": "mai",
+    "m6": "juin",
+    "m7": "juillet",
+    "m8": "août",
+    "m9": "septembre",
+    "m10": "octobre",
+    "m11": "novembre",
+    "m12": "décembre"
+  },
+  "whenMonth": "en {month}",
+  "whenYear": "en {year}",
+  "occasion": {
+    "date": "pour un date",
+    "amis": "entre amis",
+    "groupe": "pour les groupes",
+    "famille": "en famille",
+    "business": "pour un repas d’affaires",
+    "calme": "pour le calme",
+    "fete": "pour faire la fête",
+    "occasionSpeciale": "pour une occasion spéciale",
+    "dejeuner": "pour un déjeuner",
+    "touristes": "pour des touristes",
+    "travail": "pour travailler",
+    "sejourADeux": "pour un séjour à deux"
+  },
+  "occasionOther": "pour « {occasion} »",
+  "quote": "« {note} »",
+  "noteSplit": " : «",
+  "sentence": {
+    "recommendedStale": {
+      "member": "{name} l’a recommandé en {year}",
+      "self": "Tu l’as recommandé en {year}"
+    },
+    "recommendedFor": {
+      "member": "{name} le recommande {occasion}",
+      "self": "Tu le recommandes {occasion}"
+    },
+    "recommended": {
+      "member": "{name} le recommande",
+      "self": "Tu le recommandes"
+    },
+    "withNote": "{base} : {note}",
+    "visitedNote": {
+      "member": "{name} : {note}",
+      "self": "Ta note : {note}"
+    },
+    "visited": {
+      "member": "Visite confirmée par {name}",
+      "self": "Ta visite est confirmée"
+    },
+    "booked": {
+      "member": "{name} y a réservé {when}",
+      "self": "Tu y as réservé {when}"
+    },
+    "saved": {
+      "member": "{name} l’a enregistré",
+      "self": "Tu l’as enregistré"
+    }
+  },
+  "deduction": "Correspond à tes critères : {matches}",
+  "discovery": {
+    "headline": "Une découverte, pas encore validée par ton cercle",
+    "noCircle": "Aucun proche ne l’a encore recommandé",
+    "unknownPersonal": "Aucun signal personnel",
+    "unknownVibe": "Ambiance réelle non confirmée"
+  },
+  "bestMatch": "Le meilleur match pour ta demande",
+  "rating": "Note publique de {rating, number, ::.0} sur 5",
+  "ratingWithCount": "Note publique de {rating, number, ::.0} sur 5 ({count, number} avis Google)",
+  "unknown": {
+    "noVisit": "Aucune visite confirmée dans ton cercle",
+    "noSecondOpinion": "Aucun second avis dans ton cercle",
+    "noRecentSignal": "Aucun signal récent dans ton cercle",
+    "vibe": "« {vibe} » : non confirmé",
+    "availability": "Disponibilité {when} non vérifiée"
+  },
+  "stale": "Cette recommandation date de {years} ans.",
+  "rank": {
+    "discovery": "Découverte",
+    "best": "Meilleur match",
+    "nth": "n°{n}"
+  },
+  "intro": {
+    "none": "Personne dans ton cercle ne connaît encore suffisamment ce coin. Retire un critère pour élargir la recherche.",
+    "insufficient": "Je n’ai pas encore assez de signaux fiables dans ton cercle pour te donner une réponse avec confiance.",
+    "discoveryOnlyAfter": "Une découverte publique — sans aucun signal de ton cercle, donc à prendre comme une piste.",
+    "single": "Une réponse nette plutôt que trois. ",
+    "singleReason": " : {reason}.",
+    "singleEnd": ".",
+    "three": "J’ai trois idées solides pour toi. ",
+    "two": "J’ai deux idées pour toi. ",
+    "bestReason": " semble être le meilleur match : {reason}.",
+    "best": " semble être le meilleur match."
+  },
+  "ask": {
+    "one": " pourrait probablement t’aider.",
+    "people": "{n} personnes",
+    "many": " pourraient probablement t’aider.",
+    "conflict": "Les avis de ton cercle divergent sur ce lieu.",
+    "noRecent": "Aucune de ces pistes n’est encore confirmée par une recommandation récente.",
+    "but": "{lead} Mais "
+  },
+  "afterOrdinal": {
+    "o1": "Le deuxième",
+    "o2": "Le troisième"
+  },
+  "after": "{ordinal} est une découverte : personne de ton cercle ne l’a encore validé, je te le montre pour l’exploration.",
+  "confidence": {
+    "forteRecoAndVisit": "Forte — recommandation explicite et visite confirmée",
+    "forteSignals": "Forte — basée sur {count, plural, one {# signal personnel} other {# signaux personnels}}",
+    "forteRecos": "Forte — {count} recommandations",
+    "forteRecentReco": "Forte — recommandation récente de {name}",
+    "moyenneMissingReco": "Moyenne — une recommandation personnelle manque",
+    "moyenneStaleReco": "Moyenne — recommandation ancienne",
+    "exploMostlyPublic": "Exploratoire — principalement basé sur des données publiques",
+    "exploPublicOnly": "Exploratoire — informations publiques uniquement",
+    "conflict": "Moyenne — signaux contradictoires"
+  },
+  "conflict": {
+    "after": "Signaux contradictoires : {calm} le trouve calme, {noisy} indique qu’il devient bruyant après {hour} h. Probablement calme en début de soirée, animé ensuite.",
+    "plain": "Signaux contradictoires : {calm} le trouve calme, {noisy} le trouve bruyant. Je te donne les deux avis plutôt que de trancher."
+  }
+}

@@ -33,6 +33,12 @@ describe("buildMessages", () => {
     ]);
   });
 
+  it("place la langue de réponse en tête de la question, jamais dans le prompt système", () => {
+    expect(buildMessages({ question: "A lively bar" }, "en")).toEqual([
+      { role: "user", content: "Langue de réponse : en\n\nA lively bar" },
+    ]);
+  });
+
   it("rejoue la question de précision et la réponse de l'utilisateur", () => {
     expect(
       buildMessages({
@@ -61,6 +67,17 @@ describe("understandQuestion", () => {
     });
     expect(u.tags).toEqual(["Tel Aviv", "ce soir", "deux personnes", "date", "caché"]);
     expect(u.clarification?.options).toEqual(["restaurant", "bar"]);
+  });
+
+  it("transmet la langue dans le message, avec un prompt système identique quelle que soit la langue", async () => {
+    const he = fakeClient({ parsed_output: output });
+    const fr = fakeClient({ parsed_output: output });
+    await understandQuestion({ question: "בר שקט" }, he.client, "he");
+    await understandQuestion({ question: "Un bar calme" }, fr.client, "fr");
+    const heParams = he.parse.mock.calls[0]?.[0] as { system: unknown; messages: { content: string }[] };
+    const frParams = fr.parse.mock.calls[0]?.[0] as { system: unknown; messages: { content: string }[] };
+    expect(heParams.system).toEqual(frParams.system);
+    expect(heParams.messages[0]?.content).toBe("Langue de réponse : he\n\nבר שקט");
   });
 
   it("échoue proprement si le modèle refuse ou renvoie un JSON invalide", async () => {

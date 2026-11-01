@@ -11,12 +11,11 @@ export type UsagePrefs = {
 
 export const DEFAULT_USAGE: UsagePrefs = { importedBookings: true, visitFeedback: true, circleReplies: true };
 
-/** Libellés mot pour mot, dans l'ordre de la maquette. */
-export const USAGE_LABELS: readonly (readonly [keyof UsagePrefs, string])[] = [
-  ["importedBookings", "Mes réservations importées"],
-  ["visitFeedback", "Mes retours après visite"],
-  ["circleReplies", "Les réponses de mon cercle (avec leur accord)"],
-];
+/**
+ * Interrupteurs dans l'ordre de la maquette. Libellés : messages/{langue}/privacy.json, `usage.{clé}`
+ * (en français, mot pour mot depuis la maquette).
+ */
+export const USAGE_KEYS: readonly (keyof UsagePrefs)[] = ["importedBookings", "visitFeedback", "circleReplies"];
 
 /** Colonnes de public.users correspondantes. */
 export const USAGE_COLUMNS = {

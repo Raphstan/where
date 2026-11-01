@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { HomeAsk } from "@/components/home/home-ask";
+import { LanguageSwitcher } from "@/components/shell/language-switcher";
 import { Mascot, Wordmark } from "@/components/shell/wordmark";
 import { EXAMPLE_QUESTIONS } from "@/lib/ask/examples";
 
@@ -12,6 +13,7 @@ export default async function Home() {
     <main className="hero relative flex min-h-dvh flex-1 flex-col overflow-hidden text-ink">
       <header className="relative flex items-center justify-between px-[22px] pt-[max(16px,env(safe-area-inset-top))] lg:px-10 lg:pt-6">
         <Wordmark />
+        <LanguageSwitcher />
       </header>
       <div className="relative flex flex-col gap-5 px-[22px] pt-10 pb-10 lg:mx-auto lg:w-full lg:max-w-[760px] lg:px-8 lg:pt-16 lg:pb-[60px]">
         <div className="relative">

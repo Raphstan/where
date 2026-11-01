@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { PersonAvatar } from "@/components/results/marks";
 import type { CreateRequestResponse, PreparedRecipient } from "@/lib/conversations/schema";
@@ -30,6 +31,7 @@ export function AskComposer({
   candidates: SuggestedPerson[];
 }) {
   const router = useRouter();
+  const t = useTranslations("network");
   const [message, setMessage] = useState(draft);
   const [selected, setSelected] = useState(() => new Set(candidates.filter((c) => c.relevant).map((c) => c.id)));
   const [step, setStep] = useState<Step>({ kind: "compose" });
@@ -61,11 +63,11 @@ export function AskComposer({
       });
       const json = (await res.json().catch(() => null)) as CreateRequestResponse | { error?: { message?: string } } | null;
       if (!res.ok || !json || !("recipients" in json)) {
-        throw new Error((json && "error" in json && json.error?.message) || "Je n’arrive pas à préparer la demande.");
+        throw new Error((json && "error" in json && json.error?.message) || t("ask.prepareFailed"));
       }
       setStep({ kind: "open", recipients: json.recipients });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Je n’arrive pas à préparer la demande.");
+      setError(e instanceof Error ? e.message : t("ask.prepareFailed"));
     } finally {
       setPending(false);
     }
@@ -89,7 +91,7 @@ export function AskComposer({
   const backLink =
     step.kind === "open" ? null : (
       <Link href={back} className="text-[13.5px] font-semibold text-blue hover:underline">
-        ‹ Retour à la conversation
+        <span aria-hidden className="inline-block">‹</span> {t("ask.backToConversation")}
       </Link>
     );
 
@@ -97,26 +99,20 @@ export function AskComposer({
     return (
       <div className="flex flex-col gap-4">
         {backLink}
-        <div className={EYEBROW}>Demander à mon réseau</div>
-        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
-          J’ai préparé la question. Tu gardes la main.
-        </h1>
-        <p className="text-[12.5px] text-muted">
-          Modifie le message si tu veux, choisis les destinataires. Rien ne part sans ta confirmation.
-        </p>
+        <div className={EYEBROW}>{t("ask.eyebrow")}</div>
+        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">{t("ask.title")}</h1>
+        <p className="text-[12.5px] text-muted">{t("ask.lead")}</p>
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           maxLength={1000}
-          aria-label="Message"
+          aria-label={t("ask.messageLabel")}
           className="min-h-[110px] w-full resize-none rounded-[14px] border-[1.5px] border-line bg-paper-2 px-3.5 py-3 text-[14px] text-ink outline-none focus:border-ink"
         />
         <div>
-          <div className={`${EYEBROW} mb-2`}>Destinataires suggérés</div>
+          <div className={`${EYEBROW} mb-2`}>{t("ask.suggested")}</div>
           {candidates.length === 0 ? (
-            <p className="text-[12.5px] text-muted">
-              Ton cercle est vide pour l’instant. Ajoute quelques personnes de confiance dans Mon cercle.
-            </p>
+            <p className="text-[12.5px] text-muted">{t("ask.emptyCircle")}</p>
           ) : (
             <div className="flex flex-col gap-2">
               {candidates.map((c) => {
@@ -127,7 +123,7 @@ export function AskComposer({
                     type="button"
                     aria-pressed={on}
                     onClick={() => toggle(c.id)}
-                    className={`flex items-center gap-3 rounded-[16px] border bg-paper-2 p-3 text-left transition-colors ${on ? "border-ink" : "border-line"}`}
+                    className={`flex items-center gap-3 rounded-[16px] border bg-paper-2 p-3 text-start transition-colors ${on ? "border-ink" : "border-line"}`}
                   >
                     <PersonAvatar person={c} />
                     <span>
@@ -136,7 +132,7 @@ export function AskComposer({
                     </span>
                     <span
                       aria-hidden
-                      className={`ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-full border-[1.5px] text-[13px] text-white ${on ? "border-ink bg-ink" : "border-line"}`}
+                      className={`ms-auto inline-flex size-6 shrink-0 items-center justify-center rounded-full border-[1.5px] text-[13px] text-white ${on ? "border-ink bg-ink" : "border-line"}`}
                     >
                       ✓
                     </span>
@@ -148,7 +144,7 @@ export function AskComposer({
         </div>
         <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] leading-[1.4] text-ink-2">
           <span aria-hidden>🎯</span>
-          <span>Tu demandes seulement aux personnes les plus pertinentes, pas à tout ton carnet d’adresses.</span>
+          <span>{t("ask.onlyRelevant")}</span>
         </div>
         <button
           type="button"
@@ -156,7 +152,7 @@ export function AskComposer({
           onClick={() => setStep({ kind: "confirm" })}
           className={`${BTN} ${WA}`}
         >
-          Envoyer individuellement sur WhatsApp{chosen.length ? ` (${chosen.length})` : ""}
+          {chosen.length ? t("ask.sendIndividuallyCount", { count: chosen.length }) : t("ask.sendIndividually")}
         </button>
       </div>
     );
@@ -168,21 +164,19 @@ export function AskComposer({
         {backLink}
         <span className="inline-flex">
           {chosen.map((c, i) => (
-            <span key={c.id} className={`rounded-full border-2 border-paper ${i > 0 ? "-ml-2" : ""}`}>
+            <span key={c.id} className={`rounded-full border-2 border-paper ${i > 0 ? "-ms-2" : ""}`}>
               <PersonAvatar person={c} />
             </span>
           ))}
         </span>
         <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
-          Envoyer à {joinNames(chosen.map((c) => c.name))} ?
+          {t("ask.confirmTitle", { names: joinNames(t, chosen.map((c) => c.name)) })}
         </h1>
-        <p className="text-[12.5px] text-muted">
-          Un message WhatsApp par personne, chacun avec son lien privé pour répondre sans rien installer.
-        </p>
-        <div className="w-full rounded-card border border-line bg-paper-2 p-4 text-left">
-          <div className="mb-1.5 text-[11.5px] text-soft">Aperçu</div>
+        <p className="text-[12.5px] text-muted">{t("ask.confirmLead")}</p>
+        <div className="w-full rounded-card border border-line bg-paper-2 p-4 text-start">
+          <div className="mb-1.5 text-[11.5px] text-soft">{t("ask.preview")}</div>
           <div className="text-[13.5px] whitespace-pre-line">{message.trim()}</div>
-          <div className="mt-2 text-[11.5px] text-blue">Lien privé · Répondre en 20 secondes</div>
+          <div className="mt-2 text-[11.5px] text-blue">{t("ask.previewLink")}</div>
         </div>
         {error ? (
           <p role="alert" className="w-full rounded-[14px] bg-amber-2 px-3.5 py-3 text-[13.5px] text-[#6e4f14]">
@@ -191,10 +185,10 @@ export function AskComposer({
         ) : null}
         <div className="flex w-full gap-2.5">
           <button type="button" onClick={() => setStep({ kind: "compose" })} className={`${BTN} ${GHOST} flex-1`}>
-            Modifier
+            {t("ask.edit")}
           </button>
           <button type="button" disabled={pending} onClick={() => void confirm()} className={`${BTN} ${WA} flex-1`}>
-            Confirmer l’envoi
+            {t("ask.confirm")}
           </button>
         </div>
       </div>
@@ -203,13 +197,9 @@ export function AskComposer({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className={EYEBROW}>Demander à mon réseau</div>
-      <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
-        Un message par personne.
-      </h1>
-      <p className="text-[12.5px] text-muted">
-        WhatsApp s’ouvre avec le message et le lien privé déjà prêts : c’est toi qui appuies sur Envoyer.
-      </p>
+      <div className={EYEBROW}>{t("ask.eyebrow")}</div>
+      <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">{t("ask.openTitle")}</h1>
+      <p className="text-[12.5px] text-muted">{t("ask.openLead")}</p>
       <div className="flex flex-col gap-2">
         {step.recipients.map((r) => {
           const person = candidates.find((c) => c.id === r.memberId);
@@ -217,9 +207,9 @@ export function AskComposer({
             <div key={r.id} className="flex flex-wrap items-center gap-3 rounded-[16px] border border-line bg-paper-2 p-3">
               {person ? <PersonAvatar person={person} /> : null}
               <span className="font-bold">{r.name}</span>
-              <span className="ml-auto flex gap-2">
+              <span className="ms-auto flex gap-2">
                 <button type="button" onClick={() => void copy(r)} className="inline-flex min-h-[30px] items-center rounded-full bg-lilac-2 px-[11px] text-[12.5px] font-semibold text-ink hover:bg-lilac">
-                  {copied === r.id ? "Lien copié" : "Copier le lien privé"}
+                  {copied === r.id ? t("ask.copied") : t("ask.copy")}
                 </button>
                 <a
                   href={r.waUrl}
@@ -228,7 +218,7 @@ export function AskComposer({
                   onClick={() => markOpened(r)}
                   className={`inline-flex min-h-[30px] items-center rounded-full px-[11px] text-[12.5px] font-semibold ${opened.has(r.id) ? "bg-olive-2 text-olive" : WA}`}
                 >
-                  {opened.has(r.id) ? "WhatsApp ouvert ✓" : "Ouvrir WhatsApp"}
+                  {opened.has(r.id) ? t("ask.opened") : t("ask.open")}
                 </a>
               </span>
             </div>
@@ -236,7 +226,7 @@ export function AskComposer({
         })}
       </div>
       <button type="button" onClick={() => router.push(back)} className={`${BTN} ${opened.size > 0 ? "bg-ink text-paper" : GHOST}`}>
-        Revenir à la conversation
+        {t("ask.backBottom")}
       </button>
     </div>
   );

@@ -1,4 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { apiLocale } from "@/i18n/request-locale";
+import { translator } from "@/i18n/translator";
 import { fail } from "@/lib/api";
 import { isCronAuthorized } from "@/lib/booking/cron";
 import { getServerEnv } from "@/lib/env.server";
@@ -11,9 +13,10 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * Seul usage de service_role hors page invité : la tâche n'a pas de session utilisateur.
  */
 export async function GET(request: NextRequest) {
+  const t = translator(await apiLocale(), "booking");
   const env = getServerEnv();
   if (!isCronAuthorized(request.headers.get("authorization"), env.CRON_SECRET)) {
-    return fail(401, "unauthorized", "Accès réservé à la tâche planifiée.");
+    return fail(401, "unauthorized", t("api.cronUnauthorized"));
   }
 
   const now = new Date().toISOString();
@@ -24,6 +27,6 @@ export async function GET(request: NextRequest) {
     .is("answered_at", null)
     .lte("due_at", now)
     .select("id");
-  if (error) return fail(503, "storage_unavailable", "Mise à jour des retours impossible.");
+  if (error) return fail(503, "storage_unavailable", t("api.cronFailed"));
   return NextResponse.json({ prompted: data.length });
 }

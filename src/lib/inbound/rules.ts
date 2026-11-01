@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { T } from "@/i18n/translator";
 import type { EvidenceLevel } from "@/lib/evidence";
 import type { Database } from "@/lib/supabase/database.types";
 
@@ -67,23 +68,42 @@ export const OCCASIONS = [
   "touristes",
 ] as const;
 
-export const QUALIFY_TEXT = {
-  eyebrow: "Qualifier mes expériences",
-  visited: "Tu y es vraiment allé ?",
-  recommend: "Tu le recommanderais ?",
-  occasion: "Pour quelle occasion ?",
-  note: "Une chose à savoir ?",
-  noteHint: "Facultatif · ex. « Très bonne ambiance, mais la musique devient forte après 22 h. »",
-  notePlaceholder: "Écris une phrase…",
-  continue: "Continuer",
-  skipNote: "Passer",
-  save: "Enregistrer",
-  skipPlace: "Ignorer ce lieu",
-  doneTitle: "Ta mémoire commence à se former.",
-  doneLead: (n: number) =>
-    `${n} lieux qualifiés. WH3RE saura désormais ce qui compte vraiment pour toi, pas seulement où tu as réservé.`,
-  doneCta: "Créer mon cercle de confiance",
-} as const;
+export type Occasion = (typeof OCCASIONS)[number];
+
+/*
+ * Les réponses et les occasions restent des valeurs françaises en base et dans l'API ; leurs libellés
+ * vivent dans messages/{langue}/import.json (`qualify.*`, `occasions.*`), via ces clés.
+ */
+export const VISITED_KEY: Readonly<Record<VisitedAnswer, string>> = {
+  Oui: "yes",
+  Non: "no",
+  "Je ne sais plus": "unsure",
+};
+
+export const RECOMMEND_KEY: Readonly<Record<RecommendAnswer, string>> = {
+  Absolument: "absolutely",
+  "Oui, dans certains contextes": "someContexts",
+  "Pas vraiment": "notReally",
+  Non: "no",
+};
+
+export const OCCASION_KEY: Readonly<Record<Occasion, string>> = {
+  date: "date",
+  amis: "friends",
+  groupe: "group",
+  famille: "family",
+  business: "business",
+  calme: "quiet",
+  fête: "party",
+  "occasion spéciale": "special",
+  déjeuner: "lunch",
+  touristes: "tourists",
+};
+
+/** Libellé d'une occasion dans la langue de l'utilisateur (`t` : espace « import »). */
+export function occasionLabel(t: T, occasion: Occasion): string {
+  return t(`occasions.${OCCASION_KEY[occasion]}`);
+}
 
 export const QualificationSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("skip") }),
@@ -132,21 +152,29 @@ export function qualificationLevels(kind: EmailKind, answers: Pick<QualifyAnswer
 
 /**
  * Résumé de fin de pile, mot pour mot (maquette scrQualify) : le texte et la pastille.
- * `null` = lieu ignoré.
+ * `null` = lieu ignoré. `t` : espace « import ».
  */
 export function qualificationSummary(
+  t: T,
   answers: Pick<QualifyAnswers, "visited" | "recommend" | "occasion"> | null,
 ): { text: string; level: EvidenceLevel } {
-  if (!answers) return { text: "Ignoré", level: "booked" };
-  const occ = answers.occasion.length ? ` · ${answers.occasion.join(", ")}` : "";
+  if (!answers) return { text: t("summary.ignored"), level: "booked" };
+  const occ = answers.occasion.length ? ` · ${answers.occasion.map((o) => occasionLabel(t, o)).join(", ")}` : "";
   switch (answers.visited) {
     case "Oui":
-      if (answers.recommend === "Absolument") return { text: `Visité · tu le recommandes${occ}`, level: "recommended" };
-      return { text: `${answers.recommend ? `Visité · ${answers.recommend.toLocaleLowerCase("fr")}` : "Visité"}${occ}`, level: "visited" };
+      if (answers.recommend === "Absolument") return { text: `${t("summary.recommends")}${occ}`, level: "recommended" };
+      return {
+        text: `${
+          answers.recommend
+            ? t("summary.visitedWith", { answer: t(`qualify.recommendAnswers.${RECOMMEND_KEY[answers.recommend]}`).toLocaleLowerCase() })
+            : t("summary.visited")
+        }${occ}`,
+        level: "visited",
+      };
     case "Non":
-      return { text: "Réservé, non visité — ignoré", level: "public" };
+      return { text: t("summary.notVisited"), level: "public" };
     case "Je ne sais plus":
-      return { text: "Réservé, présence incertaine", level: "booked" };
+      return { text: t("summary.unsure"), level: "booked" };
   }
 }
 
@@ -154,35 +182,35 @@ export function qualificationSummary(
  * Résultats de l'import (maquette scrGmailResults)
  * ------------------------------------------------------------------------- */
 
-const SHORT_DATE = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone: "UTC" });
-const LONG_DATE = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
-
 /** « 12 sept. 2026 » ou, sans l'année, « 12 sept. » ; la date est un jour (AAAA-MM-JJ). */
-export function formatDay(day: string | null, withYear: boolean): string | null {
+export function formatDay(day: string | null, withYear: boolean, locale: string): string | null {
   if (!day || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return null;
   const date = new Date(`${day}T00:00:00Z`);
   if (Number.isNaN(date.getTime())) return null;
-  return (withYear ? LONG_DATE : SHORT_DATE).format(date);
+  return new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "short",
+    ...(withYear ? { year: "numeric" } : {}),
+    timeZone: "UTC",
+  }).format(date);
 }
 
-/** Libellé de provenance : « Réservation Tabit », « Confirmation hôtel », « Activité ». */
-export function provenanceLabel(kind: ReservationKind, platform: string | null): string {
+/** Libellé de provenance : « Réservation Tabit », « Confirmation hôtel », « Activité ». `t` : espace « import ». */
+export function provenanceLabel(t: T, kind: ReservationKind, platform: string | null): string {
   switch (kind) {
     case "table":
-      return platform ? `Réservation ${platform}` : "Réservation";
+      return platform ? t("provenance.tableOn", { platform }) : t("provenance.table");
     case "hotel":
-      return "Confirmation hôtel";
+      return t("provenance.hotel");
     case "activity":
-      return "Activité";
+      return t("provenance.activity");
   }
 }
 
-/** Badge de la liste : « Réservé », « Hôtel », « Activité ». */
-export const KIND_BADGE: Readonly<Record<ReservationKind, string>> = {
-  table: "Réservé",
-  hotel: "Hôtel",
-  activity: "Activité",
-};
+/** Badge de la liste : « Réservé », « Hôtel », « Activité » (clé `badge.{kind}` de l'espace « import »). */
+export function kindBadge(t: T, kind: ReservationKind): string {
+  return t(`badge.${kind}`);
+}
 
 export type ImportedEmail = {
   id: string;

@@ -1,25 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { EvidenceText, hashIndex } from "@/components/results/marks";
 import { PageFrame } from "@/components/shell/page-frame";
 import { buildMemory, filterMemory, isMemoryFilter, MEMORY_FILTERS, memoryStats, type MemoryFilter } from "@/lib/memory/memory";
 import { loadMemoryRows } from "@/lib/memory/store";
 import { createClient } from "@/lib/supabase/server";
+import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = { title: "Ma mémoire" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("memory");
+  return { title: t("title") };
+}
 
 const SCENES = 6;
 
-function Stat({ n, one, many }: { n: number; one: string; many: string }) {
-  return (
-    <div className="flex flex-col gap-0.5 rounded-2xl border border-line bg-paper-2 p-3.5">
-      <b className="font-display text-[28px] font-bold leading-none">{n}</b>
-      <span className="text-[12px] text-muted">{n > 1 ? many : one}</span>
-    </div>
-  );
+/** Un chiffre de la maquette : `<n>` le nombre, `<l>` son libellé, accordé selon la langue. */
+const STAT_TAGS = {
+  n: (chunks: ReactNode) => <b className="font-display text-[28px] font-bold leading-none">{chunks}</b>,
+  l: (chunks: ReactNode) => <span className="text-[12px] text-muted">{chunks}</span>,
+};
+
+function Stat({ children }: { children: ReactNode }) {
+  return <div className="flex flex-col gap-0.5 rounded-2xl border border-line bg-paper-2 p-3.5">{children}</div>;
 }
 
 async function Memory({ searchParams }: { searchParams: PageProps<"/[locale]/memory">["searchParams"] }) {
@@ -33,16 +38,17 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/[locale]/mem
   } = await supabase.auth.getUser();
   if (!user) return null;
 
+  const t = await getTranslations("memory");
   const rows = await loadMemoryRows(supabase, user.id);
   const all = buildMemory(rows, await getTranslations("evidence"));
   if (all.length === 0) {
     return (
       <div className="rounded-card border border-line bg-paper-2 p-4 shadow-soft">
         <p className="text-[12.5px] text-muted">
-          Ta mémoire est encore vide. Elle se remplira avec tes réservations, tes retours et les réponses de ton cercle.
+          {t("empty")}
         </p>
         <Link href="/import" className="mt-2 inline-block text-[12.5px] font-semibold text-blue hover:underline">
-          Retrouver mes anciennes réservations →
+          {t("emptyImport")}
         </Link>
       </div>
     );
@@ -53,13 +59,13 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/[locale]/mem
   return (
     <>
       <div className="grid grid-cols-3 gap-2.5">
-        <Stat n={stats.visited} one="lieu visité" many="lieux visités" />
-        <Stat n={stats.recosReceived} one="reco reçue" many="recos reçues" />
-        <Stat n={stats.cities} one="ville" many="villes" />
+        <Stat>{t.rich("stats.visited", { count: stats.visited, ...STAT_TAGS })}</Stat>
+        <Stat>{t.rich("stats.recosReceived", { count: stats.recosReceived, ...STAT_TAGS })}</Stat>
+        <Stat>{t.rich("stats.cities", { count: stats.cities, ...STAT_TAGS })}</Stat>
       </div>
 
-      <nav aria-label="Filtrer" className="-mx-[22px] flex gap-2 overflow-x-auto px-[22px] pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
-        {MEMORY_FILTERS.map(([k, label]) => (
+      <nav aria-label={t("filterAria")} className="-mx-[22px] flex gap-2 overflow-x-auto px-[22px] pb-1 [scrollbar-width:none] lg:mx-0 lg:px-0">
+        {MEMORY_FILTERS.map((k) => (
           <Link
             key={k}
             href={k === "tous" ? "/memory" : `/memory?f=${k}`}
@@ -69,7 +75,7 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/[locale]/mem
               filter === k ? "border-ink bg-ink text-paper" : "border-line bg-paper-2 text-ink hover:border-ink"
             }`}
           >
-            {label}
+            {t(`filters.${k}`)}
           </Link>
         ))}
       </nav>
@@ -92,13 +98,14 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/[locale]/mem
 
 /* Ma mémoire (docs/prototype.html, scrMemory). */
 export default function MemoryPage({ searchParams }: PageProps<"/[locale]/memory">) {
+  const t = useTranslations("memory");
   return (
-    <PageFrame title="Ma mémoire" wide>
+    <PageFrame title={t("title")} wide>
       <Suspense fallback={<div className="h-[260px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <Memory searchParams={searchParams} />
       </Suspense>
       <p className="text-center text-[11.5px] text-soft">
-        Cette section reste secondaire. Le chat demeure le point d&apos;entrée.
+        {t("footnote")}
       </p>
     </PageFrame>
   );

@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { TRUST_DOMAINS, toggleDomain } from "./domains";
-import { NewMemberSchema, normalizeDomains } from "./member";
+import { isMemberError, NewMemberSchema, normalizeDomains } from "./member";
+import { translator } from "@/i18n/translator";
+
+const t = translator("fr", "circle");
 
 describe("toggleDomain", () => {
   it("« Tout » remplace les domaines cochés, puis se décoche", () => {
@@ -15,7 +18,7 @@ describe("toggleDomain", () => {
   });
 
   it("reprend les domaines de la maquette dans l'ordre", () => {
-    expect(TRUST_DOMAINS.map(([, l]) => l)).toEqual([
+    expect(TRUST_DOMAINS.map((k) => t(`domains.${k}`))).toEqual([
       "Je lui fais confiance pour tout",
       "Restaurants",
       "Hôtels",
@@ -45,5 +48,15 @@ describe("NewMemberSchema", () => {
     expect(NewMemberSchema.safeParse({ name: "Noam", phone: "abc" }).success).toBe(false);
     expect(NewMemberSchema.safeParse({ name: "Noam", email: "noam@" }).success).toBe(false);
     expect(NewMemberSchema.safeParse({ name: "Noam", email: "noam@exemple.com" }).success).toBe(true);
+  });
+
+  it("renvoie des clés d'erreur, traduites mot pour mot", () => {
+    const messages = (input: unknown) => {
+      const r = NewMemberSchema.safeParse(input);
+      return r.success ? [] : r.error.issues.map((i) => i.message).filter(isMemberError).map((k) => t(`api.${k}`));
+    };
+    expect(messages({ name: "Noam", phone: "abc" })).toEqual(["Numéro invalide."]);
+    expect(messages({ name: "Noam", email: "noam@" })).toEqual(["Email invalide."]);
+    expect(messages({ name: "Noam", phone: "", email: "" })).toEqual(["Un numéro WhatsApp ou un email."]);
   });
 });

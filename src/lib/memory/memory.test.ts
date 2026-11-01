@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { buildMemory, filterMemory, memoryCategory, memoryStats, type MemorySignalRow } from "./memory";
+import { buildMemory, filterMemory, MEMORY_FILTERS, memoryCategory, memoryStats, type MemorySignalRow } from "./memory";
+import { createTranslator } from "next-intl";
+import { MESSAGES } from "@/i18n/messages";
 import { translator } from "@/i18n/translator";
 
 const tEv = translator("fr", "evidence");
@@ -105,5 +107,24 @@ describe("memoryStats", () => {
 
   it("une visite d'un proche n'est pas une visite de l'utilisateur", () => {
     expect(memoryStats([row("Beit Kandinof", "visited", maya)]).visited).toBe(0);
+  });
+});
+
+describe("libellés de la mémoire", () => {
+  const t = translator("fr", "memory");
+
+  it("reprend les filtres de la maquette mot pour mot", () => {
+    expect(MEMORY_FILTERS.map((k) => t(`filters.${k}`))).toEqual(["Tout", "Restaurants", "Hôtels", "Bars", "Cafés", "Activités", "Voyages"]);
+  });
+
+  it("accorde les chiffres comme la maquette (singulier jusqu'à 1)", () => {
+    const m = createTranslator({ locale: "fr", messages: MESSAGES.fr, namespace: "memory" });
+    const stat = (key: string, count: number) =>
+      m.markup(key as never, { count, n: (c: string) => `[${c}]`, l: (c: string) => c } as never);
+    expect(stat("stats.visited", 1)).toBe("[1]lieu visité");
+    expect(stat("stats.visited", 0)).toBe("[0]lieu visité");
+    expect(stat("stats.visited", 2)).toBe("[2]lieux visités");
+    expect(stat("stats.recosReceived", 3)).toBe("[3]recos reçues");
+    expect(stat("stats.cities", 2)).toBe("[2]villes");
   });
 });

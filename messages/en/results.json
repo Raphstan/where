@@ -1,1 +1,9 @@
-{}
+{
+  "why": "Why this pick?",
+  "maps": "View in Google Maps",
+  "book": "Book",
+  "outsideCircle": "Outside your circle",
+  "basis": "This recommendation is based on",
+  "unknowns": "What we don’t know yet",
+  "levels": "Levels of evidence"
+}

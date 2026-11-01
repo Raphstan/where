@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useState, type ReactNode } from "react";
 import {
+  contextLabel,
   FEEDBACK_CONTEXTS,
-  FEEDBACK_TEXT,
   NOT_VISITED,
+  ratingLabel,
+  recommendLabel,
   RATINGS,
   RECOMMEND_ANSWERS,
   type DueFollowup,
@@ -21,11 +24,11 @@ const ACTION = "inline-flex min-h-9 items-center rounded-full px-3.5 text-[13px]
 
 type Stage = "rating" | "recommend" | "context" | "thanks" | "not-visited";
 
-async function send(url: string, method: "POST" | "PATCH", body: unknown): Promise<void> {
+async function send(url: string, method: "POST" | "PATCH", body: unknown, fallback: string): Promise<void> {
   const res = await fetch(url, { method, headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
   if (!res.ok) {
     const json = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
-    throw new Error(json?.error?.message || "Ton retour n’est pas parti. Réessaie dans un instant.");
+    throw new Error(json?.error?.message || fallback);
   }
 }
 
@@ -43,6 +46,7 @@ export function FeedbackBubble({
   onNewQuestion: () => void;
   onToast: (text: string) => void;
 }) {
+  const t = useTranslations("booking");
   const [stage, setStage] = useState<Stage>("rating");
   const [rating, setRating] = useState<Rating | null>(null);
   const [recommend, setRecommend] = useState<RecommendAnswer | null>(null);
@@ -54,10 +58,10 @@ export function FeedbackBubble({
     setPending(true);
     setError(null);
     try {
-      await send(`/api/followups/${followup.id}`, "POST", feedback);
+      await send(`/api/followups/${followup.id}`, "POST", feedback, t("feedback.sendFailed"));
       setStage(next);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Ton retour n’est pas parti. Réessaie dans un instant.");
+      setError(e instanceof Error ? e.message : t("feedback.sendFailed"));
     } finally {
       setPending(false);
     }
@@ -78,31 +82,26 @@ export function FeedbackBubble({
     const next = !shared;
     setShared(next);
     try {
-      await send(`/api/followups/${followup.id}`, "PATCH", { shared: next });
-      onToast(next ? FEEDBACK_TEXT.shared : FEEDBACK_TEXT.kept);
+      await send(`/api/followups/${followup.id}`, "PATCH", { shared: next }, t("feedback.shareFailed"));
+      onToast(next ? t("feedback.shared") : t("feedback.kept"));
     } catch {
       setShared(!next);
-      onToast("Je n’arrive pas à modifier le partage.");
+      onToast(t("feedback.shareFailed"));
     }
   }
 
-  const q = FEEDBACK_TEXT.rating(followup.placeName);
-  const thanks = FEEDBACK_TEXT.thanks(recommend === "Absolument");
+  const bold = (chunks: ReactNode) => <b>{chunks}</b>;
 
   return (
     <div className="flex flex-col gap-2.5">
       <WhereBubble>
         {stage === "rating" ? (
           <>
-            <div className="mb-2.5">
-              {q.before}
-              <b>{q.strong}</b>
-              {q.after}
-            </div>
+            <div className="mb-2.5">{t.rich("feedback.rating", { place: followup.placeName, b: bold })}</div>
             <div className="flex flex-wrap gap-2">
               {RATINGS.map((r) => (
                 <button key={r} type="button" disabled={pending} onClick={() => pickRating(r)} className={CHIP}>
-                  {r}
+                  {ratingLabel(t, r)}
                 </button>
               ))}
             </div>
@@ -112,9 +111,9 @@ export function FeedbackBubble({
         {stage === "recommend" ? (
           <>
             <div className="mb-2 text-[12.5px] text-muted">
-              {followup.placeName} · {rating}
+              {followup.placeName} · {rating ? ratingLabel(t, rating) : null}
             </div>
-            <div className="mb-2.5">{FEEDBACK_TEXT.recommend}</div>
+            <div className="mb-2.5">{t("feedback.recommend")}</div>
             <div className="flex flex-wrap gap-2">
               {RECOMMEND_ANSWERS.map((r) => (
                 <button
@@ -126,7 +125,7 @@ export function FeedbackBubble({
                   }}
                   className={CHIP}
                 >
-                  {r}
+                  {recommendLabel(t, r)}
                 </button>
               ))}
             </div>
@@ -135,11 +134,11 @@ export function FeedbackBubble({
 
         {stage === "context" ? (
           <>
-            <div className="mb-2.5">{FEEDBACK_TEXT.context}</div>
+            <div className="mb-2.5">{t("feedback.context")}</div>
             <div className="flex flex-wrap gap-2">
               {FEEDBACK_CONTEXTS.map((c) => (
                 <button key={c} type="button" disabled={pending} onClick={() => pickContext(c)} className={CHIP}>
-                  {c}
+                  {contextLabel(t, c)}
                 </button>
               ))}
             </div>
@@ -149,38 +148,34 @@ export function FeedbackBubble({
               onClick={() => pickContext(null)}
               className="mt-2 text-[12.5px] font-semibold text-blue hover:underline"
             >
-              {FEEDBACK_TEXT.skip}
+              {t("feedback.skip")}
             </button>
           </>
         ) : null}
 
         {stage === "thanks" ? (
           <>
-            <div>
-              {thanks.before}
-              <b>{thanks.strong}</b>
-              {thanks.after}
-            </div>
+            <div>{t.rich(recommend === "Absolument" ? "feedback.thanksRecommended" : "feedback.thanks", { b: bold })}</div>
             <div className="flex items-center justify-between gap-3 pt-2.5">
-              <span className="text-[12.5px] text-muted">{FEEDBACK_TEXT.share}</span>
+              <span className="text-[12.5px] text-muted">{t("feedback.share")}</span>
               <button
                 type="button"
                 role="switch"
                 aria-checked={shared}
-                aria-label={FEEDBACK_TEXT.share}
+                aria-label={t("feedback.share")}
                 onClick={() => void toggleShare()}
                 className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors ${shared ? "bg-orange" : "bg-line-strong"}`}
               >
                 <span
-                  className={`absolute top-[3px] size-5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-[left] ${shared ? "left-[21px]" : "left-[3px]"}`}
+                  className={`absolute top-[3px] size-5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-[inset-inline-start] ${shared ? "start-[21px]" : "start-[3px]"}`}
                 />
               </button>
             </div>
-            <p className="text-[11.5px] text-soft">{FEEDBACK_TEXT.shareNote}</p>
+            <p className="text-[11.5px] text-soft">{t("feedback.shareNote")}</p>
           </>
         ) : null}
 
-        {stage === "not-visited" ? <div>{FEEDBACK_TEXT.notVisited}</div> : null}
+        {stage === "not-visited" ? <div>{t("feedback.notVisited")}</div> : null}
 
         {error ? <p className="mt-2 text-[12.5px] text-orange-ink">{error}</p> : null}
       </WhereBubble>
@@ -188,10 +183,10 @@ export function FeedbackBubble({
       {stage === "thanks" ? (
         <div className="flex flex-wrap gap-2">
           <Link href="/memory" className={`${ACTION} bg-lilac-2 text-ink hover:bg-lilac`}>
-            {FEEDBACK_TEXT.memory}
+            {t("feedback.memory")}
           </Link>
           <button type="button" onClick={onNewQuestion} className={`${ACTION} bg-ink text-paper hover:bg-night`}>
-            {FEEDBACK_TEXT.newQuestion}
+            {t("feedback.newQuestion")}
           </button>
         </div>
       ) : null}

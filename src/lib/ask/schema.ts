@@ -6,8 +6,8 @@ import { z } from "zod";
  * des sorties structurées.
  */
 export const CriteriaOutputSchema = z.object({
-  city: z.string().nullable().describe("Ville, telle que l'utilisateur la nomme"),
-  area: z.string().nullable().describe("Quartier ou zone dans la ville"),
+  city: z.string().nullable().describe("Ville, en alphabet latin, graphie internationale usuelle"),
+  area: z.string().nullable().describe("Quartier ou zone dans la ville, en alphabet latin"),
   when: z.string().nullable().describe("Moment : « ce soir », « samedi midi », « en novembre »…"),
   party_size: z.number().nullable().describe("Nombre de personnes, si précisé ou implicite"),
   occasion: z
@@ -25,8 +25,8 @@ export const CriteriaOutputSchema = z.object({
 });
 
 export const ClarificationOutputSchema = z.object({
-  question: z.string().describe("Une seule question courte, tutoiement"),
-  options: z.array(z.string()).describe("2 à 4 réponses courtes, en minuscules"),
+  question: z.string().describe("Une seule question courte, tutoiement, dans la langue de réponse"),
+  options: z.array(z.string()).describe("2 à 4 réponses courtes, en minuscules, dans la langue de réponse"),
 });
 
 export const UnderstandingOutputSchema = z.object({
@@ -34,7 +34,7 @@ export const UnderstandingOutputSchema = z.object({
   tags: z
     .array(z.string())
     .describe(
-      "Les critères compris, en chips courtes (1 à 4 mots), en français, dans l'ordre : lieu, moment, personnes, occasion, ambiance, contraintes",
+      "Les critères compris, en chips courtes (1 à 4 mots), dans la langue de réponse, dans l'ordre : lieu, moment, personnes, occasion, ambiance, contraintes",
     ),
   clarification: ClarificationOutputSchema.nullable().describe(
     "Une seule question complémentaire si elle change vraiment la réponse, sinon null",

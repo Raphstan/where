@@ -12,11 +12,14 @@ const optionalText = (max: number) =>
     .max(max)
     .transform((v) => (v.length ? v : null));
 
-/** Formulaire de la page invité, validé côté serveur. */
+/**
+ * Formulaire de la page invité, validé côté serveur. Les messages d'erreur sont des clés de
+ * messages/{langue}/guest.json (`errors.*`), traduites par l'action.
+ */
 export const GuestReplySchema = z.object({
   token: z.string().regex(/^[0-9a-f]{32}$/),
-  placeName: z.string().trim().min(2, "Indique le nom du lieu.").max(120),
-  placeUrl: optionalText(500).refine((v) => v === null || /^https?:\/\/\S+$/i.test(v), "Ce lien ne semble pas valide."),
+  placeName: z.string().trim().min(2, "placeNameRequired").max(120),
+  placeUrl: optionalText(500).refine((v) => v === null || /^https?:\/\/\S+$/i.test(v), "placeUrlInvalid"),
   visited: z.enum(VISITED_ANSWERS),
   note: optionalText(600),
   visibleOnlyToRequester: z.boolean(),

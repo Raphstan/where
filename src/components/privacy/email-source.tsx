@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useToast } from "@/components/shell/toast";
-import { call, useConfirm } from "./confirm-sheet";
+import { call, useConfirm, useErrorText } from "./confirm-sheet";
 
 const XS =
   "inline-flex min-h-[30px] items-center justify-center rounded-full px-[11px] py-1.5 text-[12.5px] font-semibold transition-colors disabled:opacity-60";
@@ -15,6 +16,8 @@ export function EmailSourceActions({ connected }: { connected: boolean }) {
   const confirm = useConfirm();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
+  const t = useTranslations("sources");
+  const errorText = useErrorText();
 
   if (!connected) {
     return (
@@ -30,12 +33,12 @@ export function EmailSourceActions({ connected }: { connected: boolean }) {
               router.push("/import");
               router.refresh();
             } catch (e) {
-              toast.show(e instanceof Error ? e.message : "Une erreur est survenue.");
+              toast.show(errorText(e));
               setBusy(false);
             }
           }}
         >
-          Connecter
+          {t("email.connect")}
         </button>
         {toast.node}
       </div>
@@ -45,7 +48,7 @@ export function EmailSourceActions({ connected }: { connected: boolean }) {
   return (
     <div className="flex flex-wrap gap-2.5">
       <Link href="/import" className={`${XS} border-[1.5px] border-line text-ink hover:border-ink`}>
-        Voir l’adresse de transfert
+        {t("email.viewAddress")}
       </Link>
       <button
         type="button"
@@ -53,17 +56,17 @@ export function EmailSourceActions({ connected }: { connected: boolean }) {
         onClick={() =>
           confirm(
             "disconnect-email",
-            "Déconnecter le transfert d’email ? Les lieux déjà importés restent, sauf si tu les supprimes.",
-            "Déconnecter",
+            t("email.disconnectConfirm"),
+            t("email.disconnect"),
             async () => {
               await call("/api/sources/email", "DELETE");
-              toast.show("Transfert d’email déconnecté");
+              toast.show(t("email.disconnected"));
               router.refresh();
             },
           )
         }
       >
-        Déconnecter
+        {t("email.disconnect")}
       </button>
       {toast.node}
     </div>

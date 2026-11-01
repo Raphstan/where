@@ -1,3 +1,4 @@
+import type { T } from "@/i18n/translator";
 import { fold } from "./match";
 import type { MemorySignal } from "./signal";
 
@@ -27,6 +28,7 @@ function saysNoisy(s: MemorySignal): boolean {
   return NOISY.test(t.replace(/pas trop bruyant|pas bruyant/g, ""));
 }
 
+/** `after` : l'heure (« 22 ») à partir de laquelle l'avis bruyant dit que le lieu s'anime. */
 export type Conflict = { calm: string; noisy: string; after: string | null };
 
 /** Deux proches distincts, l'un « calme », l'autre « bruyant ». L'utilisateur lui-même n'est pas cité. */
@@ -36,17 +38,19 @@ export function noiseConflict(signals: readonly MemorySignal[]): Conflict | null
     const calm = members.find((s) => saysCalm(s) && s.author.kind === "member" && noisy.author.kind === "member" && s.author.id !== noisy.author.id);
     if (calm && calm.author.kind === "member" && noisy.author.kind === "member") {
       const hour = AFTER.exec(textOf(noisy))?.[1] ?? null;
-      return { calm: calm.author.name.trim(), noisy: noisy.author.name.trim(), after: hour ? `${hour} h` : null };
+      return { calm: calm.author.name.trim(), noisy: noisy.author.name.trim(), after: hour };
     }
   }
   return null;
 }
 
 /** Notice de la maquette : « Signaux contradictoires : Sarah le trouve calme, Noam indique… ». */
-export function conflictNotice(c: Conflict): string {
+export function conflictNotice(t: T, c: Conflict): string {
   return c.after
-    ? `Signaux contradictoires : ${c.calm} le trouve calme, ${c.noisy} indique qu’il devient bruyant après ${c.after}. Probablement calme en début de soirée, animé ensuite.`
-    : `Signaux contradictoires : ${c.calm} le trouve calme, ${c.noisy} le trouve bruyant. Je te donne les deux avis plutôt que de trancher.`;
+    ? t("conflict.after", { calm: c.calm, noisy: c.noisy, hour: c.after })
+    : t("conflict.plain", { calm: c.calm, noisy: c.noisy });
 }
 
-export const CONFLICT_CONFIDENCE = "Moyenne — signaux contradictoires";
+export function conflictConfidence(t: T): string {
+  return t("confidence.conflict");
+}

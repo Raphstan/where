@@ -1,1 +1,60 @@
-{}
+{
+  "title": "Confidentialité",
+  "lead": "Privé par défaut. Tu gardes le contrôle de chaque connexion et de chaque suppression.",
+  "principles": {
+    "title": "Principes",
+    "privateByDefault": "Privé par défaut",
+    "noPublishing": "Aucune publication publique automatique",
+    "noAttribution": "Aucune recommandation attribuée à un proche sans preuve",
+    "noSecretReading": "Aucune lecture secrète des conversations",
+    "noSilentSend": "Aucun message envoyé sans ta confirmation",
+    "fullControl": "Contrôle total sur les connexions et la suppression"
+  },
+  "connected": {
+    "title": "Données connectées",
+    "email": "Transfert d’email",
+    "emailOn": "Emails transférés uniquement · {count, plural, one {# confirmation} other {# confirmations}}",
+    "emailOff": "Non connecté",
+    "importedPlaces": "Lieux importés"
+  },
+  "circle": {
+    "title": "Mon cercle",
+    "people": "Personnes",
+    "peopleValue": "{count} · invisible pour elles",
+    "theySee": "Ce qu’elles voient",
+    "theySeeValue": "Seulement les questions que tu leur envoies",
+    "feedback": "Mes retours après visite",
+    "feedbackValue": "Privés, sauf partage explicite"
+  },
+  "usage": {
+    "title": "Utilisé pour les recommandations",
+    "importedBookings": "Mes réservations importées",
+    "visitFeedback": "Mes retours après visite",
+    "circleReplies": "Les réponses de mon cercle (avec leur accord)"
+  },
+  "delete": {
+    "title": "Supprimer",
+    "source": "Supprimer une source",
+    "sourceConfirm": "Supprimer la source « transfert d’email » ? Les futures confirmations ne seront plus lues.",
+    "sourceAction": "Supprimer la source",
+    "sourceDone": "Source « transfert d’email » supprimée",
+    "places": "Supprimer tous les lieux importés",
+    "placesConfirmOne": "Supprimer le lieu importé ? Tes recommandations manuelles et les réponses de ton cercle sont conservées.",
+    "placesConfirmMany": "Supprimer les {count} lieux importés ? Tes recommandations manuelles et les réponses de ton cercle sont conservées.",
+    "placesAction": "Supprimer les lieux",
+    "placesDone": "{count, plural, one {# lieu importé supprimé} other {# lieux importés supprimés}}",
+    "account": "Supprimer mon compte",
+    "accountConfirm": "Supprimer ton compte et toutes tes données ? Cette action est définitive."
+  },
+  "confirm": {
+    "title": "Confirmer",
+    "cancel": "Annuler"
+  },
+  "error": "Une erreur est survenue.",
+  "api": {
+    "unauthenticated": "Connecte-toi pour continuer.",
+    "invalidUsage": "Réglage invalide.",
+    "saveUsageFailed": "Je n’arrive pas à enregistrer ce réglage.",
+    "deleteAccountFailed": "Je n’arrive pas à supprimer ton compte."
+  }
+}

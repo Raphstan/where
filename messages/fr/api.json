@@ -1,1 +1,10 @@
-{}
+{
+  "unauthenticated": "Connecte-toi pour continuer.",
+  "invalidAnswer": "Réponse invalide.",
+  "imports": {
+    "reservationNotFound": "Réservation introuvable.",
+    "alreadyQualified": "Ce lieu est déjà qualifié.",
+    "saveAnswerFailed": "Je n’arrive pas à enregistrer ta réponse.",
+    "deletePlacesFailed": "Je n’arrive pas à supprimer ces lieux."
+  }
+}

@@ -1,10 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EXAMPLE_QUESTIONS } from "@/lib/ask/examples";
 import type { AskRequest, AskResponse, Criteria, Understanding } from "@/lib/ask/schema";
-import { bookedQuestion, bookedReply, BOOKED_ANSWERS, type BookedAnswer, type DueFollowup } from "@/lib/booking/followup";
+import {
+  bookedAnswerFromLabel,
+  bookedAnswerLabel,
+  bookedQuestion,
+  bookedReply,
+  BOOKED_ANSWERS,
+  type BookedAnswer,
+  type DueFollowup,
+} from "@/lib/booking/followup";
 import type { BookingOption } from "@/lib/booking/options";
 import type { StoredConversation } from "@/lib/conversations/load";
 import type { ReplySummary } from "@/lib/conversations/schema";
@@ -20,7 +29,7 @@ import { Notice, TypingBubble, UserBubble, WhereBubble } from "./bubbles";
 import { ChoiceBubble } from "./choice";
 import { Composer } from "./composer";
 import { CriteriaChips } from "./criteria-chips";
-import { closedText, WIDEN_LABEL, type ChatMessage } from "./messages";
+import { closedText, type ChatMessage } from "./messages";
 import { PeopleSuggestion } from "./people";
 import { Mascot } from "@/components/shell/wordmark";
 
@@ -58,22 +67,21 @@ const isReplies = (json: unknown): json is { replies: ReplySummary[] } => isObje
 const isFollowups = (json: unknown): json is { followups: DueFollowup[] } => isObject(json) && Array.isArray(json.followups);
 const isBooking = (json: unknown): json is { followupId: string } => isObject(json) && typeof json.followupId === "string";
 
-async function ask(body: AskRequest): Promise<Understanding> {
-  const json = await call("/api/ask", { method: "POST", body }, isAskResponse, "Je n’ai pas réussi à comprendre la question. Réessaie dans un instant.");
+async function ask(body: AskRequest, fallback: string): Promise<Understanding> {
+  const json = await call("/api/ask", { method: "POST", body }, isAskResponse, fallback);
   return json.understanding;
 }
 
-function searchPlaces(criteria: Criteria, conversationId: string | null): Promise<SearchResponse> {
-  return call(
-    "/api/search",
-    { method: "POST", body: { criteria, conversationId } },
-    isSearchResponse,
-    "Je n’arrive pas à chercher dans ton cercle. Réessaie dans un instant.",
-  );
+function searchPlaces(criteria: Criteria, conversationId: string | null, fallback: string): Promise<SearchResponse> {
+  return call("/api/search", { method: "POST", body: { criteria, conversationId } }, isSearchResponse, fallback);
 }
 
 export function ChatScreen({ initial }: { initial?: StoredConversation }) {
   const router = useRouter();
+  const t = useTranslations("chat");
+  const th = useTranslations("home");
+  const tb = useTranslations("booking");
+  const tn = useTranslations("network");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [question, setQuestion] = useState<string | null>(initial?.question ?? null);
   const [busy, setBusy] = useState(false);
@@ -160,7 +168,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     try {
       // Laisse l'indicateur « réfléchit » visible au moins un court instant, comme la maquette.
       const [understanding] = await Promise.all([
-        ask(body),
+        ask(body, t("errors.ask")),
         new Promise<void>((resolve) => setTimeout(resolve, TYPING_DELAY_MS)),
       ]);
       remove(typingId);
@@ -178,7 +186,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       push({
         kind: "notice",
         tone: "warn",
-        text: error instanceof Error ? error.message : "Quelque chose a coincé. Réessaie dans un instant.",
+        text: error instanceof Error ? error.message : t("errors.generic"),
       });
       setBusy(false);
     }
@@ -194,13 +202,13 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     const typingId = push({ kind: "typing", search });
     try {
       const id = opts.save ? await persist(current) : conversation.current;
-      const response = await searchPlaces(current, id);
+      const response = await searchPlaces(current, id, t("errors.search"));
       if (lastSearch.current !== search) return null; // Une recherche plus récente a pris le relais.
       remove(typingId);
       push({ kind: "where", parts: response.intro, search });
       if (response.results.length > 0) push({ kind: "results", results: response.results, search });
       if (response.after) push({ kind: "notice", tone: "info", icon: "🧭", text: response.after, search });
-      if (response.closed.length > 0) push({ kind: "notice", tone: "soft", icon: "🚪", ...closedText(response.closed), search });
+      if (response.closed.length > 0) push({ kind: "notice", tone: "soft", icon: "🚪", ...closedText(t, response.closed), search });
       if (response.results.length === 0 && tags.current.length > 1) push({ kind: "widen", search });
       if (response.askIntro) push({ kind: "where", parts: response.askIntro, search });
       if (response.people.length > 0) push({ kind: "people", people: response.people, search });
@@ -210,7 +218,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       push({
         kind: "notice",
         tone: "warn",
-        text: error instanceof Error ? error.message : "Quelque chose a coincé. Réessaie dans un instant.",
+        text: error instanceof Error ? error.message : t("errors.generic"),
         search,
       });
       return null;
@@ -245,7 +253,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       if (a.sentTo.length > 0) push({ kind: "asked", names: a.sentTo });
     }
     for (const r of initial.replies) {
-      push({ kind: "notice", tone: "orange", strong: `${r.memberName} a répondu`, text: ` : ${r.placeName}.` });
+      push({ kind: "notice", tone: "orange", strong: t("replies.replied", { name: r.memberName }), text: t("replies.repliedPlace", { place: r.placeName }) });
     }
     void runSearch(initial.criteria, { save: false }).then(() => loadFollowups(initial.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois, au chargement
@@ -262,7 +270,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
   function book(result: SearchResult) {
     openPanel({
       key: `book:${result.id}`,
-      title: "Réserver",
+      title: t("book"),
       body: (
         <BookingPanel
           result={result}
@@ -289,7 +297,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     if (current?.kind !== "booked" || current.picked !== null) return;
     setMessages((prev) => prev.map((m) => (m.id === id && m.kind === "booked" ? { ...m, picked: answer } : m)));
     const { result } = current;
-    if (answer === "Oui") {
+    if (answer === "yes") {
       const place =
         result.origin === "discovery"
           ? { googlePlaceId: result.id.replace(/^google:/, ""), name: result.name, address: result.area }
@@ -299,19 +307,19 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
           "/api/bookings",
           { method: "POST", body: { place, conversationId: conversation.current } },
           isBooking,
-          "Je n’arrive pas à enregistrer ta réservation. Réessaie dans un instant.",
+          t("errors.booking"),
         );
       } catch (error) {
         setMessages((prev) => prev.map((m) => (m.id === id && m.kind === "booked" ? { ...m, picked: null } : m)));
         push({
           kind: "notice",
           tone: "warn",
-          text: error instanceof Error ? error.message : "Je n’arrive pas à enregistrer ta réservation.",
+          text: error instanceof Error ? error.message : t("errors.bookingShort"),
         });
         return;
       }
     }
-    push({ kind: "where", parts: bookedReply(answer, result.name) });
+    push({ kind: "where", parts: bookedReply(tb, answer, result.name) });
   }
 
   /* Réponses du cercle : vérifiées régulièrement tant que la page est visible. */
@@ -331,13 +339,13 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       for (const r of fresh) seenReplies.current.add(r.id);
 
       const noticeIds = fresh.map((r) =>
-        push({ kind: "notice", tone: "orange", strong: `${r.memberName} vient de répondre.`, text: "" }),
+        push({ kind: "notice", tone: "orange", strong: t("replies.justReplied", { name: r.memberName }), text: "" }),
       );
       for (const r of fresh.filter((x) => !x.reusable)) {
         push({
           kind: "notice",
           tone: "soft",
-          text: `${r.memberName} n’a pas autorisé la réutilisation : cette réponse ne sert qu’à cette question et ne sera pas gardée.`,
+          text: t("replies.notReusable", { name: r.memberName }),
         });
       }
       if (!criteria.current) return;
@@ -350,7 +358,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
           setMessages((prev) =>
             prev.map((m) =>
               m.id === noticeIds[i] && m.kind === "notice"
-                ? { ...m, text: " J’ai une nouvelle recommandation plus fiable — sa réponse change le classement." }
+                ? { ...m, text: t("replies.changesRanking") }
                 : m,
             ),
           );
@@ -411,11 +419,11 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     const q = new URLSearchParams(window.location.search).get("q")?.trim().slice(0, 500);
     if (!q) return;
     // Hors du rendu de l'effet ; en mode strict, le premier passage est annulé et le second envoie.
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       window.history.replaceState(null, "", "/chat");
       send(q);
     });
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois, au chargement
   }, []);
 
@@ -449,10 +457,10 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     tags.current = tags.current.filter((t) => normalize(t) !== normalize(label));
     if (criteria.current) criteria.current = withoutTag(criteria.current, label);
     if (criteria.current && searched.current && !busy) {
-      showToast(`« ${label} » retiré — je mets les résultats à jour`);
+      showToast(t("toast.removedUpdating", { tag: label }));
       void runSearch(criteria.current, { save: true });
     } else {
-      showToast(`« ${label} » retiré`);
+      showToast(t("toast.removed", { tag: label }));
     }
   }
 
@@ -475,10 +483,10 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
     if (!tags.current.some((t) => normalize(t) === normalize(tag))) tags.current = [...tags.current, tag];
     if (criteria.current) criteria.current = withTag(criteria.current, tag);
     if (criteria.current && searched.current && !busy) {
-      showToast(`« ${tag} » ajouté — résultats mis à jour`);
+      showToast(t("toast.addedUpdated", { tag }));
       void runSearch(criteria.current, { save: true });
     } else {
-      showToast(`« ${tag} » ajouté`);
+      showToast(t("toast.added", { tag }));
     }
   }
 
@@ -512,7 +520,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
             onClick={reset}
             className="inline-flex min-h-[30px] items-center rounded-full border-[1.5px] border-line px-[11px] text-[12.5px] font-semibold text-ink transition-colors hover:border-ink"
           >
-            Nouveau
+            {t("new")}
           </button>
         </div>
       ) : null}
@@ -526,11 +534,8 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
             >
               <Mascot className="animate-glow h-[60px] w-[52px]" />
             </span>
-            <h1 className="font-display text-[21px] font-bold leading-tight">Où devrais-tu vraiment aller ?</h1>
-            <p className="max-w-[360px] text-[12.5px] text-muted">
-              Pose ta question comme à un ami. Je regarde d’abord ce que ton cercle sait, puis je complète
-              avec le public.
-            </p>
+            <h1 className="font-display text-[21px] font-bold leading-tight">{t("empty.title")}</h1>
+            <p className="max-w-[360px] text-[12.5px] text-muted">{t("empty.lead")}</p>
           </div>
         ) : null}
 
@@ -594,7 +599,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
                     onClick={widen}
                     className="inline-flex min-h-9 items-center rounded-full bg-lilac-2 px-3.5 text-[13px] font-bold text-ink transition-colors hover:bg-lilac disabled:opacity-50"
                   >
-                    {WIDEN_LABEL}
+                    {t("widen")}
                   </button>
                 </div>
               );
@@ -616,12 +621,13 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
                 </div>
               );
             case "asked": {
-              const t = askedText(m.names);
+              const sent = askedText(tn, m.names);
               return (
                 <div key={m.id} className="mx-auto w-full max-w-[760px]">
                   <WhereBubble>
-                    Envoyé à <b>{t.strong}</b>
-                    {t.text}
+                    {sent.before}
+                    <b>{sent.strong}</b>
+                    {sent.text}
                   </WhereBubble>
                 </div>
               );
@@ -630,9 +636,15 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
               return (
                 <div key={m.id} className="mx-auto w-full max-w-[760px]">
                   <ChoiceBubble
-                    clarification={{ question: bookedQuestion(m.result.name), options: [...BOOKED_ANSWERS] }}
-                    picked={m.picked}
-                    onPick={(option) => void pickBooked(m.id, option as BookedAnswer)}
+                    clarification={{
+                      question: bookedQuestion(tb, m.result.name),
+                      options: BOOKED_ANSWERS.map((a) => bookedAnswerLabel(tb, a)),
+                    }}
+                    picked={m.picked ? bookedAnswerLabel(tb, m.picked) : null}
+                    onPick={(label) => {
+                      const answer = bookedAnswerFromLabel(tb, label);
+                      if (answer) void pickBooked(m.id, answer);
+                    }}
                   />
                 </div>
               );
@@ -653,10 +665,10 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
             <button
               key={ex.key}
               type="button"
-              onClick={() => send(ex.text)}
+              onClick={() => send(th(`examples.${ex.key}`))}
               className="inline-flex shrink-0 items-center rounded-full border-[1.5px] border-line bg-paper-2 px-3 py-[7px] text-[12.5px] font-medium whitespace-nowrap text-ink transition-colors hover:border-ink"
             >
-              {ex.text}
+              {th(`examples.${ex.key}`)}
             </button>
           ))}
         </div>

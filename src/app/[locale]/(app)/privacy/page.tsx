@@ -1,30 +1,29 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Suspense, type ReactNode } from "react";
 import { DeleteActions, UsageToggles } from "@/components/privacy/privacy-controls";
 import { PageFrame } from "@/components/shell/page-frame";
 import { privacyOverview } from "@/lib/privacy/store";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Confidentialité" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("privacy");
+  return { title: t("title") };
+}
 
 const CARD = "rounded-card border border-line bg-paper-2 p-4";
 const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
 
-const PRINCIPLES = [
-  "Privé par défaut",
-  "Aucune publication publique automatique",
-  "Aucune recommandation attribuée à un proche sans preuve",
-  "Aucune lecture secrète des conversations",
-  "Aucun message envoyé sans ta confirmation",
-  "Contrôle total sur les connexions et la suppression",
-];
+/** Principes de la maquette, dans l'ordre (libellés : `principles.{clé}`). */
+const PRINCIPLES = ["privateByDefault", "noPublishing", "noAttribution", "noSecretReading", "noSilentSend", "fullControl"] as const;
 
 function Kv({ k, children }: { k: string; children: ReactNode }) {
   return (
     <div className="flex justify-between gap-3 border-b border-line py-[11px] text-[13.5px] last:border-b-0">
       <span className="text-muted">{k}</span>
-      <span className="text-right">{children}</span>
+      <span className="text-end">{children}</span>
     </div>
   );
 }
@@ -38,30 +37,29 @@ async function Overview() {
   } = await supabase.auth.getUser();
   if (!user) return null;
   const o = await privacyOverview(supabase, user.id);
+  const t = await getTranslations("privacy");
 
   return (
     <>
       <div className={CARD}>
-        <div className={EYEBROW}>Données connectées</div>
-        <Kv k="Transfert d’email">
-          {o.emailSource
-            ? `Emails transférés uniquement · ${o.confirmations} ${o.confirmations > 1 ? "confirmations" : "confirmation"}`
-            : "Non connecté"}
+        <div className={EYEBROW}>{t("connected.title")}</div>
+        <Kv k={t("connected.email")}>
+          {o.emailSource ? t("connected.emailOn", { count: o.confirmations }) : t("connected.emailOff")}
         </Kv>
-        <Kv k="Lieux importés">{o.importedPlaces}</Kv>
+        <Kv k={t("connected.importedPlaces")}>{o.importedPlaces}</Kv>
       </div>
       <div className={CARD}>
-        <div className={EYEBROW}>Mon cercle</div>
-        <Kv k="Personnes">{o.circleSize} · invisible pour elles</Kv>
-        <Kv k="Ce qu’elles voient">Seulement les questions que tu leur envoies</Kv>
-        <Kv k="Mes retours après visite">Privés, sauf partage explicite</Kv>
+        <div className={EYEBROW}>{t("circle.title")}</div>
+        <Kv k={t("circle.people")}>{t("circle.peopleValue", { count: o.circleSize })}</Kv>
+        <Kv k={t("circle.theySee")}>{t("circle.theySeeValue")}</Kv>
+        <Kv k={t("circle.feedback")}>{t("circle.feedbackValue")}</Kv>
       </div>
       <div className={CARD}>
-        <div className={EYEBROW}>Utilisé pour les recommandations</div>
+        <div className={EYEBROW}>{t("usage.title")}</div>
         <UsageToggles initial={o.usage} />
       </div>
       <div className={`${CARD} flex flex-col gap-2`}>
-        <div className={EYEBROW}>Supprimer</div>
+        <div className={EYEBROW}>{t("delete.title")}</div>
         <DeleteActions emailSource={o.emailSource} importedPlaces={o.importedPlaces} />
       </div>
     </>
@@ -70,19 +68,20 @@ async function Overview() {
 
 /* Confidentialité (docs/prototype.html, scrPrivacy). */
 export default function PrivacyPage() {
+  const t = useTranslations("privacy");
   return (
     <PageFrame
-      title="Confidentialité"
-      lead="Privé par défaut. Tu gardes le contrôle de chaque connexion et de chaque suppression."
+      title={t("title")}
+      lead={t("lead")}
       back="/profile"
     >
       <div className={CARD}>
-        <div className={EYEBROW}>Principes</div>
+        <div className={EYEBROW}>{t("principles.title")}</div>
         <div className="mt-2 flex flex-col gap-[9px] text-[13px] text-ink-2">
-          {PRINCIPLES.map((t) => (
-            <div key={t} className="flex items-start gap-2.5">
+          {PRINCIPLES.map((k) => (
+            <div key={k} className="flex items-start gap-2.5">
               <span className="shrink-0 text-olive">✓</span>
-              {t}
+              {t(`principles.${k}`)}
             </div>
           ))}
         </div>

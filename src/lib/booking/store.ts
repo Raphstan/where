@@ -80,7 +80,7 @@ export async function recordBooking(
   const signal = await supabase.from("signals").insert({
     user_id: userId,
     place_id: placeId,
-    evidence_level: bookedAnswerLevel("Oui")!,
+    evidence_level: bookedAnswerLevel("yes")!,
     source_type: "manual",
   });
   if (signal.error) {

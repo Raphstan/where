@@ -15,6 +15,3 @@ export async function CircleList() {
   const members = await listCircle(supabase, user.id);
   return members.map((m) => <PersonCard key={m.id} member={m} />);
 }
-
-export const CIRCLE_LEAD =
-  "Une personne n’est pas forcément pertinente pour tous les sujets. Choisis sur quoi tu fais confiance à chacun.";

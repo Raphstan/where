@@ -13,7 +13,7 @@ export function OnbFrame({ back, children }: { back: `/${string}`; children: Rea
           <Link
             href={back}
             aria-label={t("back")}
-            className="inline-flex size-[36px] items-center justify-center rounded-full bg-paper-2 text-[18px] shadow-soft rtl:-scale-x-100"
+            className="inline-flex size-[36px] items-center justify-center rounded-full bg-paper-2 text-[18px] shadow-soft"
           >
             ‹
           </Link>

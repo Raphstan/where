@@ -1,1 +1,93 @@
-{}
+{
+  "panelTitle": "Book",
+  "labels": {
+    "ontopo": "Book with Ontopo",
+    "tabit": "Book with Tabit",
+    "site": "Open the restaurant’s website",
+    "tel": "Call",
+    "wa": "Send a WhatsApp",
+    "maps": "View in Google Maps"
+  },
+  "intro": "WH3RE isn’t a booking system. Here’s what actually works for this place:",
+  "notes": {
+    "tabit": "Tabit also handles deliveries: only a table booking will count as a visit.",
+    "noPlatform": "This place isn’t on Ontopo or Tabit — I only show you what actually exists."
+  },
+  "leaving": {
+    "eyebrow": "You’re leaving WH3RE",
+    "back": "Back to WH3RE",
+    "text": {
+      "ontopo": "You’re leaving WH3RE to finish your booking on Ontopo.",
+      "tabit": "You’re leaving WH3RE to finish your booking on Tabit.",
+      "site": "You’re leaving WH3RE to finish your booking on the restaurant’s website.",
+      "tel": "You’re leaving WH3RE to finish your booking by phone.",
+      "wa": "You’re leaving WH3RE to finish your booking on WhatsApp.",
+      "maps": "You’re leaving WH3RE to finish your booking on Google Maps."
+    }
+  },
+  "booked": {
+    "question": "Welcome back. Did you book {place}?",
+    "answers": {
+      "yes": "Yes",
+      "notYet": "Not yet",
+      "otherPlace": "I picked somewhere else"
+    },
+    "reply": {
+      "yes": "Perfect. I’m keeping {place} in your memory as booked — not visited yet. I’ll ask you tomorrow how it was.",
+      "notYet": "No worries. I’ll keep the table open in your conversation — tell me if you’d like another time or another place.",
+      "otherPlace": "Got it. I won’t count this booking. Want to tell me where you’re going instead? It’ll make your memory richer."
+    }
+  },
+  "feedback": {
+    "rating": "So, how was <b>{place}</b>?",
+    "ratings": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "average": "So-so",
+      "notForMe": "Not for me",
+      "notVisited": "I didn’t end up going"
+    },
+    "recommend": "Would you recommend it to someone?",
+    "recommendAnswers": {
+      "absolutely": "Absolutely",
+      "someContexts": "For some occasions",
+      "notReally": "Not really"
+    },
+    "context": "For what occasion?",
+    "contexts": {
+      "date": "date",
+      "friends": "friends",
+      "quiet": "quiet",
+      "specialOccasion": "special occasion",
+      "lunch": "lunch"
+    },
+    "skip": "Skip",
+    "notVisited": "No problem — I won’t count this visit.",
+    "thanks": "Thanks. It’s saved in <b>your memory</b>. It’ll sharpen my next answers.",
+    "thanksRecommended": "Thanks. It’s saved in <b>your memory</b> as a place you recommend. It’ll sharpen my next answers.",
+    "share": "Share this feedback with my private circle",
+    "shareNote": "Off by default. Never posted publicly.",
+    "shared": "Shared with your private circle",
+    "kept": "Feedback kept just for you",
+    "memory": "See my memory",
+    "newQuestion": "New question",
+    "sendFailed": "Your feedback didn’t go through. Try again in a moment.",
+    "shareFailed": "I can’t change the sharing setting right now."
+  },
+  "api": {
+    "unauthenticated": "Sign in to continue.",
+    "invalidPlace": "Invalid place.",
+    "placeNotFound": "Place not found.",
+    "bookingFailed": "I can’t save your booking right now.",
+    "conversationNotFound": "Conversation not found.",
+    "followupsFailed": "I can’t load your feedback right now.",
+    "followupNotFound": "Feedback not found.",
+    "invalidAnswer": "Invalid answer.",
+    "alreadyAnswered": "This feedback is already saved.",
+    "nothingToShare": "No visit, so there’s nothing to share.",
+    "feedbackFailed": "I can’t save your feedback right now.",
+    "shareFailed": "I can’t change the sharing setting right now.",
+    "cronUnauthorized": "Reserved for the scheduled job.",
+    "cronFailed": "Couldn’t update the follow-ups."
+  }
+}

@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { EvidenceDot, hashIndex } from "@/components/results/marks";
 import {
   OCCASIONS,
-  QUALIFY_TEXT,
+  occasionLabel,
   qualificationSummary,
   RECOMMEND_ENDS,
+  RECOMMEND_KEY,
+  VISITED_KEY,
   type Qualification,
   type QualifyAnswers,
   type RecommendAnswer,
@@ -35,7 +38,8 @@ async function send(id: string, body: Qualification): Promise<void> {
   // Déjà qualifié (autre onglet) : la carte est traitée, on passe à la suivante.
   if (res.ok || res.status === 409) return;
   const json = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
-  throw new Error(json?.error?.message || "Ta réponse n’est pas partie. Réessaie dans un instant.");
+  // Sans message du serveur, l'appelant affiche « Ta réponse n'est pas partie. » dans la bonne langue.
+  throw new Error(json?.error?.message || "");
 }
 
 /**
@@ -53,6 +57,8 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
   const [error, setError] = useState<string | null>(null);
 
   const card = cards[idx];
+  const t = useTranslations("import");
+  const tc = useTranslations("common");
 
   async function finish(answers: QualifyAnswers | null) {
     if (!card || pending) return;
@@ -70,7 +76,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
         setPending(false);
       }, 280);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Ta réponse n’est pas partie. Réessaie dans un instant.");
+      setError(e instanceof Error && e.message ? e.message : t("qualify.sendFailed"));
       setPending(false);
     }
   }
@@ -108,12 +114,12 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
         <span className="inline-flex size-16 items-center justify-center rounded-full bg-olive font-display text-[26px] text-white">
           ✓
         </span>
-        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">{QUALIFY_TEXT.doneTitle}</h1>
-        <p className="text-[15px] leading-normal text-muted">{QUALIFY_TEXT.doneLead(qualified)}</p>
+        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">{t("qualify.doneTitle")}</h1>
+        <p className="text-[15px] leading-normal text-muted">{t("qualify.doneLead", { count: qualified })}</p>
         {done.length > 0 ? (
-          <div className="w-full rounded-card border border-line bg-paper-2 px-4 py-1 text-left">
+          <div className="w-full rounded-card border border-line bg-paper-2 px-4 py-1 text-start">
             {done.map(({ card: c, answers: a }) => {
-              const s = qualificationSummary(a);
+              const s = qualificationSummary(t, a);
               return (
                 <div key={c.id} className="flex items-center gap-3 border-b border-line py-[11px] last:border-b-0">
                   <div className="min-w-0 grow">
@@ -127,7 +133,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
           </div>
         ) : null}
         <Link href="/circle" className={`${PRIMARY} w-full`}>
-          {QUALIFY_TEXT.doneCta}
+          {t("qualify.doneCta")}
         </Link>
       </div>
     );
@@ -138,14 +144,14 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
   return (
     <div className="flex flex-col gap-3.5">
       <div className="flex min-h-10 items-center justify-between">
-        <Link href="/import" aria-label="Retour" className="inline-flex size-10 items-center justify-center rounded-full text-[22px] text-ink hover:bg-lilac-2">
+        <Link href="/import" aria-label={tc("back")} className="inline-flex size-10 items-center justify-center rounded-full text-[22px] text-ink hover:bg-lilac-2">
           ‹
         </Link>
         <span className="text-[12.5px] text-muted">
           {idx + 1} / {cards.length}
         </span>
       </div>
-      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{QUALIFY_TEXT.eyebrow}</div>
+      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("qualify.eyebrow")}</div>
 
       <div className="relative h-[430px]">
         <div aria-hidden className="absolute inset-0 translate-y-3 scale-95 rounded-card-lg border border-line bg-lilac-2" />
@@ -156,23 +162,23 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
           }`}
         >
           <div className={`scene h-[150px] shrink-0 scene-${hashIndex(card.id, SCENES)}`}>
-            <span className="absolute bottom-3 left-3.5 z-[1] font-display text-[17px] text-white drop-shadow">{label}</span>
+            <span className="absolute bottom-3 start-3.5 z-[1] font-display text-[17px] text-white drop-shadow">{label}</span>
           </div>
           <div className="flex flex-1 flex-col gap-3 p-4">
             <div className="text-[11.5px] text-soft">{card.provenance}</div>
 
             {step === 0 ? (
               <>
-                <div className="font-display text-[22px]">{QUALIFY_TEXT.visited}</div>
+                <div className="font-display text-[22px]">{t("qualify.visited")}</div>
                 <div className="grid grid-cols-2 gap-2">
                   <button type="button" disabled={pending} onClick={() => pickVisited("Oui")} className={PRIMARY}>
-                    Oui
+                    {t(`qualify.visitedAnswers.${VISITED_KEY.Oui}`)}
                   </button>
                   <button type="button" disabled={pending} onClick={() => pickVisited("Non")} className={GHOST}>
-                    Non
+                    {t(`qualify.visitedAnswers.${VISITED_KEY.Non}`)}
                   </button>
                   <button type="button" disabled={pending} onClick={() => pickVisited("Je ne sais plus")} className={`${GHOST} col-span-2`}>
-                    Je ne sais plus
+                    {t(`qualify.visitedAnswers.${VISITED_KEY["Je ne sais plus"]}`)}
                   </button>
                 </div>
               </>
@@ -180,10 +186,10 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
 
             {step === 1 ? (
               <>
-                <div className="font-display text-[22px]">{QUALIFY_TEXT.recommend}</div>
+                <div className="font-display text-[22px]">{t("qualify.recommend")}</div>
                 <div className="grid grid-cols-2 gap-2">
                   <button type="button" disabled={pending} onClick={() => pickRecommend("Absolument")} className={`${PRIMARY} col-span-2`}>
-                    Absolument
+                    {t(`qualify.recommendAnswers.${RECOMMEND_KEY.Absolument}`)}
                   </button>
                   <button
                     type="button"
@@ -191,13 +197,13 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
                     onClick={() => pickRecommend("Oui, dans certains contextes")}
                     className={`${GHOST} col-span-2`}
                   >
-                    Oui, dans certains contextes
+                    {t(`qualify.recommendAnswers.${RECOMMEND_KEY["Oui, dans certains contextes"]}`)}
                   </button>
                   <button type="button" disabled={pending} onClick={() => pickRecommend("Pas vraiment")} className={GHOST}>
-                    Pas vraiment
+                    {t(`qualify.recommendAnswers.${RECOMMEND_KEY["Pas vraiment"]}`)}
                   </button>
                   <button type="button" disabled={pending} onClick={() => pickRecommend("Non")} className={GHOST}>
-                    Non
+                    {t(`qualify.recommendAnswers.${RECOMMEND_KEY.Non}`)}
                   </button>
                 </div>
               </>
@@ -205,7 +211,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
 
             {step === 2 ? (
               <>
-                <div className="font-display text-[22px]">{QUALIFY_TEXT.occasion}</div>
+                <div className="font-display text-[22px]">{t("qualify.occasion")}</div>
                 <div className="flex flex-wrap gap-2">
                   {OCCASIONS.map((o) => {
                     const on = draft.occasion.includes(o);
@@ -221,35 +227,35 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
                           on ? "border-ink bg-ink text-paper" : "border-line bg-paper-2 text-ink hover:border-ink"
                         }`}
                       >
-                        {o}
+                        {occasionLabel(t, o)}
                       </button>
                     );
                   })}
                 </div>
                 <button type="button" onClick={() => setStep(3)} className={`${PRIMARY} w-full`}>
-                  {QUALIFY_TEXT.continue}
+                  {t("qualify.continue")}
                 </button>
               </>
             ) : null}
 
             {step === 3 ? (
               <>
-                <div className="font-display text-[22px]">{QUALIFY_TEXT.note}</div>
-                <p className="text-[11.5px] text-soft">{QUALIFY_TEXT.noteHint}</p>
+                <div className="font-display text-[22px]">{t("qualify.note")}</div>
+                <p className="text-[11.5px] text-soft">{t("qualify.noteHint")}</p>
                 <textarea
                   value={draft.note}
                   onChange={(e) => setDraft((d) => ({ ...d, note: e.target.value }))}
                   maxLength={600}
-                  placeholder={QUALIFY_TEXT.notePlaceholder}
-                  aria-label={QUALIFY_TEXT.note}
+                  placeholder={t("qualify.notePlaceholder")}
+                  aria-label={t("qualify.note")}
                   className="min-h-[88px] w-full resize-none rounded-[14px] border-[1.5px] border-line bg-paper-2 px-3.5 py-3 text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <button type="button" disabled={pending} onClick={() => void finish(answers({ ...draft, note: "" }))} className={GHOST}>
-                    {QUALIFY_TEXT.skipNote}
+                    {t("qualify.skipNote")}
                   </button>
                   <button type="button" disabled={pending} onClick={() => void finish(answers(draft))} className={PRIMARY}>
-                    {QUALIFY_TEXT.save}
+                    {t("qualify.save")}
                   </button>
                 </div>
               </>
@@ -268,7 +274,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
 
       <div className="flex justify-center">
         <button type="button" disabled={pending} onClick={() => void finish(null)} className="text-[13px] font-semibold text-blue hover:underline">
-          {QUALIFY_TEXT.skipPlace}
+          {t("qualify.skipPlace")}
         </button>
       </div>
     </div>

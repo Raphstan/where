@@ -3,26 +3,27 @@ import type { Database } from "@/lib/supabase/database.types";
 export type TrustDomain = Database["public"]["Enums"]["trust_domain"];
 
 /**
- * Domaines de confiance, dans l'ordre et avec les libellés de la maquette (DOMAINS) ;
- * « Tout » s'affiche « Je lui fais confiance pour tout » sur la fiche d'une personne.
+ * Domaines de confiance, dans l'ordre de la maquette (DOMAINS). Libellés : messages/{langue}/circle.json,
+ * `domains.{valeur}` ; en français, ceux de la maquette (« Tout » s'affiche « Je lui fais confiance pour
+ * tout » sur la fiche d'une personne). Les valeurs enregistrées ne changent pas avec la langue.
  */
 export const TRUST_DOMAINS = [
-  ["all", "Je lui fais confiance pour tout"],
-  ["restaurants", "Restaurants"],
-  ["hotels", "Hôtels"],
-  ["nightlife", "Nightlife"],
-  ["travel", "Voyages"],
-  ["activities", "Activités"],
-  ["family", "Famille"],
-  ["business", "Business"],
-] as const satisfies readonly (readonly [TrustDomain, string])[];
+  "all",
+  "restaurants",
+  "hotels",
+  "nightlife",
+  "travel",
+  "activities",
+  "family",
+  "business",
+] as const satisfies readonly TrustDomain[];
 
 // Toute valeur de l'enum Postgres a sa chip.
-type Missing = Exclude<TrustDomain, (typeof TRUST_DOMAINS)[number][0]>;
+type Missing = Exclude<TrustDomain, (typeof TRUST_DOMAINS)[number]>;
 const _everyDomainHasAChip: Missing extends never ? true : never = true;
 void _everyDomainHasAChip;
 
-export const TRUST_DOMAIN_VALUES = TRUST_DOMAINS.map(([k]) => k) as [TrustDomain, ...TrustDomain[]];
+export const TRUST_DOMAIN_VALUES = [...TRUST_DOMAINS] as [TrustDomain, ...TrustDomain[]];
 
 /**
  * Coche ou décoche un domaine (maquette togDom) : « Tout » remplace les domaines cochés, ou se

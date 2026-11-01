@@ -1,1 +1,162 @@
-{}
+{
+  "metaTitle": "Retrouver mes réservations",
+  "page": {
+    "eyebrow": "Mes anciennes réservations",
+    "title": "Tu as déjà une mémoire de tes sorties cachée dans tes emails.",
+    "lead": "WH3RE peut y retrouver les confirmations de restaurants, hôtels, activités, événements et voyages.",
+    "disconnected": "Le transfert d’email est déconnecté.",
+    "addressUnavailable": "L’adresse de transfert n’est pas encore disponible.",
+    "privacy": "WH3RE ne lit que les emails qu’il reçoit, et rien n’entre dans ta mémoire sans que tu le valides. Tu peux tout supprimer à tout moment.",
+    "foundTitle": "Voilà ce que j’ai retrouvé.",
+    "stats": {
+      "restaurants": "restaurants",
+      "hotels": "hôtels",
+      "activities": "activités"
+    },
+    "noOntopo": "<b>Aucune réservation Ontopo trouvée</b> dans les emails. Certaines confirmations ont peut-être été envoyées uniquement par SMS.",
+    "deliveries": "{count, plural, one {# commande de livraison exclue.} other {# commandes de livraison exclues.}}",
+    "deliveriesTabit": "{count, plural, one {# commande de livraison Tabit exclue.} other {# commandes de livraison Tabit exclues.}}",
+    "deliveriesNote": "Une livraison n’est pas une visite au restaurant — elles ne compteront jamais comme telle.",
+    "cancellations": "{count, plural, one {# annulation écartée.} other {# annulations écartées.}}",
+    "cancellationsNote": "Une réservation annulée ne compte jamais comme visite.",
+    "groups": {
+      "restaurants": "Restaurants",
+      "hotels": "Hôtels",
+      "activities": "Activités & événements"
+    },
+    "qualifyHint": "Une réservation ne veut pas dire que tu y es allé, ni que tu as aimé. Prochaine étape : quelques questions rapides pour qualifier ces expériences.",
+    "qualifyCta": "Qualifier mes expériences"
+  },
+  "badge": {
+    "table": "Réservé",
+    "hotel": "Hôtel",
+    "activity": "Activité"
+  },
+  "provenance": {
+    "table": "Réservation",
+    "tableOn": "Réservation {platform}",
+    "hotel": "Confirmation hôtel",
+    "activity": "Activité"
+  },
+  "deliveriesSheet": {
+    "see": "Voir",
+    "title": "Livraisons exclues",
+    "textTabit": "Ces emails viennent de Tabit mais correspondent à des commandes livrées. Ils ne compteront jamais comme une visite.",
+    "text": "Ces emails correspondent à des commandes livrées. Ils ne compteront jamais comme une visite.",
+    "order": "Commande",
+    "orderLine": "Commande de livraison · exclue"
+  },
+  "copy": {
+    "copy": "Copier",
+    "copiedAddress": "Copiée",
+    "copied": "Copié ✓"
+  },
+  "setup": {
+    "notReceiving": "<b>La réception des emails n’est pas encore active sur cette version de WH3RE.</b> Ne configure rien dans Gmail pour l’instant : rien n’arriverait. Cette étape sera disponible une fois WH3RE en ligne.",
+    "chooseTitle": "Comment veux-tu retrouver tes réservations ?",
+    "auto": {
+      "title": "Automatiquement, depuis Gmail",
+      "badge": "Recommandé",
+      "text": "3 étapes, 2 minutes. Gmail n’envoie à WH3RE que les emails de réservation, rien d’autre."
+    },
+    "byHand": {
+      "title": "À la main, un email à la fois",
+      "text": "Tu transfères toi-même une confirmation de restaurant, d’hôtel ou d’activité."
+    },
+    "back": "‹ Retour",
+    "manual": {
+      "title": "Transfère une confirmation",
+      "step1": "Ouvre un email de confirmation : un restaurant, un hôtel, une activité.",
+      "step2": "Clique sur « Transférer » et envoie-le à cette adresse :",
+      "step3": "Envoie-le depuis <b>{email}</b>, l’adresse de ton compte WH3RE. Il apparaîtra ici en quelques secondes.",
+      "deliveries": "Les livraisons sont écartées : une commande Tabit ou Wolt n’est pas une visite au restaurant."
+    },
+    "done": {
+      "activeTitle": "Le transfert automatique fonctionne.",
+      "title": "C’est en place.",
+      "activeText": "Tes nouvelles confirmations arrivent ici toutes seules. Tu les valides avant qu’elles entrent dans ta mémoire.",
+      "text": "Ta prochaine confirmation d’Ontopo, Tabit, Booking ou Airbnb apparaîtra ici toute seule.",
+      "oldEmails": "Gmail ne transfère que les nouveaux emails. Pour tes anciennes réservations, <manual>transfère-les à la main</manual>.",
+      "restart": "Recommencer l’assistant"
+    },
+    "progress": "Étape {step} sur 3",
+    "step1": {
+      "title": "Donne ton adresse WH3RE à Gmail",
+      "copy": "Copie ton adresse WH3RE :",
+      "open": "Ouvre Gmail, clique sur <b>« Ajouter une adresse de transfert »</b>, colle l’adresse et valide.",
+      "openGmail": "Ouvrir Gmail ↗",
+      "workspace": "Tu vois un champ « Transférer une copie des messages reçus à » au lieu du bouton ? N’y mets rien : il transférerait toute ta boîte. C’est l’affichage de certains comptes professionnels (Google Workspace).",
+      "next": "C’est fait, étape suivante"
+    },
+    "step2": {
+      "title": "Confirme avec le code",
+      "codeSent": "Gmail a envoyé ce code à WH3RE :",
+      "codeSentFor": "Gmail a envoyé ce code à WH3RE pour {requester} :",
+      "paste": "Retourne dans Gmail, colle le code et clique sur <b>« Valider »</b>.",
+      "keepDisabled": "Laisse <b>« Désactiver le transfert »</b> sélectionné : seuls les emails de réservation seront transférés, grâce à l’étape suivante.",
+      "waiting": "J’attends le code que Gmail envoie à WH3RE. Il apparaît ici tout seul, en quelques secondes.",
+      "next": "C’est validé, étape suivante",
+      "alreadyDone": "J’ai déjà validé le code dans Gmail"
+    },
+    "step3": {
+      "title": "Ne transfère que les réservations",
+      "open": "Ouvre Gmail : la recherche des emails de réservation est déjà remplie.",
+      "openSearch": "Ouvrir la recherche dans Gmail ↗",
+      "options": "Dans la barre de recherche, clique sur l’icône des options (à droite), puis sur <b>« Créer un filtre »</b>.",
+      "forward": "Coche <b>« Le transférer à »</b>, choisis ton adresse WH3RE, puis clique sur <b>« Créer un filtre »</b>.",
+      "notFilled": "La recherche ne s’est pas remplie ?",
+      "copyQuery": "Copie-la et colle-la dans la barre de recherche de Gmail :",
+      "done": "C’est fait"
+    }
+  },
+  "qualify": {
+    "eyebrow": "Qualifier mes expériences",
+    "visited": "Tu y es vraiment allé ?",
+    "recommend": "Tu le recommanderais ?",
+    "occasion": "Pour quelle occasion ?",
+    "note": "Une chose à savoir ?",
+    "noteHint": "Facultatif · ex. « Très bonne ambiance, mais la musique devient forte après 22 h. »",
+    "notePlaceholder": "Écris une phrase…",
+    "continue": "Continuer",
+    "skipNote": "Passer",
+    "save": "Enregistrer",
+    "skipPlace": "Ignorer ce lieu",
+    "doneTitle": "Ta mémoire commence à se former.",
+    "doneLead": "{count} lieux qualifiés. WH3RE saura désormais ce qui compte vraiment pour toi, pas seulement où tu as réservé.",
+    "doneCta": "Créer mon cercle de confiance",
+    "empty": "Rien à qualifier pour l’instant. Transfère une confirmation de réservation : elle apparaîtra ici.",
+    "backToImport": "‹ Retour à l’import",
+    "sendFailed": "Ta réponse n’est pas partie. Réessaie dans un instant.",
+    "visitedAnswers": {
+      "yes": "Oui",
+      "no": "Non",
+      "unsure": "Je ne sais plus"
+    },
+    "recommendAnswers": {
+      "absolutely": "Absolument",
+      "someContexts": "Oui, dans certains contextes",
+      "notReally": "Pas vraiment",
+      "no": "Non"
+    }
+  },
+  "occasions": {
+    "date": "date",
+    "friends": "amis",
+    "group": "groupe",
+    "family": "famille",
+    "business": "business",
+    "quiet": "calme",
+    "party": "fête",
+    "special": "occasion spéciale",
+    "lunch": "déjeuner",
+    "tourists": "touristes"
+  },
+  "summary": {
+    "ignored": "Ignoré",
+    "recommends": "Visité · tu le recommandes",
+    "visited": "Visité",
+    "visitedWith": "Visité · {answer}",
+    "notVisited": "Réservé, non visité — ignoré",
+    "unsure": "Réservé, présence incertaine"
+  }
+}

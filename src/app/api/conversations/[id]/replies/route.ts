@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
+import { apiLocale } from "@/i18n/request-locale";
+import { translator } from "@/i18n/translator";
 import { authenticated, fail } from "@/lib/api";
 import type { ReplySummary } from "@/lib/conversations/schema";
 
@@ -8,11 +10,12 @@ import type { ReplySummary } from "@/lib/conversations/schema";
  * conversation, sous RLS (seul l'auteur de la demande les lit). Interrogé régulièrement par le chat.
  */
 export async function GET(request: NextRequest, ctx: RouteContext<"/api/conversations/[id]/replies">) {
+  const t = translator(await apiLocale(), "chat");
   const { id } = await ctx.params;
-  if (!z.guid().safeParse(id).success) return fail(404, "not_found", "Conversation introuvable.");
+  if (!z.guid().safeParse(id).success) return fail(404, "not_found", t("api.conversations.notFound"));
 
   const auth = await authenticated();
-  if (!auth) return fail(401, "unauthenticated", "Connecte-toi pour continuer.");
+  if (!auth) return fail(401, "unauthenticated", t("api.conversations.signIn"));
 
   const since = z.iso.datetime({ offset: true }).safeParse(request.nextUrl.searchParams.get("since"));
 
@@ -26,7 +29,7 @@ export async function GET(request: NextRequest, ctx: RouteContext<"/api/conversa
   if (since.success) query = query.gt("created_at", since.data);
 
   const { data, error } = await query;
-  if (error) return fail(503, "storage_unavailable", "Je n’arrive pas à lire les réponses.");
+  if (error) return fail(503, "storage_unavailable", t("api.conversations.repliesFailed"));
 
   const replies: ReplySummary[] = data.map((r) => ({
     id: r.id,

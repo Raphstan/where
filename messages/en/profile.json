@@ -1,1 +1,31 @@
-{}
+{
+  "title": "Profile",
+  "head": {
+    "noCity": "No city yet",
+    "edit": "Edit",
+    "name": "First name",
+    "city": "City",
+    "nameHint": "Your first name shows up in the questions you send to your friends.",
+    "save": "Save"
+  },
+  "preferences": {
+    "title": "What I’ve learned you like",
+    "empty": "WH3RE hasn’t learned anything yet. Your preferences will show up here as you visit places and share feedback."
+  },
+  "links": {
+    "sources": "My sources",
+    "privacy": "Privacy",
+    "edge": "Edge cases & special situations",
+    "onboarding": "Replay the onboarding"
+  },
+  "account": {
+    "title": "Account",
+    "email": "Email",
+    "signOut": "Log out"
+  },
+  "api": {
+    "unauthenticated": "Log in to continue.",
+    "checkFields": "Check the fields.",
+    "saveFailed": "I can’t save your profile right now."
+  }
+}

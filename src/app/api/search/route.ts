@@ -1,4 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { apiLocale } from "@/i18n/request-locale";
+import { translator } from "@/i18n/translator";
 import { getServerEnv } from "@/lib/env.server";
 import { SearchRequestSchema } from "@/lib/search/request";
 import { search, SearchError } from "@/lib/search/search";
@@ -16,18 +18,23 @@ function fail(status: number, code: string, message: string) {
  * Lit la mémoire de l'utilisateur sous RLS, complète avec au plus une découverte Google Places.
  */
 export async function POST(request: NextRequest) {
+  const locale = await apiLocale();
+  const t = translator(locale, "chat");
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return fail(401, "unauthenticated", "Connecte-toi pour lancer une recherche.");
+  if (!user) return fail(401, "unauthenticated", t("api.search.unauthenticated"));
 
   const json = await request.json().catch(() => null);
   const parsed = SearchRequestSchema.safeParse(json);
-  if (!parsed.success) return fail(400, "invalid_request", "Critères manquants ou invalides.");
+  if (!parsed.success) return fail(400, "invalid_request", t("api.search.invalid"));
 
   try {
     const response = await search(parsed.data.criteria, {
+      tr: { t: translator(locale, "search"), ev: translator(locale, "evidence") },
+      network: translator(locale, "network"),
+      locale,
       supabase,
       userId: user.id,
       googlePlacesApiKey: getServerEnv().GOOGLE_PLACES_API_KEY,
@@ -36,7 +43,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json<SearchResponse>(response);
   } catch (error) {
     if (error instanceof SearchError) {
-      return fail(503, "memory_unavailable", "Je n’arrive pas à lire ta mémoire. Réessaie dans un instant.");
+      return fail(503, "memory_unavailable", t("api.search.memory"));
     }
     throw error;
   }

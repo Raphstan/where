@@ -9,7 +9,8 @@ import { createClient } from "@/lib/supabase/server";
 export type MagicLinkState =
   | { status: "idle" }
   | { status: "sent"; email: string }
-  | { status: "error"; message: string };
+  /** Clé du message (messages/{langue}/login.json, `errors.*`) : le formulaire le traduit. */
+  | { status: "error"; error: "invalidEmail" | "sendFailed" };
 
 const schema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -27,7 +28,7 @@ export async function sendMagicLink(
   });
 
   if (!parsed.success) {
-    return { status: "error", message: "Entre une adresse email valide." };
+    return { status: "error", error: "invalidEmail" };
   }
 
   const { email, next } = parsed.data;
@@ -41,10 +42,7 @@ export async function sendMagicLink(
   });
 
   if (error) {
-    return {
-      status: "error",
-      message: "Impossible d'envoyer le lien pour l'instant. Réessaie dans un instant.",
-    };
+    return { status: "error", error: "sendFailed" };
   }
 
   // La page demandée survit au détour par la boîte mail (voir /auth/confirm).

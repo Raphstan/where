@@ -1,3 +1,5 @@
+import type { T } from "@/i18n/translator";
+
 /**
  * Moyens de réserver ou de joindre un lieu (docs/prototype.html, BOOK et bookBody).
  * WH3RE ne réserve pas : ce sont des liens sortants, et seulement ceux qui existent vraiment pour
@@ -10,17 +12,16 @@ export const BOOKING_KINDS = ["ontopo", "tabit", "site", "tel", "wa", "maps"] as
 
 export type BookingKind = (typeof BOOKING_KINDS)[number];
 
-/** Libellés mot pour mot (maquette BOOK). */
-export const BOOKING_LABEL: Readonly<Record<BookingKind, string>> = {
-  ontopo: "Réserver avec Ontopo",
-  tabit: "Réserver avec Tabit",
-  site: "Ouvrir le site du restaurant",
-  tel: "Appeler",
-  wa: "Envoyer un WhatsApp",
-  maps: "Voir dans Google Maps",
-};
+/**
+ * Libellé d'un moyen, mot pour mot en français (maquette BOOK) : messages/{langue}/booking.json,
+ * `labels.{kind}`. Le libellé n'est pas stocké dans l'option : il suit la langue de l'affichage.
+ * `t` : traducteur de l'espace `booking`.
+ */
+export function bookingLabel(t: T, kind: BookingKind): string {
+  return t(`labels.${kind}`);
+}
 
-export type BookingOption = { kind: BookingKind; label: string; url: string };
+export type BookingOption = { kind: BookingKind; url: string };
 
 /** Ce que l'on sait d'un lieu pour construire ses liens sortants. */
 export type BookingPlace = {
@@ -37,14 +38,10 @@ export type BookingPlace = {
   tabitUrl: string | null;
 };
 
-/** Textes de la feuille « Réserver », mot pour mot (maquette bookBody). */
-export const BOOKING_TEXT = {
-  intro: "WH3RE n’est pas le système de réservation. Voici les moyens réellement disponibles pour ce lieu :",
-  tabitNote: "Tabit gère aussi des livraisons : seule une réservation de table comptera comme visite.",
-  noPlatformNote: "Ce lieu ne propose ni Ontopo ni Tabit — je ne t’affiche que ce qui existe vraiment.",
-  leavingEyebrow: "Tu quittes WH3RE",
-  back: "Revenir à WH3RE",
-} as const;
+/*
+ * Textes de la feuille « Réserver » (maquette bookBody) : messages/{langue}/booking.json
+ * (`intro`, `notes.tabit`, `notes.noPlatform`, `leaving.*`).
+ */
 
 function httpUrl(value: string | null | undefined): string | null {
   if (!value) return null;
@@ -104,16 +101,19 @@ export function bookingOptions(place: BookingPlace): BookingOption[] {
   };
   return BOOKING_KINDS.flatMap((kind) => {
     const url = urls[kind];
-    return url ? [{ kind, label: BOOKING_LABEL[kind], url }] : [];
+    return url ? [{ kind, url }] : [];
   });
 }
 
-/** Notes sous la liste (maquette bookBody) : Tabit et livraisons, ou ni Ontopo ni Tabit. */
-export function bookingNotes(options: readonly BookingOption[]): string[] {
+/**
+ * Notes sous la liste (maquette bookBody) : Tabit et livraisons, ou ni Ontopo ni Tabit.
+ * `t` : traducteur de l'espace `booking`.
+ */
+export function bookingNotes(t: T, options: readonly BookingOption[]): string[] {
   const kinds = new Set(options.map((o) => o.kind));
   const notes: string[] = [];
-  if (kinds.has("tabit")) notes.push(BOOKING_TEXT.tabitNote);
-  if (!kinds.has("ontopo") && !kinds.has("tabit")) notes.push(BOOKING_TEXT.noPlatformNote);
+  if (kinds.has("tabit")) notes.push(t("notes.tabit"));
+  if (!kinds.has("ontopo") && !kinds.has("tabit")) notes.push(t("notes.noPlatform"));
   return notes;
 }
 
@@ -121,15 +121,8 @@ export function bookingNotes(options: readonly BookingOption[]): string[] {
  * Écran « Tu quittes WH3RE » (maquette renderLeave) : « Tu quittes WH3RE pour finaliser ta
  * réservation sur {Plateforme}. » La maquette dérive la plateforme du libellé, ce qui donnerait
  * « sur site du restaurant » ou « sur Appeler » : on garde la phrase, avec l’article et « par téléphone ».
+ * Une phrase entière par moyen (`leaving.text.{kind}`). `t` : traducteur de l'espace `booking`.
  */
-export function leavingText(kind: BookingKind): string {
-  const on: Record<BookingKind, string> = {
-    ontopo: "sur Ontopo",
-    tabit: "sur Tabit",
-    site: "sur le site du restaurant",
-    tel: "par téléphone",
-    wa: "sur WhatsApp",
-    maps: "sur Google Maps",
-  };
-  return `Tu quittes WH3RE pour finaliser ta réservation ${on[kind]}.`;
+export function leavingText(t: T, kind: BookingKind): string {
+  return t(`leaving.text.${kind}`);
 }

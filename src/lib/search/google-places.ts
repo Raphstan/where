@@ -1,16 +1,16 @@
 import "server-only";
 import { z } from "zod";
 import type { Criteria } from "@/lib/ask/schema";
-import { BOOKING_LABEL } from "@/lib/booking/options";
 import { discoveryConfidence } from "./confidence";
 import { matchedVibes } from "./match";
 import {
   deductionLine,
-  DISCOVERY_TEXT,
+  discoveryText,
   discoveryUnknowns,
   noCircleLine,
   rankLabel,
   ratingLine,
+  type SearchT,
 } from "./phrasing";
 import type { EvidenceLine, SearchResult } from "./types";
 
@@ -49,7 +49,7 @@ export type GooglePlace = z.infer<typeof PlaceSchema>;
 export function discoveryQuery(criteria: Criteria): string | null {
   const parts = [criteria.placeKind, ...criteria.vibe, criteria.area, criteria.city]
     .filter((p): p is string => typeof p === "string" && p.trim().length > 0)
-    .filter((p) => !/^(surprends-moi|les deux)$/i.test(p.trim()));
+    .filter((p) => !/^(surprends-moi|les deux|surprise me|both|תפתיעו אותי|תפתיע אותי|שניהם)$/i.test(p.trim()));
   if (!criteria.city && !criteria.area) return null; // Sans lieu, une découverte n'a pas de sens.
   if (!parts.some((p) => p === criteria.placeKind)) parts.unshift("restaurant");
   return parts.join(" ");
@@ -65,6 +65,8 @@ export async function searchGooglePlaces(
   query: string,
   apiKey: string,
   fetchImpl: FetchLike = fetch,
+  /** Langue des noms et types renvoyés par Google (celle de l'utilisateur). */
+  languageCode = "fr",
 ): Promise<GooglePlace[]> {
   try {
     const res = await fetchImpl(PLACES_SEARCH_URL, {
@@ -74,7 +76,7 @@ export async function searchGooglePlaces(
         "X-Goog-Api-Key": apiKey,
         "X-Goog-FieldMask": FIELD_MASK,
       },
-      body: JSON.stringify({ textQuery: query, languageCode: "fr", pageSize: 10 }),
+      body: JSON.stringify({ textQuery: query, languageCode, pageSize: 10 }),
       signal: AbortSignal.timeout(4000),
     });
     if (!res.ok) return [];
@@ -106,34 +108,34 @@ export function pickDiscovery(
 }
 
 /** Carte « Découverte » : uniquement de l'information publique, jamais attribuée à personne. */
-export function discoveryResult(place: GooglePlace, criteria: Criteria, index: number): SearchResult {
+export function discoveryResult(tr: SearchT, place: GooglePlace, criteria: Criteria, index: number): SearchResult {
   const kind = place.primaryTypeDisplayName?.text ?? null;
   const facts = { city: null, area: null, address: null, kind, vibe: [] as string[] };
-  const lines: EvidenceLine[] = [noCircleLine()];
-  if (place.rating !== undefined) lines.push(ratingLine(place.rating, place.userRatingCount ?? null));
-  const deduction = deductionLine(matchedVibes(facts, criteria));
+  const lines: EvidenceLine[] = [noCircleLine(tr)];
+  if (place.rating !== undefined) lines.push(ratingLine(tr, place.rating, place.userRatingCount ?? null));
+  const deduction = deductionLine(tr.t, matchedVibes(facts, criteria));
   if (deduction) lines.push(deduction);
 
   return {
     id: `google:${place.id}`,
     origin: "discovery",
-    rank: rankLabel(index, "discovery"),
+    rank: rankLabel(tr.t, index, "discovery"),
     name: place.displayName.text,
     area: place.shortFormattedAddress ?? place.formattedAddress ?? null,
     kind,
     vibe: [],
     noise: null,
     price: null,
-    headline: DISCOVERY_TEXT.headline,
+    headline: discoveryText(tr.t, "headline"),
     lines,
-    unknowns: discoveryUnknowns(criteria.when),
-    confidence: discoveryConfidence(),
+    unknowns: discoveryUnknowns(tr.t, criteria.when),
+    confidence: discoveryConfidence(tr.t),
     people: [],
     staleNotice: null,
     conflictNotice: null,
     links: { googleMapsUrl: place.googleMapsUri ?? null },
     // Hors du cercle, seul le lien Google Maps est connu : ni Ontopo, ni Tabit, ni téléphone inventés.
-    booking: place.googleMapsUri ? [{ kind: "maps", label: BOOKING_LABEL.maps, url: place.googleMapsUri }] : [],
+    booking: place.googleMapsUri ? [{ kind: "maps", url: place.googleMapsUri }] : [],
   };
 }
 

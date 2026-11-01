@@ -1,1 +1,10 @@
-{}
+{
+  "unauthenticated": "צריך להתחבר כדי להמשיך.",
+  "invalidAnswer": "תשובה לא תקינה.",
+  "imports": {
+    "reservationNotFound": "ההזמנה לא נמצאה.",
+    "alreadyQualified": "כבר ענית על המקום הזה.",
+    "saveAnswerFailed": "לא הצלחתי לשמור את התשובה שלך.",
+    "deletePlacesFailed": "לא הצלחתי למחוק את המקומות האלה."
+  }
+}

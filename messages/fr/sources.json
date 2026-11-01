@@ -1,1 +1,33 @@
-{}
+{
+  "title": "Mes sources",
+  "lead": "Ce que WH3RE peut vraiment lire, et ce qu’il ne lira jamais.",
+  "soon": "Bientôt",
+  "email": {
+    "name": "Transfert d’email",
+    "on": "Connecté · emails transférés uniquement",
+    "off": "Non connecté",
+    "text": "Détecte les confirmations de réservation et certains signaux post-visite (ex. « merci pour votre visite ») dans les emails que tu transfères, à la main ou par un filtre Gmail qui ne vise que les plateformes de réservation. Jamais les emails personnels.",
+    "connect": "Connecter",
+    "viewAddress": "Voir l’adresse de transfert",
+    "disconnect": "Déconnecter",
+    "disconnectConfirm": "Déconnecter le transfert d’email ? Les lieux déjà importés restent, sauf si tu les supprimes.",
+    "disconnected": "Transfert d’email déconnecté"
+  },
+  "later": {
+    "sms": "Dépend des autorisations de ton téléphone. Une web app ne peut pas lire librement tes SMS. Utile pour Ontopo, qui confirme souvent par SMS.",
+    "whatsapp": "WH3RE ne peut pas lire tes conversations. Il utilise seulement : les messages que tu transfères, les liens envoyés au bot, les réponses reçues via un lien WH3RE, ou une conversation que tu inities.",
+    "instagram": "Pas d’accès à tes messages privés ni à tes collections. Tu partages volontairement un post, un Reel, un profil de lieu ou un lien.",
+    "tiktok": "Même logique : partage volontaire d’un lien ou d’une vidéo.",
+    "maps": "Liens partagés, données publiques sur les lieux, et intégrations autorisées le cas échéant."
+  },
+  "platforms": {
+    "title": "Plateformes de réservation",
+    "direct": "Sites directs",
+    "text": "Ce sont des destinations, pas des sources illimitées : leur disponibilité dépend du pays, du lieu et des intégrations possibles. WH3RE t’y envoie, il ne réserve pas à ta place."
+  },
+  "api": {
+    "unauthenticated": "Connecte-toi pour continuer.",
+    "deleteFailed": "Je n’arrive pas à supprimer cette source.",
+    "connectFailed": "Je n’arrive pas à connecter cette source."
+  }
+}

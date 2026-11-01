@@ -1,16 +1,39 @@
 import { z } from "zod";
+import type { T } from "@/i18n/translator";
 import type { EvidenceLevel } from "@/lib/evidence";
 import type { RichText } from "@/lib/search/types";
 
+/**
+ * Texte riche dont seul le nom du lieu est en gras : la phrase entière vit dans les messages
+ * (pour que chaque langue place le nom où il faut), le nom y est repéré par un marqueur.
+ */
+const MARK = "\uE000";
+function withStrongPlace(t: T, key: string, placeName: string): RichText {
+  const [before = "", after = ""] = t(key, { place: MARK }).split(MARK);
+  return [...(before ? [{ text: before }] : []), { text: placeName, strong: true }, ...(after ? [{ text: after }] : [])];
+}
+
 /* ---------------------------------------------------------------------------
  * Au retour : « De retour. As-tu réservé chez {Lieu} ? » (maquette backFrom)
+ * Textes : messages/{langue}/booking.json, `booked.*`. `t` : traducteur de l'espace `booking`.
  * ------------------------------------------------------------------------- */
 
-export const BOOKED_ANSWERS = ["Oui", "Pas encore", "J’ai choisi un autre endroit"] as const;
+/** Réponses, dans l'ordre de la maquette : « Oui », « Pas encore », « J’ai choisi un autre endroit ». */
+export const BOOKED_ANSWERS = ["yes", "notYet", "otherPlace"] as const;
 export type BookedAnswer = (typeof BOOKED_ANSWERS)[number];
 
-export function bookedQuestion(placeName: string): string {
-  return `De retour. As-tu réservé chez ${placeName} ?`;
+export function bookedQuestion(t: T, placeName: string): string {
+  return t("booked.question", { place: placeName });
+}
+
+/** Libellé d'une réponse (« Oui »…). */
+export function bookedAnswerLabel(t: T, answer: BookedAnswer): string {
+  return t(`booked.answers.${answer}`);
+}
+
+/** Réponse correspondant à un libellé affiché (choix d'une bulle à options), sinon null. */
+export function bookedAnswerFromLabel(t: T, label: string): BookedAnswer | null {
+  return BOOKED_ANSWERS.find((a) => bookedAnswerLabel(t, a) === label) ?? null;
 }
 
 /**
@@ -18,27 +41,25 @@ export function bookedQuestion(placeName: string): string {
  * n'est pas une visite tant que l'utilisateur ne l'a pas confirmée (CLAUDE.md § 2.4).
  */
 export function bookedAnswerLevel(answer: BookedAnswer): EvidenceLevel | null {
-  return answer === "Oui" ? "booked" : null;
+  return answer === "yes" ? "booked" : null;
 }
 
 /** Réponses de WH3RE, mot pour mot (maquette pick). Le nom du lieu est en gras. */
-export function bookedReply(answer: BookedAnswer, placeName: string): RichText {
+export function bookedReply(t: T, answer: BookedAnswer, placeName: string): RichText {
   switch (answer) {
-    case "Oui":
-      return [
-        { text: "Parfait. Je garde " },
-        { text: placeName, strong: true },
-        { text: " dans ta mémoire comme réservé — pas encore comme visité. Je te demanderai demain comment c’était." },
-      ];
-    case "Pas encore":
-      return [{ text: "Pas de souci. Je laisse la table ouverte dans ta conversation — dis-moi si tu veux une autre heure ou un autre lieu." }];
-    case "J’ai choisi un autre endroit":
-      return [{ text: "Compris. Je ne compte pas cette réservation. Tu veux me dire où tu vas finalement ? Ça enrichira ta mémoire." }];
+    case "yes":
+      return withStrongPlace(t, "booked.reply.yes", placeName);
+    case "notYet":
+      return [{ text: t("booked.reply.notYet") }];
+    case "otherPlace":
+      return [{ text: t("booked.reply.otherPlace") }];
   }
 }
 
 /* ---------------------------------------------------------------------------
  * Le lendemain : retour après visite en trois questions (maquette feedbackMsg)
+ * Les valeurs ci-dessous sont des codes stockés (contraintes de visit_followups et
+ * signals.occasion) : elles restent en français. Libellés affichés : booking.json, `feedback.*`.
  * ------------------------------------------------------------------------- */
 
 export const NOT_VISITED = "Je n’y suis finalement pas allé";
@@ -50,25 +71,44 @@ export type RecommendAnswer = (typeof RECOMMEND_ANSWERS)[number];
 
 /** Contextes proposés à « Pour quel contexte ? », mot pour mot. */
 export const FEEDBACK_CONTEXTS = ["date", "amis", "calme", "occasion spéciale", "déjeuner"] as const;
+export type FeedbackContext = (typeof FEEDBACK_CONTEXTS)[number];
 
-export const FEEDBACK_TEXT = {
-  rating: (placeName: string) => ({ before: "Alors, ", strong: placeName, after: " ?" }),
-  recommend: "Tu le recommanderais à quelqu’un ?",
-  context: "Pour quel contexte ?",
-  skip: "Passer",
-  notVisited: "Pas de problème — je ne compte pas cette visite.",
-  thanks: (recommended: boolean) => ({
-    before: "Merci. C’est noté dans ",
-    strong: "ta mémoire",
-    after: `${recommended ? " comme un lieu que tu recommandes" : ""}. Ça affinera mes prochaines réponses.`,
-  }),
-  share: "Partager ce retour avec mon cercle privé",
-  shareNote: "Désactivé par défaut. Jamais publié publiquement.",
-  shared: "Partagé avec ton cercle privé",
-  kept: "Retour gardé pour toi",
-  memory: "Voir ma mémoire",
-  newQuestion: "Nouvelle question",
-} as const;
+const RATING_KEY: Record<Rating, string> = {
+  Excellent: "excellent",
+  Bien: "good",
+  Moyen: "average",
+  "Pas pour moi": "notForMe",
+  [NOT_VISITED]: "notVisited",
+};
+
+const RECOMMEND_KEY: Record<RecommendAnswer, string> = {
+  Absolument: "absolutely",
+  "Dans certains contextes": "someContexts",
+  "Pas vraiment": "notReally",
+};
+
+const CONTEXT_KEY: Record<FeedbackContext, string> = {
+  date: "date",
+  amis: "friends",
+  calme: "quiet",
+  "occasion spéciale": "specialOccasion",
+  déjeuner: "lunch",
+};
+
+/** Libellé affiché d'une note (« Excellent »…). `t` : traducteur de l'espace `booking`. */
+export function ratingLabel(t: T, rating: Rating): string {
+  return t(`feedback.ratings.${RATING_KEY[rating]}`);
+}
+
+/** Libellé affiché d'une réponse à « Tu le recommanderais à quelqu’un ? ». */
+export function recommendLabel(t: T, answer: RecommendAnswer): string {
+  return t(`feedback.recommendAnswers.${RECOMMEND_KEY[answer]}`);
+}
+
+/** Libellé affiché d'un contexte (« date », « amis »…). */
+export function contextLabel(t: T, context: FeedbackContext): string {
+  return t(`feedback.contexts.${CONTEXT_KEY[context]}`);
+}
 
 /** Réponses du retour, validées côté serveur. Sans visite, ni recommandation ni contexte. */
 export const FeedbackSchema = z

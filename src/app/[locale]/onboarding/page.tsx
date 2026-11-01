@@ -1,18 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { EYEBROW, H1, OnbFrame } from "@/components/home/onb-frame";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Comment veux-tu commencer ?" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("onboarding");
+  return { title: t("metaTitle") };
+}
 
 /* Les quatre choix de la maquette (scrOnb). Import par transfert d'email au MVP, pas Gmail. */
 const CHOICES = [
-  ["📬", "Retrouver mes anciennes réservations", "Par transfert d’email. Tu valides avant tout ajout.", "/import"],
-  ["👥", "Ajouter quelques personnes de confiance", "Sarah pour les tables, Noam pour les bars…", "/onboarding/circle"],
-  ["💬", "Poser directement ma première question", "Sans rien connecter. Les réponses seront moins personnelles.", "/chat"],
-  ["✨", "Explorer une démonstration", "Un parcours complet avec des données d’exemple.", "/how"],
+  ["📬", "import", "/import"],
+  ["👥", "circle", "/onboarding/circle"],
+  ["💬", "chat", "/chat"],
+  ["✨", "demo", "/how"],
 ] as const;
 
 async function Welcome() {
@@ -26,37 +31,39 @@ async function Welcome() {
     ? await supabase.from("users").select("display_name").eq("id", user.id).maybeSingle()
     : { data: null };
   const name = data?.display_name?.trim();
-  return <>{name ? `Bienvenue, ${name}` : "Bienvenue"}</>;
+  const t = await getTranslations("onboarding");
+  return <>{name ? t("welcomeName", { name }) : t("welcome")}</>;
 }
 
 /* Comment veux-tu commencer ? (docs/prototype.html, scrOnb). */
 export default function OnboardingPage() {
+  const t = useTranslations("onboarding");
   return (
     <OnbFrame back="/">
       <div className={EYEBROW}>
-        <Suspense fallback="Bienvenue">
+        <Suspense fallback={t("welcome")}>
           <Welcome />
         </Suspense>
       </div>
-      <h1 className={H1}>Comment veux-tu commencer ?</h1>
+      <h1 className={H1}>{t("title")}</h1>
       <p className="text-[15px] leading-normal text-muted">
-        Tu peux ignorer n’importe quelle étape. Plus tu ajoutes de contexte, plus les réponses deviennent personnelles.
+        {t("lead")}
       </p>
       <div className="flex flex-col gap-2.5">
-        {CHOICES.map(([icon, title, text, href]) => (
+        {CHOICES.map(([icon, key, href]) => (
           <Link
             key={href}
             href={href}
-            className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
+            className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-start transition hover:-translate-y-px hover:border-ink"
           >
             <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
               {icon}
             </span>
             <span>
-              <span className="block font-bold">{title}</span>
-              <span className="block text-[12.5px] text-muted">{text}</span>
+              <span className="block font-bold">{t(`choices.${key}.title`)}</span>
+              <span className="block text-[12.5px] text-muted">{t(`choices.${key}.text`)}</span>
             </span>
-            <span aria-hidden className="ml-auto text-soft">
+            <span aria-hidden className="ms-auto text-soft">
               ›
             </span>
           </Link>
@@ -66,10 +73,10 @@ export default function OnboardingPage() {
         <span aria-hidden className="shrink-0">
           🔒
         </span>
-        <span>Privé par défaut. Rien n’est publié, aucun message n’est envoyé sans ta confirmation.</span>
+        <span>{t("privacy")}</span>
       </div>
       <Link href="/sources" className="self-center text-[13.5px] font-semibold text-blue hover:underline">
-        Voir toutes les sources possibles
+        {t("allSources")}
       </Link>
     </OnbFrame>
   );

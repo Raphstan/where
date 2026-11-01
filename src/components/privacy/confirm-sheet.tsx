@@ -1,11 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { usePanel } from "@/components/shell/panel-context";
 
 /** Corps de la feuille « Confirmer » (docs/prototype.html, kind 'delete') : Annuler ou agir. */
 function ConfirmBody({ message, action, onConfirm }: { message: string; action: string; onConfirm: () => Promise<void> }) {
   const { close } = usePanel();
+  const t = useTranslations("privacy");
+  const errorText = useErrorText();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   return (
@@ -18,7 +21,7 @@ function ConfirmBody({ message, action, onConfirm }: { message: string; action: 
           onClick={close}
           className="inline-flex min-h-[46px] grow items-center justify-center rounded-full border-[1.5px] border-line px-5 text-[14.5px] font-bold text-ink transition-colors hover:border-ink"
         >
-          Annuler
+          {t("confirm.cancel")}
         </button>
         <button
           type="button"
@@ -30,7 +33,7 @@ function ConfirmBody({ message, action, onConfirm }: { message: string; action: 
               await onConfirm();
               close();
             } catch (e) {
-              setError(e instanceof Error ? e.message : "Une erreur est survenue.");
+              setError(errorText(e));
               setBusy(false);
             }
           }}
@@ -46,11 +49,24 @@ function ConfirmBody({ message, action, onConfirm }: { message: string; action: 
 /** Ouvre la feuille de confirmation ; rien n'est supprimé sans ce second geste. */
 export function useConfirm() {
   const { open } = usePanel();
+  const t = useTranslations("privacy");
   return (key: string, message: string, action: string, onConfirm: () => Promise<void>) =>
-    open({ key, title: "Confirmer", body: <ConfirmBody message={message} action={action} onConfirm={onConfirm} /> });
+    open({ key, title: t("confirm.title"), body: <ConfirmBody message={message} action={action} onConfirm={onConfirm} /> });
 }
 
-/** Appel JSON à une route de l'app : lève le message d'erreur renvoyé par le serveur. */
+/**
+ * Message d'une erreur levée par `call`, dans la langue de l'interface : celui du serveur (déjà
+ * traduit par la route), sinon « Une erreur est survenue. ».
+ */
+export function useErrorText() {
+  const t = useTranslations("privacy");
+  return (e: unknown) => (e instanceof Error && e.message ? e.message : t("error"));
+}
+
+/**
+ * Appel JSON à une route de l'app : lève le message d'erreur renvoyé par le serveur, ou une erreur
+ * sans message (à afficher avec `useErrorText`).
+ */
 export async function call<T = unknown>(url: string, method: string, body?: unknown): Promise<T> {
   const res = await fetch(url, {
     method,
@@ -62,7 +78,7 @@ export async function call<T = unknown>(url: string, method: string, body?: unkn
     const msg =
       json && typeof json === "object" && "error" in json && json.error && typeof json.error === "object" && "message" in json.error
         ? String(json.error.message)
-        : "Une erreur est survenue.";
+        : "";
     throw new Error(msg);
   }
   return json as T;

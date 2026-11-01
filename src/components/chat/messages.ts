@@ -1,3 +1,4 @@
+import type { T } from "@/i18n/translator";
 import type { Clarification } from "@/lib/ask/schema";
 import type { BookedAnswer, DueFollowup } from "@/lib/booking/followup";
 import type { RichText, SearchResult, SuggestedPerson } from "@/lib/search/types";
@@ -25,14 +26,11 @@ export type ChatMessage =
   | { id: number; kind: "booked"; result: SearchResult; picked: BookedAnswer | null }
   | { id: number; kind: "feedback"; followup: DueFollowup };
 
-export const WIDEN_LABEL = "Élargir les critères";
-
-/** « Suzana apparaît dans d’anciennes recommandations, mais semble désormais fermé. Je l’ai écarté. » */
-export function closedText(names: readonly string[]): { strong: string; text: string } {
+/**
+ * « Suzana apparaît dans d’anciennes recommandations, mais semble désormais fermé. Je l’ai écarté. »
+ * `t` : traducteur de l'espace `chat`.
+ */
+export function closedText(t: T, names: readonly string[]): { strong: string; text: string } {
   const strong = names.join(", ");
-  return names.length > 1
-    ? { strong, text: " apparaissent dans d’anciennes recommandations, mais semblent désormais fermés. Je les ai écartés." }
-    : { strong, text: " apparaît dans d’anciennes recommandations, mais semble désormais fermé. Je l’ai écarté." };
+  return { strong, text: names.length > 1 ? t("closed.many") : t("closed.one") };
 }
-
-export const CRITERIA_HINT = "Ce que j’ai compris — touche un critère pour le retirer";

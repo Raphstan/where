@@ -1,1 +1,162 @@
-{}
+{
+  "metaTitle": "Find my bookings",
+  "page": {
+    "eyebrow": "My past bookings",
+    "title": "Your emails already hold a memory of your nights out.",
+    "lead": "WH3RE can find the confirmations in there: restaurants, hotels, activities, events and trips.",
+    "disconnected": "Email forwarding is disconnected.",
+    "addressUnavailable": "Your forwarding address isn’t available yet.",
+    "privacy": "WH3RE only reads the emails it receives, and nothing goes into your memory until you approve it. You can delete everything at any time.",
+    "foundTitle": "Here’s what I found.",
+    "stats": {
+      "restaurants": "restaurants",
+      "hotels": "hotels",
+      "activities": "activities"
+    },
+    "noOntopo": "<b>No Ontopo bookings found</b> in your emails. Some confirmations may have been sent by text message only.",
+    "deliveries": "{count, plural, one {# delivery order excluded.} other {# delivery orders excluded.}}",
+    "deliveriesTabit": "{count, plural, one {# Tabit delivery order excluded.} other {# Tabit delivery orders excluded.}}",
+    "deliveriesNote": "A delivery isn’t a visit to the restaurant — it will never count as one.",
+    "cancellations": "{count, plural, one {# cancellation set aside.} other {# cancellations set aside.}}",
+    "cancellationsNote": "A cancelled booking never counts as a visit.",
+    "groups": {
+      "restaurants": "Restaurants",
+      "hotels": "Hotels",
+      "activities": "Activities & events"
+    },
+    "qualifyHint": "A booking doesn’t mean you went, or that you liked it. Next step: a few quick questions to tell me how these went.",
+    "qualifyCta": "Review my experiences"
+  },
+  "badge": {
+    "table": "Booked",
+    "hotel": "Hotel",
+    "activity": "Activity"
+  },
+  "provenance": {
+    "table": "Booking",
+    "tableOn": "{platform} booking",
+    "hotel": "Hotel confirmation",
+    "activity": "Activity"
+  },
+  "deliveriesSheet": {
+    "see": "See",
+    "title": "Excluded deliveries",
+    "textTabit": "These emails come from Tabit but are delivery orders. They will never count as a visit.",
+    "text": "These emails are delivery orders. They will never count as a visit.",
+    "order": "Order",
+    "orderLine": "Delivery order · excluded"
+  },
+  "copy": {
+    "copy": "Copy",
+    "copiedAddress": "Copied",
+    "copied": "Copied ✓"
+  },
+  "setup": {
+    "notReceiving": "<b>Receiving emails isn’t switched on in this version of WH3RE yet.</b> Don’t set anything up in Gmail for now: nothing would arrive. This step will be available once WH3RE is live.",
+    "chooseTitle": "How do you want to find your bookings?",
+    "auto": {
+      "title": "Automatically, from Gmail",
+      "badge": "Recommended",
+      "text": "3 steps, 2 minutes. Gmail only sends booking emails to WH3RE, nothing else."
+    },
+    "byHand": {
+      "title": "By hand, one email at a time",
+      "text": "You forward a restaurant, hotel or activity confirmation yourself."
+    },
+    "back": "‹ Back",
+    "manual": {
+      "title": "Forward a confirmation",
+      "step1": "Open a confirmation email: a restaurant, a hotel, an activity.",
+      "step2": "Click “Forward” and send it to this address:",
+      "step3": "Send it from <b>{email}</b>, the address of your WH3RE account. It’ll show up here within seconds.",
+      "deliveries": "Deliveries are set aside: a Tabit or Wolt order isn’t a visit to the restaurant."
+    },
+    "done": {
+      "activeTitle": "Automatic forwarding is working.",
+      "title": "You’re all set.",
+      "activeText": "Your new confirmations land here on their own. You approve them before they go into your memory.",
+      "text": "Your next confirmation from Ontopo, Tabit, Booking or Airbnb will show up here on its own.",
+      "oldEmails": "Gmail only forwards new emails. For your past bookings, <manual>forward them by hand</manual>.",
+      "restart": "Restart the setup"
+    },
+    "progress": "Step {step} of 3",
+    "step1": {
+      "title": "Give Gmail your WH3RE address",
+      "copy": "Copy your WH3RE address:",
+      "open": "Open Gmail, click <b>“Add a forwarding address”</b>, paste the address and confirm.",
+      "openGmail": "Open Gmail ↗",
+      "workspace": "Seeing a “Forward a copy of incoming mail to” field instead of the button? Leave it empty: it would forward your whole inbox. Some work accounts (Google Workspace) look like that.",
+      "next": "Done, next step"
+    },
+    "step2": {
+      "title": "Confirm with the code",
+      "codeSent": "Gmail sent this code to WH3RE:",
+      "codeSentFor": "Gmail sent this code to WH3RE for {requester}:",
+      "paste": "Go back to Gmail, paste the code and click <b>“Verify”</b>.",
+      "keepDisabled": "Leave <b>“Disable forwarding”</b> selected: only booking emails will be forwarded, thanks to the next step.",
+      "waiting": "I’m waiting for the code Gmail sends to WH3RE. It’ll appear here on its own, within seconds.",
+      "next": "Verified, next step",
+      "alreadyDone": "I’ve already verified the code in Gmail"
+    },
+    "step3": {
+      "title": "Forward bookings only",
+      "open": "Open Gmail: the search for booking emails is already filled in.",
+      "openSearch": "Open the search in Gmail ↗",
+      "options": "In the search bar, click the options icon (on the right), then <b>“Create filter”</b>.",
+      "forward": "Tick <b>“Forward it to”</b>, pick your WH3RE address, then click <b>“Create filter”</b>.",
+      "notFilled": "Search didn’t fill in?",
+      "copyQuery": "Copy it and paste it into Gmail’s search bar:",
+      "done": "Done"
+    }
+  },
+  "qualify": {
+    "eyebrow": "Review my experiences",
+    "visited": "Did you actually go?",
+    "recommend": "Would you recommend it?",
+    "occasion": "For what occasion?",
+    "note": "Anything worth knowing?",
+    "noteHint": "Optional · e.g. “Great vibe, but the music gets loud after 10 pm.”",
+    "notePlaceholder": "Write a sentence…",
+    "continue": "Continue",
+    "skipNote": "Skip",
+    "save": "Save",
+    "skipPlace": "Skip this place",
+    "doneTitle": "Your memory is taking shape.",
+    "doneLead": "{count, plural, one {# place reviewed.} other {# places reviewed.}} WH3RE now knows what really matters to you, not just where you booked.",
+    "doneCta": "Build my circle of trust",
+    "empty": "Nothing to review for now. Forward a booking confirmation: it’ll show up here.",
+    "backToImport": "‹ Back to import",
+    "sendFailed": "Your answer didn’t go through. Try again in a moment.",
+    "visitedAnswers": {
+      "yes": "Yes",
+      "no": "No",
+      "unsure": "I don’t remember"
+    },
+    "recommendAnswers": {
+      "absolutely": "Absolutely",
+      "someContexts": "Yes, in some contexts",
+      "notReally": "Not really",
+      "no": "No"
+    }
+  },
+  "occasions": {
+    "date": "date",
+    "friends": "friends",
+    "group": "group",
+    "family": "family",
+    "business": "business",
+    "quiet": "quiet",
+    "party": "party",
+    "special": "special occasion",
+    "lunch": "lunch",
+    "tourists": "tourists"
+  },
+  "summary": {
+    "ignored": "Skipped",
+    "recommends": "Visited · you recommend it",
+    "visited": "Visited",
+    "visitedWith": "Visited · {answer}",
+    "notVisited": "Booked, not visited — skipped",
+    "unsure": "Booked, not sure you went"
+  }
+}

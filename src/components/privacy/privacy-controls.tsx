@@ -1,10 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useToast } from "@/components/shell/toast";
-import { USAGE_LABELS, type UsagePrefs } from "@/lib/privacy/usage";
-import { call, useConfirm } from "./confirm-sheet";
+import { USAGE_KEYS, type UsagePrefs } from "@/lib/privacy/usage";
+import { call, useConfirm, useErrorText } from "./confirm-sheet";
 
 /** Interrupteur de la maquette (.sw). */
 export function Switch({ checked, label, onChange }: { checked: boolean; label: string; onChange: () => void }) {
@@ -16,7 +17,7 @@ export function Switch({ checked, label, onChange }: { checked: boolean; label: 
       aria-label={label}
       onClick={onChange}
       className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors after:absolute after:top-[3px] after:size-5 after:rounded-full after:bg-white after:shadow-[0_1px_3px_rgba(0,0,0,0.2)] after:transition-all after:content-[''] ${
-        checked ? "bg-orange after:left-[21px]" : "bg-line-strong after:left-[3px]"
+        checked ? "bg-orange after:start-[21px]" : "bg-line-strong after:start-[3px]"
       }`}
     />
   );
@@ -26,9 +27,13 @@ export function Switch({ checked, label, onChange }: { checked: boolean; label: 
 export function UsageToggles({ initial }: { initial: UsagePrefs }) {
   const [usage, setUsage] = useState(initial);
   const toast = useToast();
+  const t = useTranslations("privacy");
+  const errorText = useErrorText();
   return (
     <>
-      {USAGE_LABELS.map(([k, label]) => (
+      {USAGE_KEYS.map((k) => {
+        const label = t(`usage.${k}`);
+        return (
         <div key={k} className="flex items-center justify-between gap-3 py-[13px]">
           <span className="text-[12.5px] text-muted">{label}</span>
           <Switch
@@ -38,14 +43,15 @@ export function UsageToggles({ initial }: { initial: UsagePrefs }) {
               const before = usage;
               const next = { ...usage, [k]: !usage[k] };
               setUsage(next);
-              call("/api/privacy", "PATCH", { [k]: next[k] }).catch((e: Error) => {
+              call("/api/privacy", "PATCH", { [k]: next[k] }).catch((e: unknown) => {
                 setUsage(before);
-                toast.show(e.message);
+                toast.show(errorText(e));
               });
             }}
           />
         </div>
-      ))}
+        );
+      })}
       {toast.node}
     </>
   );
@@ -59,7 +65,10 @@ export function DeleteActions({ emailSource, importedPlaces }: { emailSource: bo
   const router = useRouter();
   const confirm = useConfirm();
   const toast = useToast();
-  const places = importedPlaces > 1 ? `les ${importedPlaces} lieux importés` : "le lieu importé";
+  const t = useTranslations("privacy");
+  // Le bouton est désactivé à 0 : un seul lieu, ou plusieurs.
+  const placesConfirm =
+    importedPlaces > 1 ? t("delete.placesConfirmMany", { count: importedPlaces }) : t("delete.placesConfirmOne");
   return (
     <>
       <button
@@ -69,17 +78,17 @@ export function DeleteActions({ emailSource, importedPlaces }: { emailSource: bo
         onClick={() =>
           confirm(
             "delete-source",
-            "Supprimer la source « transfert d’email » ? Les futures confirmations ne seront plus lues.",
-            "Supprimer la source",
+            t("delete.sourceConfirm"),
+            t("delete.sourceAction"),
             async () => {
               await call("/api/sources/email", "DELETE");
-              toast.show("Source « transfert d’email » supprimée");
+              toast.show(t("delete.sourceDone"));
               router.refresh();
             },
           )
         }
       >
-        Supprimer une source
+        {t("delete.source")}
       </button>
       <button
         type="button"
@@ -88,17 +97,17 @@ export function DeleteActions({ emailSource, importedPlaces }: { emailSource: bo
         onClick={() =>
           confirm(
             "delete-places",
-            `Supprimer ${places} ? Tes recommandations manuelles et les réponses de ton cercle sont conservées.`,
-            "Supprimer les lieux",
+            placesConfirm,
+            t("delete.placesAction"),
             async () => {
               const { removed } = await call<{ removed: number }>("/api/imports", "DELETE");
-              toast.show(removed > 1 ? `${removed} lieux importés supprimés` : `${removed} lieu importé supprimé`);
+              toast.show(t("delete.placesDone", { count: removed }));
               router.refresh();
             },
           )
         }
       >
-        Supprimer tous les lieux importés
+        {t("delete.places")}
       </button>
       <button
         type="button"
@@ -106,8 +115,8 @@ export function DeleteActions({ emailSource, importedPlaces }: { emailSource: bo
         onClick={() =>
           confirm(
             "delete-account",
-            "Supprimer ton compte et toutes tes données ? Cette action est définitive.",
-            "Supprimer mon compte",
+            t("delete.accountConfirm"),
+            t("delete.account"),
             async () => {
               await call("/api/account", "DELETE");
               router.replace("/");
@@ -116,7 +125,7 @@ export function DeleteActions({ emailSource, importedPlaces }: { emailSource: bo
           )
         }
       >
-        Supprimer mon compte
+        {t("delete.account")}
       </button>
       {toast.node}
     </>

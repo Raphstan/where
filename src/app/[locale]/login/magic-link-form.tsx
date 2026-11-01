@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { sendMagicLink, type MagicLinkState } from "./actions";
 
@@ -7,6 +8,7 @@ const initial: MagicLinkState = { status: "idle" };
 
 export function MagicLinkForm({ next }: { next?: string }) {
   const [state, action, pending] = useActionState(sendMagicLink, initial);
+  const t = useTranslations("login");
 
   if (state.status === "sent") {
     return (
@@ -16,19 +18,22 @@ export function MagicLinkForm({ next }: { next?: string }) {
             ✉️
           </span>
           <span>
-            <b className="font-bold">Lien envoyé.</b> Ouvre l&apos;email reçu à{" "}
-            <b className="font-bold">{state.email}</b> et clique sur le lien : il te connecte, sans mot
-            de passe.
+            {t.rich("form.sent", {
+              email: state.email,
+              b: (chunks) => <b className="font-bold">{chunks}</b>,
+            })}
           </span>
         </div>
         <p className="text-[12.5px] text-muted">
-          Rien reçu ? Regarde dans les indésirables, ou{" "}
-          {/* Rechargement complet voulu : remet le formulaire à zéro (useActionState). */}
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/login" className="font-semibold text-blue hover:underline">
-            renvoie un lien
-          </a>
-          .
+          {t.rich("form.resend", {
+            link: (chunks) => (
+              // Rechargement complet voulu : remet le formulaire à zéro (useActionState).
+              // eslint-disable-next-line @next/next/no-html-link-for-pages
+              <a href="/login" className="font-semibold text-blue hover:underline">
+                {chunks}
+              </a>
+            ),
+          })}
         </p>
       </div>
     );
@@ -38,7 +43,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
     <form action={action} className="flex flex-col gap-3">
       <label className="flex flex-col gap-1.5">
         <span className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">
-          Ton email
+          {t("form.emailLabel")}
         </span>
         <input
           type="email"
@@ -46,14 +51,14 @@ export function MagicLinkForm({ next }: { next?: string }) {
           required
           autoComplete="email"
           inputMode="email"
-          placeholder="prenom@exemple.com"
+          placeholder={t("form.emailPlaceholder")}
           className="w-full rounded-xl border-[1.5px] border-line bg-paper-2 px-3.5 py-[11px] text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink"
         />
       </label>
       {next ? <input type="hidden" name="next" value={next} /> : null}
       {state.status === "error" ? (
         <p role="alert" className="rounded-[14px] bg-amber-2 px-3.5 py-3 text-[13.5px] text-[#6e4f14]">
-          {state.message}
+          {t(`errors.${state.error}`)}
         </p>
       ) : null}
       <button
@@ -61,10 +66,10 @@ export function MagicLinkForm({ next }: { next?: string }) {
         disabled={pending}
         className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
       >
-        {pending ? "Envoi…" : "Recevoir mon lien"}
+        {pending ? t("form.sending") : t("form.submit")}
       </button>
       <p className="text-center text-[11.5px] text-soft">
-        Pas de mot de passe. Le lien reçu par email suffit.
+        {t("form.noPassword")}
       </p>
     </form>
   );

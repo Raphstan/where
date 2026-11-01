@@ -3,22 +3,17 @@ import { evidenceRank, memoryLabel, type PersonalEvidenceLevel } from "@/lib/evi
 import type { ReservationKind } from "@/lib/inbound/rules";
 import { fold, kindCategories } from "@/lib/search/match";
 
-/** Filtres de la mémoire, mot pour mot depuis docs/prototype.html (scrMemory, F). */
-export const MEMORY_FILTERS = [
-  ["tous", "Tout"],
-  ["restaurants", "Restaurants"],
-  ["hotels", "Hôtels"],
-  ["bars", "Bars"],
-  ["cafes", "Cafés"],
-  ["activites", "Activités"],
-  ["voyages", "Voyages"],
-] as const;
+/**
+ * Filtres de la mémoire (docs/prototype.html, scrMemory, F). Libellés : messages/{langue}/memory.json,
+ * `filters.{clé}` (en français, mot pour mot depuis la maquette).
+ */
+export const MEMORY_FILTERS = ["tous", "restaurants", "hotels", "bars", "cafes", "activites", "voyages"] as const;
 
-export type MemoryFilter = (typeof MEMORY_FILTERS)[number][0];
+export type MemoryFilter = (typeof MEMORY_FILTERS)[number];
 export type MemoryCategory = Exclude<MemoryFilter, "tous">;
 
 export function isMemoryFilter(value: unknown): value is MemoryFilter {
-  return typeof value === "string" && MEMORY_FILTERS.some(([k]) => k === value);
+  return typeof value === "string" && (MEMORY_FILTERS as readonly string[]).includes(value);
 }
 
 const FROM_RESERVATION: Record<ReservationKind, MemoryCategory> = {

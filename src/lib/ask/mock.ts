@@ -4,6 +4,8 @@ import { normalizeUnderstanding } from "./schema";
 /**
  * Compréhension factice pour développer l'interface sans clé Anthropic (WHERE_ASK_MOCK=1,
  * jamais en production). Reprend les scénarios de la maquette par mots-clés.
+ * Française uniquement : chips, critères et question de précision restent en français quelle que
+ * soit la langue de l'interface (outil de développement, la vraie compréhension suit la langue).
  */
 export function mockUnderstanding(input: AskRequest): Understanding {
   const q = input.question.toLocaleLowerCase("fr");

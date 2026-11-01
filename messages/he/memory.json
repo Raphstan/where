@@ -1,1 +1,21 @@
-{}
+{
+  "title": "הזיכרון שלי",
+  "empty": "הזיכרון שלך עדיין ריק. הוא יתמלא בהזמנות שלך, בפידבק שלך ובתשובות מהמעגל שלך.",
+  "emptyImport": "למצוא הזמנות קודמות ←",
+  "stats": {
+    "visited": "{count, plural, one {<n>#</n><l>מקום שביקרת בו</l>} other {<n>#</n><l>מקומות שביקרת בהם</l>}}",
+    "recosReceived": "{count, plural, one {<n>#</n><l>המלצה שקיבלת</l>} other {<n>#</n><l>המלצות שקיבלת</l>}}",
+    "cities": "{count, plural, one {<n>#</n><l>עיר</l>} other {<n>#</n><l>ערים</l>}}"
+  },
+  "filterAria": "סינון",
+  "filters": {
+    "tous": "הכול",
+    "restaurants": "מסעדות",
+    "hotels": "מלונות",
+    "bars": "ברים",
+    "cafes": "בתי קפה",
+    "activites": "פעילויות",
+    "voyages": "טיולים"
+  },
+  "footnote": "החלק הזה משני. הצ׳אט הוא עדיין נקודת הפתיחה."
+}

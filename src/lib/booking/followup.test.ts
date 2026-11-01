@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { translator } from "@/i18n/translator";
 import {
   BOOKED_ANSWERS,
   bookedAnswerLevel,
@@ -7,23 +8,31 @@ import {
   feedbackLevel,
   FeedbackSchema,
   followUpDueAt,
+  bookedAnswerLabel,
   NOT_VISITED,
+  ratingLabel,
+  RATINGS,
 } from "./followup";
+
+const t = translator("fr", "booking");
 
 describe("« As-tu réservé ? »", () => {
   it("pose la question de la maquette", () => {
-    expect(bookedQuestion("Beit Kandinof")).toBe("De retour. As-tu réservé chez Beit Kandinof ?");
+    expect(bookedQuestion(t, "Beit Kandinof")).toBe("De retour. As-tu réservé chez Beit Kandinof ?");
   });
 
   it("« Oui » → booked, jamais visited ; les autres réponses ne créent rien", () => {
-    expect(bookedAnswerLevel("Oui")).toBe("booked");
-    expect(bookedAnswerLevel("Pas encore")).toBeNull();
-    expect(bookedAnswerLevel("J’ai choisi un autre endroit")).toBeNull();
+    expect(BOOKED_ANSWERS.map((a) => bookedAnswerLabel(t, a))).toEqual(["Oui", "Pas encore", "J’ai choisi un autre endroit"]);
+    expect(bookedAnswerLevel("yes")).toBe("booked");
+    expect(bookedAnswerLevel("notYet")).toBeNull();
+    expect(bookedAnswerLevel("otherPlace")).toBeNull();
     for (const a of BOOKED_ANSWERS) expect(bookedAnswerLevel(a)).not.toBe("visited");
   });
 
   it("répond « réservé — pas encore comme visité »", () => {
-    const text = bookedReply("Oui", "Beit Kandinof").map((p) => p.text).join("");
+    const parts = bookedReply(t, "yes", "Beit Kandinof");
+    expect(parts.find((p) => p.strong)?.text).toBe("Beit Kandinof");
+    const text = parts.map((p) => p.text).join("");
     expect(text).toBe(
       "Parfait. Je garde Beit Kandinof dans ta mémoire comme réservé — pas encore comme visité. Je te demanderai demain comment c’était.",
     );
@@ -31,6 +40,10 @@ describe("« As-tu réservé ? »", () => {
 });
 
 describe("retour après visite → niveau de preuve", () => {
+  it("affiche les réponses de la maquette", () => {
+    expect(RATINGS.map((r) => ratingLabel(t, r))).toEqual(["Excellent", "Bien", "Moyen", "Pas pour moi", "Je n’y suis finalement pas allé"]);
+  });
+
   it("« Je n’y suis finalement pas allé » → aucune visite", () => {
     expect(feedbackLevel({ rating: NOT_VISITED, recommend: null })).toBeNull();
   });

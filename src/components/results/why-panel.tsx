@@ -1,4 +1,5 @@
-import { EVIDENCE_REMINDER } from "@/lib/search/phrasing";
+import { useTranslations } from "next-intl";
+import { evidenceReminder } from "@/lib/search/phrasing";
 import type { SearchResult } from "@/lib/search/types";
 import { ConfidencePill, EvidenceText, PersonAvatar } from "./marks";
 
@@ -6,6 +7,8 @@ const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted 
 
 /** « Pourquoi ce choix ? » (docs/prototype.html, whyBody). */
 export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (result: SearchResult) => void }) {
+  const t = useTranslations("results");
+  const reminder = evidenceReminder({ t: useTranslations("search"), ev: useTranslations("evidence") });
   return (
     <div className="flex flex-col gap-4">
       <div>
@@ -18,7 +21,7 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
       </div>
 
       <section>
-        <h3 className={`${EYEBROW} mb-2`}>Cette recommandation repose sur</h3>
+        <h3 className={`${EYEBROW} mb-2`}>{t("basis")}</h3>
         <ul className="flex flex-col">
           {result.lines.map((line, i) => (
             <li key={i} className="flex items-start gap-3 border-t border-line py-3 first:border-t-0">
@@ -45,7 +48,7 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
 
       {result.unknowns.length > 0 ? (
         <section>
-          <h3 className={`${EYEBROW} mb-2`}>Ce que nous ne savons pas encore</h3>
+          <h3 className={`${EYEBROW} mb-2`}>{t("unknowns")}</h3>
           <ul className="flex flex-col gap-1.5">
             {result.unknowns.map((u) => (
               <li
@@ -63,9 +66,9 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
       ) : null}
 
       <section className="rounded-card border border-line bg-paper-2 p-3">
-        <h3 className={`${EYEBROW} mb-2`}>Niveaux de preuve</h3>
+        <h3 className={`${EYEBROW} mb-2`}>{t("levels")}</h3>
         <ol>
-          {EVIDENCE_REMINDER.map((r, i) => (
+          {reminder.map((r, i) => (
             <li key={r.level} className="flex items-center gap-2.5 border-b border-line py-2.5 text-[13.5px] last:border-b-0">
               <span className="inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-lilac-2 text-[11px] font-bold">
                 {i + 1}
@@ -82,7 +85,7 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
           onClick={() => onBook(result)}
           className="inline-flex min-h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-paper transition-colors hover:bg-night"
         >
-          Réserver
+          {t("book")}
         </button>
       ) : null}
     </div>

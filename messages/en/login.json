@@ -1,1 +1,21 @@
-{}
+{
+  "metaTitle": "Sign in",
+  "eyebrow": "Welcome",
+  "title": "Sign in with your email.",
+  "lead": "We send you a link. You click, you’re in.",
+  "linkExpired": "This link no longer works. Ask for a new one below.",
+  "privacy": "Private by default. Nothing is published, and no message is sent without your confirmation.",
+  "form": {
+    "emailLabel": "Your email",
+    "emailPlaceholder": "firstname@example.com",
+    "submit": "Get my link",
+    "sending": "Sending…",
+    "noPassword": "No password. The link in your email is all you need.",
+    "sent": "<b>Link sent.</b> Open the email sent to <b>{email}</b> and click the link: it signs you in, no password needed.",
+    "resend": "Nothing yet? Check your spam folder, or <link>send a new link</link>."
+  },
+  "errors": {
+    "invalidEmail": "Enter a valid email address.",
+    "sendFailed": "Couldn’t send the link right now. Try again in a moment."
+  }
+}

@@ -1,1 +1,42 @@
-{}
+{
+  "metaTitle": "Comment ça marche",
+  "eyebrow": "Comment ça marche",
+  "title": "Trois étapes, pas une appli de plus.",
+  "steps": {
+    "memory": {
+      "title": "WH3RE retrouve les lieux que toi et tes proches connaissez déjà.",
+      "text": "Réservations dans tes emails, lieux partagés, réponses de tes proches. Jamais de lecture secrète."
+    },
+    "ask": {
+      "title": "Tu poses une question comme tu la poserais à un ami.",
+      "text": "« Un endroit caché, pas trop bruyant, pour ce soir. » WH3RE comprend le contexte."
+    },
+    "answers": {
+      "title": "Tu obtiens quelques réponses expliquées, pas une liste infinie.",
+      "text": "Trois idées solides, avec qui les recommande et pourquoi."
+    }
+  },
+  "signals": {
+    "sarah": {
+      "initial": "S",
+      "text": "Sarah recommande un lieu"
+    },
+    "noam": {
+      "initial": "N",
+      "text": "Noam y a réservé"
+    },
+    "maya": {
+      "initial": "M",
+      "text": "Maya a partagé une vidéo"
+    },
+    "me": {
+      "initial": "R",
+      "text": "Raphaël a aimé un lieu similaire"
+    }
+  },
+  "caption": "Plusieurs signaux de confiance → trois recommandations",
+  "promiseEyebrow": "La promesse",
+  "promise": "Ask your network without asking everyone.",
+  "promiseText": "Au lieu de fouiller des centaines d’avis anonymes ou d’envoyer la même question dans cinq groupes WhatsApp.",
+  "start": "Commencer"
+}

@@ -1,1 +1,31 @@
-{}
+{
+  "metaTitle": "שאלה בשבילך",
+  "noAccount": "בלי חשבון · בלי אפליקציה",
+  "invalidTitle": "הקישור הפרטי הזה כבר לא בתוקף.",
+  "invalidLead": "אפשר לבקש ממי ששלח אותו קישור חדש.",
+  "requesterFallback": "מי שפנה אליך",
+  "sentTo": "נשלח ל־{requester}",
+  "thanks": "תודה, {name}.",
+  "reusableYes": "רק {requester} רואה את התשובה שלך. אישרת ל־WH3RE להשתמש בה שוב בשביל {requester} בעתיד.",
+  "reusableNo": "רק {requester} רואה את התשובה שלך. היא משמשת רק לשאלה הזו ולא תישמר.",
+  "another": "להמליץ על מקום נוסף",
+  "placeName": "שם המקום",
+  "placeUrlPlaceholder": "קישור Google Maps / Instagram / TikTok (לא חובה)",
+  "placeUrlLabel": "קישור Google Maps, Instagram או TikTok",
+  "visitedQuestion": "באמת היית שם?",
+  "visitedYes": "כן",
+  "visitedNo": "לא, אבל שמעתי עליו",
+  "note": "למה כדאי ללכת לשם?",
+  "visibleOnly": "גלוי רק ל־{requester}",
+  "allowReuse": "לאפשר ל־WH3RE להשתמש בהמלצה הזו שוב בשביל {requester} בעתיד",
+  "submit": "שליחת ההמלצה שלי",
+  "errors": {
+    "visitedRequired": "צריך לסמן אם באמת היית שם.",
+    "invalidToken": "הקישור הפרטי הזה לא תקין.",
+    "expired": "הקישור הפרטי הזה כבר לא בתוקף.",
+    "placeNameRequired": "צריך לכתוב את שם המקום.",
+    "placeUrlInvalid": "הקישור לא נראה תקין.",
+    "checkAnswer": "כדאי לבדוק את התשובה.",
+    "sendFailed": "התשובה לא נשלחה. אפשר לנסות שוב בעוד רגע."
+  }
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState, type ReactNode } from "react";
 
 type Mode = "choose" | "gmail" | "manual";
@@ -34,6 +35,7 @@ const BACK = "self-start text-[13px] font-semibold text-blue hover:underline";
 
 function CopyBox({ value, big = false }: { value: string; big?: boolean }) {
   const [copied, setCopied] = useState(false);
+  const t = useTranslations("import");
   return (
     <div className="flex items-center gap-2.5 rounded-[14px] border-[1.5px] border-line bg-paper px-3.5 py-2.5">
       <code
@@ -52,7 +54,7 @@ function CopyBox({ value, big = false }: { value: string; big?: boolean }) {
         }}
         className="inline-flex min-h-9 shrink-0 items-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-paper transition-colors hover:bg-night"
       >
-        {copied ? "Copié ✓" : "Copier"}
+        {copied ? t("copy.copied") : t("copy.copy")}
       </button>
     </div>
   );
@@ -71,9 +73,10 @@ function Do({ n, children }: { n: number; children: ReactNode }) {
 }
 
 function Progress({ step }: { step: 1 | 2 | 3 }) {
+  const t = useTranslations("import");
   return (
     <div className="flex flex-col gap-2">
-      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">Étape {step} sur 3</div>
+      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{t("setup.progress", { step })}</div>
       <div className="flex gap-1.5" aria-hidden>
         {[1, 2, 3].map((i) => (
           <i key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-orange" : "bg-lilac"}`} />
@@ -88,7 +91,7 @@ function Choice({ icon, title, text, badge, onClick }: { icon: string; title: st
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
+      className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-start transition hover:-translate-y-px hover:border-ink"
     >
       <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
         {icon}
@@ -132,6 +135,8 @@ export function ImportSetup({
 }) {
   const [mode, setMode] = useState<Mode>(active ? "gmail" : "choose");
   const [step, setStep] = useState<Step>(active ? "done" : 1);
+  const t = useTranslations("import");
+  const b = (chunks: ReactNode) => <b>{chunks}</b>;
 
   // Reprend l'assistant là où il en était (la page se rafraîchit pendant l'attente du code).
   useEffect(() => {
@@ -162,10 +167,7 @@ export function ImportSetup({
     return (
       <div className="flex items-start gap-3 rounded-card border border-line bg-amber-2 p-4 text-[14px] text-[#6e4f14]">
         <span aria-hidden>⏳</span>
-        <span>
-          <b>La réception des emails n’est pas encore active sur cette version de WH3RE.</b> Ne configure rien dans Gmail
-          pour l’instant : rien n’arriverait. Cette étape sera disponible une fois WH3RE en ligne.
-        </span>
+        <span>{t.rich("setup.notReceiving", { b })}</span>
       </div>
     );
   }
@@ -173,18 +175,18 @@ export function ImportSetup({
   if (mode === "choose") {
     return (
       <div className="flex flex-col gap-2.5">
-        <h2 className="font-display text-[21px] font-bold leading-tight">Comment veux-tu retrouver tes réservations ?</h2>
+        <h2 className="font-display text-[21px] font-bold leading-tight">{t("setup.chooseTitle")}</h2>
         <Choice
           icon="✨"
-          title="Automatiquement, depuis Gmail"
-          badge="Recommandé"
-          text="3 étapes, 2 minutes. Gmail n’envoie à WH3RE que les emails de réservation, rien d’autre."
+          title={t("setup.auto.title")}
+          badge={t("setup.auto.badge")}
+          text={t("setup.auto.text")}
           onClick={() => go(1)}
         />
         <Choice
           icon="✉️"
-          title="À la main, un email à la fois"
-          text="Tu transfères toi-même une confirmation de restaurant, d’hôtel ou d’activité."
+          title={t("setup.byHand.title")}
+          text={t("setup.byHand.text")}
           onClick={() => setMode("manual")}
         />
       </div>
@@ -195,22 +197,20 @@ export function ImportSetup({
     return (
       <div className={card}>
         <button type="button" onClick={() => setMode("choose")} className={BACK}>
-          ‹ Retour
+          {t("setup.back")}
         </button>
-        <h2 className="font-display text-[21px] font-bold leading-tight">Transfère une confirmation</h2>
+        <h2 className="font-display text-[21px] font-bold leading-tight">{t("setup.manual.title")}</h2>
         <ol className="flex flex-col gap-4">
-          <Do n={1}>Ouvre un email de confirmation : un restaurant, un hôtel, une activité.</Do>
+          <Do n={1}>{t("setup.manual.step1")}</Do>
           <Do n={2}>
-            Clique sur « Transférer » et envoie-le à cette adresse :
+            {t("setup.manual.step2")}
             <CopyBox value={address} />
           </Do>
           <Do n={3}>
-            <span>
-              Envoie-le depuis <b>{accountEmail}</b>, l’adresse de ton compte WH3RE. Il apparaîtra ici en quelques secondes.
-            </span>
+            <span>{t.rich("setup.manual.step3", { email: accountEmail, b })}</span>
           </Do>
         </ol>
-        <p className="text-[12px] text-muted">Les livraisons sont écartées : une commande Tabit ou Wolt n’est pas une visite au restaurant.</p>
+        <p className="text-[12px] text-muted">{t("setup.manual.deliveries")}</p>
       </div>
     );
   }
@@ -224,25 +224,25 @@ export function ImportSetup({
           </span>
           <div className="flex flex-col gap-1">
             <h2 className="font-display text-[21px] font-bold leading-tight">
-              {active ? "Le transfert automatique fonctionne." : "C’est en place."}
+              {active ? t("setup.done.activeTitle") : t("setup.done.title")}
             </h2>
             <p className="text-[14px] text-muted">
-              {active
-                ? "Tes nouvelles confirmations arrivent ici toutes seules. Tu les valides avant qu’elles entrent dans ta mémoire."
-                : "Ta prochaine confirmation d’Ontopo, Tabit, Booking ou Airbnb apparaîtra ici toute seule."}
+              {active ? t("setup.done.activeText") : t("setup.done.text")}
             </p>
           </div>
         </div>
         <div className="rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13px] text-ink-2">
-          Gmail ne transfère que les nouveaux emails. Pour tes anciennes réservations,{" "}
-          <button type="button" onClick={() => setMode("manual")} className="font-semibold text-blue hover:underline">
-            transfère-les à la main
-          </button>
-          .
+          {t.rich("setup.done.oldEmails", {
+            manual: (chunks) => (
+              <button type="button" onClick={() => setMode("manual")} className="font-semibold text-blue hover:underline">
+                {chunks}
+              </button>
+            ),
+          })}
         </div>
         {!active ? (
           <button type="button" onClick={() => go(1)} className={BACK}>
-            Recommencer l’assistant
+            {t("setup.done.restart")}
           </button>
         ) : null}
       </div>
@@ -252,54 +252,48 @@ export function ImportSetup({
   return (
     <div className={card}>
       <button type="button" onClick={() => (step === 1 ? go(null) : go((step - 1) as Step))} className={BACK}>
-        ‹ Retour
+        {t("setup.back")}
       </button>
       <Progress step={step} />
 
       {step === 1 ? (
         <>
-          <h2 className="font-display text-[21px] font-bold leading-tight">Donne ton adresse WH3RE à Gmail</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">{t("setup.step1.title")}</h2>
           <ol className="flex flex-col gap-4">
             <Do n={1}>
-              Copie ton adresse WH3RE :
+              {t("setup.step1.copy")}
               <CopyBox value={address} />
             </Do>
             <Do n={2}>
-              <span>
-                Ouvre Gmail, clique sur <b>« Ajouter une adresse de transfert »</b>, colle l’adresse et valide.
-              </span>
+              <span>{t.rich("setup.step1.open", { b })}</span>
               <a href={links.forwarding} target="_blank" rel="noopener noreferrer" className={SECONDARY}>
-                Ouvrir Gmail ↗
+                {t("setup.step1.openGmail")}
               </a>
               <p className="rounded-[12px] bg-amber-2 px-3 py-2 text-[12.5px] text-[#6e4f14]">
-                Tu vois un champ « Transférer une copie des messages reçus à » au lieu du bouton ? N’y mets
-                rien : il transférerait toute ta boîte. C’est l’affichage de certains comptes professionnels (Google Workspace).
+                {t("setup.step1.workspace")}
               </p>
             </Do>
           </ol>
           <button type="button" onClick={() => go(2)} className={PRIMARY}>
-            C’est fait, étape suivante
+            {t("setup.step1.next")}
           </button>
         </>
       ) : step === 2 ? (
         <>
-          <h2 className="font-display text-[21px] font-bold leading-tight">Confirme avec le code</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">{t("setup.step2.title")}</h2>
           {confirmation ? (
             <ol className="flex flex-col gap-4">
               <Do n={1}>
-                Gmail a envoyé ce code à WH3RE{confirmation.requester ? ` pour ${confirmation.requester}` : ""} :
+                {confirmation.requester
+                  ? t("setup.step2.codeSentFor", { requester: confirmation.requester })
+                  : t("setup.step2.codeSent")}
                 <CopyBox value={confirmation.code} big />
               </Do>
               <Do n={2}>
-                <span>
-                  Retourne dans Gmail, colle le code et clique sur <b>« Valider »</b>.
-                </span>
+                <span>{t.rich("setup.step2.paste", { b })}</span>
               </Do>
               <Do n={3}>
-                <span>
-                  Laisse <b>« Désactiver le transfert »</b> sélectionné : seuls les emails de réservation seront transférés,
-                  grâce à l’étape suivante.
-                </span>
+                <span>{t.rich("setup.step2.keepDisabled", { b })}</span>
               </Do>
             </ol>
           ) : (
@@ -309,48 +303,44 @@ export function ImportSetup({
                   <i key={i} style={{ animationDelay: `${i * 0.2}s` }} className="size-1.5 animate-blink rounded-full bg-soft" />
                 ))}
               </span>
-              <span>J’attends le code que Gmail envoie à WH3RE. Il apparaît ici tout seul, en quelques secondes.</span>
+              <span>{t("setup.step2.waiting")}</span>
             </div>
           )}
           <button type="button" onClick={() => go(3)} disabled={!confirmation} className={`${PRIMARY} disabled:opacity-40`}>
-            C’est validé, étape suivante
+            {t("setup.step2.next")}
           </button>
           {!confirmation ? (
             <button type="button" onClick={() => go(3)} className={BACK}>
-              J’ai déjà validé le code dans Gmail
+              {t("setup.step2.alreadyDone")}
             </button>
           ) : null}
         </>
       ) : (
         <>
-          <h2 className="font-display text-[21px] font-bold leading-tight">Ne transfère que les réservations</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">{t("setup.step3.title")}</h2>
           <ol className="flex flex-col gap-4">
             <Do n={1}>
-              <span>Ouvre Gmail : la recherche des emails de réservation est déjà remplie.</span>
+              <span>{t("setup.step3.open")}</span>
               <a href={links.search} target="_blank" rel="noopener noreferrer" className={SECONDARY}>
-                Ouvrir la recherche dans Gmail ↗
+                {t("setup.step3.openSearch")}
               </a>
             </Do>
             <Do n={2}>
-              <span>
-                Dans la barre de recherche, clique sur l’icône des options (à droite), puis sur <b>« Créer un filtre »</b>.
-              </span>
+              <span>{t.rich("setup.step3.options", { b })}</span>
             </Do>
             <Do n={3}>
-              <span>
-                Coche <b>« Le transférer à »</b>, choisis ton adresse WH3RE, puis clique sur <b>« Créer un filtre »</b>.
-              </span>
+              <span>{t.rich("setup.step3.forward", { b })}</span>
             </Do>
           </ol>
           <details className="text-[12.5px] text-muted">
-            <summary className="cursor-pointer font-semibold text-blue">La recherche ne s’est pas remplie ?</summary>
+            <summary className="cursor-pointer font-semibold text-blue">{t("setup.step3.notFilled")}</summary>
             <div className="mt-2 flex flex-col gap-2">
-              Copie-la et colle-la dans la barre de recherche de Gmail :
+              {t("setup.step3.copyQuery")}
               <CopyBox value={query} />
             </div>
           </details>
           <button type="button" onClick={() => go("done")} className={PRIMARY}>
-            C’est fait
+            {t("setup.step3.done")}
           </button>
         </>
       )}

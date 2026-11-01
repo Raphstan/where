@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_USAGE, USAGE_LABELS, usableForRecommendations } from "./usage";
+import { DEFAULT_USAGE, USAGE_KEYS, usableForRecommendations } from "./usage";
+import { translator } from "@/i18n/translator";
 
 describe("usableForRecommendations", () => {
   it("tout sert par défaut", () => {
@@ -30,7 +31,8 @@ describe("usableForRecommendations", () => {
   });
 
   it("reprend les libellés de la maquette", () => {
-    expect(USAGE_LABELS.map(([, l]) => l)).toEqual([
+    const t = translator("fr", "privacy");
+    expect(USAGE_KEYS.map((k) => t(`usage.${k}`))).toEqual([
       "Mes réservations importées",
       "Mes retours après visite",
       "Les réponses de mon cercle (avec leur accord)",

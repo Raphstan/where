@@ -1,7 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { usePanel } from "@/components/shell/panel-context";
-import { DISCOVERY_TEXT } from "@/lib/search/phrasing";
 import type { SearchResult } from "@/lib/search/types";
 import { ConfidencePill, EvidenceText, hashIndex, PeopleStack } from "./marks";
 import { WhyPanel } from "./why-panel";
@@ -21,6 +21,7 @@ export function ResultCard({
   onBook?: (result: SearchResult) => void;
 }) {
   const { open } = usePanel();
+  const t = useTranslations("results");
   const discovery = result.origin === "discovery";
   const canBook = Boolean(onBook) && result.booking.length > 0;
   const meta = [result.kind, result.vibe.join(", "), result.noise ? `🔈 ${result.noise}` : null, result.price].filter(
@@ -33,7 +34,7 @@ export function ResultCard({
     >
       <div className="relative">
         <span
-          className={`absolute top-3 left-3 z-[2] rounded-full px-2.5 py-[5px] text-[11.5px] font-bold tracking-[0.02em] ${
+          className={`absolute top-3 start-3 z-[2] rounded-full px-2.5 py-[5px] text-[11.5px] font-bold tracking-[0.02em] ${
             first && !discovery ? "bg-orange text-white" : "bg-white/90 text-ink"
           }`}
         >
@@ -51,7 +52,7 @@ export function ResultCard({
         {meta.length > 0 ? (
           <div className="flex flex-wrap gap-x-2.5 gap-y-1 text-[12.5px] text-muted">
             {meta.map((m, i) => (
-              <span key={m} className={i === 0 ? "font-semibold text-ink-2" : "before:mr-2.5 before:text-soft before:content-['·']"}>
+              <span key={m} className={i === 0 ? "font-semibold text-ink-2" : "before:me-2.5 before:text-soft before:content-['·']"}>
                 {m}
               </span>
             ))}
@@ -88,7 +89,7 @@ export function ResultCard({
             <PeopleStack people={result.people} />
           ) : discovery ? (
             <span className="text-[11.5px] font-bold tracking-[0.06em] text-blue uppercase">
-              {DISCOVERY_TEXT.outsideCircle}
+              {t("outsideCircle")}
             </span>
           ) : null}
         </div>
@@ -97,11 +98,11 @@ export function ResultCard({
           <button
             type="button"
             onClick={() =>
-              open({ key: result.id, title: "Pourquoi ce choix ?", body: <WhyPanel result={result} onBook={canBook ? onBook : undefined} /> })
+              open({ key: result.id, title: t("why"), body: <WhyPanel result={result} onBook={canBook ? onBook : undefined} /> })
             }
             className={`${ACTION} bg-lilac-2 text-ink hover:bg-lilac`}
           >
-            Pourquoi ce choix ?
+            {t("why")}
           </button>
           {result.links.googleMapsUrl ? (
             <a
@@ -110,12 +111,12 @@ export function ResultCard({
               rel="noopener noreferrer"
               className={`${ACTION} bg-lilac-2 text-ink hover:bg-lilac`}
             >
-              Voir dans Google Maps
+              {t("maps")}
             </a>
           ) : null}
           {canBook ? (
             <button type="button" onClick={() => onBook?.(result)} className={`${ACTION} bg-ink text-paper hover:bg-night`}>
-              Réserver
+              {t("book")}
             </button>
           ) : null}
         </div>

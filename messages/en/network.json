@@ -1,1 +1,93 @@
-{}
+{
+  "draft": {
+    "withName": "{name} is looking for {what}{where}{when}{details}. Any recommendations?",
+    "anonymous": "I’m looking for {what}{where}{when}{details}. Any recommendations?",
+    "kinds": {
+      "restaurant": "a restaurant",
+      "bar": "a bar",
+      "cafe": "a café",
+      "hotel": "a hotel",
+      "beach": "a beach",
+      "activity": "an activity",
+      "any": "a good spot"
+    },
+    "or": "{a} or {b}",
+    "whereCityArea": " in {city} ({area})",
+    "where": " in {place}",
+    "details": " — {list}"
+  },
+  "replyIn20": "Reply in 20 seconds",
+  "names": {
+    "and": "{rest} and {last}"
+  },
+  "asked": {
+    "many": "Sent to {names} on WhatsApp. I’ll let you know as soon as they reply — nothing else was sent.",
+    "one": "Sent to {names} on WhatsApp. I’ll let you know as soon as they reply — nothing else was sent."
+  },
+  "suggest": {
+    "knowsArea": "Knows the area well",
+    "knowsOnePlace": "Knows a place around there",
+    "trustAll": "You trust their taste in everything",
+    "trustFor": "You trust their taste in {domain}",
+    "lessRelevant": "Less relevant here",
+    "lessRelevantFor": "Less relevant here — {domains}"
+  },
+  "domains": {
+    "phrase": {
+      "all": "everything",
+      "restaurants": "restaurants",
+      "hotels": "hotels",
+      "nightlife": "bars & nightlife",
+      "travel": "travel",
+      "activities": "activities",
+      "family": "family outings",
+      "business": "business meals"
+    },
+    "short": {
+      "restaurants": "restaurants",
+      "hotels": "hotels",
+      "nightlife": "bars & nightlife",
+      "travel": "travel",
+      "activities": "activities",
+      "family": "family",
+      "business": "business"
+    }
+  },
+  "ask": {
+    "metaTitle": "Ask my network",
+    "backToConversation": "Back to the conversation",
+    "eyebrow": "Ask my network",
+    "title": "I’ve drafted the question. You stay in control.",
+    "lead": "Edit the message if you like and choose who gets it. Nothing goes out without your OK.",
+    "messageLabel": "Message",
+    "suggested": "Suggested people",
+    "emptyCircle": "Your circle is empty for now. Add a few people you trust in My circle.",
+    "onlyRelevant": "You only ask the people who fit best, not your whole address book.",
+    "sendIndividually": "Send one by one on WhatsApp",
+    "sendIndividuallyCount": "Send one by one on WhatsApp ({count})",
+    "confirmTitle": "Send to {names}?",
+    "confirmLead": "One WhatsApp message per person, each with their own private link to reply without installing anything.",
+    "preview": "Preview",
+    "previewLink": "Private link · Reply in 20 seconds",
+    "edit": "Edit",
+    "confirm": "Confirm and send",
+    "prepareFailed": "I can’t prepare the request right now.",
+    "openTitle": "One message per person.",
+    "openLead": "WhatsApp opens with the message and private link ready to go: you’re the one who taps Send.",
+    "copied": "Link copied",
+    "copy": "Copy private link",
+    "opened": "WhatsApp opened ✓",
+    "open": "Open WhatsApp",
+    "backBottom": "Back to the conversation"
+  },
+  "api": {
+    "unauthenticatedAsk": "Sign in to ask your circle.",
+    "unauthenticated": "Sign in to continue.",
+    "invalidRequest": "Invalid message or recipients.",
+    "prepareFailed": "I can’t prepare the request right now.",
+    "conversationNotFound": "Conversation not found.",
+    "notInCircle": "One of the recipients isn’t in your circle.",
+    "recipientNotFound": "Recipient not found.",
+    "sentFailed": "I can’t record the send right now."
+  }
+}

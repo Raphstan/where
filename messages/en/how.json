@@ -1,1 +1,42 @@
-{}
+{
+  "metaTitle": "How it works",
+  "eyebrow": "How it works",
+  "title": "Three steps, not another app.",
+  "steps": {
+    "memory": {
+      "title": "WH3RE finds the places you and your friends already know.",
+      "text": "Bookings in your emails, shared places, answers from your friends. Nothing read behind your back."
+    },
+    "ask": {
+      "title": "You ask a question the way you’d ask a friend.",
+      "text": "“A hidden spot, not too loud, for tonight.” WH3RE gets the context."
+    },
+    "answers": {
+      "title": "You get a few explained answers, not an endless list.",
+      "text": "Three solid ideas, with who recommends them and why."
+    }
+  },
+  "signals": {
+    "sarah": {
+      "initial": "S",
+      "text": "Sarah recommends a place"
+    },
+    "noam": {
+      "initial": "N",
+      "text": "Noam booked there"
+    },
+    "maya": {
+      "initial": "M",
+      "text": "Maya shared a video"
+    },
+    "me": {
+      "initial": "R",
+      "text": "Raphaël liked a similar place"
+    }
+  },
+  "caption": "Several trust signals → three recommendations",
+  "promiseEyebrow": "The promise",
+  "promise": "Ask your network without asking everyone.",
+  "promiseText": "Instead of digging through hundreds of anonymous reviews or sending the same question to five WhatsApp groups.",
+  "start": "Get started"
+}

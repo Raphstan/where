@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { bookingNotes, bookingOptions, BOOKING_TEXT, leavingText, mapsUrl, telUrl, waUrl, type BookingPlace } from "./options";
+import { translator } from "@/i18n/translator";
+import { bookingLabel, bookingNotes, bookingOptions, leavingText, mapsUrl, telUrl, waUrl, type BookingPlace } from "./options";
+
+const t = translator("fr", "booking");
 
 const bare: BookingPlace = {
   name: "Beit Kandinof",
@@ -24,7 +27,7 @@ describe("bookingOptions", () => {
       whatsapp: "+972 50-555-0101",
     });
     expect(options.map((o) => o.kind)).toEqual(["ontopo", "site", "tel", "wa", "maps"]);
-    expect(options.map((o) => o.label)).toEqual([
+    expect(options.map((o) => bookingLabel(t, o.kind))).toEqual([
       "Réserver avec Ontopo",
       "Ouvrir le site du restaurant",
       "Appeler",
@@ -36,13 +39,15 @@ describe("bookingOptions", () => {
   it("n'invente jamais de lien Ontopo ou Tabit", () => {
     const options = bookingOptions({ ...bare, city: "Tel Aviv", websiteUrl: "https://herzl16.example" });
     expect(options.some((o) => o.kind === "ontopo" || o.kind === "tabit")).toBe(false);
-    expect(bookingNotes(options)).toEqual([BOOKING_TEXT.noPlatformNote]);
+    expect(bookingNotes(t, options)).toEqual([
+      "Ce lieu ne propose ni Ontopo ni Tabit — je ne t’affiche que ce qui existe vraiment.",
+    ]);
   });
 
   it("affiche Tabit avec sa note sur les livraisons", () => {
     const options = bookingOptions({ ...bare, tabitUrl: "https://tabitisrael.co.il/herzl-16" });
     expect(options.map((o) => o.kind)).toEqual(["tabit"]);
-    expect(bookingNotes(options)).toEqual([
+    expect(bookingNotes(t, options)).toEqual([
       "Tabit gère aussi des livraisons : seule une réservation de table comptera comme visite.",
     ]);
   });
@@ -84,8 +89,8 @@ describe("liens téléphone, WhatsApp et carte", () => {
 
 describe("écran « Tu quittes WH3RE »", () => {
   it("reprend la phrase de la maquette", () => {
-    expect(leavingText("ontopo")).toBe("Tu quittes WH3RE pour finaliser ta réservation sur Ontopo.");
-    expect(leavingText("tabit")).toBe("Tu quittes WH3RE pour finaliser ta réservation sur Tabit.");
-    expect(leavingText("tel")).toBe("Tu quittes WH3RE pour finaliser ta réservation par téléphone.");
+    expect(leavingText(t, "ontopo")).toBe("Tu quittes WH3RE pour finaliser ta réservation sur Ontopo.");
+    expect(leavingText(t, "tabit")).toBe("Tu quittes WH3RE pour finaliser ta réservation sur Tabit.");
+    expect(leavingText(t, "tel")).toBe("Tu quittes WH3RE pour finaliser ta réservation par téléphone.");
   });
 });

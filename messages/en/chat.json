@@ -1,1 +1,77 @@
-{}
+{
+  "metaTitle": "Conversation",
+  "typing": "WH3RE is thinking",
+  "composer": {
+    "placeholder": "Where should you go…?",
+    "label": "Your question"
+  },
+  "criteria": {
+    "hint": "What I understood — tap a criterion to remove it",
+    "list": "Understood criteria",
+    "remove": "Remove the criterion {tag}",
+    "placeholder": "a criterion…",
+    "new": "New criterion",
+    "add": "+ add"
+  },
+  "widen": "Widen the criteria",
+  "closed": {
+    "one": " shows up in older recommendations, but seems to have closed. I left it out.",
+    "many": " show up in older recommendations, but seem to have closed. I left them out."
+  },
+  "people": {
+    "ask": "Ask them",
+    "note": "You only ask the most relevant people, not your whole contact list."
+  },
+  "errors": {
+    "ask": "I couldn’t understand the question. Try again in a moment.",
+    "search": "I can’t search your circle right now. Try again in a moment.",
+    "generic": "Something got stuck. Try again in a moment.",
+    "booking": "I can’t save your booking. Try again in a moment.",
+    "bookingShort": "I can’t save your booking."
+  },
+  "book": "Book",
+  "replies": {
+    "replied": "{name} replied",
+    "repliedPlace": ": {place}.",
+    "justReplied": "{name} just replied.",
+    "notReusable": "{name} didn’t allow reuse: this answer only serves this question and won’t be kept.",
+    "changesRanking": " I have a new, more reliable recommendation — their answer changes the ranking."
+  },
+  "toast": {
+    "removedUpdating": "“{tag}” removed — updating the results",
+    "removed": "“{tag}” removed",
+    "addedUpdated": "“{tag}” added — results updated",
+    "added": "“{tag}” added"
+  },
+  "new": "New",
+  "empty": {
+    "title": "Where should you really go?",
+    "lead": "Ask like you’d ask a friend. I look at what your circle knows first, then fill in with public info."
+  },
+  "api": {
+    "ask": {
+      "unauthenticated": "Sign in to ask a question.",
+      "invalid": "The question is missing or too long.",
+      "notConfigured": "WH3RE isn’t set up to understand questions yet.",
+      "unparseable": "I couldn’t understand the question. Could you rephrase it?",
+      "rateLimited": "Too many questions at once. Try again in a moment.",
+      "unreachable": "I can’t reach my engine. Try again in a moment.",
+      "upstream": "My engine gave a garbled answer. Try again in a moment."
+    },
+    "search": {
+      "unauthenticated": "Sign in to run a search.",
+      "invalid": "Missing or invalid criteria.",
+      "memory": "I can’t read your memory right now. Try again in a moment."
+    },
+    "conversations": {
+      "unauthenticated": "Sign in to ask a question.",
+      "invalid": "Invalid conversation.",
+      "saveFailed": "I can’t save this conversation.",
+      "notFound": "Conversation not found.",
+      "signIn": "Sign in to continue.",
+      "invalidCriteria": "Invalid criteria.",
+      "updateFailed": "I can’t update this conversation.",
+      "repliesFailed": "I can’t read the replies."
+    }
+  }
+}

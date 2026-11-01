@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { translator } from "@/i18n/translator";
 import { criteria } from "@/test/search-fixtures";
 import {
   discoveryQuery,
@@ -10,6 +11,8 @@ import {
   type FetchLike,
   type GooglePlace,
 } from "./google-places";
+
+const tr = { t: translator("fr", "search"), ev: translator("fr", "evidence") };
 
 const cqc: GooglePlace = {
   id: "ChIJcqc",
@@ -60,7 +63,7 @@ describe("découverte", () => {
   });
 
   it("produit une carte « Découverte » exploratoire, hors du cercle, sans personne", () => {
-    const r = discoveryResult(cqc, criteria({ when: "ce soir" }), 2);
+    const r = discoveryResult(tr, cqc, criteria({ when: "ce soir" }), 2);
     expect(r).toMatchObject({
       origin: "discovery",
       rank: "Découverte",

@@ -1,1 +1,93 @@
-{}
+{
+  "draft": {
+    "withName": "{name} cherche {what}{where}{when}{details}. Tu as une recommandation ?",
+    "anonymous": "Je cherche {what}{where}{when}{details}. Tu as une recommandation ?",
+    "kinds": {
+      "restaurant": "un restaurant",
+      "bar": "un bar",
+      "cafe": "un café",
+      "hotel": "un hôtel",
+      "beach": "une plage",
+      "activity": "une activité",
+      "any": "un bon endroit"
+    },
+    "or": "{a} ou {b}",
+    "whereCityArea": " à {city} ({area})",
+    "where": " à {place}",
+    "details": " — {list}"
+  },
+  "replyIn20": "Répondre en 20 secondes",
+  "names": {
+    "and": "{rest} et {last}"
+  },
+  "asked": {
+    "many": "Envoyé à {names} sur WhatsApp. Je te préviens dès qu’ils répondent — rien d’autre n’a été envoyé.",
+    "one": "Envoyé à {names} sur WhatsApp. Je te préviens dès qu’il ou elle répond — rien d’autre n’a été envoyé."
+  },
+  "suggest": {
+    "knowsArea": "Connaît bien la région",
+    "knowsOnePlace": "Connaît un lieu dans ce coin",
+    "trustAll": "Tu lui fais confiance pour tout",
+    "trustFor": "Tu lui fais confiance pour {domain}",
+    "lessRelevant": "Moins pertinent ici",
+    "lessRelevantFor": "Moins pertinent ici — {domains}"
+  },
+  "domains": {
+    "phrase": {
+      "all": "tout",
+      "restaurants": "les restaurants",
+      "hotels": "les hôtels",
+      "nightlife": "les bars & la nightlife",
+      "travel": "les voyages",
+      "activities": "les activités",
+      "family": "la famille",
+      "business": "le business"
+    },
+    "short": {
+      "restaurants": "restaurants",
+      "hotels": "hôtels",
+      "nightlife": "bars & nightlife",
+      "travel": "voyages",
+      "activities": "activités",
+      "family": "famille",
+      "business": "business"
+    }
+  },
+  "ask": {
+    "metaTitle": "Demander à mon réseau",
+    "backToConversation": "Retour à la conversation",
+    "eyebrow": "Demander à mon réseau",
+    "title": "J’ai préparé la question. Tu gardes la main.",
+    "lead": "Modifie le message si tu veux, choisis les destinataires. Rien ne part sans ta confirmation.",
+    "messageLabel": "Message",
+    "suggested": "Destinataires suggérés",
+    "emptyCircle": "Ton cercle est vide pour l’instant. Ajoute quelques personnes de confiance dans Mon cercle.",
+    "onlyRelevant": "Tu demandes seulement aux personnes les plus pertinentes, pas à tout ton carnet d’adresses.",
+    "sendIndividually": "Envoyer individuellement sur WhatsApp",
+    "sendIndividuallyCount": "Envoyer individuellement sur WhatsApp ({count})",
+    "confirmTitle": "Envoyer à {names} ?",
+    "confirmLead": "Un message WhatsApp par personne, chacun avec son lien privé pour répondre sans rien installer.",
+    "preview": "Aperçu",
+    "previewLink": "Lien privé · Répondre en 20 secondes",
+    "edit": "Modifier",
+    "confirm": "Confirmer l’envoi",
+    "prepareFailed": "Je n’arrive pas à préparer la demande.",
+    "openTitle": "Un message par personne.",
+    "openLead": "WhatsApp s’ouvre avec le message et le lien privé déjà prêts : c’est toi qui appuies sur Envoyer.",
+    "copied": "Lien copié",
+    "copy": "Copier le lien privé",
+    "opened": "WhatsApp ouvert ✓",
+    "open": "Ouvrir WhatsApp",
+    "backBottom": "Revenir à la conversation"
+  },
+  "api": {
+    "unauthenticatedAsk": "Connecte-toi pour demander à ton cercle.",
+    "unauthenticated": "Connecte-toi pour continuer.",
+    "invalidRequest": "Message ou destinataires invalides.",
+    "prepareFailed": "Je n’arrive pas à préparer la demande.",
+    "conversationNotFound": "Conversation introuvable.",
+    "notInCircle": "Un des destinataires ne fait pas partie de ton cercle.",
+    "recipientNotFound": "Destinataire introuvable.",
+    "sentFailed": "Je n’arrive pas à enregistrer l’envoi."
+  }
+}

@@ -1,4 +1,5 @@
 import "server-only";
+import type { T } from "@/i18n/translator";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Criteria } from "@/lib/ask/schema";
 import type { Database } from "@/lib/supabase/database.types";
@@ -13,7 +14,7 @@ import {
 import { suggestPeople, type CircleMember } from "@/lib/network/suggest";
 import { loadUsagePrefs } from "@/lib/privacy/store";
 import { usableForRecommendations } from "@/lib/privacy/usage";
-import { afterFor, askIntroFor, BEST_MATCH_HEADLINE, introFor, isConfident, rankLabel } from "./phrasing";
+import { afterFor, askIntroFor, bestMatchHeadline, introFor, isConfident, rankLabel, type SearchT } from "./phrasing";
 import { MAX_RESULTS, rankMemory, type MemoryRow } from "./rank";
 import type { SearchResponse, SearchResult } from "./types";
 
@@ -136,6 +137,12 @@ export async function loadMemory(
 }
 
 export type SearchDeps = {
+  /** Traducteurs de la langue de l'utilisateur (espaces `search` et `evidence`). */
+  tr: SearchT;
+  /** Traducteur de l'espace `network` (raisons des proches suggérés). */
+  network: T;
+  /** Langue de l'utilisateur, transmise à Google Places. */
+  locale: string;
   supabase: SupabaseClient<Database>;
   userId: string;
   googlePlacesApiKey: string | undefined;
@@ -153,31 +160,31 @@ export async function search(criteria: Criteria, deps: SearchDeps): Promise<Sear
   const now = deps.now ?? new Date();
   const { rows, circleMemberIds, members } = await loadMemory(deps.supabase, deps.userId);
   // Quelques candidats de plus : un lieu fermé est écarté sans laisser de place vide.
-  const ranked = rankMemory(rows, circleMemberIds, criteria, now, MAX_RESULTS + CLOSED_SLACK, deps.conversationId ?? null);
+  const ranked = rankMemory(deps.tr, rows, circleMemberIds, criteria, now, MAX_RESULTS + CLOSED_SLACK, deps.conversationId ?? null);
   const { open, closed } = await withoutClosed(ranked, rows, deps.googlePlacesApiKey, deps.fetchImpl);
   const results = open.slice(0, MAX_RESULTS).map((r, i) => ({
     ...r,
-    rank: rankLabel(i, "personal"),
-    headline: i === 0 ? BEST_MATCH_HEADLINE : null,
+    rank: rankLabel(deps.tr.t, i, "personal"),
+    headline: i === 0 ? bestMatchHeadline(deps.tr.t) : null,
   }));
 
   const query = discoveryQuery(criteria);
   if (results.length < MAX_RESULTS && deps.googlePlacesApiKey && query) {
-    const places = await searchGooglePlaces(query, deps.googlePlacesApiKey, deps.fetchImpl);
+    const places = await searchGooglePlaces(query, deps.googlePlacesApiKey, deps.fetchImpl, deps.locale);
     const known = new Set(rows.flatMap((r) => (r.place.googlePlaceId ? [r.place.googlePlaceId] : [])));
     const names = new Set(rows.map((r) => r.place.name.toLocaleLowerCase("fr")));
     const pick = pickDiscovery(places, known, names);
-    if (pick) results.push(discoveryResult(pick, criteria, results.length));
+    if (pick) results.push(discoveryResult(deps.tr, pick, criteria, results.length));
   }
 
-  const people = isConfident(results) ? [] : suggestPeople(members, rows, criteria);
-  const askIntro = askIntroFor(results, people);
+  const people = isConfident(results) ? [] : suggestPeople(deps.network, members, rows, criteria);
+  const askIntro = askIntroFor(deps.tr.t, results, people);
   const hasPersonal = results.some((r) => r.origin === "personal");
   return {
     // Sans aucun lieu du cercle, l'appel au réseau tient lieu d'introduction.
-    intro: askIntro && !hasPersonal ? askIntro : introFor(results),
+    intro: askIntro && !hasPersonal ? askIntro : introFor(deps.tr.t, results),
     results,
-    after: afterFor(results),
+    after: afterFor(deps.tr.t, results),
     askIntro: askIntro && hasPersonal ? askIntro : null,
     people: askIntro ? people : [],
     closed,

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
@@ -7,7 +8,10 @@ import { ChatScreen } from "@/components/chat/chat-screen";
 import { loadConversation } from "@/lib/conversations/load";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Conversation" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("chat");
+  return { title: t("metaTitle") };
+}
 
 async function StoredChat({ id }: { id: string }) {
   await connection();
