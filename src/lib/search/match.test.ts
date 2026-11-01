@@ -41,4 +41,14 @@ describe("chips de critères", () => {
     expect(withTag(c, "terrasse").vibe).toEqual(["caché", "terrasse"]);
     expect(withTag(c, "Caché").vibe).toEqual(["caché"]);
   });
+
+describe("lieu sans localisation", () => {
+  const nowhere = { city: null, area: null, address: null, kind: null, vibe: [] };
+  it("ne répond pas à une question qui nomme une ville", () => {
+    expect(placeMatchesCriteria(nowhere, criteria({ city: "Rome" }))).toBe(false);
+  });
+  it("reste possible sans ville demandée", () => {
+    expect(placeMatchesCriteria(nowhere, criteria({}))).toBe(true);
+  });
+});
 });

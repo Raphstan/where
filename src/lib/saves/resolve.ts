@@ -27,9 +27,15 @@ async function identify(link: SharedLink, deps: ResolveDeps): Promise<{ place: E
   if (link.source === "maps") {
     const full = (await followMapsLink(link.url, deps.fetchImpl)) ?? link.url;
     const hint = parseMapsUrl(full);
-    // Le nom est dans l'adresse : pas besoin de Claude.
-    if (hint.name) return { place: { name: hint.name, city: null, area: null, kind: null }, lat: hint.lat, lng: hint.lng };
-    const place = await extractPlace({ source: "Google Maps", url: full, content: null, note: link.text }, deps.client);
+    // Avec la clé Google, le nom lu dans l'adresse suffit : Google Places donnera la ville et le type.
+    if (hint.name && deps.googlePlacesApiKey) {
+      return { place: { name: hint.name, city: null, area: null, kind: null }, lat: hint.lat, lng: hint.lng };
+    }
+    // Sans elle, Claude déduit la ville et le type du nom et des coordonnées.
+    const content = [hint.name ? `Nom du lieu : ${hint.name}` : null, hint.lat !== null ? `Coordonnées : ${hint.lat}, ${hint.lng}` : null]
+      .filter(Boolean)
+      .join("\n");
+    const place = await extractPlace({ source: "Google Maps", url: full, content: content || null, note: link.text }, deps.client);
     return place ? { place, lat: hint.lat, lng: hint.lng } : null;
   }
   // Instagram et les autres sites ne sont pas lus : seuls l'adresse et les mots de l'utilisateur comptent.

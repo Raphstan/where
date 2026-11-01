@@ -73,9 +73,12 @@ export type PlaceFacts = {
 
 /**
  * Filtres stricts : un lieu est écarté seulement quand le critère et l'attribut sont tous deux
- * connus et se contredisent. Une donnée manquante n'exclut jamais.
+ * connus et se contredisent. Une donnée manquante n'exclut pas, à une exception : un lieu dont on
+ * ne sait pas du tout où il est (ni ville, ni quartier, ni adresse, par exemple gardé depuis un lien)
+ * ne répond pas à une question qui nomme une ville.
  */
 export function placeMatchesCriteria(place: PlaceFacts, criteria: Criteria): boolean {
+  if (criteria.city && !place.city && !place.area && !place.address) return false;
   if (criteria.city && place.city && !looselyEqual(criteria.city, place.city)) {
     // La ville cherchée peut être nommée par le quartier ou l'adresse (« Jaffa » pour Tel Aviv).
     const elsewhere = [place.area, place.address].some((v) => v && looselyEqual(criteria.city!, v));
