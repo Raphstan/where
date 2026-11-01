@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { Wordmark } from "@/components/shell/wordmark";
 import { sendGuestReply, type GuestReplyState } from "./actions";
+import { GuestMemoryPanel } from "./guest-memory";
 
 const INPUT =
   "w-full rounded-[12px] border-[1.5px] border-line bg-paper-2 px-3.5 py-[11px] text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink";
@@ -55,6 +56,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
         <p className="text-[12.5px] text-muted">
           {state.reusable ? t("reusableYes", { requester }) : t("reusableNo", { requester })}
         </p>
+        <GuestMemoryPanel token={token} requester={requester} />
         <button
           type="button"
           onClick={() => {

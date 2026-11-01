@@ -27,5 +27,45 @@
     "placeUrlInvalid": "Ce lien ne semble pas valide.",
     "checkAnswer": "Vérifie ta réponse.",
     "sendFailed": "Ta réponse n’est pas partie. Réessaie dans un instant."
+  },
+  "mine": {
+    "timesHelped": "C’est la <b>{count, selectordinal, one {#re} other {#e}} fois</b> que tu aides {requester} à trouver un lieu. Tu veux voir ce que tu lui as recommandé ?",
+    "see": "{count, plural, one {Voir ma recommandation} other {Voir mes # recommandations}}",
+    "noThanks": "Non merci",
+    "stillNoAccount": "Toujours sans compte",
+    "eyebrow": "Mes recommandations à {requester}",
+    "title": "Tu as déjà une mémoire WH3RE. Elle est à toi.",
+    "visited": "J’y suis allé·e",
+    "heard": "On m’en a parlé",
+    "privacy": "Seul {requester} voit ces réponses. Personne ne peut chercher dans tes données : tu décides, réponse par réponse.",
+    "askTitle": "Et si c’était toi qui demandais ?",
+    "askLead": "Garde cette mémoire, ajoute les personnes à qui tu fais confiance, et pose ta première question.",
+    "keep": "Garder ma mémoire WH3RE",
+    "notNow": "Pas maintenant",
+    "loading": "Je retrouve tes recommandations…"
+  },
+  "join": {
+    "metaTitle": "Bienvenue",
+    "loading": "Je range tes recommandations dans ta mémoire…",
+    "welcome": "Bienvenue, {name}.",
+    "count": "{count, plural, =0 {Ta mémoire WH3RE est prête.} one {Ta recommandation est dans ta mémoire.} other {Tes # recommandations sont dans ta mémoire.}}",
+    "addTitle": "Ajouter {requester} à ton cercle ?",
+    "addLead": "Choisis pour quoi tu lui fais confiance. La personne ne saura pas qu’elle fait partie de ton cercle, sauf si tu lui demandes quelque chose.",
+    "add": "Ajouter {requester}",
+    "later": "Plus tard",
+    "added": "{requester} est dans ton cercle.",
+    "askPlaceholder": "Un bar sympa à Tel Aviv vendredi, pas trop bruyant…",
+    "ask": "Poser ma première question",
+    "pitch": "C’est ainsi que le cercle s’étend : chaque personne devient utile avant d’être convaincue, et c’est d’avoir été utile qui la convainc.",
+    "requesterFallback": "Ton proche",
+    "errors": {
+      "own_link": "C’est ton propre lien : il sert à tes proches pour te répondre.",
+      "claimed_by_other": "Ce lien est déjà relié à un autre compte WH3RE.",
+      "not_found": "Ce lien n’existe plus.",
+      "unauthenticated": "Connecte-toi pour garder ta mémoire.",
+      "unavailable": "Je n’arrive pas à ranger tes recommandations pour l’instant. Réessaie dans un instant.",
+      "addFailed": "Je n’ai pas pu l’ajouter à ton cercle. Réessaie dans un instant."
+    },
+    "toChat": "Aller au chat"
   }
 }

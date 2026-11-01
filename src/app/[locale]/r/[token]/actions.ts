@@ -3,7 +3,7 @@
 import { apiLocale } from "@/i18n/request-locale";
 import { translator } from "@/i18n/translator";
 import { GuestReplySchema } from "@/lib/network/reply";
-import { submitGuestReply } from "@/lib/network/guest";
+import { loadGuestMemory, submitGuestReply, type GuestMemory } from "@/lib/network/guest";
 
 export type GuestReplyState =
   | { status: "idle" }
@@ -43,5 +43,14 @@ export async function sendGuestReply(_prev: GuestReplyState, form: FormData): Pr
     return { status: "sent", reusable: parsed.data.reusable, at: Date.now() };
   } catch {
     return { status: "error", message: t("errors.sendFailed") };
+  }
+}
+
+/** « Voir mes recommandations » : ce que ce proche a déjà recommandé au demandeur, toujours sans compte. */
+export async function loadMyAnswers(token: string): Promise<GuestMemory | null> {
+  try {
+    return await loadGuestMemory(token);
+  } catch {
+    return null;
   }
 }

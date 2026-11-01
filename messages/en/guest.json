@@ -27,5 +27,45 @@
     "placeUrlInvalid": "That link doesn’t look valid.",
     "checkAnswer": "Check your answer.",
     "sendFailed": "Your answer didn’t go through. Try again in a moment."
+  },
+  "mine": {
+    "timesHelped": "This is the <b>{count, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} time</b> you’ve helped {requester} find a place. Want to see what you recommended?",
+    "see": "{count, plural, one {See my recommendation} other {See my # recommendations}}",
+    "noThanks": "No thanks",
+    "stillNoAccount": "Still no account",
+    "eyebrow": "My recommendations to {requester}",
+    "title": "You already have a WH3RE memory. It’s yours.",
+    "visited": "I’ve been",
+    "heard": "Heard about it",
+    "privacy": "Only {requester} sees these answers. No one can search your data: you decide, answer by answer.",
+    "askTitle": "What if you were the one asking?",
+    "askLead": "Keep this memory, add the people you trust, and ask your first question.",
+    "keep": "Keep my WH3RE memory",
+    "notNow": "Not now",
+    "loading": "Finding your recommendations…"
+  },
+  "join": {
+    "metaTitle": "Welcome",
+    "loading": "Putting your recommendations in your memory…",
+    "welcome": "Welcome, {name}.",
+    "count": "{count, plural, =0 {Your WH3RE memory is ready.} one {Your recommendation is in your memory.} other {Your # recommendations are in your memory.}}",
+    "addTitle": "Add {requester} to your circle?",
+    "addLead": "Pick what you trust them for. They won’t know they’re in your circle unless you ask them something.",
+    "add": "Add {requester}",
+    "later": "Later",
+    "added": "{requester} is in your circle.",
+    "askPlaceholder": "A nice bar in Tel Aviv on Friday, not too loud…",
+    "ask": "Ask my first question",
+    "pitch": "That’s how the circle grows: each person is useful before they’re convinced — and being useful is what convinces them.",
+    "requesterFallback": "Your friend",
+    "errors": {
+      "own_link": "This is your own link: it’s for your friends to answer you.",
+      "claimed_by_other": "This link is already tied to another WH3RE account.",
+      "not_found": "This link no longer exists.",
+      "unauthenticated": "Sign in to keep your memory.",
+      "unavailable": "I can’t save your recommendations right now. Try again in a moment.",
+      "addFailed": "I couldn’t add them to your circle. Try again in a moment."
+    },
+    "toChat": "Go to chat"
   }
 }

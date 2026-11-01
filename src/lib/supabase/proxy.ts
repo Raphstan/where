@@ -13,6 +13,7 @@ const PROTECTED_PREFIXES = [
   "/privacy",
   "/edge",
   "/onboarding",
+  "/join",
 ];
 
 function isProtected(pathname: string): boolean {

@@ -87,9 +87,10 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
   et surtout les réponses de l'API Anthropic (jamais de confiance au JSON du modèle sans parsing).
 - **Toutes les requêtes Supabase passent par RLS.** Client « anon » porteur de la session utilisateur,
   côté serveur comme côté client. RLS activée sur chaque table, policies explicites.
-- **Jamais de clé `service_role` côté client.** Les deux seules opérations qui l'exigent (webhook Resend
-  entrant, page invité sans compte) vivent dans des route handlers serveur documentés. Jamais de
-  `NEXT_PUBLIC_` pour cette clé.
+- **Jamais de clé `service_role` côté client.** Les seules opérations qui l'exigent (webhook Resend
+  entrant ; page invité sans compte, y compris « Garder ma mémoire WH3RE » qui relie le compte du proche
+  et copie ses réponses dans sa mémoire, `src/lib/network/guest.ts`) vivent côté serveur, toujours
+  restreintes au jeton. Jamais de `NEXT_PUBLIC_` pour cette clé.
 - **Auth** : lien magique par email uniquement (`@supabase/ssr`). La session est rafraîchie dans
   `src/proxy.ts` (Next 16 : le middleware s'appelle `proxy`). Les routes de l'app sont protégées là.
   Tout composant serveur qui lit la session appelle `await connection()` avant (Cache Components).

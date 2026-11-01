@@ -67,3 +67,26 @@ export function replySignals(input: ReplySignalInput) {
     reusable: input.reusable,
   }));
 }
+
+export type OwnReply = { id: string; place_id: string | null; visited: boolean; note: string | null };
+
+/**
+ * Copie des réponses d'un proche dans SA mémoire quand il crée son compte (« Garder ma mémoire WH3RE ») :
+ * mêmes niveaux que chez le demandeur (Oui → recommended + visited, sinon saved), mais à son nom
+ * (aucun proche attribué, provenance `manual`), rattachés à la réponse d'origine pour rester idempotent.
+ * Les réponses sans lieu reconnu ne sont pas copiées.
+ */
+export function ownMemorySignals(userId: string, replies: readonly OwnReply[], alreadyCopied: ReadonlySet<string>) {
+  return replies
+    .filter((r) => r.place_id && !alreadyCopied.has(r.id))
+    .flatMap((r) =>
+      guestAnswerLevels(r.visited ? "oui" : "non").map((level, i) => ({
+        user_id: userId,
+        place_id: r.place_id as string,
+        request_reply_id: r.id,
+        evidence_level: level,
+        note: i === 0 ? r.note : null,
+        source_type: "manual" as const,
+      })),
+    );
+}
