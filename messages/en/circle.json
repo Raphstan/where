@@ -46,5 +46,9 @@
     "notFound": "Person not found.",
     "invalidDomains": "Invalid topics.",
     "saveChoiceFailed": "I can’t save this choice right now."
+  },
+  "empty": {
+    "title": "Your circle is empty for now.",
+    "lead": "Add two or three people who share your taste and your standards: your best answers will come from them. They won’t know a thing."
   }
 }

@@ -46,5 +46,9 @@
     "notFound": "Personne introuvable.",
     "invalidDomains": "Domaines invalides.",
     "saveChoiceFailed": "Je n’arrive pas à enregistrer ce choix."
+  },
+  "empty": {
+    "title": "Ton cercle est vide pour l’instant.",
+    "lead": "Ajoute deux ou trois personnes qui ont les mêmes goûts et les mêmes standards que toi : c’est d’elles que viendront tes meilleures réponses. Elles n’en sauront rien."
   }
 }
