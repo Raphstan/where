@@ -102,7 +102,7 @@ export function DeleteActions({ emailSource, importedPlaces }: { emailSource: bo
       </button>
       <button
         type="button"
-        className={`${GHOST} border-coral-2 text-[#a4402c] hover:border-coral`}
+        className={`${GHOST} border-orange-2 text-orange-ink hover:border-orange`}
         onClick={() =>
           confirm(
             "delete-account",

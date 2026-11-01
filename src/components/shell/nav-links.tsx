@@ -28,7 +28,7 @@ function TabsView({ pathname }: { pathname: string | null }) {
   return (
     <nav
       aria-label="Navigation principale"
-      className="flex justify-around border-t border-line bg-cream px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
+      className="flex justify-around border-t border-line bg-paper px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
     >
       {NAV_ITEMS.map((item) => {
         if (!item.tabLabel) return null;
@@ -77,7 +77,7 @@ function SidebarView({ pathname }: { pathname: string | null }) {
             href={item.href}
             aria-current={active ? "page" : undefined}
             className={`flex items-center gap-2.5 rounded-xl px-2.5 py-[9px] text-[13.5px] font-semibold transition-colors ${
-              active ? "bg-ink text-cream" : "text-ink-2 hover:bg-sand-2"
+              active ? "bg-ink text-paper" : "text-ink-2 hover:bg-lilac-2"
             }`}
           >
             <Icon className="size-[18px] shrink-0" />

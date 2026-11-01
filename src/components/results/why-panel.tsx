@@ -2,7 +2,7 @@ import { EVIDENCE_REMINDER } from "@/lib/search/phrasing";
 import type { SearchResult } from "@/lib/search/types";
 import { ConfidencePill, EvidenceText, PersonAvatar } from "./marks";
 
-const EYEBROW = "text-[11px] font-bold tracking-[0.14em] text-muted uppercase";
+const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
 
 /** « Pourquoi ce choix ? » (docs/prototype.html, whyBody). */
 export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (result: SearchResult) => void }) {
@@ -27,7 +27,7 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
               ) : (
                 <span
                   aria-hidden
-                  className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-sand text-[13px] text-muted"
+                  className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-lilac text-[13px] text-muted"
                 >
                   {line.kind === "evidence" && line.level === "public" ? "🌐" : "✦"}
                 </span>
@@ -50,7 +50,7 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
             {result.unknowns.map((u) => (
               <li
                 key={u}
-                className="flex items-start gap-2.5 rounded-[14px] bg-sand-2 px-3 py-[9px] text-[13.5px] leading-[1.4] text-ink-2"
+                className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3 py-[9px] text-[13.5px] leading-[1.4] text-ink-2"
               >
                 <span aria-hidden className="shrink-0">
                   ?
@@ -62,12 +62,12 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
         </section>
       ) : null}
 
-      <section className="rounded-card border border-line bg-cream-2 p-3">
+      <section className="rounded-card border border-line bg-paper-2 p-3">
         <h3 className={`${EYEBROW} mb-2`}>Niveaux de preuve</h3>
         <ol>
           {EVIDENCE_REMINDER.map((r, i) => (
             <li key={r.level} className="flex items-center gap-2.5 border-b border-line py-2.5 text-[13.5px] last:border-b-0">
-              <span className="inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-sand-2 text-[11px] font-bold">
+              <span className="inline-flex size-[22px] shrink-0 items-center justify-center rounded-full bg-lilac-2 text-[11px] font-bold">
                 {i + 1}
               </span>
               <EvidenceText level={r.level}>{r.label}</EvidenceText>
@@ -80,7 +80,7 @@ export function WhyPanel({ result, onBook }: { result: SearchResult; onBook?: (r
         <button
           type="button"
           onClick={() => onBook(result)}
-          className="inline-flex min-h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-cream transition-colors hover:bg-[#0f1722]"
+          className="inline-flex min-h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-paper transition-colors hover:bg-night"
         >
           Réserver
         </button>

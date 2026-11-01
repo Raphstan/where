@@ -9,7 +9,7 @@ function CloseButton({ onClick }: { onClick: () => void }) {
       type="button"
       onClick={onClick}
       aria-label="Fermer"
-      className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-sand-2 text-base"
+      className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-lilac-2 text-base"
     >
       ×
     </button>
@@ -35,9 +35,9 @@ export function ContextPanel({ sheetOnly = false }: { sheetOnly?: boolean }) {
 
   return (
     <>
-      <aside className={sheetOnly ? "hidden" : "hidden w-[380px] shrink-0 flex-col border-l border-line bg-cream-2 xl:flex"}>
+      <aside className={sheetOnly ? "hidden" : "hidden w-[380px] shrink-0 flex-col border-l border-line bg-paper-2 xl:flex"}>
         <div className="flex items-center gap-2.5 border-b border-line px-[18px] py-4">
-          <h2 className="font-display text-[21px] font-medium leading-tight">{panel ? panel.title : "Détails"}</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">{panel ? panel.title : "Détails"}</h2>
           {panel ? <CloseButton onClick={close} /> : null}
         </div>
         {panel ? (
@@ -64,11 +64,11 @@ export function ContextPanel({ sheetOnly = false }: { sheetOnly?: boolean }) {
             role="dialog"
             aria-modal="true"
             aria-label={panel.title}
-            className="flex max-h-[88%] w-full animate-up flex-col rounded-t-[28px] bg-cream lg:max-h-[85%] lg:max-w-[520px] lg:rounded-[24px] lg:shadow-soft"
+            className="flex max-h-[88%] w-full animate-up flex-col rounded-t-[28px] bg-paper lg:max-h-[85%] lg:max-w-[520px] lg:rounded-[24px] lg:shadow-soft"
           >
             <div className="mx-auto mt-2.5 h-1 w-10 rounded-sm bg-line lg:hidden" />
             <div className="flex items-center gap-2.5 px-5 pt-3.5 pb-2">
-              <h2 className="font-display text-[21px] font-medium leading-tight">{panel.title}</h2>
+              <h2 className="font-display text-[21px] font-bold leading-tight">{panel.title}</h2>
               <CloseButton onClick={close} />
             </div>
             <div className="overflow-auto px-5 pt-2 pb-7">{panel.body}</div>

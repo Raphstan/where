@@ -4,8 +4,8 @@ import type { BookingKind } from "@/lib/booking/options";
 const LOGO: Record<BookingKind, { cls: string; t: string }> = {
   ontopo: { cls: "bg-blue text-white", t: "O" },
   tabit: { cls: "bg-[#1a1a1a] text-white", t: "T" },
-  site: { cls: "bg-sand-2 text-ink", t: "↗" },
-  tel: { cls: "bg-sand-2 text-ink", t: "☎" },
+  site: { cls: "bg-lilac-2 text-ink", t: "↗" },
+  tel: { cls: "bg-lilac-2 text-ink", t: "☎" },
   wa: { cls: "bg-[#25d366] text-white", t: "W" },
   maps: { cls: "bg-[#34a853] text-white", t: "M" },
 };

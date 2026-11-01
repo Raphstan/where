@@ -11,7 +11,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
   if (state.status === "sent") {
     return (
       <div className="flex flex-col gap-3.5" aria-live="polite">
-        <div className="flex items-start gap-2.5 rounded-[14px] bg-olive-2 px-3.5 py-3 text-[13.5px] leading-snug text-[#375434]">
+        <div className="flex items-start gap-2.5 rounded-[14px] bg-olive-2 px-3.5 py-3 text-[13.5px] leading-snug text-[#28553b]">
           <span aria-hidden className="shrink-0">
             ✉️
           </span>
@@ -35,7 +35,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
   return (
     <form action={action} className="flex flex-col gap-3">
       <label className="flex flex-col gap-1.5">
-        <span className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">
+        <span className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">
           Ton email
         </span>
         <input
@@ -45,7 +45,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
           autoComplete="email"
           inputMode="email"
           placeholder="prenom@exemple.com"
-          className="w-full rounded-xl border-[1.5px] border-line bg-cream-2 px-3.5 py-[11px] text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink"
+          className="w-full rounded-xl border-[1.5px] border-line bg-paper-2 px-3.5 py-[11px] text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink"
         />
       </label>
       {next ? <input type="hidden" name="next" value={next} /> : null}
@@ -57,7 +57,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-cream transition-colors hover:bg-[#0f1722] disabled:opacity-60"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-paper transition-colors hover:bg-night disabled:opacity-60"
       >
         {pending ? "Envoi…" : "Recevoir mon lien"}
       </button>

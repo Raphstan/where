@@ -55,7 +55,7 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
 
    | Valeur | Libellé long (« Pourquoi ce choix ? ») | Libellé court (Mémoire) | Pastille |
    |---|---|---|---|
-   | `recommended` | Recommandé explicitement | Recommandé | corail |
+   | `recommended` | Recommandé explicitement | Recommandé | orange |
    | `visited` | Visité et confirmé | Visité | olive |
    | `booked_confirmed` | Réservation confirmée | Réservé | bleu |
    | `booked` | Réservation confirmée / signal post-visite | Réservé | bleu |
@@ -113,32 +113,42 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
 Ton **éditorial, court et chaleureux** : phrases brèves, tutoiement, voix de WHERE à la première personne
 (« J'ai trois idées solides pour toi. »), aveu de ce qu'il ne sait pas (« Ce que nous ne savons pas encore »).
 
-### Couleurs (tokens Tailwind, `theme.extend.colors`)
+### Thème : celui de la landing (wh3re.com), pas celui de la maquette
 
-| Token | Hex | Usage dans la maquette |
+Depuis le 2026-11-01, l'appli reprend l'identité de la landing (`Where/landing/public/index.html`) :
+lilas, orange, mascotte « 3 ». La maquette reste le cahier des charges pour les **écrans, flux et textes**,
+plus pour les couleurs, polices et formes. Tokens dans `src/app/globals.css` (`@theme`).
+
+| Token | Hex | Usage |
 |---|---|---|
-| `cream` | `#F7F2E9` | Fond principal (`--cream`) ; variante `cream-2` `#FBF8F2` pour les cartes |
-| `sand` | `#EADFCC` | Fonds secondaires (`--sand`) ; variante `sand-2` `#F1E9DB` ; trait `line` `#E3D9C7` |
-| `ink` | `#16202E` | Texte, boutons primaires, bulles utilisateur ; variante `ink-2` `#2B3443` |
-| `blue` | `#2E6E8E` | Liens, critères, pastille `booked` (`--sea`) ; fond `blue-2` `#DCE9EF` |
-| `coral` | `#DF6F55` | Bouton d'envoi, CTA « Commencer », pastille `recommended`, point du wordmark |
+| `paper` / `paper-2` | `#EBE5F2` / `#F8F5FC` | Fond de l'appli / cartes et bulles WH3RE |
+| `lilac` / `lilac-2` | `#DCD3E9` / `#E4DCEE` | Surfaces secondaires (le `--paper` de la landing) |
+| `line` / `line-strong` | `#D3C8E2` / `#B3A5CA` | Traits / bordures de champs (2 px) |
+| `ink` / `ink-2` | `#2A1438` / `#5E4B6E` | Texte, bulles utilisateur, boutons secondaires / texte secondaire |
+| `muted` / `soft` | `#6D5D80` / `#9A8DAD` | Libellés / indications décoratives |
+| `orange` / `orange-2` / `orange-ink` | `#FF5A1F` / `#FFE1D4` / `#C2410C` | CTA, envoi, mascotte, pastille `recommended` / chips / orange lisible en petit texte |
+| `olive` | `#3F7A57` | Pastille `visited`, confiance forte |
+| `blue` | `#4453B8` | Liens, critères, pastille `booked`, « Exploratoire » |
+| `amber` | `#B7791F` | Pastille `saved`, confiance moyenne, avertissements |
+| `night` | `#1E1029` | Écrans sombres (« Tu quittes WH3RE ») |
 
-Couleurs secondaires de la maquette, à déclarer aussi : `olive` `#5E7F5A` (visité, confiance forte),
-`amber` `#C7913A` (sauvegardé, avertissements), `muted` `#75705F`, `soft` `#A39E8F`, `night` `#1A2436`
-(cartes sombres, écran « Tu quittes WHERE »). Pas de couleur hors palette.
+Chaque couleur a une variante claire `-2` pour les fonds. Pas de couleur hors palette (hors logos de marques tierces).
 
 ### Typographie
 
-- **Fraunces** (titres, noms de lieux, wordmark en capitales espacées, chiffres des stats) via `next/font/google`.
-- **Manrope** (texte, interface, boutons).
+- **Bricolage Grotesque** (`font-display`, 700–800, interlettrage −0,02 em) : titres, noms de lieux, wordmark.
+- **Figtree** (`font-sans`) : texte, interface, boutons.
+- **DM Mono** (`font-mono`) : surtitres en capitales (11 px, interlettrage 0,08 em), heures, petits libellés.
 
 ### Formes
 
-- Rayons : `18px` cartes, `26px` grandes cartes, `999px` boutons et chips. Coins arrondis partout.
-- Ombre unique très douce : `0 1px 2px rgba(22,32,46,.04), 0 10px 30px -12px rgba(22,32,46,.18)`.
-- Bulles de chat : utilisateur en `ink` à droite, WHERE en `cream-2` bordé à gauche.
-- Niveaux de confiance affichés par une pastille à trois barres : `forte` (olive), `moyenne` (ambre),
-  `explo` (bleu, « Exploratoire »), `faible` (sable).
+- Rayons : `18px` cartes, `26px` grandes cartes, `999px` boutons et chips.
+- Ombre `shadow-soft` : `0 2px 6px -2px rgba(42,20,56,.10), 0 18px 44px -18px rgba(42,20,56,.32)` ;
+  `shadow-orange` sous les CTA orange.
+- Wordmark : composant `Wordmark` (mascotte « 3 » + « WH3RE »), mascotte seule : `Mascot`
+  (`src/components/shell/wordmark.tsx`).
+- Bulles de chat : utilisateur en `ink` à droite, WH3RE en `paper-2` avec ombre, à gauche.
+- Niveaux de confiance : pastille à trois barres, `forte` (olive), `moyenne` (ambre), `explo` (bleu).
 
 ## 5. Règle de travail
 

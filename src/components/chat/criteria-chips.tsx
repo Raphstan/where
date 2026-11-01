@@ -64,14 +64,14 @@ export function CriteriaChips({
               maxLength={40}
               placeholder="un critère…"
               aria-label="Nouveau critère"
-              className="w-[140px] rounded-full border-[1.5px] border-ink bg-cream-2 px-2.5 py-1.5 text-[12.5px] text-ink outline-none placeholder:text-soft"
+              className="w-[140px] rounded-full border-[1.5px] border-ink bg-paper-2 px-2.5 py-1.5 text-[12.5px] text-ink outline-none placeholder:text-soft"
             />
           </form>
         ) : (
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="inline-flex items-center rounded-full border-[1.5px] border-line bg-cream-2 px-2.5 py-1.5 text-[12.5px] font-semibold text-ink transition-colors hover:border-ink"
+            className="inline-flex items-center rounded-full border-[1.5px] border-line bg-paper-2 px-2.5 py-1.5 text-[12.5px] font-semibold text-ink transition-colors hover:border-ink"
           >
             + ajouter
           </button>

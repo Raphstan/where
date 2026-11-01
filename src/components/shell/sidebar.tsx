@@ -54,20 +54,20 @@ async function Account() {
 /** Colonne de gauche, desktop uniquement (docs/prototype.html, .side). */
 export function Sidebar() {
   return (
-    <aside className="hidden w-[248px] shrink-0 flex-col border-r border-line bg-cream px-3.5 py-[18px] lg:flex">
+    <aside className="hidden w-[248px] shrink-0 flex-col border-r border-line bg-paper px-3.5 py-[18px] lg:flex">
       <div className="px-2 pt-1 pb-4">
         <Wordmark className="text-base" />
       </div>
 
       <Link
         href="/chat"
-        className="flex min-h-9 items-center justify-center rounded-full bg-sand-2 px-3.5 text-[13px] font-bold text-ink transition-colors hover:bg-sand"
+        className="flex min-h-9 items-center justify-center rounded-full bg-orange px-3.5 text-[13px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10]"
       >
         + Nouvelle question
       </Link>
 
       <div className="mt-3.5 flex flex-1 flex-col gap-0.5 overflow-auto">
-        <div className="px-2.5 pt-3.5 pb-1.5 text-[11px] font-bold tracking-[0.14em] text-muted uppercase">
+        <div className="px-2.5 pt-3.5 pb-1.5 font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">
           Historique
         </div>
         <Suspense fallback={null}>

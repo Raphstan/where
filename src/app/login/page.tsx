@@ -22,7 +22,7 @@ async function LoginCard({ searchParams }: { searchParams: SearchParams }) {
           Ce lien ne fonctionne plus. Demande-en un nouveau ci-dessous.
         </p>
       ) : null}
-      <div className="rounded-card border border-line bg-cream-2 p-4 shadow-soft">
+      <div className="rounded-card border border-line bg-paper-2 p-4 shadow-soft">
         <MagicLinkForm next={next === "/chat" ? undefined : next} />
       </div>
     </>
@@ -35,8 +35,8 @@ export default function LoginPage(props: PageProps<"/login">) {
       <div className="flex w-full max-w-[420px] flex-col gap-[18px]">
         <Wordmark className="text-base" />
         <div className="flex flex-col gap-2">
-          <p className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">Bienvenue</p>
-          <h1 className="font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">
+          <p className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">Bienvenue</p>
+          <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
             Connecte-toi par email.
           </h1>
           <p className="text-[15px] leading-normal text-muted">
@@ -45,12 +45,12 @@ export default function LoginPage(props: PageProps<"/login">) {
         </div>
         <Suspense
           fallback={
-            <div className="h-[190px] animate-pulse rounded-card border border-line bg-cream-2" />
+            <div className="h-[190px] animate-pulse rounded-card border border-line bg-paper-2" />
           }
         >
           <LoginCard searchParams={props.searchParams} />
         </Suspense>
-        <div className="flex items-start gap-2.5 rounded-[14px] bg-sand-2 px-3.5 py-3 text-[13.5px] text-ink-2">
+        <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] text-ink-2">
           <span aria-hidden className="shrink-0">
             🔒
           </span>

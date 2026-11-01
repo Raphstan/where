@@ -12,7 +12,7 @@ export default function CirclePage() {
   return (
     <PageFrame title="Mon cercle" lead={CIRCLE_LEAD}>
       <CircleNotice />
-      <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-cream-2" />}>
+      <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <CircleList />
       </Suspense>
       <AddPersonButton />

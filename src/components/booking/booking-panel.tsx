@@ -20,7 +20,7 @@ export function BookingPanel({ result, onChoose }: { result: SearchResult; onCho
             key={option.kind}
             type="button"
             onClick={() => onChoose(option)}
-            className="flex w-full items-center gap-3.5 rounded-[18px] border-[1.5px] border-line bg-cream-2 px-3.5 py-3 text-left transition hover:-translate-y-px hover:border-ink"
+            className="flex w-full items-center gap-3.5 rounded-[18px] border-[1.5px] border-line bg-paper-2 px-3.5 py-3 text-left transition hover:-translate-y-px hover:border-ink"
           >
             <PlatformLogo kind={option.kind} />
             <span className="font-bold">{option.label}</span>

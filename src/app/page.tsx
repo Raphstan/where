@@ -1,44 +1,37 @@
 import Link from "next/link";
 import { HomeAsk } from "@/components/home/home-ask";
+import { Mascot, Wordmark } from "@/components/shell/wordmark";
 import { EXAMPLE_QUESTIONS } from "@/lib/ask/examples";
 
-/* Accueil (docs/prototype.html, scrHome). Les visiteurs connectés vont directement au chat (proxy). */
+/* Accueil (docs/prototype.html, scrHome), aux couleurs de la landing. Les visiteurs connectés vont directement au chat (proxy). */
 export default function Home() {
   const [first, ...others] = EXAMPLE_QUESTIONS;
   return (
-    <main className="hero relative flex min-h-dvh flex-1 flex-col overflow-hidden text-cream">
-      <div aria-hidden className="hero-stars absolute inset-0" />
-      <div aria-hidden className="absolute inset-x-0 bottom-0 h-[34%] bg-linear-to-b from-transparent to-blue/35" />
-      <div className="relative flex flex-col gap-[22px] px-[22px] pt-[max(70px,env(safe-area-inset-top))] pb-10 lg:mx-auto lg:w-full lg:max-w-[820px] lg:px-8 lg:pt-[70px] lg:pb-[60px] lg:text-center">
-        <div className="font-display text-[15px] tracking-[0.18em]">WH3RE</div>
-        <h1 className="font-display text-[34px] font-normal leading-[1.08] tracking-[-0.01em] lg:text-[56px]">
-          Où devrais-tu
-          <br />
-          vraiment aller ?
-        </h1>
-        <p className="text-[15px] leading-normal text-[#c8cfda]">
+    <main className="hero relative flex min-h-dvh flex-1 flex-col overflow-hidden text-ink">
+      <header className="relative flex items-center justify-between px-[22px] pt-[max(16px,env(safe-area-inset-top))] lg:px-10 lg:pt-6">
+        <Wordmark />
+      </header>
+      <div className="relative flex flex-col gap-5 px-[22px] pt-10 pb-10 lg:mx-auto lg:w-full lg:max-w-[760px] lg:px-8 lg:pt-16 lg:pb-[60px]">
+        <div className="relative">
+          <h1 className="font-display text-[44px] leading-[1.02] font-extrabold tracking-[-0.02em] lg:text-[72px]">
+            Où devrais-tu
+            <br />
+            <em className="text-orange not-italic">vraiment aller ?</em>
+          </h1>
+          <Mascot className="animate-glow absolute -top-3 right-0 h-[70px] w-[60px] lg:-top-6 lg:right-6 lg:h-[110px] lg:w-[94px]" />
+        </div>
+        <p className="max-w-[40ch] text-[17px] leading-normal text-ink-2">
           Trouve des lieux recommandés par les personnes auxquelles tu fais confiance.
         </p>
-        <HomeAsk example={first.text} />
-        <div className="flex flex-col gap-2 lg:flex-row lg:flex-wrap lg:justify-center">
-          {others.map((ex) => (
-            <Link
-              key={ex.key}
-              href={`/chat?q=${encodeURIComponent(ex.text)}`}
-              className="rounded-[14px] border border-white/12 bg-white/7 px-3.5 py-[11px] text-left text-[13.5px] text-cream transition-colors hover:bg-white/14"
-            >
-              {ex.text}
-            </Link>
-          ))}
-        </div>
-        <div className="mt-1.5 flex flex-col gap-2.5">
+        <HomeAsk example={first.text} others={others.map((ex) => ({ key: ex.key, text: ex.text }))} />
+        <div className="mt-1.5 flex flex-col gap-2.5 lg:flex-row lg:items-center">
           <Link
             href="/onboarding"
-            className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-coral px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#d2644b] lg:mx-auto lg:w-full lg:max-w-[680px]"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-orange px-7 text-[15px] font-bold text-white shadow-orange transition-[transform,background-color] hover:-translate-y-px hover:bg-[#ee4a10]"
           >
             Commencer
           </Link>
-          <Link href="/how" className="self-center text-[13.5px] font-semibold text-[#c8cfda] hover:underline">
+          <Link href="/how" className="self-center px-3 text-[14px] font-semibold text-ink-2 underline-offset-4 hover:text-ink hover:underline">
             Voir comment ça marche →
           </Link>
         </div>

@@ -9,8 +9,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Profil" };
 
-const CARD = "rounded-card border border-line bg-cream-2 p-4";
-const EYEBROW = "mb-2 text-[11px] font-bold tracking-[0.14em] text-muted uppercase";
+const CARD = "rounded-card border border-line bg-paper-2 p-4";
+const EYEBROW = "mb-2 font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
 
 /* docs/prototype.html, scrProfile : le profil mène aux sources, à la confidentialité, aux états limites. */
 const LINKS = [
@@ -40,7 +40,7 @@ async function Profile() {
         {profile.preferences.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
             {profile.preferences.map((p) => (
-              <span key={p} className="inline-flex rounded-full border-[1.5px] border-line bg-cream-2 px-3 py-[7px] text-[12px] font-medium">
+              <span key={p} className="inline-flex rounded-full border-[1.5px] border-line bg-paper-2 px-3 py-[7px] text-[12px] font-medium">
                 {p}
               </span>
             ))}
@@ -88,7 +88,7 @@ export default function ProfilePage() {
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-3.5">
-        <Suspense fallback={<div className="h-[320px] animate-pulse rounded-card border border-line bg-cream-2" />}>
+        <Suspense fallback={<div className="h-[320px] animate-pulse rounded-card border border-line bg-paper-2" />}>
           <Profile />
         </Suspense>
       </div>

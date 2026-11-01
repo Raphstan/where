@@ -72,9 +72,9 @@ export default function EdgePage() {
       back="/profile"
     >
       {CASES.map((c) => (
-        <div key={c.title} className="flex flex-col gap-2 rounded-card border border-line bg-cream-2 p-4">
+        <div key={c.title} className="flex flex-col gap-2 rounded-card border border-line bg-paper-2 p-4">
           <h2 className="text-[15px] font-bold">{c.title}</h2>
-          <div className="flex items-start gap-2.5 rounded-[14px] bg-sand-2 px-3 py-[9px] text-[13.5px] text-ink-2">
+          <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3 py-[9px] text-[13.5px] text-ink-2">
             <span aria-hidden>“</span>
             <span>{c.quote}</span>
           </div>

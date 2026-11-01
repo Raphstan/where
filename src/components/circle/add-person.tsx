@@ -20,7 +20,7 @@ function contactsApi(): ContactsManager | null {
 }
 
 const INPUT =
-  "w-full rounded-xl border-[1.5px] border-line bg-cream-2 px-3.5 py-[11px] text-[14px] text-ink placeholder:text-soft focus:border-ink focus:outline-none";
+  "w-full rounded-xl border-[1.5px] border-line bg-paper-2 px-3.5 py-[11px] text-[14px] text-ink placeholder:text-soft focus:border-ink focus:outline-none";
 
 function MemberForm({ channel, prefill, onDone }: { channel: Channel; prefill: Prefill; onDone: (name: string) => void }) {
   const [error, setError] = useState<string | null>(null);
@@ -67,11 +67,11 @@ function MemberForm({ channel, prefill, onDone }: { channel: Channel; prefill: P
         aria-label={channel === "phone" ? "Numéro WhatsApp" : "Email"}
         className={INPUT}
       />
-      {error ? <p className="text-[12.5px] text-[#a4402c]">{error}</p> : null}
+      {error ? <p className="text-[12.5px] text-orange-ink">{error}</p> : null}
       <button
         type="submit"
         disabled={busy}
-        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-cream transition-colors hover:bg-[#0f1722] disabled:opacity-60"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-paper transition-colors hover:bg-night disabled:opacity-60"
       >
         Ajouter une personne
       </button>
@@ -84,9 +84,9 @@ function Choice({ icon, label, onClick }: { icon: string; label: string; onClick
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-cream-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
+      className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
     >
-      <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-sand-2 text-[19px]">
+      <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
         {icon}
       </span>
       <span className="font-bold">{label}</span>
@@ -157,9 +157,9 @@ export function AddPersonButton() {
             ),
           })
         }
-        className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-cream-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
+        className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
       >
-        <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-sand-2 text-[19px]">
+        <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
           +
         </span>
         <span>

@@ -2,7 +2,7 @@ import type { Clarification } from "@/lib/ask/schema";
 import type { BookedAnswer, DueFollowup } from "@/lib/booking/followup";
 import type { RichText, SearchResult, SuggestedPerson } from "@/lib/search/types";
 
-export type NoticeTone = "info" | "warn" | "coral" | "soft";
+export type NoticeTone = "info" | "warn" | "orange" | "soft";
 
 /**
  * Messages affichés dans la conversation. Même vocabulaire que la maquette

@@ -22,11 +22,11 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Retrouver mes réservations" };
 
-const CARD = "rounded-card border border-line bg-cream-2 p-4 shadow-soft";
-const EYEBROW = "text-[11px] font-bold tracking-[0.14em] text-muted uppercase";
+const CARD = "rounded-card border border-line bg-paper-2 p-4 shadow-soft";
+const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
 
 function Notice({ icon, tone, children }: { icon: string; tone: "warn" | "soft" | "info"; children: ReactNode }) {
-  const bg = { warn: "bg-amber-2", soft: "bg-sand-2", info: "bg-blue-2" }[tone];
+  const bg = { warn: "bg-amber-2", soft: "bg-lilac-2", info: "bg-blue-2" }[tone];
   return (
     <div className={`flex items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13px] leading-normal text-ink-2 ${bg}`}>
       <span aria-hidden className="shrink-0">
@@ -52,7 +52,7 @@ function Line({ email }: { email: ImportedEmail }) {
           {[provenanceLabel(email.kind, email.platform), date].filter(Boolean).join(" · ")}
         </div>
       </div>
-      <span className="shrink-0 rounded-full bg-sand-2 px-[9px] py-1 text-[11.5px] font-bold text-ink-2">
+      <span className="shrink-0 rounded-full bg-lilac-2 px-[9px] py-1 text-[11.5px] font-bold text-ink-2">
         {KIND_BADGE[email.kind]}
       </span>
     </div>
@@ -126,7 +126,7 @@ async function Results() {
 
       {emails.length === 0 ? null : (
         <>
-          <h2 className="mt-2 font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">
+          <h2 className="mt-2 font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
             Voilà ce que j’ai retrouvé.
           </h2>
           <div className="grid grid-cols-3 gap-2.5">
@@ -137,8 +137,8 @@ async function Results() {
                 [s.activities.length, "activités"],
               ] as const
             ).map(([n, label]) => (
-              <div key={label} className="flex flex-col gap-0.5 rounded-2xl border border-line bg-cream-2 p-3.5">
-                <b className="font-display text-[28px] font-medium leading-none">{n}</b>
+              <div key={label} className="flex flex-col gap-0.5 rounded-2xl border border-line bg-paper-2 p-3.5">
+                <b className="font-display text-[28px] font-bold leading-none">{n}</b>
                 <span className="text-[12px] text-muted">{label}</span>
               </div>
             ))}
@@ -188,7 +188,7 @@ async function Results() {
           {s.pending > 0 ? (
             <Link
               href="/import/qualify"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-cream transition-colors hover:bg-[#0f1722]"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-paper transition-colors hover:bg-night"
             >
               Qualifier mes expériences
             </Link>
@@ -204,14 +204,14 @@ export default function ImportPage() {
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4">
-        <div className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">Mes anciennes réservations</div>
-        <h1 className="font-display text-[22px] font-medium leading-tight">
+        <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">Mes anciennes réservations</div>
+        <h1 className="font-display text-[22px] font-bold leading-tight">
           Tu as déjà une mémoire de tes sorties cachée dans tes emails.
         </h1>
         <p className="text-[15px] leading-normal text-muted">
           WH3RE peut y retrouver les confirmations de restaurants, hôtels, activités, événements et voyages.
         </p>
-        <Suspense fallback={<div className="h-[220px] animate-pulse rounded-card border border-line bg-cream-2" />}>
+        <Suspense fallback={<div className="h-[220px] animate-pulse rounded-card border border-line bg-paper-2" />}>
           <Results />
         </Suspense>
       </div>

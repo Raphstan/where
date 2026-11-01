@@ -32,10 +32,10 @@ export function Composer({ disabled, onSend }: { disabled: boolean; onSend: (tex
   }
 
   return (
-    <div className="shrink-0 border-t border-line bg-cream px-3.5 pt-2.5 pb-[max(12px,env(safe-area-inset-bottom))] lg:border-t-0 lg:px-9 lg:pb-6">
+    <div className="shrink-0 border-t border-line bg-paper px-3.5 pt-2.5 pb-[max(12px,env(safe-area-inset-bottom))] lg:border-t-0 lg:px-9 lg:pb-6">
       <form
         onSubmit={submit}
-        className="mx-auto flex max-w-[760px] items-center gap-2 rounded-full border-[1.5px] border-line bg-cream-2 py-1.5 pr-1.5 pl-4 focus-within:border-ink"
+        className="mx-auto flex max-w-[760px] items-center gap-2 rounded-full border-[1.5px] border-line bg-paper-2 py-1.5 pr-1.5 pl-4 focus-within:border-ink"
       >
         <input
           type="text"
@@ -52,7 +52,7 @@ export function Composer({ disabled, onSend }: { disabled: boolean; onSend: (tex
           type="submit"
           aria-label="Envoyer"
           disabled={disabled}
-          className="inline-flex size-[38px] shrink-0 items-center justify-center rounded-full bg-coral text-white transition-opacity disabled:opacity-50"
+          className="inline-flex size-[38px] shrink-0 items-center justify-center rounded-full bg-orange text-white transition-opacity disabled:opacity-50"
         >
           <SendIcon />
         </button>

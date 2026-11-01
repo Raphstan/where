@@ -15,7 +15,7 @@ export default function OnboardingCirclePage() {
       <h1 className={H1}>Ton cercle de confiance.</h1>
       <p className="text-[15px] leading-normal text-muted">{CIRCLE_LEAD}</p>
       <CircleNotice />
-      <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-cream-2" />}>
+      <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <CircleList />
       </Suspense>
       <AddPersonButton />

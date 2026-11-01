@@ -44,10 +44,10 @@ export function LeavingScreen({
       role="dialog"
       aria-modal="true"
       aria-labelledby="leaving-title"
-      className="fixed inset-0 z-[60] flex animate-fade flex-col items-center justify-center gap-4 bg-night p-[30px] text-center text-cream"
+      className="fixed inset-0 z-[60] flex animate-fade flex-col items-center justify-center gap-4 bg-night p-[30px] text-center text-paper"
     >
-      <div className="text-[11px] font-bold tracking-[0.14em] text-[#b9c0cc] uppercase">{BOOKING_TEXT.leavingEyebrow}</div>
-      <h2 id="leaving-title" className="max-w-[420px] font-display text-[21px] font-medium leading-tight">
+      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-lilac uppercase">{BOOKING_TEXT.leavingEyebrow}</div>
+      <h2 id="leaving-title" className="max-w-[420px] font-display text-[21px] font-bold leading-tight">
         {leavingText(option.kind)}
       </h2>
       <div className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-[16px] bg-white p-[18px] text-left text-[#111] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55)]">
@@ -62,12 +62,12 @@ export function LeavingScreen({
           onClick={() => {
             left.current = true;
           }}
-          className="inline-flex min-h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-cream transition-colors hover:bg-[#0f1722]"
+          className="inline-flex min-h-9 items-center justify-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-paper transition-colors hover:bg-night"
         >
           {option.label}
         </a>
       </div>
-      <button ref={back} type="button" onClick={onBack} className="text-[13.5px] font-semibold text-[#c8cfda] hover:underline">
+      <button ref={back} type="button" onClick={onBack} className="text-[13.5px] font-semibold text-ink-2 hover:underline">
         {BOOKING_TEXT.back}
       </button>
     </div>

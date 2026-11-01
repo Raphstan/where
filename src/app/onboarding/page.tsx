@@ -47,9 +47,9 @@ export default function OnboardingPage() {
           <Link
             key={href}
             href={href}
-            className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-cream-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
+            className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
           >
-            <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-sand-2 text-[19px]">
+            <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
               {icon}
             </span>
             <span>
@@ -62,7 +62,7 @@ export default function OnboardingPage() {
           </Link>
         ))}
       </div>
-      <div className="flex items-start gap-2.5 rounded-[14px] bg-sand-2 px-3.5 py-3 text-[13.5px] text-ink-2">
+      <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] text-ink-2">
         <span aria-hidden className="shrink-0">
           🔒
         </span>

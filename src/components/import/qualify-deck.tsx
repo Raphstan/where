@@ -16,7 +16,7 @@ import {
 
 const SCENES = 6;
 const BTN = "inline-flex min-h-[50px] items-center justify-center rounded-full px-5 text-[14.5px] font-bold transition-[transform,background,border-color] active:scale-[0.97] disabled:opacity-50";
-const PRIMARY = `${BTN} bg-ink text-cream hover:bg-[#0f1722]`;
+const PRIMARY = `${BTN} bg-ink text-paper hover:bg-night`;
 const GHOST = `${BTN} border-[1.5px] border-line text-ink hover:border-ink`;
 
 export type DeckCard = { id: string; placeName: string; city: string | null; provenance: string };
@@ -108,10 +108,10 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
         <span className="inline-flex size-16 items-center justify-center rounded-full bg-olive font-display text-[26px] text-white">
           ✓
         </span>
-        <h1 className="font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">{QUALIFY_TEXT.doneTitle}</h1>
+        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">{QUALIFY_TEXT.doneTitle}</h1>
         <p className="text-[15px] leading-normal text-muted">{QUALIFY_TEXT.doneLead(qualified)}</p>
         {done.length > 0 ? (
-          <div className="w-full rounded-card border border-line bg-cream-2 px-4 py-1 text-left">
+          <div className="w-full rounded-card border border-line bg-paper-2 px-4 py-1 text-left">
             {done.map(({ card: c, answers: a }) => {
               const s = qualificationSummary(a);
               return (
@@ -138,20 +138,20 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
   return (
     <div className="flex flex-col gap-3.5">
       <div className="flex min-h-10 items-center justify-between">
-        <Link href="/import" aria-label="Retour" className="inline-flex size-10 items-center justify-center rounded-full text-[22px] text-ink hover:bg-sand-2">
+        <Link href="/import" aria-label="Retour" className="inline-flex size-10 items-center justify-center rounded-full text-[22px] text-ink hover:bg-lilac-2">
           ‹
         </Link>
         <span className="text-[12.5px] text-muted">
           {idx + 1} / {cards.length}
         </span>
       </div>
-      <div className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">{QUALIFY_TEXT.eyebrow}</div>
+      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{QUALIFY_TEXT.eyebrow}</div>
 
       <div className="relative h-[430px]">
-        <div aria-hidden className="absolute inset-0 translate-y-3 scale-95 rounded-card-lg border border-line bg-sand-2" />
+        <div aria-hidden className="absolute inset-0 translate-y-3 scale-95 rounded-card-lg border border-line bg-lilac-2" />
         <div
           key={card.id}
-          className={`absolute inset-0 flex flex-col overflow-hidden rounded-card-lg border border-line bg-cream-2 shadow-soft ${
+          className={`absolute inset-0 flex flex-col overflow-hidden rounded-card-lg border border-line bg-paper-2 shadow-soft ${
             out === "l" ? "animate-out-l" : out === "r" ? "animate-out-r" : "animate-pop"
           }`}
         >
@@ -218,7 +218,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
                           setDraft((d) => ({ ...d, occasion: on ? d.occasion.filter((x) => x !== o) : [...d.occasion, o] }))
                         }
                         className={`inline-flex items-center rounded-full border-[1.5px] px-3.5 py-[9px] text-[13.5px] font-semibold transition-colors ${
-                          on ? "border-ink bg-ink text-cream" : "border-line bg-cream-2 text-ink hover:border-ink"
+                          on ? "border-ink bg-ink text-paper" : "border-line bg-paper-2 text-ink hover:border-ink"
                         }`}
                       >
                         {o}
@@ -242,7 +242,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
                   maxLength={600}
                   placeholder={QUALIFY_TEXT.notePlaceholder}
                   aria-label={QUALIFY_TEXT.note}
-                  className="min-h-[88px] w-full resize-none rounded-[14px] border-[1.5px] border-line bg-cream-2 px-3.5 py-3 text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink"
+                  className="min-h-[88px] w-full resize-none rounded-[14px] border-[1.5px] border-line bg-paper-2 px-3.5 py-3 text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink"
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <button type="button" disabled={pending} onClick={() => void finish(answers({ ...draft, note: "" }))} className={GHOST}>
@@ -255,7 +255,7 @@ export function QualifyDeck({ cards }: { cards: DeckCard[] }) {
               </>
             ) : null}
 
-            {error ? <p className="text-[12.5px] text-[#a4402c]">{error}</p> : null}
+            {error ? <p className="text-[12.5px] text-orange-ink">{error}</p> : null}
 
             <div aria-hidden className="mt-auto flex justify-center gap-1.5">
               {[0, 1, 2, 3].map((k) => (

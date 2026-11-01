@@ -24,7 +24,7 @@ export function PersonCard({ member }: { member: CircleMemberView }) {
   }
 
   return (
-    <div className="flex flex-col gap-2.5 rounded-card border border-line bg-cream-2 p-3.5">
+    <div className="flex flex-col gap-2.5 rounded-card border border-line bg-paper-2 p-3.5">
       <div className="flex items-center gap-2.5">
         <PersonAvatar person={{ id: member.id, name: member.name, initial }} size="lg" />
         <div className="min-w-0 grow">
@@ -43,7 +43,7 @@ export function PersonCard({ member }: { member: CircleMemberView }) {
               aria-pressed={on}
               onClick={() => toggle(k)}
               className={`inline-flex items-center rounded-full border-[1.5px] px-2.5 py-[5px] text-[12px] font-semibold transition-colors ${
-                on ? "border-ink bg-ink text-cream" : "border-line bg-cream-2 text-ink hover:border-ink"
+                on ? "border-ink bg-ink text-paper" : "border-line bg-paper-2 text-ink hover:border-ink"
               }`}
             >
               {label}

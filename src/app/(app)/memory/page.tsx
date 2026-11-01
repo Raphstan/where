@@ -14,8 +14,8 @@ const SCENES = 6;
 
 function Stat({ n, one, many }: { n: number; one: string; many: string }) {
   return (
-    <div className="flex flex-col gap-0.5 rounded-2xl border border-line bg-cream-2 p-3.5">
-      <b className="font-display text-[28px] font-medium leading-none">{n}</b>
+    <div className="flex flex-col gap-0.5 rounded-2xl border border-line bg-paper-2 p-3.5">
+      <b className="font-display text-[28px] font-bold leading-none">{n}</b>
       <span className="text-[12px] text-muted">{n > 1 ? many : one}</span>
     </div>
   );
@@ -36,7 +36,7 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/memory">["se
   const all = buildMemory(rows);
   if (all.length === 0) {
     return (
-      <div className="rounded-card border border-line bg-cream-2 p-4 shadow-soft">
+      <div className="rounded-card border border-line bg-paper-2 p-4 shadow-soft">
         <p className="text-[12.5px] text-muted">
           Ta mémoire est encore vide. Elle se remplira avec tes réservations, tes retours et les réponses de ton cercle.
         </p>
@@ -65,7 +65,7 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/memory">["se
             scroll={false}
             aria-current={filter === k ? "page" : undefined}
             className={`inline-flex shrink-0 items-center rounded-full border-[1.5px] px-3 py-[7px] text-[13px] font-semibold transition-colors ${
-              filter === k ? "border-ink bg-ink text-cream" : "border-line bg-cream-2 text-ink hover:border-ink"
+              filter === k ? "border-ink bg-ink text-paper" : "border-line bg-paper-2 text-ink hover:border-ink"
             }`}
           >
             {label}
@@ -75,7 +75,7 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/memory">["se
 
       <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-3">
         {items.map((i) => (
-          <article key={i.placeId} className="flex flex-col overflow-hidden rounded-2xl border border-line bg-cream-2">
+          <article key={i.placeId} className="flex flex-col overflow-hidden rounded-2xl border border-line bg-paper-2">
             <div aria-hidden className={`scene aspect-[4/3] scene-${hashIndex(i.placeId, SCENES)}`} />
             <div className="flex flex-col gap-1 px-3 pt-2.5 pb-3">
               <div className="text-[13.5px] font-bold">{i.name}</div>
@@ -93,7 +93,7 @@ async function Memory({ searchParams }: { searchParams: PageProps<"/memory">["se
 export default function MemoryPage({ searchParams }: PageProps<"/memory">) {
   return (
     <PageFrame title="Ma mémoire" wide>
-      <Suspense fallback={<div className="h-[260px] animate-pulse rounded-card border border-line bg-cream-2" />}>
+      <Suspense fallback={<div className="h-[260px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <Memory searchParams={searchParams} />
       </Suspense>
       <p className="text-center text-[11.5px] text-soft">

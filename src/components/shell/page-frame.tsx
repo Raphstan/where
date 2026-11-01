@@ -25,12 +25,12 @@ export function PageFrame({
           <Link
             href={back}
             aria-label="Retour"
-            className="inline-flex size-[34px] items-center justify-center rounded-full bg-sand-2 text-[18px] lg:hidden"
+            className="inline-flex size-[34px] items-center justify-center rounded-full bg-lilac-2 text-[18px] lg:hidden"
           >
             ‹
           </Link>
         ) : null}
-        <h1 className="font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">
+        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
           {title}
         </h1>
         {lead ? <p className="text-[15px] leading-normal text-muted">{lead}</p> : null}

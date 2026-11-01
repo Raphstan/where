@@ -22,7 +22,7 @@ export function EmailSourceActions({ connected }: { connected: boolean }) {
         <button
           type="button"
           disabled={busy}
-          className={`${XS} bg-ink text-cream hover:bg-[#0f1722]`}
+          className={`${XS} bg-ink text-paper hover:bg-night`}
           onClick={async () => {
             setBusy(true);
             try {

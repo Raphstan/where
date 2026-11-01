@@ -17,7 +17,7 @@ async function Deck() {
   if (reservations.length === 0) {
     return (
       <div className="flex flex-col gap-3 pt-10">
-        <div className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">{QUALIFY_TEXT.eyebrow}</div>
+        <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">{QUALIFY_TEXT.eyebrow}</div>
         <p className="text-[15px] leading-normal text-muted">
           Rien à qualifier pour l’instant. Transfère une confirmation de réservation : elle apparaîtra ici.
         </p>
@@ -45,7 +45,7 @@ export default function QualifyPage() {
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className="mx-auto w-full max-w-[460px]">
-        <Suspense fallback={<div className="h-[520px] animate-pulse rounded-card-lg bg-cream-2" />}>
+        <Suspense fallback={<div className="h-[520px] animate-pulse rounded-card-lg bg-paper-2" />}>
           <Deck />
         </Suspense>
       </div>

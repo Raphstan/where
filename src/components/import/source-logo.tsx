@@ -11,7 +11,7 @@ const LOGOS: readonly [RegExp, string, string][] = [
 ];
 
 export function SourceLogo({ platform, kind }: { platform: string | null; kind?: ReservationKind | "delivery" }) {
-  const [, cls, t] = LOGOS.find(([re]) => re.test(platform ?? "")) ?? [null, kind === "table" ? "bg-sand-2 text-ink" : "bg-[#4285f4] text-white", "✦"];
+  const [, cls, t] = LOGOS.find(([re]) => re.test(platform ?? "")) ?? [null, kind === "table" ? "bg-lilac-2 text-ink" : "bg-[#4285f4] text-white", "✦"];
   return (
     <span
       aria-hidden

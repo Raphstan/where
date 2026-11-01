@@ -10,36 +10,43 @@
   --color-white: #ffffff;
   --color-black: #000000;
 
-  --color-cream: #f7f2e9;
-  --color-cream-2: #fbf8f2;
-  --color-sand: #eadfcc;
-  --color-sand-2: #f1e9db;
-  --color-line: #e3d9c7;
+  /* Fonds lilas de la landing (wh3re.com) : paper = fond de l'appli, paper-2 = cartes, lilac = surfaces secondaires. */
+  --color-paper: #ebe5f2;
+  --color-paper-2: #f8f5fc;
+  --color-lilac: #dcd3e9;
+  --color-lilac-2: #e4dcee;
+  --color-line: #d3c8e2;
+  --color-line-strong: #b3a5ca;
 
-  --color-ink: #16202e;
-  --color-ink-2: #2b3443;
-  --color-muted: #75705f;
-  --color-soft: #a39e8f;
+  --color-ink: #2a1438;
+  --color-ink-2: #5e4b6e;
+  --color-muted: #6d5d80;
+  --color-soft: #9a8dad;
 
-  --color-blue: #2e6e8e;
-  --color-blue-2: #dce9ef;
-  --color-coral: #df6f55;
-  --color-coral-2: #fbe4dc;
+  /* Orange de marque : CTA, envoi, preuve « recommandé ». orange-ink = orange lisible en petit texte. */
+  --color-orange: #ff5a1f;
+  --color-orange-2: #ffe1d4;
+  --color-orange-ink: #c2410c;
 
-  --color-olive: #5e7f5a;
-  --color-olive-2: #e3ecdd;
-  --color-amber: #c7913a;
-  --color-amber-2: #f7ebd2;
-  --color-night: #1a2436;
-  --color-night-2: #243247;
+  /* Couleurs des preuves et de la confiance, accordées au lilas. */
+  --color-blue: #4453b8;
+  --color-blue-2: #dfe2f7;
+  --color-olive: #3f7a57;
+  --color-olive-2: #dcecdf;
+  --color-amber: #b7791f;
+  --color-amber-2: #f6e7c8;
+  --color-night: #1e1029;
+  --color-night-2: #2e1b3d;
 
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-manrope), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-bricolage), "Arial Rounded MT Bold", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-figtree), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, Menlo, monospace;
 
   --radius-card: 18px;
   --radius-card-lg: 26px;
 
-  --shadow-soft: 0 1px 2px rgba(22, 32, 46, 0.04), 0 10px 30px -12px rgba(22, 32, 46, 0.18);
+  --shadow-soft: 0 2px 6px -2px rgba(42, 20, 56, 0.1), 0 18px 44px -18px rgba(42, 20, 56, 0.32);
+  --shadow-orange: 0 10px 24px -10px rgba(255, 90, 31, 0.7);
 }
 
 html,
@@ -48,7 +55,7 @@ body {
 }
 
 body {
-  background: var(--color-cream);
+  background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: 14px;
@@ -60,7 +67,8 @@ h1,
 h2,
 h3,
 h4 {
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -250,18 +258,10 @@ h4 {
   }
 }
 
+/* Fond de l'accueil : le lilas de la landing (wh3re.com), avec la lueur blanche de ses chapitres. */
 .hero {
   background:
-    radial-gradient(90% 60% at 80% 0%, #3d5a77 0%, transparent 55%),
-    radial-gradient(70% 50% at 10% 100%, #8a4a3f 0%, transparent 55%),
-    linear-gradient(180deg, #1a2436 0%, #121a28 100%);
-}
-.hero-stars {
-  background-image:
-    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(1px 1px at 70% 20%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1.5px 1.5px at 85% 60%, rgba(255, 255, 255, 0.5), transparent),
-    radial-gradient(1px 1px at 40% 70%, rgba(255, 255, 255, 0.5), transparent),
-    radial-gradient(1px 1px at 55% 45%, rgba(255, 255, 255, 0.4), transparent);
-  opacity: 0.7;
+    radial-gradient(70% 55% at 20% 30%, rgba(251, 249, 253, 0.95), rgba(251, 249, 253, 0) 70%),
+    radial-gradient(60% 50% at 95% 100%, rgba(255, 90, 31, 0.14), transparent 60%),
+    linear-gradient(180deg, #e4dcee 0%, #dcd3e9 100%);
 }

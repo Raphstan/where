@@ -10,7 +10,7 @@ import { SourceLogo } from "./source-logo";
 export function CopyAddress({ address }: { address: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="flex items-center gap-2.5 rounded-[14px] border-[1.5px] border-line bg-cream px-3.5 py-2.5">
+    <div className="flex items-center gap-2.5 rounded-[14px] border-[1.5px] border-line bg-paper px-3.5 py-2.5">
       <code className="min-w-0 grow truncate font-sans text-[14px] font-semibold text-ink">{address}</code>
       <button
         type="button"
@@ -20,7 +20,7 @@ export function CopyAddress({ address }: { address: string }) {
             setTimeout(() => setCopied(false), 1800);
           });
         }}
-        className="inline-flex min-h-8 shrink-0 items-center rounded-full bg-ink px-3 text-[12.5px] font-bold text-cream transition-colors hover:bg-[#0f1722]"
+        className="inline-flex min-h-8 shrink-0 items-center rounded-full bg-ink px-3 text-[12.5px] font-bold text-paper transition-colors hover:bg-night"
       >
         {copied ? "Copiée" : "Copier"}
       </button>

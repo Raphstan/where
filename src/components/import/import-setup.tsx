@@ -27,7 +27,7 @@ function writeStep(step: Step | null) {
 }
 
 const PRIMARY =
-  "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-[14.5px] font-bold text-cream transition-colors hover:bg-[#0f1722]";
+  "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-full bg-ink px-5 text-[14.5px] font-bold text-paper transition-colors hover:bg-night";
 const SECONDARY =
   "inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-line px-5 text-[14.5px] font-bold text-ink transition-colors hover:border-ink";
 const BACK = "self-start text-[13px] font-semibold text-blue hover:underline";
@@ -35,7 +35,7 @@ const BACK = "self-start text-[13px] font-semibold text-blue hover:underline";
 function CopyBox({ value, big = false }: { value: string; big?: boolean }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="flex items-center gap-2.5 rounded-[14px] border-[1.5px] border-line bg-cream px-3.5 py-2.5">
+    <div className="flex items-center gap-2.5 rounded-[14px] border-[1.5px] border-line bg-paper px-3.5 py-2.5">
       <code
         className={`min-w-0 grow truncate font-sans font-semibold text-ink ${big ? "text-[22px] tracking-[0.12em]" : "text-[14px]"}`}
         title={value}
@@ -50,7 +50,7 @@ function CopyBox({ value, big = false }: { value: string; big?: boolean }) {
             setTimeout(() => setCopied(false), 1800);
           });
         }}
-        className="inline-flex min-h-9 shrink-0 items-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-cream transition-colors hover:bg-[#0f1722]"
+        className="inline-flex min-h-9 shrink-0 items-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-paper transition-colors hover:bg-night"
       >
         {copied ? "Copié ✓" : "Copier"}
       </button>
@@ -62,7 +62,7 @@ function CopyBox({ value, big = false }: { value: string; big?: boolean }) {
 function Do({ n, children }: { n: number; children: ReactNode }) {
   return (
     <li className="flex gap-3 text-[14px] leading-normal">
-      <span aria-hidden className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-sand-2 text-[12px] font-bold">
+      <span aria-hidden className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-lilac-2 text-[12px] font-bold">
         {n}
       </span>
       <div className="flex min-w-0 grow flex-col gap-2">{children}</div>
@@ -73,10 +73,10 @@ function Do({ n, children }: { n: number; children: ReactNode }) {
 function Progress({ step }: { step: 1 | 2 | 3 }) {
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-[11px] font-bold tracking-[0.14em] text-muted uppercase">Étape {step} sur 3</div>
+      <div className="font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase">Étape {step} sur 3</div>
       <div className="flex gap-1.5" aria-hidden>
         {[1, 2, 3].map((i) => (
-          <i key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-coral" : "bg-sand"}`} />
+          <i key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? "bg-orange" : "bg-lilac"}`} />
         ))}
       </div>
     </div>
@@ -88,9 +88,9 @@ function Choice({ icon, title, text, badge, onClick }: { icon: string; title: st
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-cream-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
+      className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-left transition hover:-translate-y-px hover:border-ink"
     >
-      <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-sand-2 text-[19px]">
+      <span aria-hidden className="inline-flex size-[42px] shrink-0 items-center justify-center rounded-[14px] bg-lilac-2 text-[19px]">
         {icon}
       </span>
       <span className="min-w-0 grow">
@@ -156,7 +156,7 @@ export function ImportSetup({
     }
   }
 
-  const card = "flex flex-col gap-4 rounded-card-lg border border-line bg-cream-2 p-5 shadow-soft";
+  const card = "flex flex-col gap-4 rounded-card-lg border border-line bg-paper-2 p-5 shadow-soft";
 
   if (!receiving) {
     return (
@@ -173,7 +173,7 @@ export function ImportSetup({
   if (mode === "choose") {
     return (
       <div className="flex flex-col gap-2.5">
-        <h2 className="font-display text-[21px] font-medium leading-tight">Comment veux-tu retrouver tes réservations ?</h2>
+        <h2 className="font-display text-[21px] font-bold leading-tight">Comment veux-tu retrouver tes réservations ?</h2>
         <Choice
           icon="✨"
           title="Automatiquement, depuis Gmail"
@@ -197,7 +197,7 @@ export function ImportSetup({
         <button type="button" onClick={() => setMode("choose")} className={BACK}>
           ‹ Retour
         </button>
-        <h2 className="font-display text-[21px] font-medium leading-tight">Transfère une confirmation</h2>
+        <h2 className="font-display text-[21px] font-bold leading-tight">Transfère une confirmation</h2>
         <ol className="flex flex-col gap-4">
           <Do n={1}>Ouvre un email de confirmation : un restaurant, un hôtel, une activité.</Do>
           <Do n={2}>
@@ -223,7 +223,7 @@ export function ImportSetup({
             ✓
           </span>
           <div className="flex flex-col gap-1">
-            <h2 className="font-display text-[21px] font-medium leading-tight">
+            <h2 className="font-display text-[21px] font-bold leading-tight">
               {active ? "Le transfert automatique fonctionne." : "C’est en place."}
             </h2>
             <p className="text-[14px] text-muted">
@@ -233,7 +233,7 @@ export function ImportSetup({
             </p>
           </div>
         </div>
-        <div className="rounded-[14px] bg-sand-2 px-3.5 py-3 text-[13px] text-ink-2">
+        <div className="rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13px] text-ink-2">
           Gmail ne transfère que les nouveaux emails. Pour tes anciennes réservations,{" "}
           <button type="button" onClick={() => setMode("manual")} className="font-semibold text-blue hover:underline">
             transfère-les à la main
@@ -258,7 +258,7 @@ export function ImportSetup({
 
       {step === 1 ? (
         <>
-          <h2 className="font-display text-[21px] font-medium leading-tight">Donne ton adresse WH3RE à Gmail</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">Donne ton adresse WH3RE à Gmail</h2>
           <ol className="flex flex-col gap-4">
             <Do n={1}>
               Copie ton adresse WH3RE :
@@ -283,7 +283,7 @@ export function ImportSetup({
         </>
       ) : step === 2 ? (
         <>
-          <h2 className="font-display text-[21px] font-medium leading-tight">Confirme avec le code</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">Confirme avec le code</h2>
           {confirmation ? (
             <ol className="flex flex-col gap-4">
               <Do n={1}>
@@ -303,7 +303,7 @@ export function ImportSetup({
               </Do>
             </ol>
           ) : (
-            <div className="flex items-center gap-3 rounded-[14px] bg-sand-2 px-3.5 py-4 text-[14px] text-ink-2">
+            <div className="flex items-center gap-3 rounded-[14px] bg-lilac-2 px-3.5 py-4 text-[14px] text-ink-2">
               <span aria-hidden className="inline-flex gap-1">
                 {[0, 1, 2].map((i) => (
                   <i key={i} style={{ animationDelay: `${i * 0.2}s` }} className="size-1.5 animate-blink rounded-full bg-soft" />
@@ -323,7 +323,7 @@ export function ImportSetup({
         </>
       ) : (
         <>
-          <h2 className="font-display text-[21px] font-medium leading-tight">Ne transfère que les réservations</h2>
+          <h2 className="font-display text-[21px] font-bold leading-tight">Ne transfère que les réservations</h2>
           <ol className="flex flex-col gap-4">
             <Do n={1}>
               <span>Ouvre Gmail : la recherche des emails de réservation est déjà remplie.</span>

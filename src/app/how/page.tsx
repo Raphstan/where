@@ -22,9 +22,9 @@ const STEPS = [
 
 /* Dégradés des avatars de la maquette (.av.sarah, .noam, .maya, .me). */
 const AV = {
-  sarah: "from-[#e58a6f] to-[#b9553f]",
-  noam: "from-[#3e7f9f] to-[#1f4f68]",
-  maya: "from-[#c8a35a] to-[#8c6a2a]",
+  sarah: "from-[#ff8a5c] to-[#e04a12]",
+  noam: "from-[#7d86d8] to-[#3e47a3]",
+  maya: "from-[#d6a24f] to-[#9a6a1c]",
   me: "from-ink-2 to-ink",
 };
 
@@ -46,20 +46,20 @@ export default function HowPage() {
       <h1 className={H1}>Trois étapes, pas une appli de plus.</h1>
       <div className="flex flex-col gap-3.5 lg:flex-row">
         {STEPS.map(([title, text], i) => (
-          <div key={title} className="flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-cream-2 p-[18px]">
-            <div className="font-display text-[26px] text-coral">{i + 1}</div>
+          <div key={title} className="flex flex-1 flex-col gap-2 rounded-[20px] border border-line bg-paper-2 p-[18px]">
+            <div className="font-display text-[26px] text-orange">{i + 1}</div>
             <div className="text-[15px] font-bold">{title}</div>
             <p className="text-[12.5px] text-muted">{text}</p>
           </div>
         ))}
       </div>
       <div className="relative h-[230px] overflow-hidden rounded-[22px] bg-night" aria-hidden>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(223,111,85,0.25),transparent_45%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,90,31,0.25),transparent_45%)]" />
         {SIGNALS.map((s) => (
           <div
             key={s.text}
             style={{ "--dx": s.d.split(",")[0], "--dy": s.d.split(",")[1], animationDelay: s.delay } as CSSProperties}
-            className={`absolute flex animate-drift items-center gap-2 rounded-full border border-white/12 bg-white/8 py-1.5 pr-2.5 pl-1.5 text-[12px] whitespace-nowrap text-cream ${s.pos}`}
+            className={`absolute flex animate-drift items-center gap-2 rounded-full border border-white/12 bg-white/8 py-1.5 pr-2.5 pl-1.5 text-[12px] whitespace-nowrap text-paper ${s.pos}`}
           >
             <span className={`inline-flex size-[26px] items-center justify-center rounded-full bg-linear-145 font-display text-[11px] font-bold text-white ${s.av}`}>
               {s.ini}
@@ -76,14 +76,14 @@ export default function HowPage() {
             />
           ))}
         </div>
-        <div className="absolute inset-x-0 bottom-2 text-center text-[11.5px] text-[#b9c0cc]">
+        <div className="absolute inset-x-0 bottom-2 text-center text-[11.5px] text-lilac">
           Plusieurs signaux de confiance → trois recommandations
         </div>
       </div>
-      <div className="flex flex-col gap-1.5 rounded-card bg-night p-4 text-cream">
-        <div className={`${EYEBROW} text-[#b9c0cc]`}>La promesse</div>
-        <div className="font-display text-[21px] font-medium leading-tight">Ask your network without asking everyone.</div>
-        <p className="text-[12.5px] text-[#b9c0cc]">
+      <div className="flex flex-col gap-1.5 rounded-card bg-night p-4 text-paper">
+        <div className={`${EYEBROW} text-lilac`}>La promesse</div>
+        <div className="font-display text-[21px] font-bold leading-tight">Ask your network without asking everyone.</div>
+        <p className="text-[12.5px] text-lilac">
           Au lieu de fouiller des centaines d’avis anonymes ou d’envoyer la même question dans cinq groupes WhatsApp.
         </p>
       </div>

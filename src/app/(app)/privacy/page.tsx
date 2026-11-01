@@ -8,8 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Confidentialité" };
 
-const CARD = "rounded-card border border-line bg-cream-2 p-4";
-const EYEBROW = "text-[11px] font-bold tracking-[0.14em] text-muted uppercase";
+const CARD = "rounded-card border border-line bg-paper-2 p-4";
+const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
 
 const PRINCIPLES = [
   "Privé par défaut",
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
           ))}
         </div>
       </div>
-      <Suspense fallback={<div className="h-[420px] animate-pulse rounded-card border border-line bg-cream-2" />}>
+      <Suspense fallback={<div className="h-[420px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <Overview />
       </Suspense>
     </PageFrame>

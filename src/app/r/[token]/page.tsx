@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { Wordmark } from "@/components/shell/wordmark";
 import { loadInvitation } from "@/lib/network/guest";
 import { GuestForm } from "./guest-form";
 
@@ -15,7 +16,7 @@ async function Invitation({ token }: { token: string }) {
   if (!invitation) {
     return (
       <div className="flex flex-col gap-2">
-        <h1 className="font-display text-[21px] font-medium leading-tight">Ce lien privé n’est plus valide.</h1>
+        <h1 className="font-display text-[21px] font-bold leading-tight">Ce lien privé n’est plus valide.</h1>
         <p className="text-[12.5px] text-muted">Demande à la personne qui te l’a envoyé de t’en renvoyer un.</p>
       </div>
     );
@@ -23,7 +24,7 @@ async function Invitation({ token }: { token: string }) {
   const requester = invitation.requesterName ?? "la personne qui te demande";
   return (
     <>
-      <h1 className="font-display text-[21px] font-medium leading-tight">{invitation.message}</h1>
+      <h1 className="font-display text-[21px] font-bold leading-tight">{invitation.message}</h1>
       <GuestForm token={token} memberName={invitation.memberName} requester={requester} />
     </>
   );
@@ -32,13 +33,13 @@ async function Invitation({ token }: { token: string }) {
 /** Page invité : le proche répond depuis son lien privé, sans compte, sans appli (docs/prototype.html, scrSarah). */
 export default function GuestPage({ params }: PageProps<"/r/[token]">) {
   return (
-    <div className="flex min-h-dvh flex-1 flex-col bg-[#efe7d8]">
-      <main className="mx-auto mt-auto flex w-full max-w-[480px] flex-col gap-3.5 rounded-t-[24px] bg-cream px-5 pt-5 pb-[30px] sm:my-auto sm:rounded-[24px] sm:shadow-soft">
+    <div className="flex min-h-dvh flex-1 flex-col bg-lilac">
+      <main className="mx-auto mt-auto flex w-full max-w-[480px] flex-col gap-3.5 rounded-t-[24px] bg-paper px-5 pt-5 pb-[30px] sm:my-auto sm:rounded-[24px] sm:shadow-soft">
         <div className="flex items-center">
-          <span className="font-display tracking-[0.14em]">WH3RE</span>
+          <Wordmark className="text-[16px]" />
           <span className="ml-auto text-[11.5px] text-soft">Sans compte · sans appli</span>
         </div>
-        <Suspense fallback={<div className="h-[420px] animate-pulse rounded-card bg-cream-2" />}>
+        <Suspense fallback={<div className="h-[420px] animate-pulse rounded-card bg-paper-2" />}>
           {params.then(({ token }) => (
             <Invitation token={token} />
           ))}

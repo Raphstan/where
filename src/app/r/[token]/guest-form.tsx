@@ -1,10 +1,11 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Wordmark } from "@/components/shell/wordmark";
 import { sendGuestReply, type GuestReplyState } from "./actions";
 
 const INPUT =
-  "w-full rounded-[12px] border-[1.5px] border-line bg-cream-2 px-3.5 py-[11px] text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink";
+  "w-full rounded-[12px] border-[1.5px] border-line bg-paper-2 px-3.5 py-[11px] text-[14px] text-ink outline-none placeholder:text-soft focus:border-ink";
 
 function Toggle({ name, label, defaultOn }: { name: string; label: string; defaultOn: boolean }) {
   const [on, setOn] = useState(defaultOn);
@@ -43,12 +44,12 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
     return (
       <div className="flex animate-up flex-col gap-3">
         <div className="flex items-center">
-          <span className="font-display tracking-[0.14em]">WH3RE</span>
+          <Wordmark className="text-[16px]" />
           <span className="ml-auto rounded-full bg-olive-2 px-[9px] py-1 text-[11.5px] font-bold text-olive">
             Envoyé à {requester}
           </span>
         </div>
-        <h2 className="font-display text-[21px] font-medium leading-tight">Merci, {memberName}.</h2>
+        <h2 className="font-display text-[21px] font-bold leading-tight">Merci, {memberName}.</h2>
         <p className="text-[12.5px] text-muted">
           {state.reusable
             ? `Seul ${requester} voit ta réponse. Tu as autorisé WH3RE à la réutiliser pour ${requester} à l’avenir.`
@@ -63,7 +64,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
             setPlaceUrl("");
             setNote("");
           }}
-          className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-sand-2 px-5 text-[14.5px] font-bold text-ink transition-colors hover:bg-sand"
+          className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-lilac-2 px-5 text-[14.5px] font-bold text-ink transition-colors hover:bg-lilac"
         >
           Recommander un autre lieu
         </button>
@@ -125,7 +126,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
                 setLocalError(null);
               }}
               className={`inline-flex items-center rounded-full border-[1.5px] px-3.5 py-[9px] text-[13.5px] font-semibold transition-colors ${
-                visited === value ? "border-ink bg-ink text-cream" : "border-line bg-cream-2 text-ink hover:border-ink"
+                visited === value ? "border-ink bg-ink text-paper" : "border-line bg-paper-2 text-ink hover:border-ink"
               }`}
             >
               {label}
@@ -158,7 +159,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-coral px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#d2644b] disabled:opacity-60"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
       >
         Envoyer ma recommandation
       </button>

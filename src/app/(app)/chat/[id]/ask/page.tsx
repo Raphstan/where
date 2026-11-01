@@ -45,7 +45,7 @@ export default function AskPage({ params }: PageProps<"/chat/[id]/ask">) {
   return (
     <div className="px-[22px] pt-3 pb-7 lg:px-9 lg:pt-7">
       <div className="mx-auto w-full max-w-[600px]">
-        <Suspense fallback={<div className="h-[480px] animate-pulse rounded-card bg-cream-2" />}>
+        <Suspense fallback={<div className="h-[480px] animate-pulse rounded-card bg-paper-2" />}>
           {params.then(({ id }) => (
             <Ask id={id} />
           ))}

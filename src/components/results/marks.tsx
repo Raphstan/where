@@ -3,7 +3,7 @@ import type { ConfidenceLevel, Person } from "@/lib/search/types";
 
 /** Pastille d'un niveau de preuve (maquette .ev) ; `deduction` = point encre de « déduction WH3RE ». */
 const DOT: Record<EvidenceLevel | "deduction", string> = {
-  recommended: "bg-coral",
+  recommended: "bg-orange",
   visited: "bg-olive",
   booked_confirmed: "bg-blue",
   booked: "bg-blue",
@@ -14,7 +14,7 @@ const DOT: Record<EvidenceLevel | "deduction", string> = {
 
 export function EvidenceDot({ level }: { level: EvidenceLevel | "deduction" }) {
   return (
-    <i aria-hidden className={`inline-block size-[9px] shrink-0 rounded-full shadow-[0_0_0_3px_var(--color-cream-2)] ${DOT[level]}`} />
+    <i aria-hidden className={`inline-block size-[9px] shrink-0 rounded-full shadow-[0_0_0_3px_var(--color-paper-2)] ${DOT[level]}`} />
   );
 }
 
@@ -29,7 +29,7 @@ export function EvidenceText({ level, children }: { level: EvidenceLevel | "dedu
 
 const CONF: Record<ConfidenceLevel, { pill: string; on: number }> = {
   forte: { pill: "bg-olive-2 text-olive", on: 3 },
-  moyenne: { pill: "bg-amber-2 text-[#8e6a22]", on: 2 },
+  moyenne: { pill: "bg-amber-2 text-[#86560f]", on: 2 },
   explo: { pill: "bg-blue-2 text-blue", on: 1 },
 };
 
@@ -50,10 +50,10 @@ export function ConfidencePill({ level, text }: { level: ConfidenceLevel; text: 
 
 /** Dégradés des avatars de la maquette (.av.sarah, .noam, .maya, .david). */
 const AVATAR_GRADIENTS = [
-  "from-[#e58a6f] to-[#b9553f]",
-  "from-[#3e7f9f] to-[#1f4f68]",
-  "from-[#c8a35a] to-[#8c6a2a]",
-  "from-[#6d8f67] to-[#3e5e3a]",
+  "from-[#ff8a5c] to-[#e04a12]",
+  "from-[#7d86d8] to-[#3e47a3]",
+  "from-[#d6a24f] to-[#9a6a1c]",
+  "from-[#9b7cc4] to-[#5e3d8a]",
 ];
 
 export function hashIndex(id: string, modulo: number): number {
@@ -84,7 +84,7 @@ export function PeopleStack({ people }: { people: Person[] }) {
   return (
     <span className="inline-flex" aria-label={people.map((p) => p.name).join(", ")}>
       {people.map((p, i) => (
-        <span key={p.id} className={`rounded-full border-2 border-cream-2 ${i > 0 ? "-ml-2" : ""}`}>
+        <span key={p.id} className={`rounded-full border-2 border-paper-2 ${i > 0 ? "-ml-2" : ""}`}>
           <PersonAvatar person={p} size="sm" />
         </span>
       ))}

@@ -16,7 +16,7 @@ import {
 import { WhereBubble } from "@/components/chat/bubbles";
 
 const CHIP =
-  "inline-flex items-center rounded-full border-[1.5px] border-line bg-cream-2 px-3.5 py-[9px] text-[13.5px] font-semibold text-ink transition-colors hover:border-ink disabled:cursor-default disabled:opacity-50";
+  "inline-flex items-center rounded-full border-[1.5px] border-line bg-paper-2 px-3.5 py-[9px] text-[13.5px] font-semibold text-ink transition-colors hover:border-ink disabled:cursor-default disabled:opacity-50";
 const ACTION = "inline-flex min-h-9 items-center rounded-full px-3.5 text-[13px] font-bold transition-colors";
 
 type Stage = "rating" | "recommend" | "context" | "thanks" | "not-visited";
@@ -182,15 +182,15 @@ export function FeedbackBubble({
 
         {stage === "not-visited" ? <div>{FEEDBACK_TEXT.notVisited}</div> : null}
 
-        {error ? <p className="mt-2 text-[12.5px] text-[#a4402c]">{error}</p> : null}
+        {error ? <p className="mt-2 text-[12.5px] text-orange-ink">{error}</p> : null}
       </WhereBubble>
 
       {stage === "thanks" ? (
         <div className="flex flex-wrap gap-2">
-          <Link href="/memory" className={`${ACTION} bg-sand-2 text-ink hover:bg-sand`}>
+          <Link href="/memory" className={`${ACTION} bg-lilac-2 text-ink hover:bg-lilac`}>
             {FEEDBACK_TEXT.memory}
           </Link>
-          <button type="button" onClick={onNewQuestion} className={`${ACTION} bg-ink text-cream hover:bg-[#0f1722]`}>
+          <button type="button" onClick={onNewQuestion} className={`${ACTION} bg-ink text-paper hover:bg-night`}>
             {FEEDBACK_TEXT.newQuestion}
           </button>
         </div>

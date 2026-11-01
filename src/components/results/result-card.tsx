@@ -29,12 +29,12 @@ export function ResultCard({
 
   return (
     <article
-      className={`overflow-hidden rounded-[22px] border border-line bg-cream-2 shadow-soft ${discovery ? "border-dashed" : ""}`}
+      className={`overflow-hidden rounded-[22px] border border-line bg-paper-2 shadow-soft ${discovery ? "border-dashed" : ""}`}
     >
       <div className="relative">
         <span
           className={`absolute top-3 left-3 z-[2] rounded-full px-2.5 py-[5px] text-[11.5px] font-bold tracking-[0.02em] ${
-            first && !discovery ? "bg-coral text-white" : "bg-white/90 text-ink"
+            first && !discovery ? "bg-orange text-white" : "bg-white/90 text-ink"
           }`}
         >
           {result.rank}
@@ -44,7 +44,7 @@ export function ResultCard({
 
       <div className="flex flex-col gap-2.5 px-4 pt-3.5 pb-4">
         <div>
-          <h3 className="font-display text-[22px] font-medium leading-[1.1]">{result.name}</h3>
+          <h3 className="font-display text-[22px] font-bold leading-[1.1]">{result.name}</h3>
           {result.area ? <div className="text-[12.5px] text-muted">{result.area}</div> : null}
         </div>
 
@@ -60,7 +60,7 @@ export function ResultCard({
 
         {result.headline ? <p className="text-[14px] leading-[1.4] text-ink">{result.headline}</p> : null}
 
-        <div className="flex flex-col gap-1.5 rounded-[14px] bg-cream px-3 py-2.5">
+        <div className="flex flex-col gap-1.5 rounded-[14px] bg-paper px-3 py-2.5">
           {result.lines.slice(0, 3).map((line, i) => (
             <EvidenceText key={i} level={line.kind === "evidence" ? line.level : "deduction"}>
               {line.text}
@@ -76,7 +76,7 @@ export function ResultCard({
         ) : null}
 
         {result.conflictNotice ? (
-          <div className="flex items-start gap-2.5 rounded-[14px] bg-blue-2 px-3 py-[9px] text-[13.5px] leading-[1.4] text-[#1f4f68]">
+          <div className="flex items-start gap-2.5 rounded-[14px] bg-blue-2 px-3 py-[9px] text-[13.5px] leading-[1.4] text-[#2c3a8c]">
             <span aria-hidden>↔</span>
             <span>{result.conflictNotice}</span>
           </div>
@@ -99,7 +99,7 @@ export function ResultCard({
             onClick={() =>
               open({ key: result.id, title: "Pourquoi ce choix ?", body: <WhyPanel result={result} onBook={canBook ? onBook : undefined} /> })
             }
-            className={`${ACTION} bg-sand-2 text-ink hover:bg-sand`}
+            className={`${ACTION} bg-lilac-2 text-ink hover:bg-lilac`}
           >
             Pourquoi ce choix ?
           </button>
@@ -108,13 +108,13 @@ export function ResultCard({
               href={result.links.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={`${ACTION} bg-sand-2 text-ink hover:bg-sand`}
+              className={`${ACTION} bg-lilac-2 text-ink hover:bg-lilac`}
             >
               Voir dans Google Maps
             </a>
           ) : null}
           {canBook ? (
-            <button type="button" onClick={() => onBook?.(result)} className={`${ACTION} bg-ink text-cream hover:bg-[#0f1722]`}>
+            <button type="button" onClick={() => onBook?.(result)} className={`${ACTION} bg-ink text-paper hover:bg-night`}>
               Réserver
             </button>
           ) : null}

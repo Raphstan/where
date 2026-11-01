@@ -11,7 +11,7 @@ function ConfirmBody({ message, action, onConfirm }: { message: string; action: 
   return (
     <div className="flex flex-col gap-3">
       <p>{message}</p>
-      {error ? <p className="text-[12.5px] text-[#a4402c]">{error}</p> : null}
+      {error ? <p className="text-[12.5px] text-orange-ink">{error}</p> : null}
       <div className="flex gap-2.5">
         <button
           type="button"
@@ -34,7 +34,7 @@ function ConfirmBody({ message, action, onConfirm }: { message: string; action: 
               setBusy(false);
             }
           }}
-          className="inline-flex min-h-[46px] grow items-center justify-center rounded-full bg-coral px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#d2644b] disabled:opacity-60"
+          className="inline-flex min-h-[46px] grow items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
         >
           {action}
         </button>

@@ -8,7 +8,7 @@ import type { CreateRequestResponse, PreparedRecipient } from "@/lib/conversatio
 import { joinNames } from "@/lib/network/message";
 import type { SuggestedPerson } from "@/lib/search/types";
 
-const EYEBROW = "text-[11px] font-bold tracking-[0.14em] text-muted uppercase";
+const EYEBROW = "font-mono text-[11px] font-medium tracking-[0.08em] text-muted uppercase";
 const BTN = "inline-flex min-h-[46px] items-center justify-center gap-2 rounded-full px-5 text-[14.5px] font-bold transition-colors disabled:opacity-50";
 const WA = "bg-[#25d366] text-white";
 const GHOST = "border-[1.5px] border-line bg-transparent text-ink hover:border-ink";
@@ -98,7 +98,7 @@ export function AskComposer({
       <div className="flex flex-col gap-4">
         {backLink}
         <div className={EYEBROW}>Demander à mon réseau</div>
-        <h1 className="font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">
+        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
           J’ai préparé la question. Tu gardes la main.
         </h1>
         <p className="text-[12.5px] text-muted">
@@ -109,7 +109,7 @@ export function AskComposer({
           onChange={(e) => setMessage(e.target.value)}
           maxLength={1000}
           aria-label="Message"
-          className="min-h-[110px] w-full resize-none rounded-[14px] border-[1.5px] border-line bg-cream-2 px-3.5 py-3 text-[14px] text-ink outline-none focus:border-ink"
+          className="min-h-[110px] w-full resize-none rounded-[14px] border-[1.5px] border-line bg-paper-2 px-3.5 py-3 text-[14px] text-ink outline-none focus:border-ink"
         />
         <div>
           <div className={`${EYEBROW} mb-2`}>Destinataires suggérés</div>
@@ -127,7 +127,7 @@ export function AskComposer({
                     type="button"
                     aria-pressed={on}
                     onClick={() => toggle(c.id)}
-                    className={`flex items-center gap-3 rounded-[16px] border bg-cream-2 p-3 text-left transition-colors ${on ? "border-ink" : "border-line"}`}
+                    className={`flex items-center gap-3 rounded-[16px] border bg-paper-2 p-3 text-left transition-colors ${on ? "border-ink" : "border-line"}`}
                   >
                     <PersonAvatar person={c} />
                     <span>
@@ -146,7 +146,7 @@ export function AskComposer({
             </div>
           )}
         </div>
-        <div className="flex items-start gap-2.5 rounded-[14px] bg-sand-2 px-3.5 py-3 text-[13.5px] leading-[1.4] text-ink-2">
+        <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] leading-[1.4] text-ink-2">
           <span aria-hidden>🎯</span>
           <span>Tu demandes seulement aux personnes les plus pertinentes, pas à tout ton carnet d’adresses.</span>
         </div>
@@ -168,18 +168,18 @@ export function AskComposer({
         {backLink}
         <span className="inline-flex">
           {chosen.map((c, i) => (
-            <span key={c.id} className={`rounded-full border-2 border-cream ${i > 0 ? "-ml-2" : ""}`}>
+            <span key={c.id} className={`rounded-full border-2 border-paper ${i > 0 ? "-ml-2" : ""}`}>
               <PersonAvatar person={c} />
             </span>
           ))}
         </span>
-        <h1 className="font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">
+        <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
           Envoyer à {joinNames(chosen.map((c) => c.name))} ?
         </h1>
         <p className="text-[12.5px] text-muted">
           Un message WhatsApp par personne, chacun avec son lien privé pour répondre sans rien installer.
         </p>
-        <div className="w-full rounded-card border border-line bg-cream-2 p-4 text-left">
+        <div className="w-full rounded-card border border-line bg-paper-2 p-4 text-left">
           <div className="mb-1.5 text-[11.5px] text-soft">Aperçu</div>
           <div className="text-[13.5px] whitespace-pre-line">{message.trim()}</div>
           <div className="mt-2 text-[11.5px] text-blue">Lien privé · Répondre en 20 secondes</div>
@@ -204,7 +204,7 @@ export function AskComposer({
   return (
     <div className="flex flex-col gap-4">
       <div className={EYEBROW}>Demander à mon réseau</div>
-      <h1 className="font-display text-[28px] font-normal leading-[1.12] tracking-[-0.01em]">
+      <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
         Un message par personne.
       </h1>
       <p className="text-[12.5px] text-muted">
@@ -214,11 +214,11 @@ export function AskComposer({
         {step.recipients.map((r) => {
           const person = candidates.find((c) => c.id === r.memberId);
           return (
-            <div key={r.id} className="flex flex-wrap items-center gap-3 rounded-[16px] border border-line bg-cream-2 p-3">
+            <div key={r.id} className="flex flex-wrap items-center gap-3 rounded-[16px] border border-line bg-paper-2 p-3">
               {person ? <PersonAvatar person={person} /> : null}
               <span className="font-bold">{r.name}</span>
               <span className="ml-auto flex gap-2">
-                <button type="button" onClick={() => void copy(r)} className="inline-flex min-h-[30px] items-center rounded-full bg-sand-2 px-[11px] text-[12.5px] font-semibold text-ink hover:bg-sand">
+                <button type="button" onClick={() => void copy(r)} className="inline-flex min-h-[30px] items-center rounded-full bg-lilac-2 px-[11px] text-[12.5px] font-semibold text-ink hover:bg-lilac">
                   {copied === r.id ? "Lien copié" : "Copier le lien privé"}
                 </button>
                 <a
@@ -235,7 +235,7 @@ export function AskComposer({
           );
         })}
       </div>
-      <button type="button" onClick={() => router.push(back)} className={`${BTN} ${opened.size > 0 ? "bg-ink text-cream" : GHOST}`}>
+      <button type="button" onClick={() => router.push(back)} className={`${BTN} ${opened.size > 0 ? "bg-ink text-paper" : GHOST}`}>
         Revenir à la conversation
       </button>
     </div>

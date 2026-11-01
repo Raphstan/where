@@ -22,6 +22,7 @@ import { Composer } from "./composer";
 import { CriteriaChips } from "./criteria-chips";
 import { closedText, WIDEN_LABEL, type ChatMessage } from "./messages";
 import { PeopleSuggestion } from "./people";
+import { Mascot } from "@/components/shell/wordmark";
 
 const TYPING_DELAY_MS = 450;
 /** Fréquence de vérification des réponses du cercle, tant qu'une demande est en cours. */
@@ -244,7 +245,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       if (a.sentTo.length > 0) push({ kind: "asked", names: a.sentTo });
     }
     for (const r of initial.replies) {
-      push({ kind: "notice", tone: "coral", strong: `${r.memberName} a répondu`, text: ` : ${r.placeName}.` });
+      push({ kind: "notice", tone: "orange", strong: `${r.memberName} a répondu`, text: ` : ${r.placeName}.` });
     }
     void runSearch(initial.criteria, { save: false }).then(() => loadFollowups(initial.id));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- une seule fois, au chargement
@@ -330,7 +331,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       for (const r of fresh) seenReplies.current.add(r.id);
 
       const noticeIds = fresh.map((r) =>
-        push({ kind: "notice", tone: "coral", strong: `${r.memberName} vient de répondre.`, text: "" }),
+        push({ kind: "notice", tone: "orange", strong: `${r.memberName} vient de répondre.`, text: "" }),
       );
       for (const r of fresh.filter((x) => !x.reusable)) {
         push({
@@ -521,11 +522,11 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
           <div className="my-auto flex flex-col items-center gap-3.5 px-2.5 pt-8 pb-2.5 text-center">
             <span
               aria-hidden
-              className="inline-flex size-[52px] items-center justify-center rounded-full bg-coral font-display text-[20px] font-medium text-white"
+              className="inline-flex size-[64px] items-center justify-center"
             >
-              W
+              <Mascot className="animate-glow h-[60px] w-[52px]" />
             </span>
-            <h1 className="font-display text-[21px] font-medium leading-tight">Où devrais-tu vraiment aller ?</h1>
+            <h1 className="font-display text-[21px] font-bold leading-tight">Où devrais-tu vraiment aller ?</h1>
             <p className="max-w-[360px] text-[12.5px] text-muted">
               Pose ta question comme à un ami. Je regarde d’abord ce que ton cercle sait, puis je complète
               avec le public.
@@ -591,7 +592,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
                     type="button"
                     disabled={busy}
                     onClick={widen}
-                    className="inline-flex min-h-9 items-center rounded-full bg-sand-2 px-3.5 text-[13px] font-bold text-ink transition-colors hover:bg-sand disabled:opacity-50"
+                    className="inline-flex min-h-9 items-center rounded-full bg-lilac-2 px-3.5 text-[13px] font-bold text-ink transition-colors hover:bg-lilac disabled:opacity-50"
                   >
                     {WIDEN_LABEL}
                   </button>
@@ -653,7 +654,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
               key={ex.key}
               type="button"
               onClick={() => send(ex.text)}
-              className="inline-flex shrink-0 items-center rounded-full border-[1.5px] border-line bg-cream-2 px-3 py-[7px] text-[12.5px] font-medium whitespace-nowrap text-ink transition-colors hover:border-ink"
+              className="inline-flex shrink-0 items-center rounded-full border-[1.5px] border-line bg-paper-2 px-3 py-[7px] text-[12.5px] font-medium whitespace-nowrap text-ink transition-colors hover:border-ink"
             >
               {ex.text}
             </button>
@@ -670,7 +671,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
       {toast ? (
         <div
           role="status"
-          className="absolute bottom-[92px] left-1/2 z-10 max-w-[90%] -translate-x-1/2 animate-pop truncate rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold whitespace-nowrap text-cream lg:bottom-24"
+          className="absolute bottom-[92px] left-1/2 z-10 max-w-[90%] -translate-x-1/2 animate-pop truncate rounded-full bg-ink px-4 py-2.5 text-[13px] font-semibold whitespace-nowrap text-paper lg:bottom-24"
         >
           {toast}
         </div>

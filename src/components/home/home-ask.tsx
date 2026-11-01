@@ -1,57 +1,72 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SendIcon } from "@/components/chat/composer";
 
 /**
- * Boîte de question de l'accueil (maquette .chatbox). Envoyer ouvre le chat avec la question ;
- * sans compte, le passage par la connexion la conserve.
+ * Boîte de question de l'accueil (maquette .chatbox, habillage de la carte « Try it » de la landing).
+ * Envoyer ouvre le chat avec la question ; sans compte, le passage par la connexion la conserve.
  */
-export function HomeAsk({ example }: { example: string }) {
+export function HomeAsk({ example, others }: { example: string; others: { key: string; text: string }[] }) {
   const router = useRouter();
   const [value, setValue] = useState("");
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        const q = value.trim() || example;
-        router.push(`/chat?q=${encodeURIComponent(q)}`);
-      }}
-      className="rounded-[22px] bg-cream px-4 pt-4 pb-3 text-left text-ink shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)] lg:mx-auto lg:w-full lg:max-w-[680px]"
-    >
-      <label className="relative block min-h-11 text-[15.5px] leading-[1.45]">
-        <span className="sr-only">Ta question</span>
-        <textarea
-          rows={2}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              e.currentTarget.form?.requestSubmit();
-            }
-          }}
-          maxLength={500}
-          className="peer block w-full resize-none bg-transparent outline-none"
-        />
-        {value === "" ? (
-          <span aria-hidden className="pointer-events-none absolute inset-0">
-            {example}
-            <span className="ml-0.5 inline-block h-4 w-0.5 animate-caret bg-coral align-[-3px]" />
-          </span>
-        ) : null}
-      </label>
-      <div className="mt-2 flex items-center justify-between gap-3">
-        <span className="text-[11.5px] text-soft">Demande à ton réseau, sans avoir à demander à tout le monde.</span>
+    <div className="flex flex-col gap-3 rounded-[22px] border-2 border-orange bg-paper-2/90 p-4 shadow-[0_18px_44px_-18px_rgba(255,90,31,0.45)] backdrop-blur-sm">
+      <div className="flex items-center gap-2 font-mono text-[11px] font-medium tracking-[0.08em] text-orange-ink uppercase">
+        <i aria-hidden className="size-1.5 rounded-full bg-orange" />
+        Demande à ton réseau, sans avoir à demander à tout le monde.
+      </div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const q = value.trim() || example;
+          router.push(`/chat?q=${encodeURIComponent(q)}`);
+        }}
+        className="flex items-end gap-2 rounded-[18px] border-2 border-line-strong bg-white py-2 pr-2 pl-4 focus-within:border-ink"
+      >
+        <label className="relative block min-h-11 flex-1 py-1 text-[15.5px] leading-[1.45]">
+          <span className="sr-only">Ta question</span>
+          <textarea
+            rows={2}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                e.currentTarget.form?.requestSubmit();
+              }
+            }}
+            maxLength={500}
+            className="peer block w-full resize-none bg-transparent outline-none"
+          />
+          {value === "" ? (
+            <span aria-hidden className="pointer-events-none absolute inset-0 py-1 text-ink-2">
+              {example}
+              <span className="ml-0.5 inline-block h-4 w-0.5 animate-caret bg-orange align-[-3px]" />
+            </span>
+          ) : null}
+        </label>
         <button
           type="submit"
           aria-label="Envoyer"
-          className="inline-flex size-[38px] shrink-0 items-center justify-center rounded-full bg-coral text-white"
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-orange text-white"
         >
           <SendIcon />
         </button>
+      </form>
+      <div className="flex flex-wrap gap-2">
+        {others.map((ex) => (
+          <Link
+            key={ex.key}
+            href={`/chat?q=${encodeURIComponent(ex.text)}`}
+            className="rounded-full bg-orange-2 px-3 py-1.5 text-[13px] font-medium text-[#8a2e0e] transition-colors hover:bg-[#ffd2bf]"
+          >
+            {ex.text}
+          </Link>
+        ))}
       </div>
-    </form>
+    </div>
   );
 }

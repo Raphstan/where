@@ -7,7 +7,7 @@ export function PeopleSuggestion({ people, askHref }: { people: SuggestedPerson[
   return (
     <div className="flex w-full animate-pop flex-col gap-2.5">
       {people.map((p) => (
-        <div key={p.id} className="flex items-center gap-3 rounded-[16px] border border-line bg-cream-2 p-3">
+        <div key={p.id} className="flex items-center gap-3 rounded-[16px] border border-line bg-paper-2 p-3">
           <PersonAvatar person={p} />
           <div>
             <div className="font-bold">{p.name}</div>
@@ -18,7 +18,7 @@ export function PeopleSuggestion({ people, askHref }: { people: SuggestedPerson[
       {askHref ? (
         <Link
           href={askHref}
-          className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-coral px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#d2644b]"
+          className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#ee4a10]"
         >
           Leur demander
         </Link>

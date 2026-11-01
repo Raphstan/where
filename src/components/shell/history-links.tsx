@@ -27,8 +27,8 @@ function HistoryView({ items, pathname }: { items: HistoryItem[]; pathname: stri
         href={`/chat/${c.id}`}
         title={c.question}
         aria-current={on ? "page" : undefined}
-        className={`block w-full truncate rounded-[10px] px-2.5 py-2 text-[12.5px] transition-colors hover:bg-sand-2 hover:text-ink ${
-          on ? "bg-sand-2 text-ink" : "text-muted"
+        className={`block w-full truncate rounded-[10px] px-2.5 py-2 text-[12.5px] transition-colors hover:bg-lilac-2 hover:text-ink ${
+          on ? "bg-lilac-2 text-ink" : "text-muted"
         }`}
       >
         {c.question}

@@ -7,10 +7,10 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Mes sources" };
 
-const CARD = "flex flex-col gap-2 rounded-card border border-line bg-cream-2 p-4";
+const CARD = "flex flex-col gap-2 rounded-card border border-line bg-paper-2 p-4";
 const BADGE = {
   ok: "bg-olive-2 text-olive",
-  off: "bg-sand-2 text-muted",
+  off: "bg-lilac-2 text-muted",
   soon: "bg-blue-2 text-blue",
 } as const;
 
@@ -101,7 +101,7 @@ async function EmailSource() {
 export default function SourcesPage() {
   return (
     <PageFrame title="Mes sources" lead="Ce que WH3RE peut vraiment lire, et ce qu’il ne lira jamais." back="/profile">
-      <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-cream-2" />}>
+      <Suspense fallback={<div className="h-[150px] animate-pulse rounded-card border border-line bg-paper-2" />}>
         <EmailSource />
       </Suspense>
       {LATER.map((s) => (
@@ -114,7 +114,7 @@ export default function SourcesPage() {
         <h2 className="text-[15px] font-bold">Plateformes de réservation</h2>
         <div className="flex flex-wrap gap-1.5">
           {PLATFORMS.map((p) => (
-            <span key={p} className="inline-flex rounded-full border-[1.5px] border-line bg-cream-2 px-3 py-[7px] text-[12px] font-medium">
+            <span key={p} className="inline-flex rounded-full border-[1.5px] border-line bg-paper-2 px-3 py-[7px] text-[12px] font-medium">
               {p}
             </span>
           ))}
