@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { z } from "zod";
+import { ensureBetaAccount } from "@/lib/auth/beta-access";
 import { NEXT_COOKIE, NEXT_COOKIE_MAX_AGE, safeNextPath } from "@/lib/auth/redirect";
 import { publicEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
@@ -9,6 +10,8 @@ import { createClient } from "@/lib/supabase/server";
 export type MagicLinkState =
   | { status: "idle" }
   | { status: "sent"; email: string }
+  /** Bêta privée : ni compte, ni invitation, ni lien de proche. Aucun email n'est envoyé. */
+  | { status: "waitlist"; email: string }
   /** Clé du message (messages/{langue}/login.json, `errors.*`) : le formulaire le traduit. */
   | { status: "error"; error: "invalidEmail" | "sendFailed" };
 
@@ -35,10 +38,19 @@ export async function sendMagicLink(
   const redirectTo = new URL("/auth/confirm", publicEnv.NEXT_PUBLIC_SITE_URL);
   if (next) redirectTo.searchParams.set("next", next);
 
+  // Bêta privée : le compte n'est créé (côté serveur) que pour une personne invitée.
+  let access;
+  try {
+    access = await ensureBetaAccount(email, next);
+  } catch {
+    return { status: "error", error: "sendFailed" };
+  }
+  if (access === "waitlist") return { status: "waitlist", email };
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: redirectTo.toString(), shouldCreateUser: true },
+    options: { emailRedirectTo: redirectTo.toString(), shouldCreateUser: false },
   });
 
   if (error) {

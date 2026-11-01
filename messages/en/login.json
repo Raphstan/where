@@ -17,5 +17,9 @@
   "errors": {
     "invalidEmail": "Enter a valid email address.",
     "sendFailed": "Couldn’t send the link right now. Try again in a moment."
+  },
+  "waitlist": {
+    "text": "The beta is private for now. <b>{email}</b> doesn’t have an invite yet: I’ll write as soon as your spot is ready.",
+    "join": "Not on the list yet? <link>Join it on wh3re.com</link>."
   }
 }

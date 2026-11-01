@@ -5,7 +5,21 @@ export type Database = {
   
   "public": {
           Tables: {
-            "circle_members": {
+            "beta_access": {
+                  Row: {
+                    "email": string,"invited_at": string,"note": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "email": string,"invited_at"?: string,"note"?: string | null
+                  }
+                  Update: {
+                    "email"?: string,"invited_at"?: string,"note"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"circle_members": {
                   Row: {
                     "created_at": string,"description": string | null,"email": string | null,"id": string,"member_id": string | null,"name": string,"phone": string | null,"relation": string | null,"trust_domains": (Database["public"]['Enums']["trust_domain"])[],"user_id": string
                   }

@@ -5,9 +5,12 @@ import { getServerEnv } from "@/lib/env.server";
 import type { Database } from "./database.types";
 
 /**
- * Client service_role : contourne RLS. Trois usages seulement, côté serveur :
- * - la page invité /r/[token] (src/app/r), où le proche répond sans compte (CLAUDE.md § 3) ; chaque
- *   requête y est restreinte au jeton du lien privé ;
+ * Client service_role : contourne RLS. Usages, tous côté serveur :
+ * - la page invité /r/[token] et « Garder ma mémoire WH3RE » (/join/[token], src/lib/network/guest.ts),
+ *   où le proche répond sans compte puis relie le sien (CLAUDE.md § 3) ; chaque requête y est
+ *   restreinte au jeton du lien privé ;
+ * - la connexion pendant la bêta privée (src/lib/auth/beta-access.ts) : vérifie l'invitation d'un
+ *   email et crée son compte, les inscriptions libres étant fermées ;
  * - la tâche planifiée /api/cron/visit-followups, protégée par CRON_SECRET, qui ne fait que marquer
  *   les retours après visite arrivés à échéance ;
  * - le webhook Resend /api/inbound/resend, signé (RESEND_WEBHOOK_SECRET), qui retrouve le compte par

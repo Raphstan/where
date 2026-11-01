@@ -241,9 +241,22 @@ Airbnb, OpenTable, Resy, Restu). Le guide est sur `/import`.
 `npm run test:live` classe aussi, contre l'API réelle, les emails de `src/lib/inbound/examples.ts`
 (dont une table Tabit et une livraison Tabit).
 
+## Bêta privée : qui peut entrer
+
+Les inscriptions libres sont fermées (`enable_signup = false` dans `supabase/config.toml`). À la
+connexion, le serveur crée le compte seulement pour :
+
+- un email de la table `beta_access` (tu l'y ajoutes : `supabase/snippets/invite.sql`) ;
+- un proche arrivé par son lien privé (`/r/{token}` → « Garder ma mémoire WH3RE » → `/join/{token}`) ;
+- un compte qui existe déjà.
+
+Les autres voient « La bêta est privée pour l'instant » : aucun email n'est envoyé. La table n'a aucune
+policy RLS : seul le serveur (service_role) la lit (`src/lib/auth/beta-access.ts`).
+
 ## Supabase hébergé (Vercel)
 
 1. Créer un projet Supabase, puis appliquer les migrations : `npx supabase link` puis `npx supabase db push`.
+   Dans Authentication → Sign In / Providers, **désactiver « Allow new users to sign up »** (bêta privée).
 2. Dans Authentication → Email Templates → Magic Link, coller le contenu de
    `supabase/templates/magic_link.html` (il envoie vers `/auth/confirm` avec `token_hash`).
    Sans ce template, le flux PKCE par défaut fonctionne aussi : `/auth/confirm` accepte `code`.

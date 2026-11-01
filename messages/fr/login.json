@@ -17,5 +17,9 @@
   "errors": {
     "invalidEmail": "Entre une adresse email valide.",
     "sendFailed": "Impossible d'envoyer le lien pour l'instant. Réessaie dans un instant."
+  },
+  "waitlist": {
+    "text": "La bêta est privée pour l’instant. <b>{email}</b> n’a pas encore d’invitation : je t’écris dès que ta place est prête.",
+    "join": "Pas encore inscrit·e ? <link>Rejoins la liste sur wh3re.com</link>."
   }
 }

@@ -10,6 +10,28 @@ export function MagicLinkForm({ next }: { next?: string }) {
   const [state, action, pending] = useActionState(sendMagicLink, initial);
   const t = useTranslations("login");
 
+  if (state.status === "waitlist") {
+    return (
+      <div className="flex flex-col gap-3.5" aria-live="polite">
+        <div className="flex items-start gap-2.5 rounded-[14px] bg-lilac-2 px-3.5 py-3 text-[13.5px] leading-snug text-ink">
+          <span aria-hidden className="shrink-0">
+            ⏳
+          </span>
+          <span>{t.rich("waitlist.text", { email: state.email, b: (chunks) => <b className="font-bold">{chunks}</b> })}</span>
+        </div>
+        <p className="text-[12.5px] text-muted">
+          {t.rich("waitlist.join", {
+            link: (chunks) => (
+              <a href="https://wh3re.com" className="font-semibold text-blue hover:underline">
+                {chunks}
+              </a>
+            ),
+          })}
+        </p>
+      </div>
+    );
+  }
+
   if (state.status === "sent") {
     return (
       <div className="flex flex-col gap-3.5" aria-live="polite">
