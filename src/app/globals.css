@@ -166,41 +166,42 @@ h4 {
   inset: 0;
   background: radial-gradient(120% 70% at 50% 110%, rgba(0, 0, 0, 0.35), transparent 60%);
 }
+/* Teintes de la landing : lilas, orange, prune, et un vert ou un bleu doux pour varier. */
 .scene-0 {
   background:
-    radial-gradient(60% 50% at 30% 30%, #f2b37a 0%, transparent 60%),
-    radial-gradient(40% 40% at 75% 65%, #d1623f 0%, transparent 60%),
-    linear-gradient(160deg, #5c2b2e 0%, #1c1a2b 60%, #0e1420 100%);
+    radial-gradient(60% 50% at 30% 30%, #ff9b6a 0%, transparent 60%),
+    radial-gradient(40% 40% at 75% 65%, #ff5a1f 0%, transparent 60%),
+    linear-gradient(160deg, #5e2a4a 0%, #2a1438 60%, #1e1029 100%);
 }
 .scene-1 {
   background:
-    radial-gradient(50% 50% at 70% 25%, #f6d28c 0%, transparent 55%),
-    radial-gradient(60% 40% at 20% 80%, #2e6e8e 0%, transparent 60%),
-    linear-gradient(200deg, #3b2a3b, #111a2a);
+    radial-gradient(50% 50% at 70% 25%, #ffc08f 0%, transparent 55%),
+    radial-gradient(60% 40% at 20% 80%, #6a72d0 0%, transparent 60%),
+    linear-gradient(200deg, #4a2a5e, #1e1029);
 }
 .scene-2 {
   background:
-    radial-gradient(40% 50% at 25% 35%, #8fb8c8 0%, transparent 60%),
-    radial-gradient(50% 45% at 75% 75%, #e8a58a 0%, transparent 60%),
-    linear-gradient(180deg, #f1e6d3, #b9a590);
+    radial-gradient(40% 50% at 25% 35%, #b9b0e8 0%, transparent 60%),
+    radial-gradient(50% 45% at 75% 75%, #ffb08c 0%, transparent 60%),
+    linear-gradient(180deg, #efe8f6, #b3a5ca);
 }
 .scene-3 {
   background:
-    radial-gradient(60% 55% at 30% 20%, #fbe2b0 0%, transparent 60%),
-    radial-gradient(60% 50% at 80% 80%, #7e9e63 0%, transparent 60%),
-    linear-gradient(190deg, #d9c9a4, #5f7b4c);
+    radial-gradient(60% 55% at 30% 20%, #ffe1d4 0%, transparent 60%),
+    radial-gradient(60% 50% at 80% 80%, #6fa585 0%, transparent 60%),
+    linear-gradient(190deg, #dcd3e9, #4f7a64);
 }
 .scene-4 {
   background:
-    radial-gradient(40% 50% at 25% 35%, #e7a35b 0%, transparent 60%),
-    radial-gradient(40% 40% at 80% 60%, #9b3f4a 0%, transparent 60%),
-    linear-gradient(190deg, #2a1e2e, #0f131f);
+    radial-gradient(40% 50% at 25% 35%, #ff8a3d 0%, transparent 60%),
+    radial-gradient(40% 40% at 80% 60%, #9b3f6a 0%, transparent 60%),
+    linear-gradient(190deg, #2e1b3d, #130b1d);
 }
 .scene-5 {
   background:
-    radial-gradient(50% 50% at 30% 30%, #f7c9a5 0%, transparent 60%),
-    radial-gradient(40% 40% at 80% 70%, #b9654a 0%, transparent 60%),
-    linear-gradient(190deg, #d9a27e, #5b3a33);
+    radial-gradient(50% 50% at 30% 30%, #ffc6aa 0%, transparent 60%),
+    radial-gradient(40% 40% at 80% 70%, #c0567a 0%, transparent 60%),
+    linear-gradient(190deg, #cfa3c4, #4a2a4e);
 }
 
 /* ---------- Qualifier mes expériences (docs/prototype.html : .qcard, outL, outR) ---------- */
@@ -264,4 +265,5 @@ h4 {
     radial-gradient(70% 55% at 20% 30%, rgba(251, 249, 253, 0.95), rgba(251, 249, 253, 0) 70%),
     radial-gradient(60% 50% at 95% 100%, rgba(255, 90, 31, 0.14), transparent 60%),
     linear-gradient(180deg, #e4dcee 0%, #dcd3e9 100%);
+  background-attachment: fixed;
 }

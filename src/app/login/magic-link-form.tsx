@@ -57,7 +57,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-ink px-5 text-[14.5px] font-bold text-paper transition-colors hover:bg-night disabled:opacity-60"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
       >
         {pending ? "Envoi…" : "Recevoir mon lien"}
       </button>

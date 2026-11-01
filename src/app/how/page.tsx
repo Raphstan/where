@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
-import { CORAL_BTN, EYEBROW, H1, OnbFrame } from "@/components/home/onb-frame";
+import { ORANGE_BTN, EYEBROW, H1, OnbFrame } from "@/components/home/onb-frame";
 
 export const metadata: Metadata = { title: "Comment ça marche" };
 
@@ -87,7 +87,7 @@ export default function HowPage() {
           Au lieu de fouiller des centaines d’avis anonymes ou d’envoyer la même question dans cinq groupes WhatsApp.
         </p>
       </div>
-      <Link href="/onboarding" className={CORAL_BTN}>
+      <Link href="/onboarding" className={ORANGE_BTN}>
         Commencer
       </Link>
     </OnbFrame>

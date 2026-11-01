@@ -18,7 +18,7 @@ export function PeopleSuggestion({ people, askHref }: { people: SuggestedPerson[
       {askHref ? (
         <Link
           href={askHref}
-          className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#ee4a10]"
+          className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10]"
         >
           Leur demander
         </Link>

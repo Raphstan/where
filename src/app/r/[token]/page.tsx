@@ -33,8 +33,8 @@ async function Invitation({ token }: { token: string }) {
 /** Page invité : le proche répond depuis son lien privé, sans compte, sans appli (docs/prototype.html, scrSarah). */
 export default function GuestPage({ params }: PageProps<"/r/[token]">) {
   return (
-    <div className="flex min-h-dvh flex-1 flex-col bg-lilac">
-      <main className="mx-auto mt-auto flex w-full max-w-[480px] flex-col gap-3.5 rounded-t-[24px] bg-paper px-5 pt-5 pb-[30px] sm:my-auto sm:rounded-[24px] sm:shadow-soft">
+    <div className="hero flex min-h-dvh flex-1 flex-col">
+      <main className="mx-auto mt-auto flex w-full max-w-[480px] flex-col gap-3.5 rounded-t-[24px] bg-paper-2 px-5 pt-5 pb-[30px] sm:my-auto sm:rounded-[24px] sm:shadow-soft">
         <div className="flex items-center">
           <Wordmark className="text-[16px]" />
           <span className="ml-auto text-[11.5px] text-soft">Sans compte · sans appli</span>

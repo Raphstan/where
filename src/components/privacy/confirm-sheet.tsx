@@ -34,7 +34,7 @@ function ConfirmBody({ message, action, onConfirm }: { message: string; action: 
               setBusy(false);
             }
           }}
-          className="inline-flex min-h-[46px] grow items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
+          className="inline-flex min-h-[46px] grow items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
         >
           {action}
         </button>

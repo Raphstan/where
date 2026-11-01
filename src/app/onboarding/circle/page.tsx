@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { AddPersonButton } from "@/components/circle/add-person";
 import { CIRCLE_LEAD, CircleList } from "@/components/circle/circle-list";
 import { CircleNotice } from "@/components/circle/circle-notice";
-import { CORAL_BTN, H1, OnbFrame } from "@/components/home/onb-frame";
+import { ORANGE_BTN, H1, OnbFrame } from "@/components/home/onb-frame";
 
 export const metadata: Metadata = { title: "Ton cercle de confiance" };
 
@@ -19,7 +19,7 @@ export default function OnboardingCirclePage() {
         <CircleList />
       </Suspense>
       <AddPersonButton />
-      <Link href="/chat" className={CORAL_BTN}>
+      <Link href="/chat" className={ORANGE_BTN}>
         Poser ma première question
       </Link>
       <Link href="/chat" className="self-center text-[13.5px] font-semibold text-blue hover:underline">

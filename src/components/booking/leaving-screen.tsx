@@ -50,7 +50,7 @@ export function LeavingScreen({
       <h2 id="leaving-title" className="max-w-[420px] font-display text-[21px] font-bold leading-tight">
         {leavingText(option.kind)}
       </h2>
-      <div className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-[16px] bg-white p-[18px] text-left text-[#111] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55)]">
+      <div className="flex w-full max-w-[340px] flex-col gap-2.5 rounded-[16px] bg-white p-[18px] text-left text-ink shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55)]">
         <div className="flex items-center gap-2.5">
           <PlatformLogo kind={option.kind} />
           <b className="min-w-0 truncate">{placeName}</b>
@@ -67,7 +67,7 @@ export function LeavingScreen({
           {option.label}
         </a>
       </div>
-      <button ref={back} type="button" onClick={onBack} className="text-[13.5px] font-semibold text-ink-2 hover:underline">
+      <button ref={back} type="button" onClick={onBack} className="text-[13.5px] font-semibold text-lilac hover:underline">
         {BOOKING_TEXT.back}
       </button>
     </div>

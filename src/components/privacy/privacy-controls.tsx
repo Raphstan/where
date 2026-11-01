@@ -16,7 +16,7 @@ export function Switch({ checked, label, onChange }: { checked: boolean; label: 
       aria-label={label}
       onClick={onChange}
       className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors after:absolute after:top-[3px] after:size-5 after:rounded-full after:bg-white after:shadow-[0_1px_3px_rgba(0,0,0,0.2)] after:transition-all after:content-[''] ${
-        checked ? "bg-olive after:left-[21px]" : "bg-line after:left-[3px]"
+        checked ? "bg-orange after:left-[21px]" : "bg-line-strong after:left-[3px]"
       }`}
     />
   );

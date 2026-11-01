@@ -31,7 +31,7 @@ async function LoginCard({ searchParams }: { searchParams: SearchParams }) {
 
 export default function LoginPage(props: PageProps<"/login">) {
   return (
-    <div className="flex min-h-dvh flex-1 flex-col items-center justify-center px-[22px] py-10">
+    <div className="hero flex min-h-dvh flex-1 flex-col items-center justify-center px-[22px] py-10">
       <div className="flex w-full max-w-[420px] flex-col gap-[18px]">
         <Wordmark className="text-base" />
         <div className="flex flex-col gap-2">

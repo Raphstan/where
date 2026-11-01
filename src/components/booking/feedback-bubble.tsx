@@ -169,7 +169,7 @@ export function FeedbackBubble({
                 aria-checked={shared}
                 aria-label={FEEDBACK_TEXT.share}
                 onClick={() => void toggleShare()}
-                className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors ${shared ? "bg-olive" : "bg-line"}`}
+                className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors ${shared ? "bg-orange" : "bg-line-strong"}`}
               >
                 <span
                   className={`absolute top-[3px] size-5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-[left] ${shared ? "left-[21px]" : "left-[3px]"}`}

@@ -19,7 +19,7 @@ function Toggle({ name, label, defaultOn }: { name: string; label: string; defau
         aria-checked={on}
         aria-label={label}
         onClick={() => setOn((v) => !v)}
-        className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors ${on ? "bg-olive" : "bg-line"}`}
+        className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors ${on ? "bg-orange" : "bg-line-strong"}`}
       >
         <span
           className={`absolute top-[3px] size-5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-[left] ${on ? "left-[21px]" : "left-[3px]"}`}
@@ -159,7 +159,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
+        className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-orange px-5 text-[14.5px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10] disabled:opacity-60"
       >
         Envoyer ma recommandation
       </button>
