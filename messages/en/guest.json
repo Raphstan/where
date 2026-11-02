@@ -9,18 +9,10 @@
   "reusableYes": "Only {requester} sees your answer. You’ve let WH3RE reuse it for {requester} in the future.",
   "reusableNo": "Only {requester} sees your answer. It’s only used for this question and won’t be kept.",
   "another": "Recommend another place",
-  "placeName": "Place name",
-  "placeUrlPlaceholder": "Google Maps / Instagram / TikTok link (optional)",
-  "placeUrlLabel": "Google Maps, Instagram or TikTok link",
-  "visitedQuestion": "Have you actually been?",
-  "visitedYes": "Yes",
-  "visitedNo": "No, but I’ve heard about it",
+  "placeName": "Name of the place",
   "note": "Why do you recommend it?",
-  "visibleOnly": "Only visible to {requester}",
-  "allowReuse": "Let WH3RE reuse this rec for {requester} in the future",
   "submit": "Send my recommendation",
   "errors": {
-    "visitedRequired": "Tell me whether you’ve actually been.",
     "invalidToken": "This private link isn’t valid.",
     "expired": "This private link is no longer valid.",
     "placeNameRequired": "Enter the name of the place.",
@@ -44,7 +36,8 @@
     "askLead": "Keep this memory, add the people you trust, and ask your first question.",
     "keep": "Keep my WH3RE memory",
     "notNow": "Not now",
-    "loading": "Finding your recommendations…"
+    "loading": "Finding your recommendations…",
+    "recommended": "Recommended"
   },
   "join": {
     "metaTitle": "Welcome",
@@ -76,5 +69,13 @@
   "inviteLead": "Share 2 or 3 spots you truly love. Takes 20 seconds, no account.",
   "yourName": "Your first name",
   "inviteTitleNoName": "A friend would love to know your favorite places.",
-  "ogTitleNoName": "A friend is asking for your advice"
+  "ogTitleNoName": "A friend is asking for your advice",
+  "searchPlaceholder": "Search for a place or paste a link",
+  "suggestions": "Suggested places",
+  "change": "Change",
+  "linkAdded": "Link added: {link}",
+  "removeLink": "Remove",
+  "notYet": "I haven’t been yet",
+  "addNote": "Add a note (optional)",
+  "privateTo": "Only {requester} sees your answer."
 }

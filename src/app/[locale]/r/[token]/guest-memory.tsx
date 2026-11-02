@@ -63,11 +63,11 @@ export function GuestMemoryPanel({ token, requester }: { token: string; requeste
       <ul className="flex flex-col divide-y divide-line rounded-card bg-paper p-1.5">
         {memory.items.map((item) => (
           <li key={item.id} className="flex items-center gap-3 px-2.5 py-2.5">
-            <span aria-hidden className={`size-2.5 shrink-0 rounded-full ${item.visited ? "bg-orange" : "bg-amber"}`} />
+            <span aria-hidden className={`size-2.5 shrink-0 rounded-full ${item.visited === false ? "bg-amber" : "bg-orange"}`} />
             <div className="min-w-0 flex-1">
               <div className="truncate text-[14px] font-bold">{item.place}</div>
               <div className="truncate text-[12px] text-muted">
-                {[item.city, item.visited ? t("visited") : t("heard")].filter(Boolean).join(" · ")}
+                {[item.city, item.visited === true ? t("visited") : item.visited === null ? t("recommended") : t("heard")].filter(Boolean).join(" · ")}
               </div>
             </div>
             <span className="shrink-0 text-[11.5px] text-soft">{format.relativeTime(new Date(item.createdAt), now)}</span>

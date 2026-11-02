@@ -10,17 +10,9 @@
   "reusableNo": "Seul {requester} voit ta réponse. Elle ne sert qu’à cette question et ne sera pas gardée.",
   "another": "Recommander un autre lieu",
   "placeName": "Nom du lieu",
-  "placeUrlPlaceholder": "Lien Google Maps / Instagram / TikTok (facultatif)",
-  "placeUrlLabel": "Lien Google Maps, Instagram ou TikTok",
-  "visitedQuestion": "Tu y es réellement allé·e ?",
-  "visitedYes": "Oui",
-  "visitedNo": "Non, mais on m’en a parlé",
   "note": "Pourquoi tu le recommandes ?",
-  "visibleOnly": "Visible seulement par {requester}",
-  "allowReuse": "Autoriser WH3RE à réutiliser cette reco pour {requester} à l’avenir",
   "submit": "Envoyer ma recommandation",
   "errors": {
-    "visitedRequired": "Dis-moi si tu y es réellement allé·e.",
     "invalidToken": "Ce lien privé n’est pas valide.",
     "expired": "Ce lien privé n’est plus valide.",
     "placeNameRequired": "Indique le nom du lieu.",
@@ -44,7 +36,8 @@
     "askLead": "Garde cette mémoire, ajoute les personnes à qui tu fais confiance, et pose ta première question.",
     "keep": "Garder ma mémoire WH3RE",
     "notNow": "Pas maintenant",
-    "loading": "Je retrouve tes recommandations…"
+    "loading": "Je retrouve tes recommandations…",
+    "recommended": "Recommandé"
   },
   "join": {
     "metaTitle": "Bienvenue",
@@ -76,5 +69,13 @@
   "inviteLead": "Donne 2 ou 3 lieux que tu aimes vraiment. Ça prend 20 secondes, sans compte.",
   "yourName": "Ton prénom",
   "inviteTitleNoName": "Un proche aimerait connaître tes adresses préférées.",
-  "ogTitleNoName": "Un proche te demande un conseil"
+  "ogTitleNoName": "Un proche te demande un conseil",
+  "searchPlaceholder": "Cherche un lieu ou colle un lien",
+  "suggestions": "Lieux suggérés",
+  "change": "Changer",
+  "linkAdded": "Lien ajouté : {link}",
+  "removeLink": "Retirer",
+  "notYet": "Je n’y suis pas encore allé·e",
+  "addNote": "Ajouter un mot (facultatif)",
+  "privateTo": "Seul {requester} voit ta réponse."
 }

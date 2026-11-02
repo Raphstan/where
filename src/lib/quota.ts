@@ -15,6 +15,8 @@ export const QUOTAS = {
   save: 40,
   /** Réponses envoyées depuis un même lien privé de proche. */
   guest_reply: 20,
+  /** Suggestions de lieux (Google, pendant la frappe) depuis un même lien privé de proche. */
+  guest_suggest: 150,
   /** Emails transférés traités pour une même adresse de transfert. */
   inbound_email: 300,
 } as const;
@@ -37,7 +39,7 @@ export async function consumeMyQuota(supabase: Client, action: "ask" | "search" 
 }
 
 /** Quota d'un sujet sans compte (lien privé, adresse de transfert), côté serveur (service_role). */
-export async function consumeQuota(admin: Client, subject: string, action: "guest_reply" | "inbound_email"): Promise<boolean> {
+export async function consumeQuota(admin: Client, subject: string, action: "guest_reply" | "guest_suggest" | "inbound_email"): Promise<boolean> {
   const { data, error } = await admin.rpc("consume_quota", { p_subject: subject, p_action: action, p_limit: QUOTAS[action] });
   if (error) {
     console.error(`[quota] ${action}`, error.message);

@@ -159,14 +159,14 @@ isOneToOne: false
                   ]
                 },"request_replies": {
                   Row: {
-                    "created_at": string,"id": string,"note": string | null,"place_id": string | null,"place_text": string | null,"place_url": string | null,"recipient_id": string,"request_id": string,"reusable": boolean,"visible_only_to_requester": boolean,"visited": boolean
+                    "created_at": string,"id": string,"note": string | null,"place_id": string | null,"place_text": string | null,"place_url": string | null,"recipient_id": string,"request_id": string,"reusable": boolean,"visible_only_to_requester": boolean,"visited": boolean | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id": string,"request_id": string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited": boolean
+                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id": string,"request_id": string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited": boolean | null
                   }
                   Update: {
-                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id"?: string,"request_id"?: string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited"?: boolean
+                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id"?: string,"request_id"?: string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited"?: boolean | null
                   }
                   Relationships: [
                     {
@@ -333,6 +333,9 @@ isOneToOne: false
           Functions: {
             "consume_my_quota":
 { Args: { "p_action": string,"p_limit": number }; Returns: boolean
+                           },
+"consume_google_budget":
+{ Args: { "p_limit": number,"p_sku": string }; Returns: boolean
                            },
 "consume_quota":
 { Args: { "p_action": string,"p_limit": number,"p_subject": string }; Returns: boolean

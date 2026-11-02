@@ -35,7 +35,7 @@ personnes auxquelles tu fais confiance. »
 | Déploiement | Vercel |
 | IA | API Anthropic (compréhension des questions, classification) |
 | Email entrant | Resend (webhook inbound, transfert d'email) ; Gmail OAuth pour un import unique pendant la bêta (§ 5) |
-| Lieux publics | Google Places API (New), Text Search, uniquement pour la carte « Découverte » (clé serveur) |
+| Lieux publics | Google Places API (New), clé serveur : Text Search pour la carte « Découverte », Autocomplete pour la page invité (2026-11-02). **Facture à 0** : tout appel passe par `googleFetch` (`src/lib/google/budget.ts`), plafonné par mois sous la part gratuite de Google |
 
 Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, shadcn, etc.).
 
@@ -262,20 +262,29 @@ répondent — rien d'autre n'a été envoyé. »
 
 ### 6.5 Page invité (ce que Sarah voit)
 
-URL privée `/r/{token}`, **sans compte, sans appli**. Contenu : la question, champ « Nom du lieu, ou
-lien Google Maps / Instagram / TikTok », suggestions, « Tu y es réellement allée ? » (Oui / Non, mais
-on m'en a parlé), « Pourquoi tu le recommandes ? », deux interrupteurs activés par défaut :
-« Visible seulement par {Prénom} » et « Autoriser WHERE à réutiliser cette reco pour {Prénom} à
-l'avenir », bouton « Envoyer ma recommandation ». Puis « Merci, Sarah. » et aperçu de ses réponses
-passées (« Tu as déjà une mémoire WHERE. Elle est à toi. »), invitation à garder sa mémoire (hors MVP).
+URL privée `/r/{token}`, **sans compte, sans appli**. Écart voulu avec la maquette depuis le premier test
+réel (2026-11-02) : la page doit prendre cinq secondes et ne pas ressembler à un formulaire.
+- Titre avec le prénom du demandeur (« Raphaël aimerait connaître tes adresses préférées. ») ; jamais
+  « la personne qui te demande ». Un lien d'invitation ne se crée pas sans prénom.
+- Un seul champ « Cherche un lieu ou colle un lien » : suggestions Google pendant la frappe
+  (`/api/guest/suggest`, plafonné par lien et par le budget Google), un appui choisit le lieu
+  (identifiant Google, adresse, ville). Un lien Google Maps collé est lu ; un lien Instagram ou TikTok
+  est gardé à part et le champ demande le nom. Sans suggestion, le texte tapé est utilisé tel quel.
+- Case « Je n'y suis pas encore allé·e », « Ajouter un mot (facultatif) », prénom du proche si on ne
+  le connaît pas, bouton « Envoyer ma recommandation », et en petit « Seul {Prénom} voit ta réponse. »
+- Plus de question « Tu y es réellement allé·e ? » ni d'interrupteurs : la réponse est visible du seul
+  demandeur et réutilisable pour lui.
+Puis « Merci, Sarah. » et aperçu de ses réponses passées (« Tu as déjà une mémoire WHERE. Elle est à
+toi. »), invitation à garder sa mémoire.
 
 Côté demandeur : notice « Sarah vient de répondre. J'ai une nouvelle recommandation plus fiable — sa
 réponse change le classement. », carte « Nouveau · n°1 » avec jauge de confiance, puis carte
 « Ce que WHERE sait maintenant de Sarah ». Si la réutilisation est refusée : « cette réponse ne sert
 qu'à cette question et ne sera pas gardée. »
 
-Mapping des réponses invité vers les preuves : « Oui » → `recommended` + `visited` ;
-« Non, mais on m'en a parlé » → `saved`. Mapping de la qualification : visité + « Absolument » →
+Mapping des réponses invité vers les preuves (`request_replies.visited`) : lieu préféré cité → `recommended`
+(visited null, aucune visite affirmée) ; « Je n'y suis pas encore allé·e » → `saved` (false) ; anciennes
+réponses « Oui » → `recommended` + `visited` (true). Mapping de la qualification : visité + « Absolument » →
 `recommended` ; visité → `visited` ; « Non » → ignoré ; « Je ne sais plus » → reste `booked`.
 
 ### 6.5 bis Lien d'invitation (2026-11-02, sur le modèle de Happenstance)

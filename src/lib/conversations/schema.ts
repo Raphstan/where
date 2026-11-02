@@ -34,7 +34,8 @@ export type ReplySummary = {
   id: string;
   memberName: string;
   placeName: string;
-  visited: boolean;
+  /** true : visite affirmée ; null : recommandation ; false : pas encore allé·e (voir VisitClaim). */
+  visited: boolean | null;
   reusable: boolean;
   createdAt: string;
 };

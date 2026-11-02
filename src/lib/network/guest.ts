@@ -2,7 +2,7 @@ import "server-only";
 import { StoredCriteriaSchema } from "@/lib/conversations/schema";
 import { looselyEqual } from "@/lib/search/match";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { ownMemorySignals, replySignals, type GuestReply } from "./reply";
+import { ownMemorySignals, replySignals, visitClaim, type GuestReply, type VisitClaim } from "./reply";
 import { consumeQuota } from "@/lib/quota";
 
 /**
@@ -38,6 +38,14 @@ async function recipientByToken(admin: Admin, token: string) {
   return data;
 }
 
+/** Le jeton désigne-t-il un lien privé existant ? (Lecture minimale, avant un appel payant.) */
+export async function tokenExists(token: string): Promise<boolean> {
+  if (!TOKEN.test(token)) return false;
+  const { data, error } = await createAdminClient().from("request_recipients").select("id").eq("token", token).maybeSingle();
+  if (error) throw new Error(error.message);
+  return data !== null;
+}
+
 export async function loadInvitation(token: string): Promise<Invitation | null> {
   if (!TOKEN.test(token)) return null;
   const admin = createAdminClient();
@@ -61,17 +69,45 @@ function exact(value: string): string {
   return value.replace(/[\\%_]/g, (c) => `\\${c}`);
 }
 
-/**
- * Retrouve le lieu par son nom (dans la ville cherchée si elle est connue), sinon le crée.
- * Un lieu est un fait partagé ; ce qui est personnel vit dans signals.
- */
-async function resolvePlace(admin: Admin, name: string, city: string | null): Promise<string> {
-  const { data, error } = await admin.from("places").select("id, city").ilike("name", exact(name)).limit(20);
-  if (error) throw new Error(error.message);
-  const same = data.find((p) => !city || !p.city || looselyEqual(city, p.city));
-  if (same) return same.id;
+type PlaceInput = { name: string; city: string | null; googlePlaceId: string | null; address: string | null };
 
-  const created = await admin.from("places").insert({ name, city }).select("id").single();
+/**
+ * Retrouve le lieu : par son identifiant Google s'il a été choisi parmi les suggestions, sinon par
+ * son nom (dans la ville connue, s'il y en a une). Sinon, le crée. Un lieu est un fait partagé ;
+ * ce qui est personnel vit dans signals.
+ */
+async function resolvePlace(admin: Admin, place: PlaceInput): Promise<string> {
+  if (place.googlePlaceId) {
+    const byId = await admin.from("places").select("id").eq("google_place_id", place.googlePlaceId).limit(1).maybeSingle();
+    if (byId.error) throw new Error(byId.error.message);
+    if (byId.data) return byId.data.id;
+  }
+
+  const { data, error } = await admin.from("places").select("id, city, google_place_id").ilike("name", exact(place.name)).limit(20);
+  if (error) throw new Error(error.message);
+  // Un homonyme déjà rattaché à un autre lieu Google n'est pas le même endroit.
+  const same = data.find(
+    (p) =>
+      (!place.googlePlaceId || !p.google_place_id) && (!place.city || !p.city || looselyEqual(place.city, p.city)),
+  );
+  if (same) {
+    if (place.googlePlaceId) {
+      // Le lieu tapé à la main est enfin identifié : on le complète, sans écraser ce qui est connu.
+      await admin
+        .from("places")
+        .update({ google_place_id: place.googlePlaceId })
+        .eq("id", same.id)
+        .is("google_place_id", null);
+      if (place.city && !same.city) await admin.from("places").update({ city: place.city }).eq("id", same.id).is("city", null);
+    }
+    return same.id;
+  }
+
+  const created = await admin
+    .from("places")
+    .insert({ name: place.name, city: place.city, google_place_id: place.googlePlaceId, address: place.address })
+    .select("id")
+    .single();
   if (created.error) throw new Error(created.error.message);
   return created.data.id;
 }
@@ -136,7 +172,14 @@ export async function submitGuestReply(reply: GuestReply): Promise<SubmitResult>
   const city = criteria.success ? criteria.data.city : null;
   const occasion = criteria.success ? criteria.data.occasion : null;
 
-  const placeId = await resolvePlace(admin, reply.placeName, city);
+  const placeId = await resolvePlace(admin, {
+    name: reply.placeName,
+    // La ville du lieu choisi prime sur celle de la question.
+    city: reply.placeCity ?? city,
+    googlePlaceId: reply.googlePlaceId,
+    address: reply.placeAddress,
+  });
+  const visited = visitClaim(reply);
 
   const inserted = await admin
     .from("request_replies")
@@ -146,7 +189,7 @@ export async function submitGuestReply(reply: GuestReply): Promise<SubmitResult>
       place_id: placeId,
       place_text: reply.placeName,
       place_url: reply.placeUrl,
-      visited: reply.visited === "oui",
+      visited,
       note: reply.note,
       visible_only_to_requester: reply.visibleOnlyToRequester,
       reusable: reply.reusable,
@@ -165,7 +208,7 @@ export async function submitGuestReply(reply: GuestReply): Promise<SubmitResult>
       occasion,
       note: reply.note,
       reusable: reply.reusable,
-      visited: reply.visited,
+      visited,
     }),
   );
   if (signals.error) {
@@ -192,7 +235,7 @@ export type GuestMemoryItem = {
   place: string;
   city: string | null;
   note: string | null;
-  visited: boolean;
+  visited: VisitClaim;
   createdAt: string;
 };
 

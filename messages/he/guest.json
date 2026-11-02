@@ -10,17 +10,9 @@
   "reusableNo": "רק {requester} רואה את התשובה שלך. היא משמשת רק לשאלה הזו ולא תישמר.",
   "another": "להמליץ על מקום נוסף",
   "placeName": "שם המקום",
-  "placeUrlPlaceholder": "קישור Google Maps / Instagram / TikTok (לא חובה)",
-  "placeUrlLabel": "קישור Google Maps, Instagram או TikTok",
-  "visitedQuestion": "באמת היית שם?",
-  "visitedYes": "כן",
-  "visitedNo": "לא, אבל שמעתי עליו",
-  "note": "למה כדאי ללכת לשם?",
-  "visibleOnly": "גלוי רק ל־{requester}",
-  "allowReuse": "לאפשר ל־WH3RE להשתמש בהמלצה הזו שוב בשביל {requester} בעתיד",
+  "note": "למה את/ה ממליץ/ה עליו?",
   "submit": "שליחת ההמלצה שלי",
   "errors": {
-    "visitedRequired": "צריך לסמן אם באמת היית שם.",
     "invalidToken": "הקישור הפרטי הזה לא תקין.",
     "expired": "הקישור הפרטי הזה כבר לא בתוקף.",
     "placeNameRequired": "צריך לכתוב את שם המקום.",
@@ -44,7 +36,8 @@
     "askLead": "אפשר לשמור את הזיכרון הזה, להוסיף את האנשים שסומכים עליהם, ולשאול את השאלה הראשונה.",
     "keep": "לשמור את הזיכרון שלי ב־WH3RE",
     "notNow": "לא עכשיו",
-    "loading": "מחפש את ההמלצות שלך…"
+    "loading": "מחפש את ההמלצות שלך…",
+    "recommended": "מומלץ"
   },
   "join": {
     "metaTitle": "ברוכים הבאים",
@@ -76,5 +69,13 @@
   "inviteLead": "אפשר לשתף 2 או 3 מקומות שבאמת אוהבים. לוקח 20 שניות, בלי חשבון.",
   "yourName": "השם הפרטי שלך",
   "inviteTitleNoName": "מישהו קרוב רוצה לדעת מה המקומות האהובים עליך.",
-  "ogTitleNoName": "מישהו קרוב מבקש ממך המלצה"
+  "ogTitleNoName": "מישהו קרוב מבקש ממך המלצה",
+  "searchPlaceholder": "חיפוש מקום או הדבקת קישור",
+  "suggestions": "מקומות מוצעים",
+  "change": "שינוי",
+  "linkAdded": "הקישור נוסף: {link}",
+  "removeLink": "הסרה",
+  "notYet": "עוד לא הייתי שם",
+  "addNote": "הוספת מילה (לא חובה)",
+  "privateTo": "רק {requester} רואה את התשובה שלך."
 }

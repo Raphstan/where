@@ -1,5 +1,6 @@
 import "server-only";
 import { z } from "zod";
+import { googleFetch } from "@/lib/google/budget";
 import type { Criteria } from "@/lib/ask/schema";
 import { discoveryConfidence } from "./confidence";
 import { matchedVibes } from "./match";
@@ -64,7 +65,7 @@ export type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
 export async function searchGooglePlaces(
   query: string,
   apiKey: string,
-  fetchImpl: FetchLike = fetch,
+  fetchImpl: FetchLike = googleFetch,
   /** Langue des noms et types renvoyés par Google (celle de l'utilisateur). */
   languageCode = "fr",
 ): Promise<GooglePlace[]> {
@@ -148,7 +149,7 @@ const StatusSchema = z.object({ businessStatus: z.string().optional() });
  * Le lieu est-il définitivement fermé selon Google ? Toute erreur donne « non » : on n'écarte
  * jamais un lieu sur une information absente. Réponse gardée un jour (cache des fetch de Next).
  */
-export async function isPermanentlyClosed(googlePlaceId: string, apiKey: string, fetchImpl: FetchLike = fetch): Promise<boolean> {
+export async function isPermanentlyClosed(googlePlaceId: string, apiKey: string, fetchImpl: FetchLike = googleFetch): Promise<boolean> {
   if (!/^[A-Za-z0-9_-]{10,300}$/.test(googlePlaceId)) return false;
   try {
     const res = await fetchImpl(`${PLACE_DETAILS_URL}${googlePlaceId}`, {
