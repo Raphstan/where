@@ -3,6 +3,8 @@
   "eyebrow": "Welcome",
   "title": "Sign in with your email.",
   "lead": "We send you a link. You click, you’re in.",
+  "titleGoogle": "Sign in.",
+  "leadGoogle": "With Google, or with a link sent to your email. Never a password.",
   "linkExpired": "This link no longer works. Ask for a new one below.",
   "privacy": "Private by default. Nothing is published, and no message is sent without your confirmation.",
   "form": {
@@ -23,5 +25,10 @@
   "waitlist": {
     "text": "The beta is private for now. <b>{email}</b> doesn’t have an invite yet: I’ll write as soon as your spot is ready.",
     "join": "Not on the list yet? <link>Join it on wh3re.com</link>."
+  },
+  "google": {
+    "or": "or",
+    "googleFailed": "Signing in with Google didn’t work. Try again, or get a link by email.",
+    "unavailable": "The Google button won’t load. Get a link by email instead."
   }
 }

@@ -34,7 +34,7 @@ personnes auxquelles tu fais confiance. »
 | Données / Auth | Supabase (Postgres + Auth + Row Level Security) |
 | Déploiement | Vercel |
 | IA | API Anthropic (compréhension des questions, classification) |
-| Email entrant | Resend (webhook inbound, transfert d'email uniquement, pas de Gmail OAuth au MVP) |
+| Email entrant | Resend (webhook inbound, transfert d'email) ; Gmail OAuth pour un import unique pendant la bêta (§ 5) |
 | Lieux publics | Google Places API (New), Text Search, uniquement pour la carte « Découverte » (clé serveur) |
 
 Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, shadcn, etc.).
@@ -91,7 +91,8 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
   entrant ; page invité sans compte, y compris « Garder ma mémoire WH3RE » qui relie le compte du proche
   et copie ses réponses dans sa mémoire, `src/lib/network/guest.ts`) vivent côté serveur, toujours
   restreintes au jeton. Jamais de `NEXT_PUBLIC_` pour cette clé.
-- **Auth** : lien magique par email uniquement (`@supabase/ssr`). La session est rafraîchie dans
+- **Auth** : lien magique par email, ou « Continuer avec Google » (jeton Google Identity Services →
+  `signInWithIdToken`, après la même décision d'accès à la bêta `ensureBetaAccount`) (`@supabase/ssr`). La session est rafraîchie dans
   `src/proxy.ts` (Next 16 : le middleware s'appelle `proxy`). Les routes de l'app sont protégées là.
   Tout composant serveur qui lit la session appelle `await connection()` avant (Cache Components).
 - **API Anthropic** : SDK officiel `@anthropic-ai/sdk`, modèle `claude-sonnet-5`, sorties structurées via
@@ -176,10 +177,12 @@ Chaque couleur a une variante claire `-2` pour les fonds. Pas de couleur hors pa
   « Réserver avec Google », « Réserver avec Booking », « Ouvrir le site du restaurant », « Appeler »,
   « Envoyer un WhatsApp », « Voir dans Google Maps »). On n'affiche que les moyens réellement disponibles
   pour le lieu : « Ce lieu ne propose ni Ontopo ni Tabit — je ne t'affiche que ce qui existe vraiment. »
-- **Pas de Gmail OAuth au MVP.** Import uniquement par transfert d'email vers une adresse dédiée
+- **Gmail OAuth : permis pour la bêta (décision du 2026-11-02)**, pour un import unique des réservations
+  à l'onboarding (application Google en mode test, 100 testeurs au plus). Le transfert d'email reste la
+  voie pour la suite. Avant cette décision : import uniquement par transfert d'email vers une adresse dédiée
   (la maquette propose « Je préfère transférer seulement certains emails » → « Adresse de transfert :
   inbox@where.app »). Les écrans Gmail de la maquette servent de référence pour l'écran de résultats
-  d'import et la qualification, pas pour une connexion OAuth.
+  d'import et la qualification.
 - **Envoi WhatsApp au MVP** : lien `wa.me` pré-rempli que l'utilisateur ouvre lui-même après l'écran de
   confirmation. Pas de bot WhatsApp, pas d'API Business.
 

@@ -36,6 +36,25 @@ Resend pour la landing).
    - Sujet : `Ton lien WH3RE · Your WH3RE sign-in link`
    - Corps : coller tout `supabase/templates/magic_link.html`.
 
+## 2 bis. Google : « Continuer avec Google »
+
+Facultatif : sans ID client, la page de connexion ne propose que le lien magique.
+
+1. console.cloud.google.com → nouveau projet « WH3RE » → APIs & Services → OAuth consent screen :
+   - Type : External ; nom de l'appli : WH3RE ; email d'assistance : hello@wh3re.com ;
+     domaine autorisé : `wh3re.com` ; liens vers `https://app.wh3re.com/privacy-policy` et `/terms`.
+   - Scopes : `openid`, `email`, `profile` seulement (aucune validation Google nécessaire pour ceux-là).
+   - Publishing status : **In production** (sinon seuls les testeurs listés peuvent se connecter).
+2. Credentials → Create credentials → OAuth client ID → **Web application** :
+   - Authorized JavaScript origins : `https://app.wh3re.com` (et `http://localhost:3000` pour le local).
+   - Pas de redirect URI : le bouton fonctionne en fenêtre surgissante.
+3. Supabase → Authentication → Sign In / Providers → **Google** : activé, coller l'ID client dans
+   « Client IDs » (le secret n'est pas utilisé par ce flux, mais le champ peut être exigé : coller celui
+   du client). Laisser « Allow new users to sign up » désactivé : c'est toujours le serveur qui crée les
+   comptes (liste `beta_access` ou lien d'un proche).
+4. Vercel → Settings → Environment Variables : `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (Production), puis redéployer
+   (variable publique : elle est figée au build).
+
 ## 3. Resend : envoi des emails de connexion (SMTP)
 
 Sans SMTP à soi, Supabase n'envoie que quelques emails par heure, depuis une adresse générique.

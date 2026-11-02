@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { Suspense } from "react";
 import { safeNextPath } from "@/lib/auth/redirect";
 import { TERMS_COOKIE, termsAcceptedOnDevice } from "@/lib/auth/terms";
+import { publicEnv } from "@/lib/env";
 import { Wordmark } from "@/components/shell/wordmark";
 import { MagicLinkForm } from "./magic-link-form";
 
@@ -32,7 +33,11 @@ async function LoginCard({ searchParams }: { searchParams: SearchParams }) {
         </p>
       ) : null}
       <div className="rounded-card border border-line bg-paper-2 p-4 shadow-soft">
-        <MagicLinkForm next={next === "/chat" ? undefined : next} termsOnDevice={termsOnDevice} />
+        <MagicLinkForm
+          next={next === "/chat" ? undefined : next}
+          termsOnDevice={termsOnDevice}
+          googleClientId={publicEnv.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        />
       </div>
     </>
   );
@@ -40,6 +45,7 @@ async function LoginCard({ searchParams }: { searchParams: SearchParams }) {
 
 export default function LoginPage(props: PageProps<"/[locale]/login">) {
   const t = useTranslations("login");
+  const google = !!publicEnv.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   return (
     <div className="hero flex min-h-dvh flex-1 flex-col items-center justify-center px-[22px] py-10">
       <div className="flex w-full max-w-[420px] flex-col gap-[18px]">
@@ -47,10 +53,10 @@ export default function LoginPage(props: PageProps<"/[locale]/login">) {
         <div className="flex flex-col gap-2">
           <p className="text-[13px] font-semibold text-muted">{t("eyebrow")}</p>
           <h1 className="font-display text-[28px] font-bold leading-[1.12] tracking-[-0.02em]">
-            {t("title")}
+            {google ? t("titleGoogle") : t("title")}
           </h1>
           <p className="text-[15px] leading-normal text-muted">
-            {t("lead")}
+            {google ? t("leadGoogle") : t("lead")}
           </p>
         </div>
         <Suspense

@@ -3,6 +3,8 @@
   "eyebrow": "Bienvenue",
   "title": "Connecte-toi par email.",
   "lead": "On t'envoie un lien. Tu cliques, tu es dedans.",
+  "titleGoogle": "Connecte-toi.",
+  "leadGoogle": "Avec Google, ou avec un lien reçu par email. Jamais de mot de passe.",
   "linkExpired": "Ce lien ne fonctionne plus. Demande-en un nouveau ci-dessous.",
   "privacy": "Privé par défaut. Rien n'est publié, aucun message n'est envoyé sans ta confirmation.",
   "form": {
@@ -23,5 +25,10 @@
   "waitlist": {
     "text": "La bêta est privée pour l’instant. <b>{email}</b> n’a pas encore d’invitation : je t’écris dès que ta place est prête.",
     "join": "Pas encore inscrit·e ? <link>Rejoins la liste sur wh3re.com</link>."
+  },
+  "google": {
+    "or": "ou",
+    "googleFailed": "La connexion avec Google n’a pas marché. Réessaie, ou reçois un lien par email.",
+    "unavailable": "Le bouton Google ne se charge pas. Reçois un lien par email à la place."
   }
 }

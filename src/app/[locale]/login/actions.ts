@@ -6,6 +6,7 @@ import { LEGAL_VERSION } from "@/content/legal";
 import { apiLocale } from "@/i18n/request-locale";
 import { ensureBetaAccount } from "@/lib/auth/beta-access";
 import { TERMS_COOKIE } from "@/lib/auth/terms";
+import { verifyGoogleIdToken } from "@/lib/auth/google";
 import { NEXT_COOKIE, NEXT_COOKIE_MAX_AGE, safeNextPath } from "@/lib/auth/redirect";
 import { publicEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
@@ -89,4 +90,57 @@ export async function sendMagicLink(
   }
 
   return { status: "sent", email };
+}
+
+export type GoogleSignInResult =
+  | { status: "signedIn"; next: string }
+  | { status: "waitlist"; email: string }
+  | { status: "error"; error: "googleFailed" | "termsRequired" };
+
+const googleSchema = z.object({
+  credential: z.string().min(1).max(8192),
+  nonce: z.string().min(16).max(128),
+  next: z.string().optional(),
+  terms: z.boolean(),
+});
+
+/**
+ * « Continuer avec Google » : le bouton Google (Google Identity Services) remet un jeton d'identité.
+ * Mêmes règles que le lien magique : l'email (vérifié par Google) passe par ensureBetaAccount, qui
+ * décide l'accès à la bêta et crée le compte d'une personne invitée. Supabase relie ensuite
+ * l'identité Google au compte qui porte le même email (signInWithIdToken).
+ */
+export async function signInWithGoogle(input: z.input<typeof googleSchema>): Promise<GoogleSignInResult> {
+  const parsed = googleSchema.safeParse(input);
+  const clientId = publicEnv.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  if (!parsed.success || !clientId) return { status: "error", error: "googleFailed" };
+  const { credential, nonce, terms } = parsed.data;
+  const next = parsed.data.next ? safeNextPath(parsed.data.next) : undefined;
+
+  const email = await verifyGoogleIdToken(credential, clientId).catch(() => null);
+  if (!email) return { status: "error", error: "googleFailed" };
+
+  let access;
+  try {
+    access = await ensureBetaAccount(email, next, terms, await apiLocale());
+  } catch {
+    return { status: "error", error: "googleFailed" };
+  }
+  if (access === "waitlist") return { status: "waitlist", email };
+  if (access === "termsRequired") return { status: "error", error: "termsRequired" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithIdToken({ provider: "google", token: credential, nonce });
+  if (error) return { status: "error", error: "googleFailed" };
+
+  if (terms) {
+    (await cookies()).set(TERMS_COOKIE, LEGAL_VERSION, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 365,
+      path: "/",
+    });
+  }
+  return { status: "signedIn", next: next ?? "/chat" };
 }
