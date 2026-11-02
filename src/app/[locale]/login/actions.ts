@@ -117,8 +117,9 @@ export async function signInWithGoogle(input: z.input<typeof googleSchema>): Pro
   const { credential, nonce, terms } = parsed.data;
   const next = parsed.data.next ? safeNextPath(parsed.data.next) : undefined;
 
-  const email = await verifyGoogleIdToken(credential, clientId).catch(() => null);
-  if (!email) return { status: "error", error: "googleFailed" };
+  const identity = await verifyGoogleIdToken(credential, clientId).catch(() => null);
+  if (!identity) return { status: "error", error: "googleFailed" };
+  const { email } = identity;
 
   let access;
   try {
@@ -130,8 +131,17 @@ export async function signInWithGoogle(input: z.input<typeof googleSchema>): Pro
   if (access === "termsRequired") return { status: "error", error: "termsRequired" };
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithIdToken({ provider: "google", token: credential, nonce });
+  const { data, error } = await supabase.auth.signInWithIdToken({ provider: "google", token: credential, nonce });
   if (error) return { status: "error", error: "googleFailed" };
+
+  // Prénom donné par Google, seulement s'il manque : c'est lui que voient les proches sur leur lien.
+  if (identity.firstName && data.user) {
+    await supabase
+      .from("users")
+      .update({ display_name: identity.firstName })
+      .eq("id", data.user.id)
+      .or("display_name.is.null,display_name.eq.");
+  }
 
   if (terms) {
     (await cookies()).set(TERMS_COOKIE, LEGAL_VERSION, {

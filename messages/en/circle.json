@@ -46,7 +46,8 @@
     "notFound": "Person not found.",
     "invalidDomains": "Invalid topics.",
     "saveChoiceFailed": "I can’t save this choice right now.",
-    "inviteFailed": "Couldn’t create the link. Try again in a moment."
+    "inviteFailed": "Couldn’t create the link. Try again in a moment.",
+    "nameRequired": "Add your first name: your friend will see it when they open the link."
   },
   "empty": {
     "title": "Your circle is empty for now.",
@@ -61,6 +62,10 @@
     "manual": "Add by hand, with their number",
     "message": "Hey! I’m keeping my friends’ best places on WH3RE. Can you give me your 2 or 3 favorite spots? Takes 20 seconds, no account:",
     "question": "Your favorite places",
-    "subject": "Your favorite places?"
+    "subject": "Your favorite places?",
+    "nameTitle": "First, your name",
+    "nameLead": "Your friend sees it when they open the link, so they know it’s from you.",
+    "namePlaceholder": "Your first name",
+    "nameSubmit": "Continue"
   }
 }

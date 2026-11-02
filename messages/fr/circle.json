@@ -46,7 +46,8 @@
     "notFound": "Personne introuvable.",
     "invalidDomains": "Domaines invalides.",
     "saveChoiceFailed": "Je n’arrive pas à enregistrer ce choix.",
-    "inviteFailed": "Je n’arrive pas à créer le lien. Réessaie dans un instant."
+    "inviteFailed": "Je n’arrive pas à créer le lien. Réessaie dans un instant.",
+    "nameRequired": "Indique ton prénom : ton proche le verra en ouvrant le lien."
   },
   "empty": {
     "title": "Ton cercle est vide pour l’instant.",
@@ -61,6 +62,10 @@
     "manual": "Ajouter à la main, avec son numéro",
     "message": "Salut ! Je garde les meilleures adresses de mes proches sur WH3RE. Tu me donnes tes 2 ou 3 lieux préférés ? Ça prend 20 secondes, sans compte :",
     "question": "Tes adresses préférées",
-    "subject": "Tes adresses préférées ?"
+    "subject": "Tes adresses préférées ?",
+    "nameTitle": "D’abord, ton prénom",
+    "nameLead": "Ton proche le verra en ouvrant le lien, pour savoir que ça vient de toi.",
+    "namePlaceholder": "Ton prénom",
+    "nameSubmit": "Continuer"
   }
 }

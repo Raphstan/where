@@ -16,7 +16,11 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/r/[token
   // Aperçu WhatsApp : seulement le prénom du demandeur, jamais la question (elle est déjà dans le message).
   const invitation = await loadInvitation(token).catch(() => null);
   const requester = invitation?.requesterName ?? t("requesterFallback");
-  const title = invitation ? t("ogTitle", { requester }) : t("metaTitle");
+  const title = !invitation
+    ? t("metaTitle")
+    : invitation.requesterName
+      ? t("ogTitle", { requester })
+      : t("ogTitleNoName");
   return {
     title: t("metaTitle"),
     openGraph: { title, description: t("ogDescription"), images: [{ url: "/og.png", width: 1200, height: 630 }] },
@@ -41,7 +45,11 @@ async function Invitation({ token }: { token: string }) {
   return (
     <>
       <h1 className="font-display text-[21px] font-bold leading-tight">
-        {invitation.kind === "invite" ? t("inviteTitle", { requester }) : invitation.message}
+        {invitation.kind !== "invite"
+          ? invitation.message
+          : invitation.requesterName
+            ? t("inviteTitle", { requester: invitation.requesterName })
+            : t("inviteTitleNoName")}
       </h1>
       {invitation.kind === "invite" ? <p className="-mt-1.5 text-[13.5px] text-ink-2">{t("inviteLead")}</p> : null}
       <GuestForm token={token} memberName={invitation.memberName} requester={requester} />

@@ -96,6 +96,22 @@ function BigLink({ href, icon, label, onUse }: { href: string | null; icon: Reac
   );
 }
 
+type InviteResult = { kind: "ok"; invite: InviteResponse } | { kind: "name_required" } | { kind: "failed"; error: Error };
+
+/** Crée le lien d'invitation ; 409 name_required tant que le demandeur n'a pas de prénom. */
+async function requestInvite(name?: string): Promise<InviteResult> {
+  const res = await fetch("/api/circle/invite", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(name ? { name } : {}),
+  }).catch(() => null);
+  const json: unknown = res ? await res.json().catch(() => null) : null;
+  if (res?.ok && json && typeof json === "object" && "waUrl" in json) return { kind: "ok", invite: json as InviteResponse };
+  const err = (json as { error?: { code?: string; message?: string } } | null)?.error;
+  if (err?.code === "name_required") return { kind: "name_required" };
+  return { kind: "failed", error: new Error(err?.message ?? "") };
+}
+
 /**
  * Feuille « Ajouter une personne », sur le modèle de Happenstance : un lien d'invitation est préparé
  * dès l'ouverture, et chaque bouton ouvre directement WhatsApp ou l'email avec le message prêt.
@@ -110,23 +126,70 @@ function InviteBody({ onDone, onSent, onCopied }: { onDone: (name: string) => vo
   const errorText = useErrorText();
   const [failed, setFailed] = useState<unknown>(null);
 
+  // Sans prénom, le proche verrait « la personne qui te demande » : on le demande d'abord.
+  const [needName, setNeedName] = useState(false);
+  const [sending, setSending] = useState(false);
+
   // Un seul lien par ouverture de la feuille (l'effet ne dépend de rien).
   useEffect(() => {
     let cancelled = false;
-    call<InviteResponse>("/api/circle/invite", "POST")
-      .then((r) => {
-        if (!cancelled) setInvite(r);
-      })
-      .catch((e: unknown) => {
-        if (!cancelled) setFailed(e ?? new Error());
-      });
+    void requestInvite().then((r) => {
+      if (cancelled) return;
+      if (r.kind === "ok") setInvite(r.invite);
+      else if (r.kind === "name_required") setNeedName(true);
+      else setFailed(r.error);
+    });
     return () => {
       cancelled = true;
     };
   }, []);
+
+  async function submitName(name: string) {
+    setSending(true);
+    const r = await requestInvite(name);
+    setSending(false);
+    if (r.kind === "ok") {
+      setInvite(r.invite);
+      setNeedName(false);
+      setFailed(null);
+    } else if (r.kind === "failed") setFailed(r.error);
+  }
   const error = failed ? errorText(failed) : null;
 
   if (manual) return <MemberForm channel={manual.channel} prefill={manual.prefill} onDone={onDone} />;
+
+  if (needName) {
+    return (
+      <form
+        className="flex flex-col gap-2.5"
+        onSubmit={async (e: FormEvent<HTMLFormElement>) => {
+          e.preventDefault();
+          const name = String(new FormData(e.currentTarget).get("name") ?? "").trim();
+          if (name && !sending) await submitName(name);
+        }}
+      >
+        <p className="font-bold">{t("invite.nameTitle")}</p>
+        <p className="text-[13.5px] text-ink-2">{t("invite.nameLead")}</p>
+        <input
+          name="name"
+          required
+          maxLength={60}
+          autoComplete="given-name"
+          placeholder={t("invite.namePlaceholder")}
+          aria-label={t("invite.namePlaceholder")}
+          className={INPUT}
+        />
+        {error ? <p className="text-[12.5px] text-orange-ink">{error}</p> : null}
+        <button
+          type="submit"
+          disabled={sending}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-orange px-5 text-[14px] font-bold text-white shadow-orange disabled:opacity-50"
+        >
+          {t("invite.nameSubmit")}
+        </button>
+      </form>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-3">

@@ -74,5 +74,7 @@
   "ogDescription": "Répondre en 20 secondes, sans installer d’appli",
   "inviteTitle": "{requester} aimerait connaître tes adresses préférées.",
   "inviteLead": "Donne 2 ou 3 lieux que tu aimes vraiment. Ça prend 20 secondes, sans compte.",
-  "yourName": "Ton prénom"
+  "yourName": "Ton prénom",
+  "inviteTitleNoName": "Un proche aimerait connaître tes adresses préférées.",
+  "ogTitleNoName": "Un proche te demande un conseil"
 }

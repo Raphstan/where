@@ -74,5 +74,7 @@
   "ogDescription": "Answer in 20 seconds, no app to install",
   "inviteTitle": "{requester} would love to know your favorite places.",
   "inviteLead": "Share 2 or 3 spots you truly love. Takes 20 seconds, no account.",
-  "yourName": "Your first name"
+  "yourName": "Your first name",
+  "inviteTitleNoName": "A friend would love to know your favorite places.",
+  "ogTitleNoName": "A friend is asking for your advice"
 }
