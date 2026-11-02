@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { apiLocale } from "@/i18n/request-locale";
 import { getServerEnv } from "@/lib/env.server";
-import { suggestPlaces, type PlaceSuggestion } from "@/lib/google/autocomplete";
+import { nearFromHeaders, suggestPlaces, type PlaceSuggestion } from "@/lib/google/autocomplete";
 import { tokenExists } from "@/lib/network/guest";
 import { consumeQuota } from "@/lib/quota";
 import { findSharedLink, parseMapsUrl } from "@/lib/saves/link";
@@ -49,6 +49,6 @@ export async function POST(request: NextRequest) {
   }
 
   const locale = await apiLocale();
-  const suggestions = await suggestPlaces(q, apiKey, locale);
+  const suggestions = await suggestPlaces(q, apiKey, locale, nearFromHeaders(request.headers));
   return NextResponse.json<SuggestResponse>({ suggestions });
 }

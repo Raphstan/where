@@ -44,6 +44,19 @@ const ResponseSchema = z.object({
 
 export type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
 
+/** Position approximative du proche (déduite de son adresse IP), pour privilégier les lieux proches. */
+export type Near = { latitude: number; longitude: number };
+
+/** Lit la position que Vercel déduit de l'IP du visiteur ; null hors de Vercel ou si elle est invalide. */
+export function nearFromHeaders(headers: Headers): Near | null {
+  const latitude = Number(headers.get("x-vercel-ip-latitude"));
+  const longitude = Number(headers.get("x-vercel-ip-longitude"));
+  if (!headers.get("x-vercel-ip-latitude") || !headers.get("x-vercel-ip-longitude")) return null;
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+  if (Math.abs(latitude) > 90 || Math.abs(longitude) > 180) return null;
+  return { latitude, longitude };
+}
+
 /**
  * Jusqu'à 5 lieux pour ce texte. Toute erreur (clé absente, budget épuisé, réseau) donne une liste
  * vide : la saisie libre reste toujours possible.
@@ -52,6 +65,7 @@ export async function suggestPlaces(
   input: string,
   apiKey: string,
   languageCode: string,
+  near: Near | null = null,
   fetchImpl: FetchLike = googleFetch,
 ): Promise<PlaceSuggestion[]> {
   const text = input.trim();
@@ -61,7 +75,15 @@ export async function suggestPlaces(
       method: "POST",
       headers: { "content-type": "application/json", "X-Goog-Api-Key": apiKey },
       // Lieux seulement (pas d'adresses de rue ni de villes seules) : on recommande un endroit.
-      body: JSON.stringify({ input: text, languageCode, includePureServiceAreaBusinesses: false, includedPrimaryTypes: ["establishment"] }),
+      body: JSON.stringify({
+        input: text,
+        languageCode,
+        includePureServiceAreaBusinesses: false,
+        includedPrimaryTypes: ["establishment"],
+        // Sans position, Google ne sait pas où est le proche : « Port Said » donnerait l'Égypte.
+        // Une préférence (50 km), pas un filtre : un lieu à Paris reste trouvable depuis Tel Aviv.
+        ...(near ? { locationBias: { circle: { center: near, radius: 50_000 } } } : {}),
+      }),
       signal: AbortSignal.timeout(3000),
     });
     if (!res.ok) return [];
