@@ -45,10 +45,22 @@
     "saveMemberFailed": "Je n’arrive pas à enregistrer cette personne.",
     "notFound": "Personne introuvable.",
     "invalidDomains": "Domaines invalides.",
-    "saveChoiceFailed": "Je n’arrive pas à enregistrer ce choix."
+    "saveChoiceFailed": "Je n’arrive pas à enregistrer ce choix.",
+    "inviteFailed": "Je n’arrive pas à créer le lien. Réessaie dans un instant."
   },
   "empty": {
     "title": "Ton cercle est vide pour l’instant.",
     "lead": "Ajoute deux ou trois personnes qui ont les mêmes goûts et les mêmes standards que toi : c’est d’elles que viendront tes meilleures réponses. Elles n’en sauront rien."
+  },
+  "invite": {
+    "lead": "Ton proche reçoit un lien. Il te donne ses adresses préférées en 20 secondes, sans compte, et entre dans ton cercle.",
+    "whatsapp": "Inviter sur WhatsApp",
+    "email": "Inviter par email",
+    "copy": "Copier le lien",
+    "copied": "Lien copié",
+    "manual": "Ajouter à la main, avec son numéro",
+    "message": "Salut ! Je garde les meilleures adresses de mes proches sur WH3RE. Tu me donnes tes 2 ou 3 lieux préférés ? Ça prend 20 secondes, sans compte :",
+    "question": "Tes adresses préférées",
+    "subject": "Tes adresses préférées ?"
   }
 }

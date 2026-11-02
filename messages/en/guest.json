@@ -27,7 +27,8 @@
     "placeUrlInvalid": "That link doesn’t look valid.",
     "checkAnswer": "Check your answer.",
     "sendFailed": "Your answer didn’t go through. Try again in a moment.",
-    "quotaExceeded": "You’ve already sent a lot of answers through this link today. Thank you! You can send more tomorrow."
+    "quotaExceeded": "You’ve already sent a lot of answers through this link today. Thank you! You can send more tomorrow.",
+    "nameRequired": "Add your first name, so they know it’s from you."
   },
   "mine": {
     "timesHelped": "This is the <b>{count, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} time</b> you’ve helped {requester} find a place. Want to see what you recommended?",
@@ -70,5 +71,8 @@
     "toChat": "Go to chat"
   },
   "ogTitle": "{requester} is asking for your advice",
-  "ogDescription": "Answer in 20 seconds, no app to install"
+  "ogDescription": "Answer in 20 seconds, no app to install",
+  "inviteTitle": "{requester} would love to know your favorite places.",
+  "inviteLead": "Share 2 or 3 spots you truly love. Takes 20 seconds, no account.",
+  "yourName": "Your first name"
 }

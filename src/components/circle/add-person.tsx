@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import type { InviteResponse } from "@/app/api/circle/invite/route";
+import { ForwardMailLogo, WhatsAppLogo } from "@/components/sources/brand-logos";
 import { call, useErrorText } from "@/components/privacy/confirm-sheet";
 import { usePanel } from "@/components/shell/panel-context";
 import { useToast } from "@/components/shell/toast";
@@ -82,54 +84,91 @@ function MemberForm({ channel, prefill, onDone }: { channel: Channel; prefill: P
   );
 }
 
-function Choice({ label, onClick }: { label: string; onClick: () => void }) {
+const BIG =
+  "flex min-h-[54px] w-full items-center gap-3 rounded-card border-[1.5px] border-line bg-paper-2 px-4 text-start text-[15px] font-bold text-ink transition hover:border-ink aria-disabled:pointer-events-none aria-disabled:opacity-50";
+
+function BigLink({ href, icon, label, onUse }: { href: string | null; icon: ReactNode; label: string; onUse: () => void }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex w-full items-center gap-3.5 rounded-card border-[1.5px] border-line bg-paper-2 p-4 text-start transition hover:-translate-y-px hover:border-ink"
-    >
-      <span className="font-bold">{label}</span>
-      <span aria-hidden className="ms-auto text-soft inline-block rtl:-scale-x-100">
-        ›
-      </span>
-    </button>
+    <a href={href ?? undefined} aria-disabled={!href} onClick={onUse} className={BIG}>
+      <span className="inline-flex size-8 shrink-0 items-center justify-center [&>svg]:size-[22px]">{icon}</span>
+      {label}
+    </a>
   );
 }
 
-/** Feuille « Ajouter une personne » (maquette kind 'invite'). Rien n'est envoyé à la personne. */
-function InviteBody({ onDone }: { onDone: (name: string) => void }) {
-  const [step, setStep] = useState<{ channel: Channel; prefill: Prefill } | null>(null);
+/**
+ * Feuille « Ajouter une personne », sur le modèle de Happenstance : un lien d'invitation est préparé
+ * dès l'ouverture, et chaque bouton ouvre directement WhatsApp ou l'email avec le message prêt.
+ * L'utilisateur choisit le contact et envoie lui-même. Le proche entre dans le cercle à sa réponse.
+ * Le formulaire d'origine (prénom, numéro…) reste accessible en dernier recours.
+ */
+function InviteBody({ onDone, onSent, onCopied }: { onDone: (name: string) => void; onSent: () => void; onCopied: () => void }) {
+  const [manual, setManual] = useState<{ channel: Channel; prefill: Prefill } | null>(null);
+  const [invite, setInvite] = useState<InviteResponse | null>(null);
   const contacts = contactsApi();
   const t = useTranslations("circle");
+  const errorText = useErrorText();
+  const [failed, setFailed] = useState<unknown>(null);
+
+  // Un seul lien par ouverture de la feuille (l'effet ne dépend de rien).
+  useEffect(() => {
+    let cancelled = false;
+    call<InviteResponse>("/api/circle/invite", "POST")
+      .then((r) => {
+        if (!cancelled) setInvite(r);
+      })
+      .catch((e: unknown) => {
+        if (!cancelled) setFailed(e ?? new Error());
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const error = failed ? errorText(failed) : null;
+
+  if (manual) return <MemberForm channel={manual.channel} prefill={manual.prefill} onDone={onDone} />;
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-[12.5px] text-muted">
-        {t("add.invisible")}
-      </p>
-      {step ? (
-        <MemberForm channel={step.channel} prefill={step.prefill} onDone={onDone} />
-      ) : (
-        <>
-          {contacts ? (
-            <Choice
-              label={t("add.fromContacts")}
-              onClick={async () => {
-                const [c] = await contacts.select(["name", "tel", "email"], { multiple: false }).catch(() => []);
-                if (!c) return;
-                const phone = c.tel?.[0];
-                setStep({
-                  channel: phone || !c.email?.[0] ? "phone" : "email",
-                  prefill: { name: c.name?.[0]?.split(" ")[0], phone, email: c.email?.[0] },
-                });
-              }}
-            />
-          ) : null}
-          <Choice label={t("add.whatsapp")} onClick={() => setStep({ channel: "phone", prefill: {} })} />
-          <Choice label={t("add.email")} onClick={() => setStep({ channel: "email", prefill: {} })} />
-        </>
-      )}
+      <p className="text-[13.5px] text-ink-2">{t("invite.lead")}</p>
+      <BigLink href={invite?.waUrl ?? null} icon={<WhatsAppLogo />} label={t("invite.whatsapp")} onUse={onSent} />
+      <BigLink href={invite?.mailtoUrl ?? null} icon={<ForwardMailLogo />} label={t("invite.email")} onUse={onSent} />
+      <button
+        type="button"
+        disabled={!invite}
+        onClick={async () => {
+          if (!invite) return;
+          try {
+            await navigator.clipboard.writeText(invite.text);
+            onCopied();
+          } catch {
+            window.prompt(t("invite.copy"), invite.link);
+          }
+        }}
+        className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-lilac-2 px-5 text-[14px] font-bold text-ink transition-colors hover:bg-lilac disabled:opacity-50"
+      >
+        {t("invite.copy")}
+      </button>
+      {error ? <p className="text-[12.5px] text-orange-ink">{error}</p> : null}
+      <button
+        type="button"
+        onClick={async () => {
+          if (contacts) {
+            const [c] = await contacts.select(["name", "tel", "email"], { multiple: false }).catch(() => []);
+            if (!c) return;
+            const phone = c.tel?.[0];
+            setManual({
+              channel: phone || !c.email?.[0] ? "phone" : "email",
+              prefill: { name: c.name?.[0]?.split(" ")[0], phone, email: c.email?.[0] },
+            });
+          } else {
+            setManual({ channel: "phone", prefill: {} });
+          }
+        }}
+        className="self-center px-2 py-1 text-[12.5px] font-semibold text-muted underline-offset-4 hover:text-ink hover:underline"
+      >
+        {t("invite.manual")}
+      </button>
     </div>
   );
 }
@@ -153,6 +192,12 @@ export function AddPersonButton() {
                   close();
                   toast.show(t("add.added", { name }));
                   router.refresh();
+                }}
+                // On part vers WhatsApp ou l'email : au retour, la feuille est fermée.
+                onSent={() => window.setTimeout(close, 400)}
+                onCopied={() => {
+                  close();
+                  toast.show(t("invite.copied"));
                 }}
               />
             ),

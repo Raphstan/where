@@ -14,8 +14,10 @@ import { consumeQuota } from "@/lib/quota";
 const TOKEN = /^[0-9a-f]{32}$/;
 
 export type Invitation = {
-  /** Prénom du proche, tel que le demandeur l'a enregistré. */
-  memberName: string;
+  /** 'invite' : lien d'invitation (« tes adresses préférées »), le proche n'est pas encore connu. */
+  kind: "question" | "invite";
+  /** Prénom du proche, tel que le demandeur l'a enregistré ; null pour une invitation sans réponse. */
+  memberName: string | null;
   /** Prénom du demandeur, s'il l'a renseigné. */
   requesterName: string | null;
   message: string;
@@ -28,7 +30,7 @@ async function recipientByToken(admin: Admin, token: string) {
   const { data, error } = await admin
     .from("request_recipients")
     .select(
-      "id, circle_member_id, member:circle_members ( name, member_id ), request:requests ( id, user_id, message, conversation:conversations ( criteria ), requester:users ( display_name ) )",
+      "id, circle_member_id, member:circle_members ( name, member_id ), request:requests ( id, kind, user_id, message, conversation:conversations ( criteria ), requester:users ( display_name ) )",
     )
     .eq("token", token)
     .maybeSingle();
@@ -40,13 +42,14 @@ export async function loadInvitation(token: string): Promise<Invitation | null> 
   if (!TOKEN.test(token)) return null;
   const admin = createAdminClient();
   const r = await recipientByToken(admin, token);
-  if (!r?.request || !r.member) return null;
+  if (!r?.request || (!r.member && r.request.kind !== "invite")) return null;
   const { count } = await admin
     .from("request_replies")
     .select("id", { count: "exact", head: true })
     .eq("recipient_id", r.id);
   return {
-    memberName: r.member.name,
+    kind: r.request.kind === "invite" ? "invite" : "question",
+    memberName: r.member?.name ?? null,
     requesterName: r.request.requester?.display_name?.trim() || null,
     message: r.request.message,
     repliesCount: count ?? 0,
@@ -75,7 +78,43 @@ async function resolvePlace(admin: Admin, name: string, city: string | null): Pr
 
 export type SubmitResult =
   | { ok: true; memberName: string; requesterName: string | null }
-  | { ok: false; reason: "not_found" | "quota_exceeded" };
+  | { ok: false; reason: "not_found" | "quota_exceeded" | "name_required" };
+
+/**
+ * Lien d'invitation : à la première réponse, le proche entre dans le cercle du demandeur sous le
+ * prénom qu'il donne, et le lien lui est rattaché. Les réponses suivantes réutilisent ce proche.
+ */
+async function memberForInvite(
+  admin: Admin,
+  recipientId: string,
+  requesterId: string,
+  guestName: string,
+): Promise<{ id: string; name: string; memberUserId: string | null }> {
+  const created = await admin
+    .from("circle_members")
+    .insert({ user_id: requesterId, name: guestName })
+    .select("id, name")
+    .single();
+  if (created.error) throw new Error(created.error.message);
+  const linked = await admin
+    .from("request_recipients")
+    .update({ circle_member_id: created.data.id })
+    .eq("id", recipientId)
+    .is("circle_member_id", null)
+    .select("id");
+  if (linked.error) throw new Error(linked.error.message);
+  if (linked.data.length > 0) return { id: created.data.id, name: created.data.name, memberUserId: null };
+
+  // Deux envois simultanés : l'autre a gagné, on reprend son proche et on retire le doublon.
+  await admin.from("circle_members").delete().eq("id", created.data.id);
+  const again = await admin
+    .from("request_recipients")
+    .select("circle_member_id, member:circle_members ( name, member_id )")
+    .eq("id", recipientId)
+    .single();
+  if (again.error || !again.data.circle_member_id || !again.data.member) throw new Error("invite_link_race");
+  return { id: again.data.circle_member_id, name: again.data.member.name, memberUserId: again.data.member.member_id };
+}
 
 /**
  * Enregistre la réponse du proche : request_replies, puis les signaux attribués au proche dans la
@@ -84,8 +123,14 @@ export type SubmitResult =
 export async function submitGuestReply(reply: GuestReply): Promise<SubmitResult> {
   const admin = createAdminClient();
   const r = await recipientByToken(admin, reply.token);
-  if (!r?.request || !r.member) return { ok: false, reason: "not_found" };
+  if (!r?.request || (!r.member && r.request.kind !== "invite")) return { ok: false, reason: "not_found" };
+  if (!r.member && !reply.guestName) return { ok: false, reason: "name_required" };
   if (!(await consumeQuota(admin, `token:${reply.token}`, "guest_reply"))) return { ok: false, reason: "quota_exceeded" };
+
+  const member =
+    r.member && r.circle_member_id
+      ? { id: r.circle_member_id, name: r.member.name, memberUserId: r.member.member_id }
+      : await memberForInvite(admin, r.id, r.request.user_id, reply.guestName ?? "");
 
   const criteria = StoredCriteriaSchema.safeParse(r.request.conversation?.criteria);
   const city = criteria.success ? criteria.data.city : null;
@@ -114,8 +159,8 @@ export async function submitGuestReply(reply: GuestReply): Promise<SubmitResult>
     replySignals({
       userId: r.request.user_id,
       placeId,
-      memberId: r.circle_member_id,
-      memberUserId: r.member.member_id,
+      memberId: member.id,
+      memberUserId: member.memberUserId,
       replyId: inserted.data.id,
       occasion,
       note: reply.note,
@@ -132,7 +177,7 @@ export async function submitGuestReply(reply: GuestReply): Promise<SubmitResult>
   const now = new Date().toISOString();
   await admin.from("request_recipients").update({ replied_at: now }).eq("id", r.id);
 
-  return { ok: true, memberName: r.member.name, requesterName: r.request.requester?.display_name?.trim() || null };
+  return { ok: true, memberName: member.name, requesterName: r.request.requester?.display_name?.trim() || null };
 }
 
 /* ---------------------------------------------------------------------------------------------
@@ -172,7 +217,7 @@ export async function loadGuestMemory(token: string): Promise<GuestMemory | null
   if (!TOKEN.test(token)) return null;
   const admin = createAdminClient();
   const r = await recipientByToken(admin, token);
-  if (!r?.request || !r.member) return null;
+  if (!r?.request || !r.member || !r.circle_member_id) return null;
   const replies = await repliesOfMember(admin, r.circle_member_id);
   return {
     requesterName: r.request.requester?.display_name?.trim() || null,
@@ -208,7 +253,7 @@ export async function claimGuestMemory(token: string, userId: string): Promise<C
   if (!TOKEN.test(token)) return { ok: false, reason: "not_found" };
   const admin = createAdminClient();
   const r = await recipientByToken(admin, token);
-  if (!r?.request || !r.member) return { ok: false, reason: "not_found" };
+  if (!r?.request || !r.member || !r.circle_member_id) return { ok: false, reason: "not_found" };
   if (r.request.user_id === userId) return { ok: false, reason: "own_link" };
   if (r.member.member_id && r.member.member_id !== userId) return { ok: false, reason: "claimed_by_other" };
 

@@ -16,6 +16,7 @@ export async function sendGuestReply(_prev: GuestReplyState, form: FormData): Pr
   const t = translator(await apiLocale(), "guest");
   const parsed = GuestReplySchema.safeParse({
     token: form.get("token"),
+    guestName: form.get("guestName") ?? "",
     placeName: form.get("placeName") ?? "",
     placeUrl: form.get("placeUrl") ?? "",
     visited: form.get("visited") ?? undefined,
@@ -31,6 +32,8 @@ export async function sendGuestReply(_prev: GuestReplyState, form: FormData): Pr
         ? "visitedRequired"
         : issue?.path[0] === "token"
           ? "invalidToken"
+          : issue?.path[0] === "guestName"
+            ? "nameRequired"
           : issue?.message === "placeNameRequired" || issue?.message === "placeUrlInvalid"
             ? issue.message
             : "checkAnswer";
@@ -39,7 +42,10 @@ export async function sendGuestReply(_prev: GuestReplyState, form: FormData): Pr
 
   try {
     const result = await submitGuestReply(parsed.data);
-    if (!result.ok) return { status: "error", message: t(result.reason === "quota_exceeded" ? "errors.quotaExceeded" : "errors.expired") };
+    if (!result.ok) {
+      const key = result.reason === "quota_exceeded" ? "quotaExceeded" : result.reason === "name_required" ? "nameRequired" : "expired";
+      return { status: "error", message: t(`errors.${key}`) };
+    }
     return { status: "sent", reusable: parsed.data.reusable, at: Date.now() };
   } catch {
     return { status: "error", message: t("errors.sendFailed") };

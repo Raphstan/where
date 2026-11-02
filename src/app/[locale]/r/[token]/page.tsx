@@ -40,7 +40,10 @@ async function Invitation({ token }: { token: string }) {
   const requester = invitation.requesterName ?? t("requesterFallback");
   return (
     <>
-      <h1 className="font-display text-[21px] font-bold leading-tight">{invitation.message}</h1>
+      <h1 className="font-display text-[21px] font-bold leading-tight">
+        {invitation.kind === "invite" ? t("inviteTitle", { requester }) : invitation.message}
+      </h1>
+      {invitation.kind === "invite" ? <p className="-mt-1.5 text-[13.5px] text-ink-2">{t("inviteLead")}</p> : null}
       <GuestForm token={token} memberName={invitation.memberName} requester={requester} />
     </>
   );

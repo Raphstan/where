@@ -27,7 +27,8 @@
     "placeUrlInvalid": "Ce lien ne semble pas valide.",
     "checkAnswer": "Vérifie ta réponse.",
     "sendFailed": "Ta réponse n’est pas partie. Réessaie dans un instant.",
-    "quotaExceeded": "Tu as déjà envoyé beaucoup de réponses par ce lien aujourd’hui. Merci ! Tu pourras en envoyer d’autres demain."
+    "quotaExceeded": "Tu as déjà envoyé beaucoup de réponses par ce lien aujourd’hui. Merci ! Tu pourras en envoyer d’autres demain.",
+    "nameRequired": "Indique ton prénom, pour qu’on sache que ça vient de toi."
   },
   "mine": {
     "timesHelped": "C’est la <b>{count, selectordinal, one {#re} other {#e}} fois</b> que tu aides {requester} à trouver un lieu. Tu veux voir ce que tu lui as recommandé ?",
@@ -70,5 +71,8 @@
     "toChat": "Aller au chat"
   },
   "ogTitle": "{requester} te demande un conseil",
-  "ogDescription": "Répondre en 20 secondes, sans installer d’appli"
+  "ogDescription": "Répondre en 20 secondes, sans installer d’appli",
+  "inviteTitle": "{requester} aimerait connaître tes adresses préférées.",
+  "inviteLead": "Donne 2 ou 3 lieux que tu aimes vraiment. Ça prend 20 secondes, sans compte.",
+  "yourName": "Ton prénom"
 }

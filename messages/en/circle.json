@@ -45,10 +45,22 @@
     "saveMemberFailed": "I can’t save this person right now.",
     "notFound": "Person not found.",
     "invalidDomains": "Invalid topics.",
-    "saveChoiceFailed": "I can’t save this choice right now."
+    "saveChoiceFailed": "I can’t save this choice right now.",
+    "inviteFailed": "Couldn’t create the link. Try again in a moment."
   },
   "empty": {
     "title": "Your circle is empty for now.",
     "lead": "Add two or three people who share your taste and your standards: your best answers will come from them. They won’t know a thing."
+  },
+  "invite": {
+    "lead": "Your friend gets a link. They share their favorite places in 20 seconds, no account needed, and join your circle.",
+    "whatsapp": "Invite on WhatsApp",
+    "email": "Invite by email",
+    "copy": "Copy the link",
+    "copied": "Link copied",
+    "manual": "Add by hand, with their number",
+    "message": "Hey! I’m keeping my friends’ best places on WH3RE. Can you give me your 2 or 3 favorite spots? Takes 20 seconds, no account:",
+    "question": "Your favorite places",
+    "subject": "Your favorite places?"
   }
 }

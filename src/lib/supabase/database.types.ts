@@ -133,14 +133,14 @@ isOneToOne: false
                   ]
                 },"request_recipients": {
                   Row: {
-                    "circle_member_id": string,"created_at": string,"id": string,"replied_at": string | null,"request_id": string,"sent_at": string | null,"token": string
+                    "circle_member_id": string | null,"created_at": string,"id": string,"replied_at": string | null,"request_id": string,"sent_at": string | null,"token": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "circle_member_id": string,"created_at"?: string,"id"?: string,"replied_at"?: string | null,"request_id": string,"sent_at"?: string | null,"token"?: string
+                    "circle_member_id"?: string | null,"created_at"?: string,"id"?: string,"replied_at"?: string | null,"request_id": string,"sent_at"?: string | null,"token"?: string
                   }
                   Update: {
-                    "circle_member_id"?: string,"created_at"?: string,"id"?: string,"replied_at"?: string | null,"request_id"?: string,"sent_at"?: string | null,"token"?: string
+                    "circle_member_id"?: string | null,"created_at"?: string,"id"?: string,"replied_at"?: string | null,"request_id"?: string,"sent_at"?: string | null,"token"?: string
                   }
                   Relationships: [
                     {
@@ -191,14 +191,14 @@ isOneToOne: false
                   ]
                 },"requests": {
                   Row: {
-                    "conversation_id": string | null,"created_at": string,"id": string,"message": string,"question": string,"user_id": string
+                    "conversation_id": string | null,"created_at": string,"id": string,"kind": string,"message": string,"question": string,"user_id": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "conversation_id"?: string | null,"created_at"?: string,"id"?: string,"message": string,"question": string,"user_id": string
+                    "conversation_id"?: string | null,"created_at"?: string,"id"?: string,"kind"?: string,"message": string,"question": string,"user_id": string
                   }
                   Update: {
-                    "conversation_id"?: string | null,"created_at"?: string,"id"?: string,"message"?: string,"question"?: string,"user_id"?: string
+                    "conversation_id"?: string | null,"created_at"?: string,"id"?: string,"kind"?: string,"message"?: string,"question"?: string,"user_id"?: string
                   }
                   Relationships: [
                     {

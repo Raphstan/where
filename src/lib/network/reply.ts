@@ -18,6 +18,8 @@ const optionalText = (max: number) =>
  */
 export const GuestReplySchema = z.object({
   token: z.string().regex(/^[0-9a-f]{32}$/),
+  /** Lien d'invitation seulement : le prénom que le proche donne (on ne le connaît pas encore). */
+  guestName: optionalText(60).optional(),
   placeName: z.string().trim().min(2, "placeNameRequired").max(120),
   placeUrl: optionalText(500).refine((v) => v === null || /^https?:\/\/\S+$/i.test(v), "placeUrlInvalid"),
   visited: z.enum(VISITED_ANSWERS),

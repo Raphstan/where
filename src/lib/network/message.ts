@@ -45,6 +45,11 @@ export function whatsappText(t: T, message: string, link: string): string {
   return `${message.trim()}\n\n${link} · ${t("replyIn20")}`;
 }
 
+/** Texte d'une invitation (« tes adresses préférées ») : le message, puis le lien sur sa propre ligne. */
+export function inviteText(message: string, link: string): string {
+  return `${message.trim()}\n${link}`;
+}
+
 /**
  * Lien wa.me pré-rempli. Le numéro doit être au format international ; sans numéro exploitable,
  * WhatsApp laisse l'utilisateur choisir le contact. Rien n'est envoyé : l'utilisateur ouvre le lien

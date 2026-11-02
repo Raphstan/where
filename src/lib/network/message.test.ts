@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { translator } from "@/i18n/translator";
 import { criteria } from "@/test/search-fixtures";
-import { askedText, draftMessage, joinNames, replyLink, waMeUrl, whatsappText } from "./message";
+import { askedText, draftMessage, joinNames, replyLink, waMeUrl, whatsappText, inviteText } from "./message";
 
 const t = translator("fr", "network");
 
@@ -51,5 +51,13 @@ describe("textes de la maquette", () => {
     );
     expect(askedText(t, ["Sarah"]).text).toContain("dès qu’il ou elle répond");
     expect(askedText(t, ["Sarah", "David"])).toMatchObject({ before: "Envoyé à ", strong: "Sarah et David" });
+  });
+});
+
+describe("inviteText", () => {
+  it("met le lien d'invitation sur sa propre ligne, après le message", () => {
+    expect(inviteText(" Salut ! Tes adresses ? ", "https://app.wh3re.com/r/abc")).toBe(
+      "Salut ! Tes adresses ?\nhttps://app.wh3re.com/r/abc",
+    );
   });
 });

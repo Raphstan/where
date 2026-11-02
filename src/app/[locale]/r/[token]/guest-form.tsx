@@ -32,7 +32,8 @@ function Toggle({ name, label, defaultOn }: { name: string; label: string; defau
 }
 
 /** Formulaire de la page invité (docs/prototype.html, scrSarah). */
-export function GuestForm({ token, memberName, requester }: { token: string; memberName: string; requester: string }) {
+/** `memberName` null : lien d'invitation, le proche donne d'abord son prénom. */
+export function GuestForm({ token, memberName, requester }: { token: string; memberName: string | null; requester: string }) {
   const t = useTranslations("guest");
   const [state, action, pending] = useActionState<GuestReplyState, FormData>(sendGuestReply, { status: "idle" });
   const [visited, setVisited] = useState<"oui" | "non" | null>(null);
@@ -41,6 +42,9 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
   const [placeName, setPlaceName] = useState("");
   const [placeUrl, setPlaceUrl] = useState("");
   const [note, setNote] = useState("");
+  const [guestName, setGuestName] = useState("");
+  const askName = memberName === null && another === null;
+  const name = memberName ?? guestName.trim();
   const [localError, setLocalError] = useState<string | null>(null);
 
   if (state.status === "sent" && another !== state.at) {
@@ -52,7 +56,7 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
             {t("sentTo", { requester })}
           </span>
         </div>
-        <h2 className="font-display text-[21px] font-bold leading-tight">{t("thanks", { name: memberName })}</h2>
+        <h2 className="font-display text-[21px] font-bold leading-tight">{t("thanks", { name })}</h2>
         <p className="text-[12.5px] text-muted">
           {state.reusable ? t("reusableYes", { requester }) : t("reusableNo", { requester })}
         </p>
@@ -87,6 +91,19 @@ export function GuestForm({ token, memberName, requester }: { token: string; mem
       key={another ?? 0}
     >
       <input type="hidden" name="token" value={token} />
+      {askName ? (
+        <input
+          name="guestName"
+          value={guestName}
+          onChange={(e) => setGuestName(e.target.value)}
+          required
+          maxLength={60}
+          autoComplete="given-name"
+          placeholder={t("yourName")}
+          aria-label={t("yourName")}
+          className={INPUT}
+        />
+      ) : null}
       <input
         name="placeName"
         value={placeName}

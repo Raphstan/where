@@ -278,6 +278,15 @@ Mapping des réponses invité vers les preuves : « Oui » → `recommended` + `
 « Non, mais on m'en a parlé » → `saved`. Mapping de la qualification : visité + « Absolument » →
 `recommended` ; visité → `visited` ; « Non » → ignoré ; « Je ne sais plus » → reste `booked`.
 
+### 6.5 bis Lien d'invitation (2026-11-02, sur le modèle de Happenstance)
+
+« Ajouter une personne » ouvre directement WhatsApp ou l'email avec un message prêt et un lien privé
+(`POST /api/circle/invite`, `requests.kind = 'invite'`, destinataire sans proche). L'utilisateur
+choisit le contact et envoie lui-même. Le proche répond sans compte en donnant son prénom : il entre
+alors dans le cercle sous ce prénom (`memberForInvite`, `src/lib/network/guest.ts`), et sa reco devient
+des signaux à son nom. Un lien = une personne. Le formulaire manuel (prénom, numéro…) reste en dernier
+recours, et un proche n'a plus besoin de téléphone ni d'email (wa.me sans numéro laisse choisir).
+
 ### 6.6 Modèle de données implicite
 
 - `profiles` : 1:1 avec `auth.users` ; prénom, ville, préférences apprises (`text[]`).
