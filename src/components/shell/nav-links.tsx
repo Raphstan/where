@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
-import { NAV_ITEMS, isActive } from "@/lib/navigation";
+import { SIDE_ITEMS, TAB_ITEMS, isActive } from "@/lib/navigation";
 import { NAV_ICONS } from "./icons";
 
 /*
@@ -32,8 +32,7 @@ function TabsView({ pathname }: { pathname: string | null }) {
       aria-label={t("aria")}
       className="mobile-tabs flex justify-around border-t border-line bg-paper px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
     >
-      {NAV_ITEMS.map((item) => {
-        if (!item.tab) return null;
+      {TAB_ITEMS.map((item) => {
         const Icon = NAV_ICONS[item.key];
         const active = pathname !== null && isActive(pathname, item.href);
         return (
@@ -71,7 +70,7 @@ function SidebarView({ pathname }: { pathname: string | null }) {
   const t = useTranslations("nav");
   return (
     <nav aria-label={t("aria")} className="flex flex-col gap-0.5">
-      {NAV_ITEMS.map((item) => {
+      {SIDE_ITEMS.map((item) => {
         const active = pathname !== null && isActive(pathname, item.href);
         return (
           <Link

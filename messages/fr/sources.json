@@ -1,6 +1,6 @@
 {
-  "title": "Mes sources",
-  "lead": "Ce que WH3RE peut vraiment lire, et ce qu’il ne lira jamais.",
+  "title": "Connecteurs",
+  "lead": "Branche tes comptes : WH3RE y retrouve les lieux que tu aimes. Tu vois tout, et rien n’entre dans ta mémoire sans ta validation.",
   "soon": "Bientôt",
   "email": {
     "name": "Transfert d’email",
@@ -11,14 +11,15 @@
     "viewAddress": "Voir l’adresse de transfert",
     "disconnect": "Déconnecter",
     "disconnectConfirm": "Déconnecter le transfert d’email ? Les lieux déjà importés restent, sauf si tu les supprimes.",
-    "disconnected": "Transfert d’email déconnecté"
+    "disconnected": "Transfert d’email déconnecté",
+    "badgeOn": "Connecté"
   },
   "later": {
     "sms": "Dépend des autorisations de ton téléphone. Une web app ne peut pas lire librement tes SMS. Utile pour Ontopo, qui confirme souvent par SMS.",
     "whatsapp": "WH3RE ne peut pas lire tes conversations. Il utilise seulement : les messages que tu transfères, les liens envoyés au bot, les réponses reçues via un lien WH3RE, ou une conversation que tu inities.",
     "instagram": "Pas d’accès à tes messages privés ni à tes collections. Tu partages volontairement un post, un Reel, un profil de lieu ou un lien.",
     "tiktok": "Même logique : partage volontaire d’un lien ou d’une vidéo.",
-    "maps": "Liens partagés, données publiques sur les lieux, et intégrations autorisées le cas échéant."
+    "maps": "Tes lieux enregistrés et les avis que tu as écrits, si Google le permet depuis ton pays. Et les liens que tu partages. Rien n’est publié."
   },
   "platforms": {
     "title": "Plateformes de réservation",
@@ -29,5 +30,27 @@
     "unauthenticated": "Connecte-toi pour continuer.",
     "deleteFailed": "Je n’arrive pas à supprimer cette source.",
     "connectFailed": "Je n’arrive pas à connecter cette source."
+  },
+  "accounts": "Tes comptes",
+  "reads": "Ce que WH3RE lit",
+  "short": {
+    "email": "Transfère tes confirmations de réservation.",
+    "gmail": "Retrouve tes réservations passées en un clic.",
+    "contacts": "Propose les personnes de ton cercle.",
+    "maps": "Tes lieux enregistrés et tes avis.",
+    "whatsapp": "Les lieux partagés dans tes groupes d’amis.",
+    "instagram": "Les restaurants et bars que tu enregistres.",
+    "tiktok": "Les lieux des vidéos que tu partages.",
+    "sms": "Les confirmations reçues par SMS."
+  },
+  "next": {
+    "gmail": {
+      "name": "Gmail",
+      "text": "Lit seulement les emails des plateformes de réservation (Ontopo, Tabit, Booking…), jamais tes emails personnels. Chaque réservation trouvée t’est montrée avant d’entrer dans ta mémoire."
+    },
+    "contacts": {
+      "name": "Contacts Google",
+      "text": "Lit les noms de tes contacts pour te suggérer qui ajouter à ton cercle. Personne n’est ajouté ni prévenu sans toi."
+    }
   }
 }

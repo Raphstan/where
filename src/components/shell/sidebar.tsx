@@ -71,7 +71,11 @@ export async function Sidebar() {
         {t("newQuestion")}
       </Link>
 
-      <div className="mt-3.5 flex flex-1 flex-col gap-0.5 overflow-auto">
+      <div className="mt-3.5">
+        <SidebarLinks />
+      </div>
+
+      <div className="mt-2 flex flex-1 flex-col gap-0.5 overflow-auto">
         <div className="px-2.5 pt-3.5 pb-1.5 text-[13px] font-semibold text-muted">
           {t("history")}
         </div>
@@ -79,8 +83,6 @@ export async function Sidebar() {
           <History />
         </Suspense>
       </div>
-
-      <SidebarLinks />
 
       <div className="mt-2.5 flex items-center gap-2.5 border-t border-line px-2 pt-2.5">
         <Suspense fallback={<div className="h-[34px]" />}>

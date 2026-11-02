@@ -3,19 +3,25 @@ export type NavKey = "chat" | "memory" | "circle" | "sources" | "privacy" | "edg
 export type NavItem = {
   key: NavKey;
   href: `/${string}`;
-  /** Présent dans les onglets mobiles (docs/prototype.html, renderTabs) ; sinon desktop seulement. */
-  tab: boolean;
 };
 // Libellés : messages/{langue}/nav.json, `tab.{key}` (onglets mobiles) et `side.{key}` (barre latérale).
 
-export const NAV_ITEMS: readonly NavItem[] = [
-  { key: "chat", href: "/chat", tab: true },
-  { key: "memory", href: "/memory", tab: true },
-  { key: "circle", href: "/circle", tab: true },
-  // Sur mobile, le profil y mène (scrProfile).
-  { key: "sources", href: "/sources", tab: false },
-  { key: "privacy", href: "/privacy", tab: false },
-  { key: "profile", href: "/profile", tab: true },
+/** Onglets du bas, mobile (docs/prototype.html, renderTabs). Le profil mène aux connecteurs et à la confidentialité. */
+export const TAB_ITEMS: readonly NavItem[] = [
+  { key: "chat", href: "/chat" },
+  { key: "memory", href: "/memory" },
+  { key: "circle", href: "/circle" },
+  { key: "profile", href: "/profile" },
+] as const;
+
+/**
+ * Barre latérale, desktop. Structure reprise de Happenstance (2026-11-02) : « Nouvelle question »
+ * (bouton), puis ce qui nourrit le chat, puis les conversations récentes ; le profil est en pied.
+ */
+export const SIDE_ITEMS: readonly NavItem[] = [
+  { key: "sources", href: "/sources" },
+  { key: "circle", href: "/circle" },
+  { key: "memory", href: "/memory" },
 ] as const;
 
 export function isActive(pathname: string, href: string): boolean {
