@@ -6,6 +6,7 @@ import { loadProfile, recentConversations } from "@/lib/profile/store";
 import { createClient } from "@/lib/supabase/server";
 import { HistoryLinks } from "./history-links";
 import { SidebarLinks } from "./nav-links";
+import { GearIcon } from "./icons";
 import { Wordmark } from "./wordmark";
 
 async function currentUser() {
@@ -35,60 +36,54 @@ async function Account() {
   const locale = await getLocale();
   const name = profile?.name ?? t("you");
   return (
-    <>
+    <Link href="/profile" className="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-1.5 py-1.5 transition-colors hover:bg-lilac-2/70">
       <span
         aria-hidden
-        className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-linear-145 from-ink-2 to-ink font-display text-[13px] font-bold text-white"
+        className="inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-orange font-display text-[14px] font-bold text-white"
       >
         {name.charAt(0).toLocaleUpperCase(locale)}
       </span>
-      <div className="min-w-0">
-        <div className="truncate text-[13px] font-bold">{name}</div>
-        <div className="truncate text-[11.5px] text-soft">
-          {profile?.city ? `${profile.city} · ` : ""}
-          <Link href="/profile" className="font-semibold text-blue hover:underline">
-            {t("profile")}
-          </Link>
-        </div>
-      </div>
-    </>
+      <span className="min-w-0 grow">
+        <span className="block truncate text-[13.5px] font-bold text-ink">{name}</span>
+        <span className="block truncate text-[12px] text-soft">{profile?.city ?? t("profile")}</span>
+      </span>
+      <GearIcon className="size-[19px] shrink-0 text-muted" />
+    </Link>
   );
 }
 
-/** Colonne de gauche, desktop uniquement (docs/prototype.html, .side). */
-export async function Sidebar() {
+/** Contenu de la barre latérale : menu, historique, compte. Sert au desktop et au tiroir mobile. */
+export async function SidebarContent() {
   const t = await getTranslations("shell");
   return (
-    <aside className="hidden w-[248px] shrink-0 flex-col overflow-y-auto border-e border-line bg-paper px-3.5 py-[18px] lg:flex">
-      <div className="px-2 pt-1 pb-4">
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="px-2.5 pt-1 pb-4">
         <Wordmark className="text-base" />
       </div>
 
-      <Link
-        href="/chat"
-        className="flex min-h-9 items-center justify-center rounded-full bg-orange px-3.5 text-[13px] font-bold text-white shadow-orange transition-colors hover:bg-[#ee4a10]"
-      >
-        {t("newQuestion")}
-      </Link>
+      <SidebarLinks />
 
-      <div className="mt-3.5">
-        <SidebarLinks />
-      </div>
-
-      <div className="mt-2 flex flex-1 flex-col gap-0.5 overflow-auto">
-        <div className="px-2.5 pt-3.5 pb-1.5 text-[13px] font-semibold text-muted">
-          {t("history")}
-        </div>
+      <div className="mt-3 flex min-h-0 flex-1 flex-col gap-0.5 overflow-auto">
+        <div className="px-2.5 pt-3 pb-1.5 text-[12.5px] font-semibold text-soft">{t("history")}</div>
         <Suspense fallback={null}>
           <History />
         </Suspense>
       </div>
 
-      <div className="mt-2.5 flex items-center gap-2.5 border-t border-line px-2 pt-2.5">
-        <Suspense fallback={<div className="h-[34px]" />}>
+      <div className="mt-2 flex items-center border-t border-line pt-2">
+        <Suspense fallback={<div className="h-[46px]" />}>
           <Account />
         </Suspense>
       </div>
+    </div>
+  );
+}
+
+/** Colonne de gauche, desktop uniquement. */
+export function Sidebar() {
+  return (
+    <aside className="hidden w-[260px] shrink-0 flex-col overflow-hidden border-e border-line bg-paper px-3 py-[18px] lg:flex">
+      <SidebarContent />
     </aside>
   );
 }

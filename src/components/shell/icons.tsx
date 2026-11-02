@@ -75,11 +75,46 @@ export function EdgeIcon(props: IconProps) {
   );
 }
 
+export function NewQuestionIcon(props: IconProps) {
+  return (
+    <svg {...base} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 4H6.5A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20h11a2.5 2.5 0 0 0 2.5-2.5V12" />
+      <path d="M17.8 3.7a1.9 1.9 0 0 1 2.7 2.7L12.6 14.3 9 15l.7-3.6z" />
+    </svg>
+  );
+}
+
+export function PlugIcon(props: IconProps) {
+  return (
+    <svg {...base} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M9 3v4M15 3v4M6.5 7h11v3.5a5.5 5.5 0 0 1-11 0z" />
+      <path d="M12 16v5" />
+    </svg>
+  );
+}
+
+export function GearIcon(props: IconProps) {
+  return (
+    <svg {...base} strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" />
+    </svg>
+  );
+}
+
+export function MenuIcon(props: IconProps) {
+  return (
+    <svg {...base} strokeLinecap="round" {...props}>
+      <path d="M4 7h16M4 12h16M4 17h10" />
+    </svg>
+  );
+}
+
 export const NAV_ICONS: Record<NavKey, (props: IconProps) => React.JSX.Element> = {
   chat: ChatIcon,
   memory: MemoryIcon,
   circle: CircleIcon,
-  sources: SourcesIcon,
+  sources: PlugIcon,
   privacy: LockIcon,
   edge: EdgeIcon,
   profile: ProfileIcon,

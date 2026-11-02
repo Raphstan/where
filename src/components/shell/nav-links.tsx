@@ -4,56 +4,17 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
-import { SIDE_ITEMS, TAB_ITEMS, isActive } from "@/lib/navigation";
-import { NAV_ICONS } from "./icons";
+import { SIDE_ITEMS, isActive } from "@/lib/navigation";
+import { NAV_ICONS, NewQuestionIcon } from "./icons";
 
 /*
  * Le chemin courant n'est connu qu'à la requête pour les routes dynamiques (/chat/[id]) :
- * chaque navigation se pré-rend sans onglet actif, puis s'active sous <Suspense>.
+ * chaque navigation se pré-rend sans lien actif, puis s'active sous <Suspense>.
  */
 
-/** Onglets du bas, mobile uniquement (docs/prototype.html, renderTabs). */
-export function MobileTabs() {
-  return (
-    <Suspense fallback={<TabsView pathname={null} />}>
-      <ActiveTabs />
-    </Suspense>
-  );
-}
+const ROW = "flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-[14px] font-medium transition-colors";
 
-function ActiveTabs() {
-  return <TabsView pathname={usePathname()} />;
-}
-
-function TabsView({ pathname }: { pathname: string | null }) {
-  const t = useTranslations("nav");
-  return (
-    <nav
-      aria-label={t("aria")}
-      className="mobile-tabs flex justify-around border-t border-line bg-paper px-2.5 pt-2 pb-[max(22px,env(safe-area-inset-bottom))] lg:hidden"
-    >
-      {TAB_ITEMS.map((item) => {
-        const Icon = NAV_ICONS[item.key];
-        const active = pathname !== null && isActive(pathname, item.href);
-        return (
-          <Link
-            key={item.key}
-            href={item.href}
-            aria-current={active ? "page" : undefined}
-            className={`flex min-w-16 flex-col items-center gap-1 rounded-xl px-2.5 py-1 text-[11px] font-semibold transition-colors ${
-              active ? "text-ink" : "text-soft hover:text-ink-2"
-            }`}
-          >
-            <Icon className="size-[22px]" />
-            {t(`tab.${item.key}`)}
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
-
-/** Liens de la barre latérale desktop (docs/prototype.html, renderSide). */
+/** Menu de la barre latérale (desktop) et du tiroir (mobile), comme Happenstance ou ChatGPT. */
 export function SidebarLinks() {
   return (
     <Suspense fallback={<SidebarView pathname={null} />}>
@@ -68,19 +29,24 @@ function ActiveSidebar() {
 
 function SidebarView({ pathname }: { pathname: string | null }) {
   const t = useTranslations("nav");
+  const ts = useTranslations("shell");
   return (
     <nav aria-label={t("aria")} className="flex flex-col gap-0.5">
+      <Link href="/chat" className={`${ROW} ${pathname === "/chat" ? "bg-lilac-2 text-ink" : "text-ink hover:bg-lilac-2/70"}`}>
+        <NewQuestionIcon className="size-[19px] shrink-0" />
+        {ts("newQuestion")}
+      </Link>
       {SIDE_ITEMS.map((item) => {
         const active = pathname !== null && isActive(pathname, item.href);
+        const Icon = NAV_ICONS[item.key];
         return (
           <Link
             key={item.key}
             href={item.href}
             aria-current={active ? "page" : undefined}
-            className={`flex items-center rounded-xl px-3 py-[9px] text-[13.5px] font-semibold transition-colors ${
-              active ? "bg-ink text-paper" : "text-ink-2 hover:bg-lilac-2"
-            }`}
+            className={`${ROW} ${active ? "bg-lilac-2 text-ink" : "text-ink hover:bg-lilac-2/70"}`}
           >
+            <Icon className="size-[19px] shrink-0" />
             {t(`side.${item.key}`)}
           </Link>
         );

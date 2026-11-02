@@ -1,5 +1,5 @@
 {
-  "newQuestion": "+ New question",
+  "newQuestion": "New question",
   "history": "History",
   "historyEmpty": "Your questions will show up here.",
   "details": "Details",
@@ -10,5 +10,7 @@
     "android": "WH3RE will open like an app, right from your home screen.",
     "install": "Install",
     "dismiss": "Not now"
-  }
+  },
+  "menu": "Menu",
+  "closeMenu": "Close menu"
 }

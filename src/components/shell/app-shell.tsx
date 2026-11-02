@@ -1,15 +1,14 @@
 import type { ReactNode } from "react";
 import { ContextPanel } from "./context-panel";
 import { InstallBanner } from "./install-banner";
-import { MobileTabs } from "./nav-links";
+import { MobileTopBar } from "./mobile-drawer";
 import { PanelProvider } from "./panel-context";
-import { Sidebar } from "./sidebar";
-import { Wordmark } from "./wordmark";
+import { Sidebar, SidebarContent } from "./sidebar";
 
 /**
- * Coquille de l'application.
- * Mobile : barre du haut + contenu + 4 onglets.
- * Desktop : barre latérale | contenu | panneau contextuel (feuille sous 1280 px).
+ * Coquille de l'application, sur le modèle de ChatGPT, Claude ou Happenstance.
+ * Mobile : barre du haut (menu en tiroir, nouvelle question) + contenu.
+ * Desktop : barre latérale | contenu | panneau contextuel, seulement quand il est ouvert.
  */
 export function AppShell({ children }: { children: ReactNode }) {
   return (
@@ -18,12 +17,9 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex h-dvh flex-1 overflow-hidden">
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="flex shrink-0 items-center gap-2.5 px-[18px] pt-[max(14px,env(safe-area-inset-top))] pb-2.5 lg:hidden">
-            <Wordmark />
-          </header>
+          <MobileTopBar sidebar={<SidebarContent />} />
           <InstallBanner />
           <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">{children}</main>
-          <MobileTabs />
         </div>
         <ContextPanel />
       </div>

@@ -38,7 +38,8 @@ export function ContextPanel({ sheetOnly = false }: { sheetOnly?: boolean }) {
 
   return (
     <>
-      <aside className={sheetOnly ? "hidden" : "hidden w-[380px] shrink-0 flex-col border-l border-line bg-paper-2 xl:flex"}>
+      {/* Comme Happenstance ou ChatGPT : la colonne n'existe que quand quelque chose y est ouvert. */}
+      <aside className={sheetOnly || !panel ? "hidden" : "hidden w-[380px] shrink-0 flex-col border-l border-line bg-paper-2 xl:flex"}>
         <div className="flex items-center gap-2.5 border-b border-line px-[18px] py-4">
           <h2 className="font-display text-[21px] font-bold leading-tight">{panel ? panel.title : t("details")}</h2>
           {panel ? <CloseButton onClick={close} /> : null}

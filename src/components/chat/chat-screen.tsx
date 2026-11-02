@@ -33,7 +33,6 @@ import { Composer } from "./composer";
 import { CriteriaChips } from "./criteria-chips";
 import { closedText, type ChatMessage } from "./messages";
 import { PeopleSuggestion } from "./people";
-import { Mascot } from "@/components/shell/wordmark";
 
 /* Suggestions du chat vide : libellé court, question complète envoyée (messages home.chips / home.examples). */
 const CHAT_SUGGESTIONS = ["group", "rome", "cafe"] as const;
@@ -563,30 +562,28 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
-      {!empty ? (
-        <div className="flex shrink-0 justify-end px-[18px] pb-1 lg:px-9 lg:pt-4">
-          <button
-            type="button"
-            onClick={reset}
-            className="inline-flex min-h-[30px] items-center rounded-full border-[1.5px] border-line px-[11px] text-[12.5px] font-semibold text-ink transition-colors hover:border-ink"
-          >
-            {t("new")}
-          </button>
-        </div>
-      ) : null}
-
       <div className="flex min-h-0 flex-1 flex-col gap-3.5 overflow-y-auto px-4 pt-2 pb-4 lg:px-9 lg:pt-6">
         {empty ? (
-          <div className="my-auto flex flex-col items-center gap-3.5 px-2.5 pt-8 pb-2.5 text-center">
-            <span
-              aria-hidden
-              className="inline-flex size-[64px] items-center justify-center"
-            >
-              <Mascot className="animate-glow h-[60px] w-[52px]" />
-            </span>
-            <h1 className="font-display text-[21px] font-bold leading-tight">{t("empty.title")}</h1>
-            <p className="max-w-[360px] text-[12.5px] text-muted">{t("empty.lead")}</p>
-            <p className="max-w-[360px] text-[12.5px] text-muted">{t("empty.saveHint")}</p>
+          <div className="my-auto flex w-full flex-col items-center gap-5 px-1 pb-[8vh] lg:pb-[10vh]">
+            <h1 className="text-center font-display text-[28px] leading-[1.1] font-bold tracking-[-0.02em] text-balance lg:text-[36px]">
+              {t("empty.title")}
+            </h1>
+            <div className="flex w-full max-w-[680px] flex-col gap-3">
+              <Composer hero disabled={busy} onSend={send} />
+              <div className="flex flex-col">
+                {CHAT_SUGGESTIONS.map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => send(th(`examples.${key}`))}
+                    className="rounded-xl px-3 py-2.5 text-start text-[14.5px] text-ink-2 transition-colors hover:bg-lilac-2/70 hover:text-ink"
+                  >
+                    {th(`examples.${key}`)}
+                  </button>
+                ))}
+              </div>
+              <p className="px-3 text-[12.5px] text-soft">{t("empty.saveHint")}</p>
+            </div>
           </div>
         ) : null}
 
@@ -776,22 +773,7 @@ export function ChatScreen({ initial }: { initial?: StoredConversation }) {
         <div ref={bottom} />
       </div>
 
-      {empty ? (
-        <div className="flex shrink-0 flex-wrap justify-center gap-2 px-3.5 pb-2.5 lg:px-9 lg:pb-2">
-          {CHAT_SUGGESTIONS.map((key) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => send(th(`examples.${key}`))}
-              className="inline-flex shrink-0 items-center rounded-full border-[1.5px] border-line bg-paper-2 px-3 py-[7px] text-[12.5px] font-medium whitespace-nowrap text-ink transition-colors hover:border-ink"
-            >
-              {th(`chips.${key}`)}
-            </button>
-          ))}
-        </div>
-      ) : null}
-
-      <Composer disabled={busy} onSend={send} />
+      {empty ? null : <Composer disabled={busy} onSend={send} />}
 
       {leaving ? (
         <LeavingScreen option={leaving.option} placeName={leaving.result.name} onBack={backFromLeaving} />

@@ -6,16 +6,8 @@ export type NavItem = {
 };
 // Libellés : messages/{langue}/nav.json, `tab.{key}` (onglets mobiles) et `side.{key}` (barre latérale).
 
-/** Onglets du bas, mobile (docs/prototype.html, renderTabs). Le profil mène aux connecteurs et à la confidentialité. */
-export const TAB_ITEMS: readonly NavItem[] = [
-  { key: "chat", href: "/chat" },
-  { key: "memory", href: "/memory" },
-  { key: "circle", href: "/circle" },
-  { key: "profile", href: "/profile" },
-] as const;
-
 /**
- * Barre latérale, desktop. Structure reprise de Happenstance (2026-11-02) : « Nouvelle question »
+ * Barre latérale (desktop) et tiroir (mobile ; les onglets du bas de la maquette sont retirés). Structure reprise de Happenstance (2026-11-02) : « Nouvelle question »
  * (bouton), puis ce qui nourrit le chat, puis les conversations récentes ; le profil est en pied.
  */
 export const SIDE_ITEMS: readonly NavItem[] = [

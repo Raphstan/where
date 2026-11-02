@@ -190,12 +190,16 @@ Chaque couleur a une variante claire `-2` pour les fonds. Pas de couleur hors pa
 
 ### 6.1 Navigation
 
-- Mobile : onglets **Chat**, **Mémoire**, **Cercle**, **Profil**. Le profil mène à **Mes sources**,
-  **Confidentialité**, **États limites**, **Revoir l'onboarding**.
-- Desktop : barre latérale avec « + Nouvelle question », **Historique** des conversations, puis
-  **Conversation**, **Ma mémoire**, **Mon cercle**, **Mes sources**, **Confidentialité**, **États limites**.
-  Les panneaux (« Pourquoi ce choix ? », carte, réservation) s'ouvrent à droite ; sur mobile ce sont des
-  feuilles (bottom sheets).
+Depuis le 2026-11-02, la coquille suit ChatGPT, Claude et Happenstance (écart voulu avec la maquette) :
+- Desktop : barre latérale avec « Nouvelle question », **Connecteurs** (ex-« Mes sources »), **Mon cercle**,
+  **Ma mémoire**, puis l'**Historique** des conversations, et le compte en pied (mène au profil).
+  Le panneau de droite (« Pourquoi ce choix ? », carte, réservation) n'apparaît que quand il est ouvert.
+- Mobile : barre du haut avec le menu (la barre latérale s'ouvre en tiroir) et « Nouvelle question ».
+  Plus d'onglets en bas. Les panneaux sont des feuilles (bottom sheets).
+- Chat vide : grand titre, champ au centre, trois suggestions en dessous ; le champ descend en bas dès
+  que la conversation commence.
+- Le profil mène aux Connecteurs, à la Confidentialité et à « Revoir l'onboarding ». « États limites »
+  n'est plus dans le menu (écran de démonstration de la maquette).
 - « Cette section reste secondaire. Le chat demeure le point d'entrée. »
 
 ### 6.2 Écrans (ordre du menu « Parcours » de la maquette)
