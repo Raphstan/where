@@ -15,7 +15,12 @@ export default async function Home() {
     <main className="hero relative flex min-h-dvh flex-1 flex-col text-ink">
       <header className="flex items-center justify-between px-[22px] pt-[max(16px,env(safe-area-inset-top))] lg:px-10 lg:pt-6">
         <Wordmark />
-        <LanguageSwitcher />
+        <div className="flex items-center gap-4">
+          <LanguageSwitcher />
+          <Link href="/login" className="text-[14px] font-semibold text-ink underline-offset-4 hover:underline">
+            {t("signIn")}
+          </Link>
+        </div>
       </header>
       <div className="flex flex-1 flex-col justify-center gap-6 px-[22px] pt-8 pb-12 lg:mx-auto lg:w-full lg:max-w-[680px] lg:px-8 lg:pb-24">
         <div className="flex flex-col gap-3">
