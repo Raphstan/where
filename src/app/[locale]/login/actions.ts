@@ -7,7 +7,8 @@ import { apiLocale } from "@/i18n/request-locale";
 import { ensureBetaAccount } from "@/lib/auth/beta-access";
 import { TERMS_COOKIE } from "@/lib/auth/terms";
 import { verifyGoogleIdToken } from "@/lib/auth/google";
-import { NEXT_COOKIE, NEXT_COOKIE_MAX_AGE, safeNextPath } from "@/lib/auth/redirect";
+import { redirect } from "next/navigation";
+import { NEXT_COOKIE, NEXT_COOKIE_MAX_AGE, nextAfterLogin, safeNextPath } from "@/lib/auth/redirect";
 import { publicEnv } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -90,6 +91,35 @@ export async function sendMagicLink(
   }
 
   return { status: "sent", email };
+}
+
+export type CodeState = { status: "idle" } | { status: "error"; error: "badCode" };
+
+const codeSchema = z.object({
+  email: z.string().trim().toLowerCase().email(),
+  code: z.string().trim().regex(/^\d{6,8}$/),
+});
+
+/**
+ * Le code à 6 chiffres reçu dans le même email que le lien. Il connecte la personne là où elle a
+ * tapé son email (appli installée, Safari ouvert depuis WhatsApp), alors que le lien s'ouvre souvent
+ * dans un autre navigateur (celui de Gmail, par exemple) où la session ne sert à rien.
+ */
+export async function verifyEmailCode(_previous: CodeState, formData: FormData): Promise<CodeState> {
+  const parsed = codeSchema.safeParse({
+    email: formData.get("email"),
+    code: String(formData.get("code") ?? "").replace(/\s/g, ""),
+  });
+  if (!parsed.success) return { status: "error", error: "badCode" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.verifyOtp({ email: parsed.data.email, token: parsed.data.code, type: "email" });
+  if (error) return { status: "error", error: "badCode" };
+
+  const jar = await cookies();
+  const next = nextAfterLogin(null, jar.get(NEXT_COOKIE)?.value);
+  jar.delete(NEXT_COOKIE);
+  redirect(next);
 }
 
 export type GoogleSignInResult =

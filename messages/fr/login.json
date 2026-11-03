@@ -2,19 +2,19 @@
   "metaTitle": "Connexion",
   "eyebrow": "Bienvenue",
   "title": "Connecte-toi par email.",
-  "lead": "On t'envoie un lien. Tu cliques, tu es dedans.",
+  "lead": "On t’envoie un code. Tu le tapes, tu es dedans.",
   "titleGoogle": "Connecte-toi.",
-  "leadGoogle": "Avec Google, ou avec un lien reçu par email. Jamais de mot de passe.",
+  "leadGoogle": "Avec Google, ou avec un code envoyé par email. Jamais de mot de passe.",
   "linkExpired": "Ce lien ne fonctionne plus. Demande-en un nouveau ci-dessous.",
   "privacy": "Privé par défaut. Rien n'est publié, aucun message n'est envoyé sans ta confirmation.",
   "form": {
     "emailLabel": "Ton email",
     "emailPlaceholder": "prenom@exemple.com",
-    "submit": "Recevoir mon lien",
+    "submit": "Recevoir mon code",
     "sending": "Envoi…",
-    "noPassword": "Pas de mot de passe. Le lien reçu par email suffit.",
+    "noPassword": "Pas de mot de passe. Le code reçu par email suffit.",
     "sent": "<b>Lien envoyé.</b> Ouvre l'email reçu à <b>{email}</b> et clique sur le lien : il te connecte, sans mot de passe.",
-    "resend": "Rien reçu ? Regarde dans les indésirables, ou <link>renvoie un lien</link>.",
+    "resend": "Rien reçu ? Regarde dans les indésirables, ou <link>renvoie un code</link>.",
     "terms": "J’accepte les <terms>conditions d’utilisation</terms> et la <privacy>politique de confidentialité</privacy>."
   },
   "errors": {
@@ -30,5 +30,13 @@
     "or": "ou",
     "googleFailed": "La connexion avec Google n’a pas marché. Réessaie, ou reçois un lien par email.",
     "unavailable": "Le bouton Google ne se charge pas. Reçois un lien par email à la place."
+  },
+  "code": {
+    "sent": "J’ai envoyé un code à <b>{email}</b>.",
+    "open": "Ouvrir {mailbox}",
+    "label": "Code reçu par email",
+    "submit": "Me connecter",
+    "checking": "Vérification…",
+    "bad": "Ce code ne marche pas. Vérifie les 6 chiffres, ou touche le lien dans l’email."
   }
 }

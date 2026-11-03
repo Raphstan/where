@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 import { PRIVACY_POLICY_PATH, TERMS_PATH } from "@/content/legal";
 import { sendMagicLink, type MagicLinkState } from "./actions";
+import { CodeStep } from "./code-step";
 import { GoogleButton } from "./google-button";
 
 const initial: MagicLinkState = { status: "idle" };
@@ -48,31 +49,7 @@ export function MagicLinkForm({
     );
   }
 
-  if (state.status === "sent") {
-    return (
-      <div className="flex flex-col gap-3.5" aria-live="polite">
-        <div className="flex items-start gap-2.5 rounded-[14px] bg-olive-2 px-3.5 py-3 text-[13.5px] leading-snug text-[#28553b]">
-          <span>
-            {t.rich("form.sent", {
-              email: state.email,
-              b: (chunks) => <b className="font-bold">{chunks}</b>,
-            })}
-          </span>
-        </div>
-        <p className="text-[12.5px] text-muted">
-          {t.rich("form.resend", {
-            link: (chunks) => (
-              // Rechargement complet voulu : remet le formulaire à zéro (useActionState).
-              // eslint-disable-next-line @next/next/no-html-link-for-pages
-              <a href="/login" className="font-semibold text-blue hover:underline">
-                {chunks}
-              </a>
-            ),
-          })}
-        </p>
-      </div>
-    );
-  }
+  if (state.status === "sent") return <CodeStep email={state.email} />;
 
   return (
     <div className="flex flex-col gap-3.5">

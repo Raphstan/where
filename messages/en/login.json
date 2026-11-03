@@ -2,19 +2,19 @@
   "metaTitle": "Sign in",
   "eyebrow": "Welcome",
   "title": "Sign in with your email.",
-  "lead": "We send you a link. You click, you’re in.",
+  "lead": "We send you a code. You type it, you’re in.",
   "titleGoogle": "Sign in.",
-  "leadGoogle": "With Google, or with a link sent to your email. Never a password.",
+  "leadGoogle": "With Google, or with a code sent to your email. Never a password.",
   "linkExpired": "This link no longer works. Ask for a new one below.",
   "privacy": "Private by default. Nothing is published, and no message is sent without your confirmation.",
   "form": {
     "emailLabel": "Your email",
     "emailPlaceholder": "firstname@example.com",
-    "submit": "Get my link",
+    "submit": "Get my code",
     "sending": "Sending…",
-    "noPassword": "No password. The link in your email is all you need.",
+    "noPassword": "No password. The code in your email is all you need.",
     "sent": "<b>Link sent.</b> Open the email sent to <b>{email}</b> and click the link: it signs you in, no password needed.",
-    "resend": "Nothing yet? Check your spam folder, or <link>send a new link</link>.",
+    "resend": "Nothing yet? Check your spam folder, or <link>send a new code</link>.",
     "terms": "I accept the <terms>terms of use</terms> and the <privacy>privacy policy</privacy>."
   },
   "errors": {
@@ -30,5 +30,13 @@
     "or": "or",
     "googleFailed": "Signing in with Google didn’t work. Try again, or get a link by email.",
     "unavailable": "The Google button won’t load. Get a link by email instead."
+  },
+  "code": {
+    "sent": "I sent a code to <b>{email}</b>.",
+    "open": "Open {mailbox}",
+    "label": "Code from the email",
+    "submit": "Sign in",
+    "checking": "Checking…",
+    "bad": "That code doesn’t work. Check the 6 digits, or tap the link in the email."
   }
 }

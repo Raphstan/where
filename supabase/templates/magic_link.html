@@ -9,20 +9,23 @@
 
 <tr><td style="background:#F7F4FB;border-radius:24px;padding:30px 26px;text-align:{{ if eq $l "he" }}right{{ else }}left{{ end }}">
 {{ if eq $l "fr" }}
-<div style="font:800 30px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.02em;color:#2A1438">Ton lien de connexion</div>
-<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">Touche le bouton pour te connecter à WH3RE. Pas de mot de passe : ce lien suffit.</div>
+<div style="font:800 30px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.02em;color:#2A1438">Ton code de connexion</div>
+<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">Tape ce code dans WH3RE, ou touche le bouton. Pas de mot de passe.</div>
+<div style="font:800 34px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.18em;color:#2A1438;margin-top:20px">{{ .Token }}</div>
 <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/chat" style="display:inline-block;margin-top:22px;background:#FF5A1F;color:#ffffff;text-decoration:none;font:700 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;padding:14px 24px;border-radius:999px">Me connecter</a>
-<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">Le lien est valable une heure et ne sert qu'une fois.</div>
+<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">Le code et le lien sont valables une heure et ne servent qu'une fois.</div>
 {{ else if eq $l "he" }}
-<div style="font:800 30px/1.15 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2A1438">קישור הכניסה שלך</div>
-<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">לוחצים על הכפתור ונכנסים ל־WH3RE. בלי סיסמה, הקישור מספיק.</div>
+<div style="font:800 30px/1.15 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2A1438">קוד הכניסה שלך</div>
+<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">מקלידים את הקוד ב־WH3RE, או לוחצים על הכפתור. בלי סיסמה.</div>
+<div style="font:800 34px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.18em;color:#2A1438;margin-top:20px">{{ .Token }}</div>
 <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/chat" style="display:inline-block;margin-top:22px;background:#FF5A1F;color:#ffffff;text-decoration:none;font:700 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;padding:14px 24px;border-radius:999px">כניסה</a>
-<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">הקישור בתוקף לשעה אחת ולשימוש אחד בלבד.</div>
+<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">הקוד והקישור בתוקף לשעה אחת ולשימוש אחד בלבד.</div>
 {{ else }}
-<div style="font:800 30px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.02em;color:#2A1438">Your sign-in link</div>
-<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">Tap the button to sign in to WH3RE. No password needed: this link is enough.</div>
+<div style="font:800 30px/1.1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:-.02em;color:#2A1438">Your sign-in code</div>
+<div style="font:16px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#5E4B6E;margin-top:12px">Type this code in WH3RE, or tap the button. No password.</div>
+<div style="font:800 34px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:.18em;color:#2A1438;margin-top:20px">{{ .Token }}</div>
 <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/chat" style="display:inline-block;margin-top:22px;background:#FF5A1F;color:#ffffff;text-decoration:none;font:700 15px/1 'Helvetica Neue',Helvetica,Arial,sans-serif;padding:14px 24px;border-radius:999px">Sign in</a>
-<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">The link works for one hour and only once.</div>
+<div style="font:13px/1.5 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#7E6E90;margin-top:16px">The code and the link work for one hour and only once.</div>
 {{ end }}
 </td></tr>
 
