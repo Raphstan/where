@@ -32,7 +32,8 @@ Resend pour la landing).
 2. Authentication → URL Configuration :
    - Site URL : `https://app.wh3re.com`
    - Redirect URLs : `https://app.wh3re.com/auth/confirm`
-3. Authentication → Email Templates → Magic Link :
+3. Email de connexion : envoyé par WH3RE via Resend dès que `RESEND_SEND_API_KEY` (clé « Sending access », domaine wh3re.com) est dans Vercel. Le modèle Supabase ci-dessous ne sert plus qu'en secours, sans cette clé.
+   Authentication → Email Templates → Magic Link :
    - Sujet : `Ton lien WH3RE · Your WH3RE sign-in link`
    - Corps : coller tout `supabase/templates/magic_link.html`.
 

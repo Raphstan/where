@@ -11,6 +11,8 @@ import type { Database } from "./database.types";
  *   restreinte au jeton du lien privé ;
  * - la connexion pendant la bêta privée (src/lib/auth/beta-access.ts) : vérifie l'invitation d'un
  *   email et crée son compte, les inscriptions libres étant fermées ;
+ * - la connexion par email (src/lib/auth/login-request.ts) : generateLink et la table login_requests,
+ *   lue et écrite seulement avec les secrets de la demande ;
  * - la tâche planifiée /api/cron/visit-followups, protégée par CRON_SECRET, qui ne fait que marquer
  *   les retours après visite arrivés à échéance ;
  * - le webhook Resend /api/inbound/resend, signé (RESEND_WEBHOOK_SECRET), qui retrouve le compte par

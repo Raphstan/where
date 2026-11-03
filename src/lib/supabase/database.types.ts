@@ -111,6 +111,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"login_requests": {
+                  Row: {
+                    "approve_secret_hash": string,"approved_at": string | null,"browser_secret_hash": string,"consumed_at": string | null,"created_at": string,"email": string,"expires_at": string,"id": string,"next_path": string | null,"token_hash": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "approve_secret_hash": string,"approved_at"?: string | null,"browser_secret_hash": string,"consumed_at"?: string | null,"created_at"?: string,"email": string,"expires_at"?: string,"id"?: string,"next_path"?: string | null,"token_hash": string
+                  }
+                  Update: {
+                    "approve_secret_hash"?: string,"approved_at"?: string | null,"browser_secret_hash"?: string,"consumed_at"?: string | null,"created_at"?: string,"email"?: string,"expires_at"?: string,"id"?: string,"next_path"?: string | null,"token_hash"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"places": {
                   Row: {
                     "address": string | null,"area": string | null,"city": string | null,"created_at": string,"created_by": string | null,"google_place_id": string | null,"id": string,"kind": string | null,"lat": number | null,"lng": number | null,"name": string,"noise": string | null,"ontopo_url": string | null,"phone": string | null,"price": string | null,"tabit_url": string | null,"vibe": (string)[],"website_url": string | null,"whatsapp": string | null
@@ -163,7 +177,7 @@ isOneToOne: false
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id": string,"request_id": string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited": boolean | null
+                    "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id": string,"request_id": string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited"?: boolean | null
                   }
                   Update: {
                     "created_at"?: string,"id"?: string,"note"?: string | null,"place_id"?: string | null,"place_text"?: string | null,"place_url"?: string | null,"recipient_id"?: string,"request_id"?: string,"reusable"?: boolean,"visible_only_to_requester"?: boolean,"visited"?: boolean | null
@@ -331,11 +345,11 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "consume_my_quota":
-{ Args: { "p_action": string,"p_limit": number }; Returns: boolean
-                           },
-"consume_google_budget":
+            "consume_google_budget":
 { Args: { "p_limit": number,"p_sku": string }; Returns: boolean
+                           },
+"consume_my_quota":
+{ Args: { "p_action": string,"p_limit": number }; Returns: boolean
                            },
 "consume_quota":
 { Args: { "p_action": string,"p_limit": number,"p_subject": string }; Returns: boolean
@@ -345,6 +359,9 @@ isOneToOne: false
                            },
 "delete_my_account":
 { Args: Record<PropertyKey, never>; Returns: undefined
+                           },
+"first_name_from_meta":
+{ Args: { "meta": Json }; Returns: string
                            },
 "imported_places_count":
 { Args: Record<PropertyKey, never>; Returns: number

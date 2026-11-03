@@ -2,25 +2,26 @@
   "metaTitle": "Connexion",
   "eyebrow": "Bienvenue",
   "title": "Connecte-toi par email.",
-  "lead": "On t’envoie un code. Tu le tapes, tu es dedans.",
+  "lead": "On t’envoie un lien. Tu le touches, tu es dedans.",
   "titleGoogle": "Connecte-toi.",
-  "leadGoogle": "Avec Google, ou avec un code envoyé par email. Jamais de mot de passe.",
+  "leadGoogle": "Avec Google, ou avec un lien envoyé par email. Jamais de mot de passe.",
   "linkExpired": "Ce lien ne fonctionne plus. Demande-en un nouveau ci-dessous.",
   "privacy": "Privé par défaut. Rien n'est publié, aucun message n'est envoyé sans ta confirmation.",
   "form": {
     "emailLabel": "Ton email",
     "emailPlaceholder": "prenom@exemple.com",
-    "submit": "Recevoir mon code",
+    "submit": "Recevoir mon lien",
     "sending": "Envoi…",
-    "noPassword": "Pas de mot de passe. Le code reçu par email suffit.",
+    "noPassword": "Pas de mot de passe. Le lien reçu par email suffit.",
     "sent": "<b>Lien envoyé.</b> Ouvre l'email reçu à <b>{email}</b> et clique sur le lien : il te connecte, sans mot de passe.",
-    "resend": "Rien reçu ? Regarde dans les indésirables, ou <link>renvoie un code</link>.",
+    "resend": "Rien reçu ? Regarde dans les indésirables, ou <link>renvoie un lien</link>.",
     "terms": "J’accepte les <terms>conditions d’utilisation</terms> et la <privacy>politique de confidentialité</privacy>."
   },
   "errors": {
     "invalidEmail": "Entre une adresse email valide.",
     "sendFailed": "Impossible d'envoyer le lien pour l'instant. Réessaie dans un instant.",
-    "termsRequired": "Coche la case pour accepter les conditions d’utilisation et la politique de confidentialité."
+    "termsRequired": "Coche la case pour accepter les conditions d’utilisation et la politique de confidentialité.",
+    "tooSoon": "Un lien vient de partir. Attends une minute avant d’en demander un autre."
   },
   "waitlist": {
     "text": "La bêta est privée pour l’instant. <b>{email}</b> n’a pas encore d’invitation : je t’écris dès que ta place est prête.",
@@ -32,11 +33,37 @@
     "unavailable": "Le bouton Google ne se charge pas. Reçois un lien par email à la place."
   },
   "code": {
-    "sent": "J’ai envoyé un code à <b>{email}</b>.",
-    "open": "Ouvrir {mailbox}",
     "label": "Code reçu par email",
     "submit": "Me connecter",
     "checking": "Vérification…",
     "bad": "Ce code ne marche pas. Vérifie les 6 chiffres, ou touche le lien dans l’email."
+  },
+  "email": {
+    "subject": "Ta connexion à WH3RE · code {code}",
+    "title": "Ta connexion à WH3RE",
+    "lead": "Touche le bouton : la page WH3RE que tu as laissée ouverte se connecte toute seule. Pas de mot de passe.",
+    "button": "Me connecter",
+    "codeLabel": "Sur un autre appareil, tape ce code :",
+    "expiry": "Valable 15 minutes, une seule fois.",
+    "ignore": "Tu n'as rien demandé ? Ignore simplement cet e-mail.",
+    "text": "Me connecter à WH3RE : {url}\n\nSur un autre appareil, tape ce code : {code}\n\nTu n'as rien demandé ? Ignore simplement cet e-mail."
+  },
+  "approve": {
+    "metaTitle": "Connexion",
+    "title": "C’est bien toi ?",
+    "lead": "Touche le bouton pour te connecter à WH3RE.",
+    "button": "Me connecter",
+    "working": "Connexion…",
+    "doneTitle": "C’est bon.",
+    "doneLead": "Retourne sur WH3RE : tu y es connecté·e.",
+    "here": "Pas sur cet appareil ? <link>Me connecter ici</link>",
+    "expiredTitle": "Ce lien ne marche plus.",
+    "expiredLead": "Il a déjà servi ou il a expiré. Demande un nouveau lien depuis WH3RE.",
+    "again": "Retour à la connexion"
+  },
+  "waiting": {
+    "sent": "J’ai envoyé un lien à <b>{email}</b>. Touche-le dans l’email : cette page se connecte toute seule.",
+    "open": "Ouvrir {mailbox}",
+    "otherDevice": "Email ouvert sur un autre appareil ? <link>Tape le code</link>"
   }
 }

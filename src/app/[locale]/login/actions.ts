@@ -5,6 +5,13 @@ import { z } from "zod";
 import { LEGAL_VERSION } from "@/content/legal";
 import { apiLocale } from "@/i18n/request-locale";
 import { ensureBetaAccount } from "@/lib/auth/beta-access";
+import {
+  LOGIN_REQUEST_COOKIE,
+  LOGIN_REQUEST_TTL_S,
+  consumeLoginRequest,
+  parseLoginCookie,
+  startLoginRequest,
+} from "@/lib/auth/login-request";
 import { TERMS_COOKIE } from "@/lib/auth/terms";
 import { verifyGoogleIdToken } from "@/lib/auth/google";
 import { redirect } from "next/navigation";
@@ -18,7 +25,7 @@ export type MagicLinkState =
   /** Bêta privée : ni compte, ni invitation, ni lien de proche. Aucun email n'est envoyé. */
   | { status: "waitlist"; email: string }
   /** Clé du message (messages/{langue}/login.json, `errors.*`) : le formulaire le traduit. */
-  | { status: "error"; error: "invalidEmail" | "sendFailed" | "termsRequired" };
+  | { status: "error"; error: "invalidEmail" | "sendFailed" | "termsRequired" | "tooSoon" };
 
 const schema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -56,18 +63,34 @@ export async function sendMagicLink(
   if (access === "waitlist") return { status: "waitlist", email };
   if (access === "termsRequired") return { status: "error", error: "termsRequired" };
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: redirectTo.toString(), shouldCreateUser: false },
-  });
-
-  if (error) {
+  const jar = await cookies();
+  // Envoi par WH3RE (Resend) : la page restée ouverte se connecte quand le lien est touché.
+  let started;
+  try {
+    started = await startLoginRequest(email, next ? safeNextPath(next) : null, await apiLocale());
+  } catch {
     return { status: "error", error: "sendFailed" };
+  }
+  if (started.status === "tooSoon") return { status: "error", error: "tooSoon" };
+  if (started.status === "sent") {
+    jar.set(LOGIN_REQUEST_COOKIE, started.cookie, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: LOGIN_REQUEST_TTL_S,
+      path: "/",
+    });
+  } else {
+    // Secours sans clé d'envoi Resend : l'email part par Supabase (lien vers /auth/confirm + code).
+    const supabase = await createClient();
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: redirectTo.toString(), shouldCreateUser: false },
+    });
+    if (error) return { status: "error", error: "sendFailed" };
   }
 
   // La page demandée survit au détour par la boîte mail (voir /auth/confirm).
-  const jar = await cookies();
   // Sur cet appareil, la case n'est plus redemandée tant que la version des conditions ne change pas.
   if (acceptedTerms) {
     jar.set(TERMS_COOKIE, LEGAL_VERSION, {
@@ -119,7 +142,35 @@ export async function verifyEmailCode(_previous: CodeState, formData: FormData):
   const jar = await cookies();
   const next = nextAfterLogin(null, jar.get(NEXT_COOKIE)?.value);
   jar.delete(NEXT_COOKIE);
+  jar.delete(LOGIN_REQUEST_COOKIE);
   redirect(next);
+}
+
+export type PollResult = { status: "pending" } | { status: "in"; next: string } | { status: "gone" };
+
+/**
+ * Interrogée par la page d'attente : si le lien de l'email a été approuvé (n'importe où), ce
+ * navigateur échange le jeton et reçoit sa session. Une seule fois.
+ */
+export async function pollLogin(): Promise<PollResult> {
+  const jar = await cookies();
+  const parsed = parseLoginCookie(jar.get(LOGIN_REQUEST_COOKIE)?.value);
+  if (!parsed) return { status: "gone" };
+  let consumed;
+  try {
+    consumed = await consumeLoginRequest(parsed.id, parsed.secret, "browser");
+  } catch {
+    return { status: "pending" };
+  }
+  if (!consumed) return { status: "pending" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.verifyOtp({ type: "magiclink", token_hash: consumed.tokenHash });
+  jar.delete(LOGIN_REQUEST_COOKIE);
+  if (error) return { status: "gone" };
+  const next = nextAfterLogin(consumed.next, jar.get(NEXT_COOKIE)?.value);
+  jar.delete(NEXT_COOKIE);
+  return { status: "in", next };
 }
 
 export type GoogleSignInResult =

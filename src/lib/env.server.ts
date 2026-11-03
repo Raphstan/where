@@ -11,6 +11,7 @@ const serverSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   CRON_SECRET: z.string().min(16).optional(),
   RESEND_API_KEY: z.string().min(1).optional(),
+  RESEND_SEND_API_KEY: z.string().min(1).optional(),
   RESEND_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
   WHERE_INBOUND_DOMAIN: z
     .string()
@@ -32,6 +33,7 @@ export function getServerEnv(): ServerEnv {
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || undefined,
     CRON_SECRET: process.env.CRON_SECRET || undefined,
     RESEND_API_KEY: process.env.RESEND_API_KEY || undefined,
+    RESEND_SEND_API_KEY: process.env.RESEND_SEND_API_KEY || undefined,
     RESEND_WEBHOOK_SECRET: process.env.RESEND_WEBHOOK_SECRET || undefined,
     WHERE_INBOUND_DOMAIN: process.env.WHERE_INBOUND_DOMAIN || undefined,
     WHERE_ASK_MOCK: process.env.WHERE_ASK_MOCK,

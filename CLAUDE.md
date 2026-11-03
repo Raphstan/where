@@ -91,7 +91,7 @@ Pas d'autre framework. Pas de librairie UI lourde (pas de MUI, Chakra, Mantine, 
   entrant ; page invité sans compte, y compris « Garder ma mémoire WH3RE » qui relie le compte du proche
   et copie ses réponses dans sa mémoire, `src/lib/network/guest.ts`) vivent côté serveur, toujours
   restreintes au jeton. Jamais de `NEXT_PUBLIC_` pour cette clé.
-- **Auth** : lien magique par email, ou « Continuer avec Google » (jeton Google Identity Services →
+- **Auth** : lien par email envoyé par WH3RE (Resend, `src/lib/auth/login-request.ts`, table `login_requests`) : le lien, ouvert n'importe où, approuve la demande sur un clic (« C'est bien toi ? », `/login/approve`) et la page restée ouverte se connecte seule ; code à 6 chiffres en secours. Ou « Continuer avec Google » (jeton Google Identity Services →
   `signInWithIdToken`, après la même décision d'accès à la bêta `ensureBetaAccount`) (`@supabase/ssr`). La session est rafraîchie dans
   `src/proxy.ts` (Next 16 : le middleware s'appelle `proxy`). Les routes de l'app sont protégées là.
   Tout composant serveur qui lit la session appelle `await connection()` avant (Cache Components).

@@ -2,25 +2,26 @@
   "metaTitle": "Sign in",
   "eyebrow": "Welcome",
   "title": "Sign in with your email.",
-  "lead": "We send you a code. You type it, you’re in.",
+  "lead": "We send you a link. You tap it, you’re in.",
   "titleGoogle": "Sign in.",
-  "leadGoogle": "With Google, or with a code sent to your email. Never a password.",
+  "leadGoogle": "With Google, or with a link sent to your email. Never a password.",
   "linkExpired": "This link no longer works. Ask for a new one below.",
   "privacy": "Private by default. Nothing is published, and no message is sent without your confirmation.",
   "form": {
     "emailLabel": "Your email",
     "emailPlaceholder": "firstname@example.com",
-    "submit": "Get my code",
+    "submit": "Get my link",
     "sending": "Sending…",
-    "noPassword": "No password. The code in your email is all you need.",
+    "noPassword": "No password. The link in your email is all you need.",
     "sent": "<b>Link sent.</b> Open the email sent to <b>{email}</b> and click the link: it signs you in, no password needed.",
-    "resend": "Nothing yet? Check your spam folder, or <link>send a new code</link>.",
+    "resend": "Nothing yet? Check your spam folder, or <link>send a new link</link>.",
     "terms": "I accept the <terms>terms of use</terms> and the <privacy>privacy policy</privacy>."
   },
   "errors": {
     "invalidEmail": "Enter a valid email address.",
     "sendFailed": "Couldn’t send the link right now. Try again in a moment.",
-    "termsRequired": "Tick the box to accept the terms of use and the privacy policy."
+    "termsRequired": "Tick the box to accept the terms of use and the privacy policy.",
+    "tooSoon": "A link just left. Wait a minute before asking for another one."
   },
   "waitlist": {
     "text": "The beta is private for now. <b>{email}</b> doesn’t have an invite yet: I’ll write as soon as your spot is ready.",
@@ -32,11 +33,37 @@
     "unavailable": "The Google button won’t load. Get a link by email instead."
   },
   "code": {
-    "sent": "I sent a code to <b>{email}</b>.",
-    "open": "Open {mailbox}",
     "label": "Code from the email",
     "submit": "Sign in",
     "checking": "Checking…",
     "bad": "That code doesn’t work. Check the 6 digits, or tap the link in the email."
+  },
+  "email": {
+    "subject": "Your WH3RE sign-in · code {code}",
+    "title": "Sign in to WH3RE",
+    "lead": "Tap the button: the WH3RE page you left open signs you in by itself. No password.",
+    "button": "Sign me in",
+    "codeLabel": "On another device, type this code:",
+    "expiry": "Works for 15 minutes, only once.",
+    "ignore": "Didn't ask for this? You can ignore this email.",
+    "text": "Sign in to WH3RE: {url}\n\nOn another device, type this code: {code}\n\nDidn't ask for this? You can ignore this email."
+  },
+  "approve": {
+    "metaTitle": "Sign in",
+    "title": "Is it you?",
+    "lead": "Tap the button to sign in to WH3RE.",
+    "button": "Sign me in",
+    "working": "Signing in…",
+    "doneTitle": "All set.",
+    "doneLead": "Go back to WH3RE: you’re signed in there.",
+    "here": "Not on this device? <link>Sign in here</link>",
+    "expiredTitle": "This link no longer works.",
+    "expiredLead": "It was already used or it expired. Ask for a new one from WH3RE.",
+    "again": "Back to sign in"
+  },
+  "waiting": {
+    "sent": "I sent a link to <b>{email}</b>. Tap it in the email: this page signs you in by itself.",
+    "open": "Open {mailbox}",
+    "otherDevice": "Email open on another device? <link>Type the code</link>"
   }
 }
